@@ -15,7 +15,7 @@ class Search extends Component {
   render() {
     return (
       <div className="search-wrapper">
-        <div className="search-brand"></div>
+        <div className="search-brand google"></div>
         <div className="search-box">
           <input type="text" ref="text" />
           <RaisedButton
