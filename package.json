@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node config/server.js",
-    "build": "webpack -p --config config/webpack.prod.js"
+    "build": "webpack -p --config config/webpack.prod.config.js"
   },
   "keywords": [
     "chrome"
