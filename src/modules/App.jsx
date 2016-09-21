@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 const muiTheme = getMuiTheme(null, {userAgent: 'all'})
 
+import Header from './Header'
 import Search from './Search'
 
 class App extends Component {
@@ -13,13 +14,7 @@ class App extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          {/*<h1>Hello World!</h1>
-          <p>A new tab extension.</p>
-          <a href="https://www.google.com" target="_blank">
-            <RaisedButton
-              label="google"
-            />
-          </a>*/}
+          <Header />
           <Search />
         </div>
       </MuiThemeProvider>
