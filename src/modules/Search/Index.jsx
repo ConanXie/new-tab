@@ -7,8 +7,19 @@ import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton/IconButton'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
+import SearchIcon from 'material-ui/svg-icons/action/search'
 
 import searchEngine from './search-engine'
+
+const style = {
+  searchBtn: {
+    width: '38px',
+    height: '38px',
+    padding: '0',
+    position: 'absolute',
+    right: '0'
+  }
+}
 
 class Search extends Component {
   constructor(props) {
@@ -59,13 +70,18 @@ class Search extends Component {
         </div>
         <div className="search-box">
           <form action="" onSubmit={this.search}>
-            <input type="text" ref="text" />
-            <RaisedButton
-              type="submit"
-              className="search-btn"
-              label={searchName}
-              // onClick={this.search}
-            />
+            <div className="input-box">
+              <input type="text" ref="text" />
+              <IconButton
+                type="submit"
+                style={style.searchBtn}
+                iconStyle={{
+                  color: '#666'
+                }}
+              >
+                <SearchIcon />
+              </IconButton>
+            </div>
           </form>
         </div>
       </div>
