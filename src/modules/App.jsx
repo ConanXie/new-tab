@@ -1,4 +1,4 @@
-import React, { Component, cloneElement } from 'react'
+import React, { Component } from 'react'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -8,6 +8,7 @@ const muiTheme = getMuiTheme(null, {userAgent: 'all'})
 
 import Header from './Header'
 import Search from './Search'
+import Setup from './Setup'
 
 class App extends Component {
   render() {
@@ -16,6 +17,7 @@ class App extends Component {
         <div>
           <Header />
           <Search />
+          <Setup />
         </div>
       </MuiThemeProvider>
     )
