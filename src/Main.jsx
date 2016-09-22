@@ -1,5 +1,3 @@
-// import 'react-hot-loader/patch'
-
 // less
 import './less/style.less'
 
@@ -12,8 +10,8 @@ injectTapEventPlugin()
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
-
-const store = createStore(() => {}, applyMiddleware(thunk))
+import reducer from './reducers'
+const store = createStore(reducer, applyMiddleware(thunk))
 
 import { AppContainer } from 'react-hot-loader'
 import App from './modules/App'
