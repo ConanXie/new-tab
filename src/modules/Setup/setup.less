@@ -4,14 +4,14 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #fff;
+  background-color: #ebebeb;
   display: none;
   @keyframes show-setup-page {
     0% {
       opacity: 0;
-      transform: translateY(120px);
+      transform: translateY(48px);
     }
-    80% {
+    60% {
       opacity: 1;
     }
     100% {
@@ -37,11 +37,23 @@
     .bar-label {
       display: flex;
       align-items: center;
-      height: 44px;
+      height: 48px;
+      font-size: 18px;
       color: #fff;
     }
   }
-  .setup-content {
+  .setup-section {
     padding: 28px;
+    .setup-content {
+      box-sizing: border-box;
+      width: 600px;
+      height: 300px;
+      padding: 32px;
+      margin: 0 auto;
+
+      .toggle > div {
+        justify-content: space-between;
+      }
+    }
   }
 }
