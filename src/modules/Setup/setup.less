@@ -1,0 +1,47 @@
+.setup-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff;
+  display: none;
+  @keyframes show-setup-page {
+    0% {
+      opacity: 0;
+      transform: translateY(120px);
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  @keyframes hide-setup-page {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  &.show-setup-page {
+    animation: show-setup-page 0.3s ease-in-out;
+  }
+  &.hide-setup-page {
+    animation: hide-setup-page 0.2s ease-in-out forwards;
+  }
+  .bar-left {
+    display: flex;
+    .bar-label {
+      display: flex;
+      align-items: center;
+      height: 44px;
+      color: #fff;
+    }
+  }
+  .setup-content {
+    padding: 28px;
+  }
+}
