@@ -1,16 +1,25 @@
-import { GET_SETTINGS } from '../actions/settings'
+/**
+ * Get data from localStorage to create initialState,
+ * because the Toggle component of material-ui can't be setting different defaultToggled value twice
+ */
+const getSettings = () => {
+  let settings
+  // console.log({} instanceof Object && !({} instanceof Array))
+  try {
+    settings = JSON.parse(window.localStorage.getItem('settings'))
+    if (settings) return settings
+    else return {}
+  } catch (error) {
+    
+  }
+}
 
 const initialState = {
-  data: {}
+  data: getSettings()
 }
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case GET_SETTINGS:
-      return {
-        ...state,
-        data: action.settings
-      }
     default:
       return state
   }

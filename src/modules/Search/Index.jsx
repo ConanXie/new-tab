@@ -1,6 +1,10 @@
 import './style.less'
 
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
+
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as searchEngineActions from '../../actions/search-engine'
 
 import RaisedButton from 'material-ui/RaisedButton'
 import IconMenu from 'material-ui/IconMenu'
@@ -22,13 +26,32 @@ const style = {
 }
 
 class Search extends Component {
+  static propsType = {
+    currentEngine: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired,
+    saveEngine: PropTypes.func.isRequired,
+    saveToLocalStorage: PropTypes.func.isRequired
+  }
   constructor(props) {
     super(props)
-    const { link, name, className } = searchEngine[0]
-    this.state = {
-      searchLink: link,
-      searchName: name,
-      searchClass: className
+    const { currentEngine, saveEngine, saveToLocalStorage, settings } = this.props
+
+    // currentEngine not exist, or autoSaveEngine is false
+    if (!currentEngine.name || !settings.autoSaveEngine) {
+      const { link, name, className } = searchEngine[0]
+      this.state = {
+        searchLink: link,
+        searchName: name,
+        searchClass: className
+      }
+      saveEngine(searchEngine[0])
+    } else {
+      const { link, name, className } = currentEngine
+      this.state = {
+        searchLink: link,
+        searchName: name,
+        searchClass: className
+      }
     }
   }
   search = (e) => {
@@ -44,9 +67,13 @@ class Search extends Component {
       searchName: name,
       searchClass: className
     })
+    const { settings, saveEngine, saveToLocalStorage } = this.props
+    saveEngine(engine)
+    if (settings.autoSaveEngine) {
+      saveToLocalStorage(engine)
+    }
   }
   render() {
-    const { changeEngine } = this
     const { searchName, searchClass } = this.state
     return (
       <div className="search-wrapper">
@@ -62,7 +89,7 @@ class Search extends Component {
                 <MenuItem
                   key={value.name}
                   primaryText={value.name}
-                  onTouchTap={e => changeEngine(value)}
+                  onTouchTap={e => this.changeEngine(value)}
                 />
               )
             })}
@@ -89,4 +116,13 @@ class Search extends Component {
   }
 }
 
-export default Search
+const mapStateToProps = state => {
+  const { currentEngine } = state.searchEngine
+  const { data } = state.settings
+  return { currentEngine, settings: data }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(searchEngineActions, dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Search)

@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import * as searchEngineActions from '../../actions/search-engine'
 import * as setupPageActions from '../../actions/setup-page'
 import * as settingsActions from '../../actions/settings'
 
@@ -26,19 +27,19 @@ class Setup extends Component {
   static propTypes = {
     status: PropTypes.bool.isRequired,
     hideSetup: PropTypes.func.isRequired,
-    getSettings: PropTypes.func.isRequired,
     saveSettings: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired
+    saveCurrentEngine: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
+    currentEngine: PropTypes.object.isRequired
   }
   constructor(props) {
     super(props)
     this.state = {
       display: 'none'
     }
-    const { getSettings } = this.props
-    getSettings()
   }
   componentWillReceiveProps(next) {
+    // show or hide the setup page
     if (next.status) {
       this.setState({
         display: 'block'
@@ -51,11 +52,12 @@ class Setup extends Component {
       }, 200)
     }
   }
-  toggleAutoSaveEngine = (event, value) => {
-    // console.log(this.props.autoSaveEngine)
-    console.log(value)
-    const { saveSettings } = this.props
-    saveSettings('autoSaveEngine', value)
+  toggleAutoSaveEngine = (event, bool) => {
+    const { saveSettings, saveCurrentEngine } = this.props
+    saveSettings('autoSaveEngine', bool)
+    if (bool) {
+      saveCurrentEngine()
+    }
   }
   render() {
     const { status, data, hideSetup } = this.props
@@ -92,14 +94,20 @@ class Setup extends Component {
 const mapStateToProps = state => {
   const { status } = state.setupPage
   const { data } = state.settings
+  const { currentEngine } = state.searchEngine
   return {
     status,
-    data
+    data,
+    currentEngine
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ ...setupPageActions, ...settingsActions }, dispatch)
+  return bindActionCreators({
+    ...setupPageActions,
+    ...settingsActions,
+    ...searchEngineActions
+  }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Setup)
