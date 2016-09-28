@@ -10,7 +10,7 @@ module.exports = {
     'react-hot-loader/patch',
     'babel-polyfill',
     'webpack/hot/only-dev-server',
-    'webpack-hot-middleware/client?path=http://localhost:5001/__webpack_hmr',
+    'webpack-hot-middleware/client?path=https://localhost:5001/__webpack_hmr',
     path.resolve(dir_src, 'Main.jsx')
   ],
   resolve: {
@@ -18,7 +18,7 @@ module.exports = {
   },
   output: {
     path: buildPath,
-    publicPath: 'http://localhost:5001/',
+    publicPath: 'https://localhost:5001/',
     filename: 'bundle.js'
   },
   module: {
