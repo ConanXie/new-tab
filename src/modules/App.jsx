@@ -8,6 +8,7 @@ const muiTheme = getMuiTheme(null, {userAgent: 'all'})
 
 import Header from './Header'
 import Search from './Search'
+import Navigation from './Navigation'
 import Setup from './Setup'
 
 class App extends Component {
@@ -17,6 +18,7 @@ class App extends Component {
         <div>
           <Header />
           <Search />
+          <Navigation />
           <Setup />
         </div>
       </MuiThemeProvider>
