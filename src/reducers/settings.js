@@ -3,6 +3,9 @@
  * because the Toggle component of material-ui can't be setting different defaultToggled value twice
  */
 const getSettings = () => {
+  /*chrome.storage.sync.get('settings', (obj) => {
+    console.log(obj)
+  })*/
   let settings
   // console.log({} instanceof Object && !({} instanceof Array))
   try {

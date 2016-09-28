@@ -6,6 +6,7 @@ export function saveSettings(key, value) {
     const data = getState().settings.data
     data[key] = value
     ls.setItem('settings', JSON.stringify(data))
+    // console.log(chrome.storage.sync.set({ settings: data }))
   }
 }
 
