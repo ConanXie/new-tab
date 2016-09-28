@@ -5,5 +5,9 @@
   "description": "A extension to replace the default new tab of Chrome",
   "chrome_url_overrides": {
     "newtab": "index.html"
-  }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_security_policy": "script-src 'self' https://localhost:5001; object-src 'self'"
 }
