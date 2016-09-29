@@ -12,7 +12,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add'
 const style = {
   website: {
     width: '172px',
-    marginBottom: '8px',
+    marginBottom: '10px',
     textAlign: 'left',
     color: '#333'
   }
@@ -27,10 +27,10 @@ class Navigation extends Component {
           <h3 className="title">我的导航</h3>
           <div className="tool-area">
             <IconButton>
-              <ContentAdd style={{ width: 18, height: 18 }} />
+              <ContentAdd />
             </IconButton>
             <IconButton>
-              <ModeEdit style={{ width: 18, height: 18 }} />
+              <ModeEdit />
             </IconButton>
           </div>
         </div>
