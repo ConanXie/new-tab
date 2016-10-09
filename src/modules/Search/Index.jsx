@@ -90,6 +90,7 @@ class Search extends Component {
                   key={value.name}
                   primaryText={value.name}
                   onTouchTap={e => this.changeEngine(value)}
+                  innerDivStyle={{minWidth: '100px'}}
                 />
               )
             })}

@@ -10,6 +10,7 @@ import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
+import Snackbar from 'material-ui/Snackbar'
 
 const style = {
   website: {
@@ -21,8 +22,16 @@ const style = {
   dialogContent: {
     width: '348px'
   },
+  dialogTitle: {
+    paddingBottom: '0'
+  },
   textField: {
     width: '300px'
+  },
+  snackbar: {
+    maxWidth: '150px',
+    // borderRadius: '0',
+    // textAlign: 'center'
   }
 }
 
@@ -30,23 +39,40 @@ class Navigation extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      open: false
+      addDialog: false,
+      snackbarOpen: false,
+      snackbarMessage: ''
     }
+    this.checkLink = /^http(s)?:\/\/\S+$/
   }
   openAddDialog = () => {
     this.setState({
-      open: true
+      addDialog: true
     })
   }
   handleClose = () => {
     this.setState({
-      open: false,
+      addDialog: false,
       name: '',
       link: ''
     })
   }
   handleConfirm = () => {
-    console.log(this.state)
+    const { name, link } = this.state
+    if (!name) {
+      this.setState({
+        snackbarOpen: true,
+        snackbarMessage: '网站名称尚未输入'
+      })
+      return
+    }
+    if (!this.checkLink.test(link)) {
+      this.setState({
+        snackbarOpen: true,
+        snackbarMessage: '网址格式不正确'
+      })
+      return
+    }
   }
   nameChange = (e) => {
     this.setState({
@@ -56,6 +82,11 @@ class Navigation extends Component {
   linkChange = (e) => {
     this.setState({
       link: e.target.value
+    })
+  }
+  closeSnackerbar = () => {
+    this.setState({
+      snackbarOpen: false
     })
   }
   render() {
@@ -88,9 +119,10 @@ class Navigation extends Component {
             title="新增网站"
             actions={actions}
             modal={false}
-            open={this.state.open}
+            open={this.state.addDialog}
             onRequestClose={this.handleClose}
             contentStyle={style.dialogContent}
+            titleStyle={style.dialogTitle}
           >
             <TextField
               floatingLabelText="名称"
@@ -129,6 +161,13 @@ class Navigation extends Component {
             style={style.website}
           />*/}
         </div>
+        <Snackbar
+          open={this.state.snackbarOpen}
+          message={this.state.snackbarMessage}
+          autoHideDuration={2000}
+          onRequestClose={this.closeSnackerbar}
+          bodyStyle={style.snackbar}
+        />
       </Paper>
     )
   }
