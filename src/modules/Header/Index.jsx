@@ -8,12 +8,15 @@ import * as setupPageActions from '../../actions/setup-page'
 
 import Paper from 'material-ui/Paper'
 import IconButton from 'material-ui/IconButton'
+import RaisedButton from 'material-ui/RaisedButton'
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 import FileFolder from 'material-ui/svg-icons/file/folder'
 import ActionBookmark from 'material-ui/svg-icons/action/bookmark-border'
 import ActionSettings from 'material-ui/svg-icons/action/settings'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
+
+import Weather from './Weather'
 
 const style = {
   headerBar: {
@@ -59,11 +62,11 @@ class Header extends Component {
         </div>
         <Drawer
           docked={false}
-          width={305}
+          width={650}
           open={this.state.drawerOpen}
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
-
+          <Weather />
         </Drawer>
       </Paper>
     )
