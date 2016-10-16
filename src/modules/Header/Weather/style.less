@@ -3,8 +3,60 @@
     background-color: #009688;
     // height: 200px;
     color: #fff;
+    header {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 24px;
+      margin-bottom: 30px;
+      .now-info {
+        .now-tmp-sec {
+          .now-tmp {
+            // float: left;
+            display: inline-block;
+            font-size: 80px;
+            font-family: Roboto;
+            font-weight: normal;
+          }
+          .now-cond {
+            // float: left;
+            display: inline-block;
+            position: relative;
+            left: -29px;
+            font-size: 14px;
+          }
+        }
+        .qlty {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 90px;
+          height: 28px;
+          // padding: 8px 12px;
+          font-size: 13px;
+          background-color: rgba(255, 255, 255, 0.15);
+          border-radius: 28px;
+        }
+      }
+      .loc-info {
+        padding-top: 20px;
+        .loc-content {
+          float: left;
+          display: flex;
+          align-items: center;
+          font-weight: normal;
+        }
+        .update-time {
+          float: right;
+          display: flex;
+          align-items: center;
+          // height: 25px;
+          margin-left: 22px;
+        }
+      }
+    }
     .daily-forecast {
       display: flex;
+      padding-bottom: 12px;
       .forecast-box {
         flex: 1;
         text-align: center;

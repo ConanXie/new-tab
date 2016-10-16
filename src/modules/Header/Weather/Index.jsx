@@ -3,6 +3,17 @@ import './style.less'
 import React, { Component, PropTypes } from 'react'
 
 import RaisedButton from 'material-ui/RaisedButton'
+import MapsPlace from 'material-ui/svg-icons/maps/place'
+import NavigationRefresh  from 'material-ui/svg-icons/navigation/refresh'
+
+const style = {
+  icon: {
+    width: '18px',
+    height: '18px',
+    marginRight: '3px',
+    color: '#fff'
+  }
+}
 
 class Weather extends Component {
   constructor(props) {
@@ -29,6 +40,11 @@ class Weather extends Component {
       console.log('Fetch failed!')
     })
   }
+  calcWeek = (date) => {
+    const weekArr = ['日', '一', '二', '三', '四', '五', '六']
+    const week = new Date(date).getDay()
+    return `周${weekArr[week]}`
+  }
   render() {
     let Interface
     const { data } = this.state
@@ -36,21 +52,35 @@ class Weather extends Component {
       Interface = (
         <div className="weather-interface">
           <header>
-            <h3>{data.basic.city}</h3>
-            <p>{data.basic.update.loc}</p>
+            <div className="now-info">
+              <div className="now-tmp-sec">
+                <h1 className="now-tmp">{data.now.tmp}°</h1>
+                <p className="now-cond">{data.now.cond.txt}</p>
+              </div>
+              <p className="qlty">空气{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
+            </div>
+            <div className="loc-info">
+              <p className="loc-content">
+                <MapsPlace style={style.icon} />
+                <span>{data.basic.city}</span>
+              </p>
+              <p className="update-time">
+                <NavigationRefresh style={style.icon} />
+                <span>{String.prototype.split.call(data.basic.update.loc, ' ')[1]}</span>
+              </p>
+            </div>
           </header>
           <section className="now">
-            <h1>{data.now.tmp}°</h1>
-            <p>{data.now.cond.txt}</p>
-            <p>空气{data.aqi.city.qlty} {data.aqi.city.pm25}</p>
           </section>
           <section className="daily-forecast">
-            {data.daily_forecast.map(value => {
+            {data.daily_forecast.map((value, index) => {
+              const week = !index ? '今天' : this.calcWeek(value.date)
               return (
-                <div className="forecast-box">
-                  <p>{value.date}</p>
-                  <p>{value.cond.txt_d}</p>
-                  <p>{value.tmp.min}° ~ {value.tmp.max}°</p>
+                <div className="forecast-box" key={value.date}>
+                  <p title={value.date}>{week}</p>
+                  <img src={`http://www.heweather.com/weather/images/icon/${value.cond.code_d}.png`} alt=""/>
+                  {/*<p>{value.cond.txt_d}</p>*/}
+                  <p>{value.tmp.min}°~{value.tmp.max}°</p>
                 </div>
               )
             })}
@@ -60,11 +90,11 @@ class Weather extends Component {
     }
     return (
       <div className="weather-component">
-        <RaisedButton
+        {/*<RaisedButton
           label="weather"
           onTouchTap={this.getData}
         />
-        <h1>Weather Component</h1>
+        <h1>Weather Component</h1>*/}
         {Interface}
       </div>
     )
