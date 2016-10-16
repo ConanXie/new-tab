@@ -62,7 +62,7 @@ class Header extends Component {
         </div>
         <Drawer
           docked={false}
-          width={650}
+          width={600}
           open={this.state.drawerOpen}
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
