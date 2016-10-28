@@ -28,7 +28,6 @@ class Weather extends Component {
     fetch(link).then(res => {
       if (res.ok) {
         res.json().then(data => {
-          console.log(data['HeWeather data service 3.0'][0])
           this.setState({
             data: data['HeWeather data service 3.0'][0]
           })
@@ -78,7 +77,7 @@ class Weather extends Component {
               return (
                 <div className="forecast-box" key={value.date}>
                   <p title={value.date}>{week}</p>
-                  <img src={`http://www.heweather.com/weather/images/icon/${value.cond.code_d}.png`} alt=""/>
+                  <img src={`http://www.heweather.com/weather/images/icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />
                   {/*<p>{value.cond.txt_d}</p>*/}
                   <p>{value.tmp.min}°~{value.tmp.max}°</p>
                 </div>
