@@ -86,6 +86,13 @@ class Setup extends Component {
             />
           </Paper>
         </div>
+        <div className="setup-section">
+          <Paper className="setup-content about" zDepth={1}>
+            <h3>About</h3>
+            <p className="name">Material Design New Tab<span className="version">1.0.0</span></p>
+            <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problem when using this extension. Thank you 😉</p>
+          </Paper>
+        </div>
       </div>
     )
   }
