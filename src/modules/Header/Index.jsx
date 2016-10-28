@@ -42,7 +42,7 @@ class Header extends Component {
   render() {
     const { showSetup } = this.props
     return (
-      <Paper className="header-bar" style={style.headerBar} zDepth={1}>
+      <Paper className="header-bar" style={style.headerBar} zDepth={0}>
         <div className="tool-bar">
           <div className="bar-left">
             <IconButton
