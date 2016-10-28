@@ -30,7 +30,7 @@ module.exports = {
       test: /\.less$/,
       loader: 'style!css?sourceMap!less?sourceMap=source-map-less-inline'
     }, {
-      test: /\.(jpg|jpeg|png|svg|gif)$/,
+      test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
       loader: 'url?limit=10000'
     }]
   },
