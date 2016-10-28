@@ -15,11 +15,30 @@
       font-size: 18px;
     }
     .tool-area {
-
+      height: 48px;
+      overflow: hidden;
+      .tool-box {
+        transition: transform 0.3s;
+      }
+      .second-column {
+        display: flex;
+        justify-content: flex-end;
+      }
     }
   }
   .website-area {
     padding: 0 20px 12px;
+    .website-box {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 10px;
+      .delete-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
   }
   .website-link {
     div {
