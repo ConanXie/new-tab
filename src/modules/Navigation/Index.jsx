@@ -2,6 +2,10 @@ import './style.less'
 
 import React, { Component } from 'react'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as websiteActions from '../../actions/websites'
+
 import Paper from 'material-ui/Paper'
 import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
@@ -10,11 +14,12 @@ import ActionAndroid from 'material-ui/svg-icons/action/android'
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import ContentClear from 'material-ui/svg-icons/content/clear'
+import ContentLink from 'material-ui/svg-icons/content/link'
 import ActionDome from 'material-ui/svg-icons/action/done'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 import Snackbar from 'material-ui/Snackbar'
-import {blue500, red500, red900, greenA200} from 'material-ui/styles/colors'
+import {blue500, red500, red300, greenA200} from 'material-ui/styles/colors'
 
 const style = {
   website: {
@@ -59,6 +64,7 @@ class Navigation extends Component {
       snackbarMessage: ''
     }
     this.checkLink = /^http(s)?:\/\/\S+$/
+    console.log(props)
   }
   openAddDialog = () => {
     this.setState({
@@ -74,7 +80,8 @@ class Navigation extends Component {
     })
   }
   handleConfirm = () => {
-    const { name, link } = this.state
+    const { name, link, icon } = this.state
+    const { addWebsite } = this.props
     if (!name) {
       this.setState({
         snackbarOpen: true,
@@ -89,6 +96,8 @@ class Navigation extends Component {
       })
       return
     }
+    addWebsite(name, link, icon)
+    this.handleClose()
   }
   nameChange = (e) => {
     this.setState({
@@ -125,8 +134,15 @@ class Navigation extends Component {
     style.toolArea.transform = ''
     style.span.display = 'none'
   }
+  handleDelete = (index) => {
+    const { store, deleteWebsite } = this.props
+    store.splice(index, 1)
+    console.log(store)
+    deleteWebsite(store)
+  }
   render() {
-    const array = '0'.repeat(10).split('')
+    // const array = '0'.repeat(10).split('')
+    const { store } = this.props
     const actions = [
       <FlatButton
         label="取消"
@@ -187,22 +203,29 @@ class Navigation extends Component {
           </Dialog>
         </div>
         <div className="website-area">
-          {array.map((value, index) => {
+          {store.map((value, index) => {
             return (
               <div className="website-box" key={index}>
                 <FlatButton
-                  label="Google"
-                  href="https://www.google.com/"
+                  label={value.name}
+                  href={value.link}
                   target="_blank"
                   secondary={true}
-                  icon={<img className="website-icon" src="https://www.google.com/images/branding/product/ico/googleg_lodp.ico" />}
+                  icon={<ContentLink />}
                   className="website-link"
                   style={style.website}
                 />
-                <span className="delete-btn" style={style.span}>
+                <span className="handle-btn edit-btn" style={style.span}>
+                  <ModeEdit
+                    color={red500}
+                    hoverColor={red300}
+                    style={style.icon}
+                  />
+                </span>
+                <span className="handle-btn delete-btn" style={style.span} onTouchTap={e => {this.handleDelete(index)}}>
                   <ContentClear
                     color={red500}
-                    hoverColor={red900}
+                    hoverColor={red300}
                     style={style.icon}
                   />
                 </span>
@@ -232,4 +255,13 @@ class Navigation extends Component {
   }
 }
 
-export default Navigation
+const mapStateToProps = state => {
+  const { store } = state.websites
+  return { store }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(websiteActions, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation)
