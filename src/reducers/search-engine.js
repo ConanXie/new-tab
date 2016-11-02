@@ -7,8 +7,7 @@ const getEngine = () => {
   let engine
   try {
     engine = JSON.parse(window.localStorage.getItem('currentEngine'))
-    if (engine) return engine
-    else return {}
+    return engine ? engine : {}
   } catch (error) {
     
   }

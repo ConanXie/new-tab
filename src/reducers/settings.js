@@ -10,8 +10,7 @@ const getSettings = () => {
   // console.log({} instanceof Object && !({} instanceof Array))
   try {
     settings = JSON.parse(window.localStorage.getItem('settings'))
-    if (settings) return settings
-    else return {}
+    return settings ? settings : {}
   } catch (error) {
     
   }
