@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react'
 
 import RaisedButton from 'material-ui/RaisedButton'
 import MapsPlace from 'material-ui/svg-icons/maps/place'
-import NavigationRefresh  from 'material-ui/svg-icons/navigation/refresh'
+import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh'
 
 const style = {
   icon: {
@@ -29,7 +29,7 @@ class Weather extends Component {
       if (res.ok) {
         res.json().then(data => {
           this.setState({
-            data: data['HeWeather data service 3.0'][0]
+            data
           })
         })
       } else {
@@ -77,7 +77,7 @@ class Weather extends Component {
               return (
                 <div className="forecast-box" key={value.date}>
                   <p title={value.date}>{week}</p>
-                  <img src={`http://www.heweather.com/weather/images/icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />
+                  <img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />
                   {/*<p>{value.cond.txt_d}</p>*/}
                   <p>{value.tmp.min}°~{value.tmp.max}°</p>
                 </div>
