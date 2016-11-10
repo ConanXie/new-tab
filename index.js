@@ -25,9 +25,10 @@ app.use(require('webpack-dev-middleware')(compiler, {
 app.use(require('webpack-hot-middleware')(compiler))
 
 app.use('/api/weather', (req, res) => {
-  const data = fs.readFileSync('./api/weather.json', 'utf8')
+  const file = fs.readFileSync('./api/weather.json', 'utf8')
+  const data = JSON.parse(file)
   res.header('Access-Control-Allow-Origin', '*')
-  res.send(data)
+  res.send(data.HeWeather5[0])
 })
 
 https.createServer(options, app).listen(port, () => {
