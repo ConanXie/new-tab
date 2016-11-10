@@ -20,7 +20,7 @@
       .tool-box {
         transition: transform 0.3s;
         &.show-edit {
-          transform: translateY(-48px)
+          transform: translateY(-48px);
         }
       }
       .second-column {
@@ -39,10 +39,12 @@
         width: 18px;
       }
       .handle-btn {
+        display: none;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        display: none;
+        width: 18px;
+        height: 18px;
         &.show {
           display: block;
         }
