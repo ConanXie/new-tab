@@ -10,17 +10,26 @@ export function addWebsite(name, link, icon) {
       link,
       icon
     })
-    console.log(websites)
     ls.setItem('websites', JSON.stringify(websites))
   }
 }
 
-export function deleteWebsite(store) {
+export function deleteWebsite(index) {
   return (dispatch, getState) => {
     const websites = getState().websites.store
-    console.log(websites, store)
-    // websites.splice(index, 1)
-    // console.log(websites)
-    // ls.setItem('websites', JSON.stringify(websites))
+    websites.splice(index, 1)
+    ls.setItem('websites', JSON.stringify(websites))
+  }
+}
+
+export function editWebsite(index, name, link, icon) {
+  return (dispatch, getState) => {
+    const websites = getState().websites.store
+    websites[index] = {
+      name,
+      link,
+      icon
+    }
+    ls.setItem('websites', JSON.stringify(websites))
   }
 }

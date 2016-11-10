@@ -1,5 +1,6 @@
 import './style.less'
 
+import classNames from 'classnames'
 import React, { Component } from 'react'
 
 import { bindActionCreators } from 'redux'
@@ -28,13 +29,13 @@ const style = {
     color: '#333'
   },
   dialogContent: {
-    width: '348px'
+    width: '400px'
   },
   dialogTitle: {
     paddingBottom: '0'
   },
   textField: {
-    width: '300px'
+    width: '352px'
   },
   snackbar: {
     maxWidth: '150px',
@@ -59,29 +60,35 @@ class Navigation extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      addDialog: false,
+      dialog: false,
       snackbarOpen: false,
       snackbarMessage: ''
     }
     this.checkLink = /^http(s)?:\/\/\S+$/
-    console.log(props)
+    // console.log(props)
   }
-  openAddDialog = () => {
+  
+  checkClick = (e) => {
+    if (this.state.edit) {
+      e.preventDefault()
+    }
+  }
+  openDialog = () => {
     this.setState({
-      addDialog: true
+      dialog: true
     })
   }
   handleClose = () => {
     this.setState({
-      addDialog: false,
+      dialog: false,
       name: '',
       link: '',
       icon: ''
     })
   }
   handleConfirm = () => {
-    const { name, link, icon } = this.state
-    const { addWebsite } = this.props
+    const { name, link, icon, edit, index } = this.state
+    const { addWebsite, editWebsite } = this.props
     if (!name) {
       this.setState({
         snackbarOpen: true,
@@ -96,9 +103,18 @@ class Navigation extends Component {
       })
       return
     }
-    addWebsite(name, link, icon)
+    // add or edit
+    if (!edit) {
+      addWebsite(name, link, icon)
+    } else {
+      // console.log(this.state)
+      editWebsite(index, name, link, icon)
+    }
     this.handleClose()
   }
+  /**
+   * watch input
+   */
   nameChange = (e) => {
     this.setState({
       name: e.target.value
@@ -119,30 +135,43 @@ class Navigation extends Component {
       snackbarOpen: false
     })
   }
-  onEdit = () => {
+  /**
+   * toggle edit
+   */
+  startEdit = () => {
     this.setState({
       edit: true
     })
-    style.toolArea.transform = 'translateY(-48px)'
-    style.span.display = ''
-    console.log(this.state)
   }
   finishedEdit = () => {
     this.setState({
       edit: false
     })
-    style.toolArea.transform = ''
-    style.span.display = 'none'
   }
+  /**
+   * delete and edit
+   */
   handleDelete = (index) => {
-    const { store, deleteWebsite } = this.props
-    store.splice(index, 1)
-    console.log(store)
-    deleteWebsite(store)
+    const { deleteWebsite } = this.props
+    // Update view
+    this.setState({
+      delete: true
+    })
+    deleteWebsite(index)
+  }
+  handleEdit = (index, name, link, icon) => {
+    this.setState({
+      index,
+      name,
+      link,
+      icon
+    })
+    this.openDialog()
   }
   render() {
     // const array = '0'.repeat(10).split('')
     const { store } = this.props
+    const { edit, dialog, snackbarOpen, snackbarMessage, name, link, icon} = this.state
     const actions = [
       <FlatButton
         label="取消"
@@ -160,12 +189,12 @@ class Navigation extends Component {
         <div className="tool-bar">
           <h3 className="title">我的导航</h3>
           <div className="tool-area">
-            <div className="tool-box" style={style.toolArea}>
+            <div className={classNames('tool-box', { 'show-edit': edit })}>
               <div className="first-column">
-                <IconButton onTouchTap={this.openAddDialog}>
+                <IconButton onTouchTap={this.openDialog}>
                   <ContentAdd />
                 </IconButton>
-                <IconButton onTouchTap={this.onEdit}>
+                <IconButton onTouchTap={this.startEdit}>
                   <ModeEdit />
                 </IconButton>
               </div>
@@ -177,26 +206,29 @@ class Navigation extends Component {
             </div>
           </div>
           <Dialog
-            title="新增网站"
+            title={edit ? '编辑网站' : '新增网站'}
             actions={actions}
             modal={false}
-            open={this.state.addDialog}
+            open={dialog}
             onRequestClose={this.handleClose}
             contentStyle={style.dialogContent}
             titleStyle={style.dialogTitle}
           >
             <TextField
               floatingLabelText="名称"
+              defaultValue={name}
               style={style.textField}
               onChange={this.nameChange}
             /><br/>
             <TextField
               floatingLabelText="网址"
+              defaultValue={link}
               style={style.textField}
               onChange={this.linkChange}
             />
             <TextField
               floatingLabelText="图标地址"
+              defaultValue={icon}
               style={style.textField}
               onChange={this.iconChange}
             />
@@ -204,32 +236,39 @@ class Navigation extends Component {
         </div>
         <div className="website-area">
           {store.map((value, index) => {
+            const { name, link, icon } = value
+            let NavIcon
+            if (value.icon && this.checkLink.test(icon)) {
+              NavIcon = <img className="nav-icon" src={icon} alt={name} />
+            } else {
+              NavIcon = <ContentLink />
+            }
             return (
               <div className="website-box" key={index}>
                 <FlatButton
-                  label={value.name}
-                  href={value.link}
+                  label={name}
+                  href={link}
                   target="_blank"
                   secondary={true}
-                  icon={<ContentLink />}
+                  icon={NavIcon}
                   className="website-link"
                   style={style.website}
+                  onClick={this.checkClick}
                 />
-                <span className="handle-btn edit-btn" style={style.span}>
+                <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, icon)}}>
                   <ModeEdit
                     color={red500}
                     hoverColor={red300}
                     style={style.icon}
                   />
                 </span>
-                <span className="handle-btn delete-btn" style={style.span} onTouchTap={e => {this.handleDelete(index)}}>
+                <span className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
                   <ContentClear
                     color={red500}
                     hoverColor={red300}
                     style={style.icon}
                   />
                 </span>
-                {/*<span className="delete-btn" style={style.span}></span>*/}
               </div>
             )
           })}
@@ -244,8 +283,8 @@ class Navigation extends Component {
           />*/}
         </div>
         <Snackbar
-          open={this.state.snackbarOpen}
-          message={this.state.snackbarMessage}
+          open={snackbarOpen}
+          message={snackbarMessage}
           autoHideDuration={2000}
           onRequestClose={this.closeSnackerbar}
           bodyStyle={style.snackbar}

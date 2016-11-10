@@ -19,6 +19,9 @@
       overflow: hidden;
       .tool-box {
         transition: transform 0.3s;
+        &.show-edit {
+          transform: translateY(-48px)
+        }
       }
       .second-column {
         display: flex;
@@ -32,10 +35,17 @@
       position: relative;
       display: inline-block;
       margin-bottom: 10px;
+      .nav-icon {
+        width: 18px;
+      }
       .handle-btn {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
+        display: none;
+        &.show {
+          display: block;
+        }
       }
       .delete-btn {
         right: 10px;
