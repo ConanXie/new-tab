@@ -7,7 +7,8 @@
     "newtab": "index.html"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "geolocation"
   ],
   "content_security_policy": "script-src 'self' https://localhost:5001; object-src 'self'"
 }
