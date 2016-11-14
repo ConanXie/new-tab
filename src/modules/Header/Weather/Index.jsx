@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import MapsPlace from 'material-ui/svg-icons/maps/place'
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh'
+import RefreshIndicator from 'material-ui/RefreshIndicator'
 
 const style = {
   icon: {
@@ -12,6 +13,10 @@ const style = {
     height: '18px',
     marginRight: '3px',
     color: '#fff'
+  },
+  refresh: {
+    display: 'inline-block',
+    position: 'relative'
   }
 }
 
@@ -28,9 +33,11 @@ class Weather extends Component {
     fetch(link).then(res => {
       if (res.ok) {
         res.json().then(data => {
-          this.setState({
-            data
-          })
+          setTimeout(() => {
+            this.setState({
+              data
+            })
+          }, 2000)
         })
       } else {
         console.log(`Response wasn't perfect, got status ${res.status}`)
@@ -85,6 +92,17 @@ class Weather extends Component {
             })}
           </section>
         </div>
+      )
+    } else {
+      Interface = (
+        <RefreshIndicator
+          size={40}
+          left={280}
+          top={160}
+          loadingColor='#009688'
+          status="loading"
+          style={style.refresh}
+        />
       )
     }
     return (

@@ -1,8 +1,18 @@
+@keyframes show-weather {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .weather-component {
+  height: 290px;
   .weather-interface {
     background-color: #009688;
-    // height: 200px;
     color: #fff;
+    animation: show-weather 0.3s;
     header {
       display: flex;
       justify-content: space-between;
@@ -62,6 +72,7 @@
         text-align: center;
         img {
           width: 60px;
+          height: 60px;
         }
       }
     }
