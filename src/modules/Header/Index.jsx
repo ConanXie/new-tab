@@ -13,6 +13,7 @@ import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 import FileFolder from 'material-ui/svg-icons/file/folder'
 import ActionBookmark from 'material-ui/svg-icons/action/bookmark-border'
 import ActionSettings from 'material-ui/svg-icons/action/settings'
+import ActionRoom from 'material-ui/svg-icons/action/room'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 
@@ -37,6 +38,18 @@ class Header extends Component {
   openDrawer = () => {
     this.setState({
       drawerOpen: true
+    })
+  }
+  trigger = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      const { latitude, longitude } = position.coords
+      fetch(`https://localhost:5001/api/position/${latitude}/${longitude}`, {
+        method: 'GET'
+      }).then(res => {
+        res.json().then(data => {
+          console.log(data)
+        })
+      })
     })
   }
   render() {
@@ -67,6 +80,9 @@ class Header extends Component {
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
           <Weather />
+          {/*<IconButton onTouchTap={this.trigger}>
+            <ActionRoom />
+          </IconButton>*/}
         </Drawer>
       </Paper>
     )
