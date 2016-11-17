@@ -29,13 +29,13 @@ const style = {
     color: '#333'
   },
   dialogContent: {
-    width: '400px'
+    width: '380px'
   },
   dialogTitle: {
     paddingBottom: '0'
   },
   textField: {
-    width: '352px'
+    width: '332px'
   },
   snackbar: {
     maxWidth: '150px',
@@ -64,7 +64,7 @@ class Navigation extends Component {
       snackbarOpen: false,
       snackbarMessage: ''
     }
-    this.checkLink = /^http(s)?:\/\/\S+$/
+    // this.checkLink = /^http(s)?:\/\/\S+$/
     // console.log(props)
   }
   
@@ -82,33 +82,38 @@ class Navigation extends Component {
     this.setState({
       dialog: false,
       name: '',
-      link: '',
-      icon: ''
+      link: ''
     })
   }
   handleConfirm = () => {
-    const { name, link, icon, edit, index } = this.state
+    const { name, link, edit, index } = this.state
     const { addWebsite, editWebsite } = this.props
     if (!name) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: '网站名称尚未输入'
+        snackbarMessage: '别忘了网站的名字🙂'
       })
       return
     }
-    if (!this.checkLink.test(link)) {
+    if (!link) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: '网址格式不正确'
+        snackbarMessage: '别忘了网址🙂'
       })
       return
     }
-    // add or edit
+    /*if (!this.checkLink.test(link)) {
+      this.setState({
+        snackbarOpen: true,
+        snackbarMessage: '请在网址前加上 http:// 或者 https://'
+      })
+      return
+    }*/
+    // judge add or edit
     if (!edit) {
-      addWebsite(name, link, icon)
+      addWebsite(name, link)
     } else {
-      // console.log(this.state)
-      editWebsite(index, name, link, icon)
+      editWebsite(index, name, link)
     }
     this.handleClose()
   }
@@ -123,11 +128,6 @@ class Navigation extends Component {
   linkChange = (e) => {
     this.setState({
       link: e.target.value
-    })
-  }
-  iconChange = (e) => {
-    this.setState({
-      icon: e.target.value
     })
   }
   closeSnackerbar = () => {
@@ -153,25 +153,24 @@ class Navigation extends Component {
    */
   handleDelete = (index) => {
     const { deleteWebsite } = this.props
-    // Update view
+    // Change state to update view
     this.setState({
       delete: true
     })
     deleteWebsite(index)
   }
-  handleEdit = (index, name, link, icon) => {
+  handleEdit = (index, name, link) => {
     this.setState({
       index,
       name,
-      link,
-      icon
+      link
     })
     this.openDialog()
   }
   render() {
     // const array = '0'.repeat(10).split('')
     const { store } = this.props
-    const { edit, dialog, snackbarOpen, snackbarMessage, name, link, icon} = this.state
+    const { edit, dialog, snackbarOpen, snackbarMessage, name, link} = this.state
     const actions = [
       <FlatButton
         label="取消"
@@ -226,23 +225,11 @@ class Navigation extends Component {
               style={style.textField}
               onChange={this.linkChange}
             />
-            <TextField
-              floatingLabelText="图标地址"
-              defaultValue={icon}
-              style={style.textField}
-              onChange={this.iconChange}
-            />
           </Dialog>
         </div>
         <div className="website-area">
           {store.map((value, index) => {
-            const { name, link, icon } = value
-            let NavIcon
-            if (value.icon && this.checkLink.test(icon)) {
-              NavIcon = <img className="nav-icon" src={icon} alt={name} />
-            } else {
-              NavIcon = <ContentLink />
-            }
+            const { name, link } = value
             return (
               <div className="website-box" key={index}>
                 <FlatButton
@@ -250,12 +237,12 @@ class Navigation extends Component {
                   href={link}
                   target="_blank"
                   secondary={true}
-                  icon={NavIcon}
+                  icon={<img className="nav-icon" src={`https://api.byi.pw/favicon/?url=${link}`} alt={name} />}
                   className="website-link"
                   style={style.website}
                   onClick={this.checkClick}
                 />
-                <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, icon)}}>
+                <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
                   <ModeEdit
                     color={red500}
                     hoverColor={red300}

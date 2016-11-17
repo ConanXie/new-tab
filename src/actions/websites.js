@@ -1,14 +1,14 @@
 const ls = window.localStorage
+const checkLink = /^http(s)?:\/\//
 
 export const ADD_WEBSITE = 'ADD_WEBSITE'
 
-export function addWebsite(name, link, icon) {
+export function addWebsite(name, link) {
   return (dispatch, getState) => {
     const websites = getState().websites.store
     websites.push({
       name,
-      link,
-      icon
+      link: checkLink.test(link) ? link : `http://${link}`
     })
     ls.setItem('websites', JSON.stringify(websites))
   }
@@ -22,13 +22,12 @@ export function deleteWebsite(index) {
   }
 }
 
-export function editWebsite(index, name, link, icon) {
+export function editWebsite(index, name, link) {
   return (dispatch, getState) => {
     const websites = getState().websites.store
     websites[index] = {
       name,
-      link,
-      icon
+      link: checkLink.test(link) ? link : `http://${link}`
     }
     ls.setItem('websites', JSON.stringify(websites))
   }
