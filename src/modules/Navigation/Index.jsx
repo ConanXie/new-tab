@@ -283,20 +283,20 @@ class Navigation extends Component {
                   style={style.website}
                   onClick={this.checkClick}
                 />
-                  <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
-                    <ModeEdit
-                      color={red500}
-                      hoverColor={red300}
-                      style={style.icon}
-                    />
-                  </span>
-                  <span className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
-                    <ContentClear
-                      color={red500}
-                      hoverColor={red300}
-                      style={style.icon}
-                    />
-                  </span>
+                <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
+                  <ModeEdit
+                    color={red500}
+                    hoverColor={red300}
+                    style={style.icon}
+                  />
+                </span>
+                <span className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
+                  <ContentClear
+                    color={red500}
+                    hoverColor={red300}
+                    style={style.icon}
+                  />
+                </span>
               </div>
             )
           })}
