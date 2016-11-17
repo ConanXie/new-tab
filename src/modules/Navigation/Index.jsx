@@ -34,6 +34,9 @@ const style = {
   dialogTitle: {
     paddingBottom: '0'
   },
+  confirmTitle: {
+    paddingBottom: '24px'
+  },
   textField: {
     width: '332px'
   },
@@ -60,6 +63,7 @@ class Navigation extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      confirm: false,
       dialog: false,
       snackbarOpen: false,
       snackbarMessage: ''
@@ -73,19 +77,34 @@ class Navigation extends Component {
       e.preventDefault()
     }
   }
+  openConfirm = () => {
+    this.setState({
+      confirm: true
+    })
+  }
+  hideConfirm = () => {
+    this.setState({
+      confirm: false
+    })
+  }
+  handleConfirm = () => {
+    const { deleteWebsite } = this.props
+    deleteWebsite(this.state.index)
+    this.hideConfirm()
+  }
   openDialog = () => {
     this.setState({
       dialog: true
     })
   }
-  handleClose = () => {
+  hideDialog = () => {
     this.setState({
       dialog: false,
       name: '',
       link: ''
     })
   }
-  handleConfirm = () => {
+  handleSubmit = () => {
     const { name, link, edit, index } = this.state
     const { addWebsite, editWebsite } = this.props
     if (!name) {
@@ -115,7 +134,7 @@ class Navigation extends Component {
     } else {
       editWebsite(index, name, link)
     }
-    this.handleClose()
+    this.hideDialog()
   }
   /**
    * watch input
@@ -152,12 +171,11 @@ class Navigation extends Component {
    * delete and edit
    */
   handleDelete = (index) => {
-    const { deleteWebsite } = this.props
-    // Change state to update view
+    this.openConfirm()
+    // Record the index
     this.setState({
-      delete: true
+      index
     })
-    deleteWebsite(index)
   }
   handleEdit = (index, name, link) => {
     this.setState({
@@ -170,12 +188,24 @@ class Navigation extends Component {
   render() {
     // const array = '0'.repeat(10).split('')
     const { store } = this.props
-    const { edit, dialog, snackbarOpen, snackbarMessage, name, link} = this.state
+    const { edit, dialog, confirm, snackbarOpen, snackbarMessage, name, link} = this.state
     const actions = [
       <FlatButton
         label="取消"
         primary={true}
-        onTouchTap={this.handleClose}
+        onTouchTap={this.hideDialog}
+      />,
+      <FlatButton
+        label="确认"
+        primary={true}
+        onTouchTap={this.handleSubmit}
+      />
+    ]
+    const confirmActions = [
+      <FlatButton
+        label="取消"
+        primary={true}
+        onTouchTap={this.hideConfirm}
       />,
       <FlatButton
         label="确认"
@@ -209,7 +239,7 @@ class Navigation extends Component {
             actions={actions}
             modal={false}
             open={dialog}
-            onRequestClose={this.handleClose}
+            onRequestClose={this.hideDialog}
             contentStyle={style.dialogContent}
             titleStyle={style.dialogTitle}
           >
@@ -225,6 +255,17 @@ class Navigation extends Component {
               style={style.textField}
               onChange={this.linkChange}
             />
+          </Dialog>
+          <Dialog
+            title="确认删除？"
+            actions={confirmActions}
+            modal={false}
+            open={confirm}
+            onRequestClose={this.hideConfirm}
+            contentStyle={style.dialogContent}
+            titleStyle={style.confirmTitle}
+          >
+            删除后不可撤销
           </Dialog>
         </div>
         <div className="website-area">
