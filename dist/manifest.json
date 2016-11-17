@@ -1,6 +1,6 @@
 {
   "name": "Material Design New Tab Extension",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "manifest_version": 2,
   "description": "An extension to replace the default new tab of Chrome",
   "chrome_url_overrides": {
