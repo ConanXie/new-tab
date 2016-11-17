@@ -23,21 +23,35 @@ const style = {
 class Weather extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
-    this.getData()
+    const local = JSON.parse(localStorage.getItem('weather'))
+    if (local) {
+      const lastUpdate = new Date(local.basic.update.loc).getTime()
+      const now = Date.now()
+      const diff = now - lastUpdate
+      if (diff < 3600000) {
+        this.state = {
+          data: local
+        }
+      } else {
+        this.state = {}
+        this.getData()
+      }
+    } else {
+      this.state = {}
+      this.getData()
+    }
   }
   getData = () => {
-    // console.log(123)
     // 'https://api.heweather.com/x3/weather?cityid=CN101280601&key=258c581b778d440ab34a85d5c8d82902'
-    const link = 'https://localhost:5001/api/weather'
+    // const link = 'https://localhost:5001/api/weather'
+    const link = 'http://23.83.235.152:5300/api/weather'
     fetch(link).then(res => {
       if (res.ok) {
         res.json().then(data => {
-          setTimeout(() => {
-            this.setState({
-              data
-            })
-          }, 2000)
+          this.setState({
+            data
+          })
+          localStorage.setItem('weather', JSON.stringify(data))
         })
       } else {
         console.log(`Response wasn't perfect, got status ${res.status}`)
