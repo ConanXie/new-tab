@@ -11,15 +11,17 @@ import * as settingsActions from '../../actions/settings'
 
 import Paper from 'material-ui/Paper'
 import IconButton from 'material-ui/IconButton'
+import FlatButton from 'material-ui/FlatButton'
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { grey600 } from 'material-ui/styles/colors'
 
+import Donor from './Donor'
+
 const style = {
   headerBar: {
-    backgroundColor: grey600,
-    borderRadius: 0
+    backgroundColor: grey600
   }
 }
 
@@ -66,7 +68,7 @@ class Setup extends Component {
       <div className={classNames('setup-page', { 'show-setup-page': status, 'hide-setup-page': !status })}
         style={{ display }}
       >
-        <Paper className="header-bar" style={style.headerBar} zDepth={1}>
+        <Paper className="header-bar" style={style.headerBar} rounded={false} zDepth={1}>
           <div className="tool-bar">
             <div className="bar-left">
               <IconButton onTouchTap={hideSetup}>
@@ -88,8 +90,9 @@ class Setup extends Component {
         </div>
         <div className="setup-section">
           <Paper className="setup-content about" zDepth={1}>
-            <h3>About</h3>
-            <p className="name">Material Design New Tab<span className="version">1.0.0</span></p>
+            <h3>关于</h3>
+            <p className="name">Material Design New Tab <FlatButton label="1.0.0" /></p>
+            <Donor />
             <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problem when using this extension. Thank you 😉</p>
           </Paper>
         </div>
