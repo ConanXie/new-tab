@@ -13,6 +13,9 @@ import Paper from 'material-ui/Paper'
 import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
+import HardwareMemory from 'material-ui/svg-icons/hardware/memory'
+import ContentLink from 'material-ui/svg-icons/content/link'
+import ActionSearch from 'material-ui/svg-icons/action/search'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { grey600 } from 'material-ui/styles/colors'
@@ -22,6 +25,12 @@ import Donor from './Donor'
 const style = {
   headerBar: {
     backgroundColor: grey600
+  },
+  toggleLabel: {
+    fontSize: '15px'
+  },
+  toggleIcon: {
+    marginRight: '30px'
   }
 }
 
@@ -61,6 +70,16 @@ class Setup extends Component {
       saveCurrentEngine()
     }
   }
+  toggleLinkTarget = (event, bool) => {
+    const { saveSettings, setLinkTarget } = this.props
+    saveSettings('linkTarget', bool)
+    setLinkTarget(bool)
+  }
+  toggleSearchTarget = (event, bool) => {
+    const { saveSettings, setLinkTarget } = this.props
+    saveSettings('searchTarget', bool)
+    this.props.setSearchTarget(bool)
+  }
   render() {
     const { status, data, hideSetup } = this.props
     const { display } = this.state
@@ -80,12 +99,42 @@ class Setup extends Component {
         </Paper>
         <div className="setup-section">
           <Paper className="setup-content" zDepth={1}>
-            <Toggle
-              className="toggle"
-              label="自动保存当前搜索引擎"
-              defaultToggled={data.autoSaveEngine}
-              onToggle={this.toggleAutoSaveEngine}
-            />
+            <div className="toggle-box">
+              <HardwareMemory style={style.toggleIcon} color="#757575" />
+              <div className="toggle-wrapper">
+                <Toggle
+                  className="toggle"
+                  label="自动保存当前搜索引擎"
+                  defaultToggled={data.autoSaveEngine}
+                  onToggle={this.toggleAutoSaveEngine}
+                  labelStyle={style.toggleLabel}
+                />
+              </div>
+            </div>
+            <div className="toggle-box">
+              <ActionSearch style={style.toggleIcon} color="#757575" />
+              <div className="toggle-wrapper">
+                <Toggle
+                  className="toggle"
+                  label="在新标签页中打开搜索"
+                  defaultToggled={data.searchTarget}
+                  onToggle={this.toggleSearchTarget}
+                  labelStyle={style.toggleLabel}
+                />
+              </div>
+            </div>
+            <div className="toggle-box">
+              <ContentLink style={style.toggleIcon} color="#757575" />
+              <div className="toggle-wrapper">
+                <Toggle
+                  className="toggle"
+                  label="在新标签页中打开链接"
+                  defaultToggled={data.linkTarget}
+                  onToggle={this.toggleLinkTarget}
+                  labelStyle={style.toggleLabel}
+                />
+              </div>
+            </div>
           </Paper>
         </div>
         <div className="setup-section">

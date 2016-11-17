@@ -58,7 +58,7 @@ class Search extends Component {
     e.preventDefault()
     const text = this.refs.text.value
     const { searchLink } = this.state
-    window.open(searchLink + text, '_blank')
+    window.open(searchLink + text, this.props.target)
   }
   changeEngine = (engine) => {
     const { name, link, className } = engine

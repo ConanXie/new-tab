@@ -187,7 +187,7 @@ class Navigation extends Component {
   }
   render() {
     // const array = '0'.repeat(10).split('')
-    const { store } = this.props
+    const { store, target } = this.props
     const { edit, dialog, confirm, snackbarOpen, snackbarMessage, name, link} = this.state
     const actions = [
       <FlatButton
@@ -276,7 +276,7 @@ class Navigation extends Component {
                 <FlatButton
                   label={name}
                   href={link}
-                  target="_blank"
+                  target={target}
                   secondary={true}
                   icon={<img className="nav-icon" src={`https://api.byi.pw/favicon/?url=${link}`} alt={name} />}
                   className="website-link"
