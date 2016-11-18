@@ -142,7 +142,7 @@ class Setup extends Component {
             <h3>关于</h3>
             <p className="name">Material Design New Tab <FlatButton label="1.0.0" /></p>
             <Donor />
-            <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problem when using this extension. Thank you 😉</p>
+            <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>
           </Paper>
         </div>
       </div>
