@@ -18,6 +18,7 @@ import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 
 import Weather from './Weather'
+import Apps from './Apps'
 
 const style = {
   headerBar: {
@@ -40,7 +41,7 @@ class Header extends Component {
       drawerOpen: true
     })
   }
-  trigger = () => {
+  /*trigger = () => {
     navigator.geolocation.getCurrentPosition(position => {
       const { latitude, longitude } = position.coords
       fetch(`https://localhost:5001/api/position/${latitude}/${longitude}`, {
@@ -51,7 +52,7 @@ class Header extends Component {
         })
       })
     })
-  }
+  }*/
   render() {
     const { showSetup } = this.props
     return (
@@ -63,9 +64,6 @@ class Header extends Component {
             >
               <NavigationMenu />
             </IconButton>
-            {/*<IconButton>
-              <ActionBookmark />
-            </IconButton>*/}
           </div>
           <div className="bar-right">
             <IconButton onTouchTap={showSetup}>
@@ -83,6 +81,7 @@ class Header extends Component {
           {/*<IconButton onTouchTap={this.trigger}>
             <ActionRoom />
           </IconButton>*/}
+          <Apps />
         </Drawer>
       </Paper>
     )
