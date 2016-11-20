@@ -10,6 +10,14 @@ export function saveSettings(key, value) {
   }
 }
 
+export function saveTheme(index) {
+  return (dispatch, getState) => {
+    const data = getState().settings.data
+    data.currentTheme = index
+    ls.setItem('settings', JSON.stringify(data))
+  }
+}
+
 /**
  * If autoSaveEngine Toggle is true,
  * save the current engine
