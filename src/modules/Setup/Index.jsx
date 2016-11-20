@@ -16,9 +16,17 @@ import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 import HardwareMemory from 'material-ui/svg-icons/hardware/memory'
 import ContentLink from 'material-ui/svg-icons/content/link'
 import ActionSearch from 'material-ui/svg-icons/action/search'
+import CheckCircle from 'material-ui/svg-icons/action/check-circle'
+import TextFormat from 'material-ui/svg-icons/content/text-format'
+import ColorLens from 'material-ui/svg-icons/image/color-lens'
+import ImageLens from 'material-ui/svg-icons/image/lens'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
-import { grey600 } from 'material-ui/styles/colors'
+import { List, ListItem } from 'material-ui/List'
+import Dialog from 'material-ui/Dialog'
+import Menu from 'material-ui/Menu'
+import MenuItem from 'material-ui/MenuItem'
+import { grey600, teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, yellow500, blueGrey500 } from 'material-ui/styles/colors'
 
 import Donor from './Donor'
 
@@ -30,9 +38,30 @@ const style = {
     fontSize: '15px'
   },
   toggleIcon: {
-    marginRight: '30px'
+    marginRight: '30px',
+    marginLeft: '4px'
+  },
+  listIcon: {
+    marginLeft: 0
+  },
+  themeContent: {
+    width: '380px'
+  },
+  themeTitle: {
+    paddingBottom: '18px'
+  },
+  smallIcon: {
+    width: 32,
+    height: 32
+  },
+  small: {
+    width: 64,
+    height: 64,
+    padding: 12,
   }
 }
+
+export const theme = [teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, yellow500, blueGrey500]
 
 class Setup extends Component {
   static propTypes = {
@@ -46,8 +75,11 @@ class Setup extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      display: 'none'
+      display: 'none',
+      currentTheme: props.data.currentTheme ? props.data.currentTheme : 0,
+      themeOpen: false
     }
+    this.theme = theme
   }
   componentWillReceiveProps(next) {
     // show or hide the setup page
@@ -76,13 +108,39 @@ class Setup extends Component {
     setLinkTarget(bool)
   }
   toggleSearchTarget = (event, bool) => {
-    const { saveSettings, setLinkTarget } = this.props
+    const { saveSettings, setSearchTarget } = this.props
     saveSettings('searchTarget', bool)
-    this.props.setSearchTarget(bool)
+    setSearchTarget(bool)
+  }
+  toggleHideAppsName = (event, bool) => {
+    const { saveSettings, hideAppsName } = this.props
+    saveSettings('hideAppsName', bool)
+    hideAppsName(bool)
+  }
+  openTheme = () => {
+    this.setState({
+      themeOpen: true
+    })
+  }
+  hideTheme = () => {
+    this.setState({
+      themeOpen: false
+    })
+  }
+  switchTheme = (index) => {
+    const { saveTheme, changeTheme } = this.props
+    saveTheme(index)
+    changeTheme(index)
+    this.setState({
+      currentTheme: index
+    })
+    setTimeout(() => {
+      this.hideTheme()
+    }, 200)
   }
   render() {
-    const { status, data, hideSetup } = this.props
-    const { display } = this.state
+    const { status, data, hideSetup, muiTheme } = this.props
+    const { display, currentTheme } = this.state
     return (
       <div className={classNames('setup-page', { 'show-setup-page': status, 'hide-setup-page': !status })}
         style={{ display }}
@@ -98,9 +156,9 @@ class Setup extends Component {
           </div>
         </Paper>
         <div className="setup-section">
-          <Paper className="setup-content" zDepth={1}>
+          <Paper className="setup-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
             <div className="toggle-box">
-              <HardwareMemory style={style.toggleIcon} color="#757575" />
+              <HardwareMemory style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
               <div className="toggle-wrapper">
                 <Toggle
                   className="toggle"
@@ -112,7 +170,7 @@ class Setup extends Component {
               </div>
             </div>
             <div className="toggle-box">
-              <ActionSearch style={style.toggleIcon} color="#757575" />
+              <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
               <div className="toggle-wrapper">
                 <Toggle
                   className="toggle"
@@ -124,7 +182,7 @@ class Setup extends Component {
               </div>
             </div>
             <div className="toggle-box">
-              <ContentLink style={style.toggleIcon} color="#757575" />
+              <ContentLink style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
               <div className="toggle-wrapper">
                 <Toggle
                   className="toggle"
@@ -135,7 +193,54 @@ class Setup extends Component {
                 />
               </div>
             </div>
+            <div className="toggle-box">
+              <TextFormat style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+              <div className="toggle-wrapper">
+                <Toggle
+                  className="toggle"
+                  label="隐藏应用的标签"
+                  defaultToggled={data.hideAppsName}
+                  onToggle={this.toggleHideAppsName}
+                  labelStyle={style.toggleLabel}
+                />
+              </div>
+            </div>
+            <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>主题</h2>
+            <List>
+              <ListItem
+                leftIcon={<ColorLens style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
+                primaryText="切换主题"
+                innerDivStyle={{ paddingLeft: '58px' }}
+                onTouchTap={this.openTheme}
+              />
+            </List>
           </Paper>
+          <Dialog
+            title="选择主题"
+            open={this.state.themeOpen}
+            onRequestClose={this.hideTheme}
+            titleStyle={style.themeTitle}
+            contentStyle={style.themeContent}
+          >
+            {this.theme.map((color, index) => {
+              if (currentTheme === index) {
+                return (
+                  <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.hideTheme() }}>
+                    <CheckCircle color={color} />
+                  </IconButton>
+                )
+              } else {
+                return (
+                  <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.switchTheme(index) }}>
+                    <ImageLens color={color} />
+                  </IconButton>
+                )
+              }
+            })}
+            {/*<IconButton style={style.small} iconStyle={style.smallIcon}>
+              <CheckCircle color={red500} />
+            </IconButton>*/}
+          </Dialog>
         </div>
         <div className="setup-section">
           <Paper className="setup-content about" zDepth={1}>

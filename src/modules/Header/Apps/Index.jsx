@@ -1,5 +1,6 @@
 import './style.less'
 
+import classNames from 'classnames'
 import React, { Component } from 'react'
 
 class Apps extends Component {
@@ -28,9 +29,10 @@ class Apps extends Component {
   }
   render() {
     const { apps } = this.state
+    const { hideAppsName, muiTheme } = this.props
     return (
       <div className="apps-component">
-        <h1>Apps</h1>
+        <h1 style={{ color: muiTheme.palette.primary1Color }}>Apps</h1>
         <div className="apps-collection">
           {apps.map((app, index) => {
             const maxIcon = app.icons.length - 1
@@ -38,9 +40,9 @@ class Apps extends Component {
               <div className="app-box" key={index}>
                 <dl onClick={e => { chrome.management.launchApp(app.id) }}>
                   <dt>
-                    <img src={app.icons[maxIcon].url} alt={app.name}/>
+                    <img src={app.icons[maxIcon].url} alt={app.shortName} />
                   </dt>
-                  <dd>{app.shortName}</dd>
+                  <dd className={classNames({ 'hide': hideAppsName })}>{app.shortName}</dd>
                 </dl>
               </div>
             )

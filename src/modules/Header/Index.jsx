@@ -54,7 +54,7 @@ class Header extends Component {
     })
   }*/
   render() {
-    const { showSetup } = this.props
+    const { showSetup, hideAppsName, muiTheme } = this.props
     return (
       <Paper className="header-bar" style={style.headerBar} zDepth={0}>
         <div className="tool-bar">
@@ -81,7 +81,7 @@ class Header extends Component {
           {/*<IconButton onTouchTap={this.trigger}>
             <ActionRoom />
           </IconButton>*/}
-          <Apps />
+          <Apps hideAppsName={hideAppsName} muiTheme={muiTheme} />
         </Drawer>
       </Paper>
     )
