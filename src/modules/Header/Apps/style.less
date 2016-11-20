@@ -1,5 +1,5 @@
 .apps-component h1 {
-  margin: 32px 0 16px 24px;
+  margin: 32px 0 32px 24px;
   font-size: 18px;
   font-weight: normal;
   color: #009688;
@@ -9,7 +9,7 @@
   .app-box {
     width: 25%;
     display: inline-block;
-    margin-bottom: 32px;
+    margin-bottom: 38px;
     dl {
       dt {
         text-align: center;
@@ -26,6 +26,10 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        &.hide {
+          // display: none;
+          visibility: hidden;
+        }
       }
     }
   }
