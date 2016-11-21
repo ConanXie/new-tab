@@ -70,7 +70,7 @@ class Weather extends Component {
     const { data } = this.state
     if (data) {
       Interface = (
-        <div className="weather-interface">
+        <div className="weather-interface" style={{ backgroundColor: this.props.muiTheme.palette.primary1Color }}>
           <header>
             <div className="now-info">
               <div className="now-tmp-sec">

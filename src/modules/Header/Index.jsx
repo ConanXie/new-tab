@@ -50,7 +50,7 @@ class Header extends Component {
         res.json().then(data => {
           console.log(data)
         })
-      })
+      }) 
     })
   }*/
   render() {
@@ -67,6 +67,9 @@ class Header extends Component {
           </div>
           <div className="bar-right">
             <IconButton onTouchTap={showSetup}>
+              <ActionBookmark />
+            </IconButton>
+            <IconButton onTouchTap={showSetup}>
               <ActionSettings />
             </IconButton>
           </div>
@@ -77,7 +80,7 @@ class Header extends Component {
           open={this.state.drawerOpen}
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
-          <Weather />
+          <Weather muiTheme={muiTheme} />
           {/*<IconButton onTouchTap={this.trigger}>
             <ActionRoom />
           </IconButton>*/}
