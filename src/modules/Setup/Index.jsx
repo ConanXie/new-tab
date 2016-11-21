@@ -26,7 +26,7 @@ import { List, ListItem } from 'material-ui/List'
 import Dialog from 'material-ui/Dialog'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
-import { grey600, teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, yellow500, blueGrey500 } from 'material-ui/styles/colors'
+import { grey600, teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500 } from 'material-ui/styles/colors'
 
 import Donor from './Donor'
 
@@ -61,7 +61,7 @@ const style = {
   }
 }
 
-export const theme = [teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, yellow500, blueGrey500]
+export const theme = [teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500]
 
 class Setup extends Component {
   static propTypes = {
