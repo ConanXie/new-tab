@@ -21,9 +21,7 @@ import Weather from './Weather'
 import Apps from './Apps'
 
 const style = {
-  headerBar: {
-    borderRadius: 0
-  }
+  
 }
 
 class Header extends Component {
@@ -33,12 +31,18 @@ class Header extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      drawerOpen: false
+      drawerOpen: false,
+      bookmarkOpen: false
     }
   }
   openDrawer = () => {
     this.setState({
       drawerOpen: true
+    })
+  }
+  openBookmark = () => {
+    this.setState({
+      bookmarkOpen: true
     })
   }
   /*trigger = () => {
@@ -56,7 +60,7 @@ class Header extends Component {
   render() {
     const { showSetup, hideAppsName, muiTheme } = this.props
     return (
-      <Paper className="header-bar" style={style.headerBar} zDepth={0}>
+      <Paper className="header-bar" rounded={false} zDepth={0}>
         <div className="tool-bar">
           <div className="bar-left">
             <IconButton
@@ -69,7 +73,7 @@ class Header extends Component {
             <IconButton onTouchTap={showSetup}>
               <ActionBookmark />
             </IconButton>
-            <IconButton onTouchTap={showSetup}>
+            <IconButton onTouchTap={this.openBookmark}>
               <ActionSettings />
             </IconButton>
           </div>
@@ -85,6 +89,14 @@ class Header extends Component {
             <ActionRoom />
           </IconButton>*/}
           <Apps hideAppsName={hideAppsName} muiTheme={muiTheme} />
+        </Drawer>
+        <Drawer
+          width={200}
+          openSecondary={true}
+          open={this.state.bookmarkOpen}
+          onRequestChange={bookmarkOpen => this.setState({ bookmarkOpen })}
+        >
+          <h1>sdhhash</h1>
         </Drawer>
       </Paper>
     )

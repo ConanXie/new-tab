@@ -145,7 +145,7 @@ class Setup extends Component {
       <div className={classNames('setup-page', { 'show-setup-page': status, 'hide-setup-page': !status })}
         style={{ display }}
       >
-        <Paper className="header-bar" style={style.headerBar} rounded={false} zDepth={1}>
+        <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
           <div className="tool-bar">
             <div className="bar-left">
               <IconButton onTouchTap={hideSetup}>
