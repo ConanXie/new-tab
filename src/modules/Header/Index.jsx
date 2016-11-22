@@ -19,6 +19,7 @@ import MenuItem from 'material-ui/MenuItem'
 
 import Weather from './Weather'
 import Apps from './Apps'
+import Bookmark from './Bookmark'
 
 const style = {
   
@@ -70,10 +71,10 @@ class Header extends Component {
             </IconButton>
           </div>
           <div className="bar-right">
-            <IconButton onTouchTap={showSetup}>
+            <IconButton onTouchTap={this.openBookmark}>
               <ActionBookmark />
             </IconButton>
-            <IconButton onTouchTap={this.openBookmark}>
+            <IconButton onTouchTap={showSetup}>
               <ActionSettings />
             </IconButton>
           </div>
@@ -91,12 +92,13 @@ class Header extends Component {
           <Apps hideAppsName={hideAppsName} muiTheme={muiTheme} />
         </Drawer>
         <Drawer
-          width={200}
+          docked={false}
+          width={360}
           openSecondary={true}
           open={this.state.bookmarkOpen}
           onRequestChange={bookmarkOpen => this.setState({ bookmarkOpen })}
         >
-          <h1>sdhhash</h1>
+          <Bookmark muiTheme={muiTheme} />
         </Drawer>
       </Paper>
     )
