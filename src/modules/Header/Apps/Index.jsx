@@ -9,6 +9,8 @@ class Apps extends Component {
     this.state = {
       apps: []
     }
+  }
+  componentDidMount() {
     /**
      * Get all installed Chrome Apps
      */
