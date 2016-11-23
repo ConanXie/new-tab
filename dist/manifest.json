@@ -9,7 +9,8 @@
   "permissions": [
     "storage",
     "management",
-    "bookmarks"
+    "bookmarks",
+    "chrome://favicon/*"
   ],
   "content_security_policy": "script-src 'self' https://localhost:5001; object-src 'self'"
 }
