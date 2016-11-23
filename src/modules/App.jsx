@@ -23,12 +23,12 @@ class App extends Component {
   constructor(props) {
     super(props)
     const { linkTarget, searchTarget, hideAppsName, currentTheme } = props.settings
-
+    const index = currentTheme ? currentTheme : 0
     this.state = {
       linkTarget: linkTarget ? '_blank' : '_self',
       searchTarget: searchTarget ? '_blank' : '_self',
       hideAppsName,
-      muiTheme: this.createTheme(theme[currentTheme])
+      muiTheme: this.createTheme(theme[index])
     }
   }
   createTheme = (color) => {
