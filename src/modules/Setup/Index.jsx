@@ -29,6 +29,7 @@ import { List, ListItem } from 'material-ui/List'
 import Dialog from 'material-ui/Dialog'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
+import Snackbar from 'material-ui/Snackbar'
 import { grey600, teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500 } from 'material-ui/styles/colors'
 
 import Donor from './Donor'
@@ -71,6 +72,9 @@ const style = {
     left: 0,
     width: '100%',
     opacity: 0
+  },
+  snackbar: {
+    maxWidth: '150px'
   }
 }
 
@@ -91,7 +95,9 @@ class Setup extends Component {
       display: 'none',
       currentTheme: props.data.currentTheme ? props.data.currentTheme : 0,
       themeOpen: false,
-      resetOpen: false
+      resetOpen: false,
+      snackbarOpen: false,
+      snackbarMessage: ''
     }
     this.theme = theme
   }
@@ -167,8 +173,20 @@ class Setup extends Component {
     a.download = 'backups.json'
     a.click()
   }
-  restoreBackups = () => {
-
+  restoreBackups = (e) => {
+    const file = e.target.files[0]
+    const fr = new FileReader()
+    fr.onloadend = e => {
+      const backups = JSON.parse(e.target.result)
+      for (let i in backups) {
+        window.localStorage.setItem(i, JSON.stringify(backups[i]))
+      }
+      this.setState({
+        snackbarOpen: true,
+        snackbarMessage: '已从备份文件恢复, 刷新后生效'
+      })
+    }
+    fr.readAsText(file)
   }
   openReset = () => {
     this.setState({
@@ -181,11 +199,22 @@ class Setup extends Component {
     })
   }
   resetSettings = () => {
-    
+    window.localStorage.removeItem('currentEngine')
+    window.localStorage.removeItem('settings')
+    this.setState({
+      snackbarOpen: true,
+      snackbarMessage: '已重置设置，刷新后生效'
+    })
+    this.hideReset()
+  }
+  closeSnackerbar = () => {
+    this.setState({
+      snackbarOpen: false
+    })
   }
   render() {
     const { status, data, hideSetup, muiTheme } = this.props
-    const { display, currentTheme } = this.state
+    const { display, currentTheme, snackbarOpen, snackbarMessage } = this.state
     const resetActions = [
       <FlatButton
         label="取消"
@@ -284,7 +313,7 @@ class Setup extends Component {
                 primaryText="从备份中恢复"
                 innerDivStyle={{ paddingLeft: '58px' }}
               >
-                <input type="file" style={style.fileInput} accept="application/json" />
+                <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
               </ListItem>
               <ListItem
                 leftIcon={<SettingsRestore style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
@@ -338,6 +367,13 @@ class Setup extends Component {
             <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>
           </Paper>
         </div>
+        <Snackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          autoHideDuration={2000}
+          onRequestClose={this.closeSnackerbar}
+          bodyStyle={style.snackbar}
+        />
       </div>
     )
   }
