@@ -20,6 +20,9 @@ import CheckCircle from 'material-ui/svg-icons/action/check-circle'
 import TextFormat from 'material-ui/svg-icons/content/text-format'
 import ColorLens from 'material-ui/svg-icons/image/color-lens'
 import ImageLens from 'material-ui/svg-icons/image/lens'
+import FileDownload from 'material-ui/svg-icons/file/file-download'
+import FileUpload from 'material-ui/svg-icons/file/file-upload'
+import SettingsRestore from 'material-ui/svg-icons/action/settings-backup-restore'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { List, ListItem } from 'material-ui/List'
@@ -58,6 +61,16 @@ const style = {
     width: 64,
     height: 64,
     padding: 12,
+  },
+  fileInput: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0
   }
 }
 
@@ -77,7 +90,8 @@ class Setup extends Component {
     this.state = {
       display: 'none',
       currentTheme: props.data.currentTheme ? props.data.currentTheme : 0,
-      themeOpen: false
+      themeOpen: false,
+      resetOpen: false
     }
     this.theme = theme
   }
@@ -138,9 +152,52 @@ class Setup extends Component {
       this.hideTheme()
     }, 200)
   }
+  createBackups = () => {
+    const currentEngine = JSON.parse(window.localStorage.currentEngine)
+    const settings = JSON.parse(window.localStorage.settings)
+    const websites = JSON.parse(window.localStorage.websites)
+    const data = JSON.stringify({
+      currentEngine,
+      settings,
+      websites
+    })
+    const backups = new Blob([data])
+    const a = document.createElement('a')
+    a.href = window.URL.createObjectURL(backups)
+    a.download = 'backups.json'
+    a.click()
+  }
+  restoreBackups = () => {
+
+  }
+  openReset = () => {
+    this.setState({
+      resetOpen: true
+    })
+  }
+  hideReset = () => {
+    this.setState({
+      resetOpen: false
+    })
+  }
+  resetSettings = () => {
+    
+  }
   render() {
     const { status, data, hideSetup, muiTheme } = this.props
     const { display, currentTheme } = this.state
+    const resetActions = [
+      <FlatButton
+        label="取消"
+        primary={true}
+        onTouchTap={this.hideReset}
+      />,
+      <FlatButton
+        label="确认"
+        primary={true}
+        onTouchTap={this.resetSettings}
+      />
+    ]
     return (
       <div className={classNames('setup-page', { 'show-setup-page': status, 'hide-setup-page': !status })}
         style={{ display }}
@@ -214,6 +271,28 @@ class Setup extends Component {
                 onTouchTap={this.openTheme}
               />
             </List>
+            <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>备份与重置</h2>
+            <List>
+              <ListItem
+                leftIcon={<FileUpload style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
+                primaryText="生成备份文件"
+                innerDivStyle={{ paddingLeft: '58px' }}
+                onTouchTap={this.createBackups}
+              />
+              <ListItem
+                leftIcon={<FileDownload style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
+                primaryText="从备份中恢复"
+                innerDivStyle={{ paddingLeft: '58px' }}
+              >
+                <input type="file" style={style.fileInput} accept="application/json" />
+              </ListItem>
+              <ListItem
+                leftIcon={<SettingsRestore style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
+                primaryText="重置为默认设置"
+                innerDivStyle={{ paddingLeft: '58px' }}
+                onTouchTap={this.openReset}
+              />
+            </List>
           </Paper>
           <Dialog
             title="选择主题"
@@ -240,6 +319,15 @@ class Setup extends Component {
             {/*<IconButton style={style.small} iconStyle={style.smallIcon}>
               <CheckCircle color={red500} />
             </IconButton>*/}
+          </Dialog>
+          <Dialog
+            title="确认重置设置？"
+            open={this.state.resetOpen}
+            actions={resetActions}
+            onRequestClose={this.hideReset}
+            contentStyle={style.themeContent}
+          >
+            将会重置为初始化设置
           </Dialog>
         </div>
         <div className="setup-section">
