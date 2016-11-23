@@ -93,12 +93,12 @@ class Header extends Component {
         </Drawer>
         <Drawer
           docked={false}
-          width={360}
+          width={480}
           openSecondary={true}
           open={this.state.bookmarkOpen}
           onRequestChange={bookmarkOpen => this.setState({ bookmarkOpen })}
         >
-          <Bookmark muiTheme={muiTheme} />
+          <Bookmark muiTheme={muiTheme} hidden={this.state.bookmarkOpen} />
         </Drawer>
       </Paper>
     )
