@@ -19,3 +19,17 @@ body {
 h1 {
   // color: red;
 }
+div, section, header, aside {
+  &::-webkit-scrollbar-track-piece {
+    background-color: #fff;
+  }
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #f5f5f5;
+    &:vertical:hover {
+      background: #f0f0f0;
+    }
+  }
+}
