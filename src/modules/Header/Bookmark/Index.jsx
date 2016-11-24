@@ -6,7 +6,6 @@ import { findDOMNode } from 'react-dom'
 
 import Paper from 'material-ui/Paper'
 import { List, ListItem } from 'material-ui/List'
-// import ListItem from 'material-ui/ListItem'
 import IconButton from 'material-ui/IconButton'
 import ActionSearch from 'material-ui/svg-icons/action/search'
 import ContentClear from 'material-ui/svg-icons/content/clear'
@@ -127,9 +126,8 @@ class Bookmark extends Component {
     super(props)
     this.state = {
       search: false,
-      bookmarks: {},
-      currentChildren: [],
-      folders: []
+      bookmarks: [],
+      currentChildren: []
     }
   }
   componentDidMount() {
@@ -138,46 +136,45 @@ class Bookmark extends Component {
      */
     chrome.bookmarks.getTree((bookmarks) => {
       // console.log(bookmarks)
-      const data = {}
-      const iteration = function (value, folder) {
+      const data = []
+      const iteration = function (value, index) {
         if (value.children) {
-          const _folder = value.title
-          data[_folder] = []
+          const _index = data.length
+          data[_index] = {
+            name: value.title,
+            children: []
+          }
           value.children.forEach((v, i) => {
             if (v.children) {
-              data[v.title] = []
+              const v_index = data.length
+              data[v_index] = {
+                name: v.title,
+                children: []
+              }
               v.children.forEach((m, n) => {
-                iteration(m, v.title)
+                iteration(m, v_index)
               })
             } else {
-              data[_folder].push(v)
+              data[_index].children.push(v)
             }
           })
         } else {
-          data[folder].push(value)
+          data[index].children.push(value)
         }
       }
       bookmarks[0].children.forEach((value, index) => {
         iteration(value)
       })
-      /**
-       * create folders by data's key
-       */
-      const folders = []
-      for (let i in data) {
-        folders.push(i)
-      }
       this.setState({
         bookmarks: data,
-        currentChildren: data[folders[0]],
-        folders
+        currentChildren: data[0].children
       })
     })
     
   }
-  getChildren = (folder) => {
+  getChildren = (index) => {
     this.setState({
-      currentChildren: this.state.bookmarks[folder]
+      currentChildren: this.state.bookmarks[index].children
     })
   }
   openSearch = () => {
@@ -204,11 +201,11 @@ class Bookmark extends Component {
         </header>
         <aside className="folder-list">
           <List>
-            {this.state.folders.map((value, index) => {
+            {this.state.bookmarks.map((value, index) => {
               return (
                 <ListItem
-                  primaryText={value}
-                  onTouchTap={e => { this.getChildren(value) }}
+                  primaryText={value.name}
+                  onTouchTap={e => { this.getChildren(index) }}
                   key={index}
                   innerDivStyle={style.listItem}
                   className="folder"
