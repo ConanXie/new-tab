@@ -68,9 +68,104 @@
       .forecast-box {
         flex: 1;
         text-align: center;
-        img {
+        .weather-icon {
           width: 60px;
           height: 60px;
+          margin: 0 auto;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 70%;
+          &.code-100 {
+            background-image: url(icons/clear.svg);
+          }
+          &.code-101,
+          &.code-102,
+          &.code-104 {
+            background-image: url(icons/cloudy2.svg);
+          }
+          &.code-103 {
+            background-image: url(icons/cloudy.svg);
+          }
+          &.code-200,
+          &.code-201,
+          &.code-202,
+          &.code-203,
+          &.code-204,
+          &.code-205,
+          &.code-206,
+          &.code-207,
+          &.code-208,
+          &.code-209,
+          &.code-210 {
+            background-image: url(icons/wind.svg);
+          }
+          &.code-211,
+          &.code-212,
+          &.code-213 {
+            background-image: url(icons/tornado.svg);
+          }
+          &.code-300,
+          &.code-301 {
+            background-image: url(icons/rain4.svg);
+          }
+          &.code-302,
+          &.code-303,
+          &.code-304 {
+            background-image: url(icons/rain6.svg);
+          }
+          &.code-305,
+          &.code-309 {
+            background-image: url(icons/rain.svg);
+          }
+          &.code-306 {
+            background-image: url(icons/rain1.svg);
+          }
+          &.code-307 {
+            background-image: url(icons/rain2.svg);
+          }
+          &.code-308,
+          &.code-310,
+          &.code-311,
+          &.code-312 {
+            background-image: url(icons/rain5.svg);
+          }
+          &.code-313 {
+            background-image: url(icons/ice.svg);
+          }
+          &.code-400,
+          &.code-404,
+          &.code-405 {
+            background-image: url(icons/snow.svg);
+          }
+          &.code-401 {
+            background-image: url(icons/snow1.svg);
+          }
+          &.code-402,
+          &.code-403 {
+            background-image: url(icons/snow2.svg);
+          }
+          &.code-404,
+          &.code-405 {
+            background-image: url(icons/rainSnow.svg);
+          }
+          &.code-500,
+          &.code-501 {
+            background-image: url(icons/fog.svg);
+          }
+          &.code-502 {
+            background-image: url(icons/smoke.svg);
+          }
+          &.code-503,
+          &.code-507,
+          &.code-508 {
+            background-image: url(icons/sand.svg);
+          }
+          &.code-504 {
+            background-image: url(icons/dust.svg);
+          }
+          &.code-999 {
+            background-image: url(icons/noMessage.svg);
+          }
         }
       }
     }

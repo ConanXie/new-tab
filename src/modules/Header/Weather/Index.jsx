@@ -98,7 +98,8 @@ class Weather extends Component {
               return (
                 <div className="forecast-box" key={value.date}>
                   <p title={value.date}>{week}</p>
-                  <img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />
+                  <div className={`weather-icon code-${value.cond.code_d}`} title={value.cond.txt_d}></div>
+                  {/*<img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />*/}
                   {/*<p>{value.cond.txt_d}</p>*/}
                   <p>{value.tmp.min}°~{value.tmp.max}°</p>
                 </div>
