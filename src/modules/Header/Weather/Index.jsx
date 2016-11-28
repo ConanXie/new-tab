@@ -44,7 +44,7 @@ class Weather extends Component {
   getData = () => {
     // 'https://api.heweather.com/x3/weather?cityid=CN101280601&key=258c581b778d440ab34a85d5c8d82902'
     // const link = 'https://localhost:5001/api/weather'
-    const link = 'http://23.83.235.152:5300/api/weather'
+    const link = 'https://tab.xiejie.co/api/weather'
     fetch(link).then(res => {
       if (res.ok) {
         res.json().then(data => {
