@@ -167,7 +167,7 @@ class Setup extends Component {
       settings,
       websites
     })
-    const backups = new Blob([data])
+    const backups = new Blob([data], { type: 'application/json' })
     const a = document.createElement('a')
     a.href = window.URL.createObjectURL(backups)
     a.download = 'backups.json'
@@ -362,7 +362,7 @@ class Setup extends Component {
         <div className="setup-section">
           <Paper className="setup-content about" zDepth={1}>
             <h3>关于</h3>
-            <p className="name">Material Design New Tab <FlatButton label="1.0.0" /></p>
+            <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.0.0" /></a></p>
             <Donor />
             <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>
           </Paper>
