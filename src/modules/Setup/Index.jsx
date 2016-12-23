@@ -33,6 +33,7 @@ import Snackbar from 'material-ui/Snackbar'
 import { grey600, teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500 } from 'material-ui/styles/colors'
 
 import Donor from './Donor'
+import Feedback from './Feedback'
 
 const style = {
   headerBar: {
@@ -363,7 +364,10 @@ class Setup extends Component {
           <Paper className="setup-content about" zDepth={1}>
             <h3>关于</h3>
             <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.0.0" /></a></p>
-            <Donor />
+            <div className="donor-feedback">
+              <Donor />
+              <Feedback />
+            </div>
             <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>
           </Paper>
         </div>
