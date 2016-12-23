@@ -47,7 +47,7 @@ class Donor extends Component {
           titleStyle={style.dialogTitle}
         >
           <img className="qrcode" src={require('./images/alipay-qrcode.png')} alt="714751364@qq.com" />
-          <p className="谢谢">如果你认可我的工作就捐助我吧，多和少都是心意，谢谢</p>
+          <p className="谢谢">如果你认可我的付出就捐助我吧，多和少都是心意，谢谢</p>
         </Dialog>
       </div>
     )
