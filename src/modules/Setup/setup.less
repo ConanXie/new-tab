@@ -1,5 +1,5 @@
 .setup-page {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -33,6 +33,15 @@
   }
   &.hide-setup-page {
     animation: hide-setup-page 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .setup-header-bar {
+    position: absolute;
+    top: 0;
+  }
+  & > section {
+    height: calc(~"100vh - 56px");
+    margin-top: 56px;
+    overflow-y: auto;
   }
   .bar-left {
     display: flex;
