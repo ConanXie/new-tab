@@ -34,24 +34,19 @@ class Search extends Component {
   componentDidUpdate() {
     findDOMNode(this.refs.search).focus()
   }
-  componentWillReceiveProps(nextProps) {
-    // when close Bookmark Component then restore the Search Component
-    if (!nextProps.hidden) {
-      setTimeout(() => {
-        this.closeSearch()
-      }, 300)
-    }
-  }
   watchInput = (e) => {
     clearTimeout(this.wait)
     const cond = e.target.value
     this.setState({
       clear: cond ? true : false
     })
-    // if user stopped input then run searchBookmarks
-    this.wait = setTimeout(() => {
-      this.searchBookmarks(cond)
-    }, 500)
+    // if condition has more than 2 characters
+    if (cond && cond.length > 1) {
+      // if user stopped input then run searchBookmarks
+      this.wait = setTimeout(() => {
+        this.searchBookmarks(cond)
+      }, 500)
+    }
   }
   searchBookmarks = (cond) => {
     chrome.bookmarks.search(cond, result => {
@@ -130,7 +125,7 @@ class Bookmark extends Component {
       currentChildren: []
     }
   }
-  componentDidMount() {
+  componentWillMount() {
     /**
      * create bookmarks data
      */
@@ -188,7 +183,7 @@ class Bookmark extends Component {
     })
   }
   render() {
-    const { muiTheme, hidden } = this.props
+    const { muiTheme } = this.props
     return (
       <div className="bookmark-component">
         <header style={{ backgroundColor: muiTheme.palette.primary1Color }}>
@@ -230,7 +225,7 @@ class Bookmark extends Component {
             })}
           </List>
         </section>
-        <Search open={this.state.search} muiTheme={muiTheme} close={this.closeSearch} hidden={hidden} />
+        <Search open={this.state.search} muiTheme={muiTheme} close={this.closeSearch} />
       </div>
     )
   }

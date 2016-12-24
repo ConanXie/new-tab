@@ -98,7 +98,7 @@ class Header extends Component {
           open={this.state.bookmarkOpen}
           onRequestChange={bookmarkOpen => this.setState({ bookmarkOpen })}
         >
-          <Bookmark muiTheme={muiTheme} hidden={this.state.bookmarkOpen} />
+          <Bookmark muiTheme={muiTheme} />
         </Drawer>
       </Paper>
     )
