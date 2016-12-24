@@ -31,8 +31,9 @@ class Feedback extends Component {
       snackbarMessage: ''
     }
     this.emailPattern = /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/
-    this.feedbackUrl = 'http://localhost:5300/api/feedback'
-    // this.feedbackUrl = 'https://tab.xiejie.co/feedback'
+    // this.feedbackUrl = 'http://localhost:5300/api/feedback'
+    this.feedbackUrl = 'https://tab.xiejie.co/api/feedback'
+    this.loading = false
   }
   openDialog = () => {
     this.setState({
@@ -68,6 +69,9 @@ class Feedback extends Component {
    * submit feedback
    */
   handleSubmit = () => {
+    // prevent multipul submit
+    if (this.loading) return
+
     const { email, content } = this.state
     if (!this.emailPattern.test(email)) {
       this.setState({
@@ -83,6 +87,7 @@ class Feedback extends Component {
       })
       return
     }
+    this.loading = true
     fetch(this.feedbackUrl, {
       method: 'POST',
       headers: {
@@ -96,6 +101,10 @@ class Feedback extends Component {
             snackbarOpen: true,
             snackbarMessage: data.code ? data.msg : '反馈成功，十分感谢'
           })
+          setTimeout(() => {
+            this.loading = false
+            this.hideDialog()
+          }, 500)
         })
       }
     })
@@ -143,7 +152,7 @@ class Feedback extends Component {
         <Snackbar
           open={snackbarOpen}
           message={snackbarMessage}
-          autoHideDuration={200000}
+          autoHideDuration={2000}
           onRequestClose={this.closeSnackerbar}
           bodyStyle={style.snackbar}
         />
