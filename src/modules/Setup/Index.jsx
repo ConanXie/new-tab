@@ -232,7 +232,7 @@ class Setup extends Component {
       <div className={classNames('setup-page', { 'show-setup-page': status, 'hide-setup-page': !status })}
         style={{ display }}
       >
-        <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
+        <Paper className="header-bar setup-header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
           <div className="tool-bar">
             <div className="bar-left">
               <IconButton onTouchTap={hideSetup}>
@@ -242,135 +242,134 @@ class Setup extends Component {
             </div>
           </div>
         </Paper>
-        <div className="setup-section">
-          <Paper className="setup-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
-            <div className="toggle-box">
-              <HardwareMemory style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-              <div className="toggle-wrapper">
-                <Toggle
-                  className="toggle"
-                  label="自动保存当前搜索引擎"
-                  defaultToggled={data.autoSaveEngine}
-                  onToggle={this.toggleAutoSaveEngine}
-                  labelStyle={style.toggleLabel}
-                />
+        <section>
+          <div className="setup-section">
+            <Paper className="setup-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
+              <div className="toggle-box">
+                <HardwareMemory style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label="自动保存当前搜索引擎"
+                    defaultToggled={data.autoSaveEngine}
+                    onToggle={this.toggleAutoSaveEngine}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="toggle-box">
-              <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-              <div className="toggle-wrapper">
-                <Toggle
-                  className="toggle"
-                  label="在新标签页中打开搜索"
-                  defaultToggled={data.searchTarget}
-                  onToggle={this.toggleSearchTarget}
-                  labelStyle={style.toggleLabel}
-                />
+              <div className="toggle-box">
+                <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label="在新标签页中打开搜索"
+                    defaultToggled={data.searchTarget}
+                    onToggle={this.toggleSearchTarget}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="toggle-box">
-              <ContentLink style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-              <div className="toggle-wrapper">
-                <Toggle
-                  className="toggle"
-                  label="在新标签页中打开链接"
-                  defaultToggled={data.linkTarget}
-                  onToggle={this.toggleLinkTarget}
-                  labelStyle={style.toggleLabel}
-                />
+              <div className="toggle-box">
+                <ContentLink style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label="在新标签页中打开链接"
+                    defaultToggled={data.linkTarget}
+                    onToggle={this.toggleLinkTarget}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="toggle-box">
-              <TextFormat style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-              <div className="toggle-wrapper">
-                <Toggle
-                  className="toggle"
-                  label="隐藏应用的标签"
-                  defaultToggled={data.hideAppsName}
-                  onToggle={this.toggleHideAppsName}
-                  labelStyle={style.toggleLabel}
-                />
+              <div className="toggle-box">
+                <TextFormat style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label="隐藏应用的标签"
+                    defaultToggled={data.hideAppsName}
+                    onToggle={this.toggleHideAppsName}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
               </div>
-            </div>
-            <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>主题</h2>
-            <List>
-              <ListItem
-                leftIcon={<ColorLens style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
-                primaryText="切换主题"
-                innerDivStyle={{ paddingLeft: '58px' }}
-                onTouchTap={this.openTheme}
-              />
-            </List>
-            <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>备份与重置</h2>
-            <List>
-              <ListItem
-                leftIcon={<FileUpload style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
-                primaryText="生成备份文件"
-                innerDivStyle={{ paddingLeft: '58px' }}
-                onTouchTap={this.createBackups}
-              />
-              <ListItem
-                leftIcon={<FileDownload style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
-                primaryText="从备份中恢复"
-                innerDivStyle={{ paddingLeft: '58px' }}
-              >
-                <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
-              </ListItem>
-              <ListItem
-                leftIcon={<SettingsRestore style={style.toggleIcon, { marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
-                primaryText="重置为默认设置"
-                innerDivStyle={{ paddingLeft: '58px' }}
-                onTouchTap={this.openReset}
-              />
-            </List>
-          </Paper>
-          <Dialog
-            title="选择主题"
-            open={this.state.themeOpen}
-            onRequestClose={this.hideTheme}
-            titleStyle={style.themeTitle}
-            contentStyle={style.themeContent}
-          >
-            {this.theme.map((color, index) => {
-              if (currentTheme === index) {
-                return (
-                  <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.hideTheme() }}>
-                    <CheckCircle color={color} />
-                  </IconButton>
-                )
-              } else {
-                return (
-                  <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.switchTheme(index) }}>
-                    <ImageLens color={color} />
-                  </IconButton>
-                )
-              }
-            })}
-            {/*<IconButton style={style.small} iconStyle={style.smallIcon}>
-              <CheckCircle color={red500} />
-            </IconButton>*/}
-          </Dialog>
-          <Dialog
-            title="确认重置设置？"
-            open={this.state.resetOpen}
-            actions={resetActions}
-            onRequestClose={this.hideReset}
-            contentStyle={style.themeContent}
-          >
-            将会重置为初始化设置
-          </Dialog>
-        </div>
-        <div className="setup-section">
-          <Paper className="setup-content about" zDepth={1}>
-            <h3>关于</h3>
-            <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.0.0" /></a></p>
-            <div className="donor-feedback">
-              <Donor />
-              <Feedback />
-            </div>
-            <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>
-          </Paper>
-        </div>
+              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>主题</h2>
+              <List>
+                <ListItem
+                  leftIcon={<ColorLens style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                  primaryText="切换主题"
+                  innerDivStyle={{ paddingLeft: '58px' }}
+                  onTouchTap={this.openTheme}
+                />
+              </List>
+              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>备份与重置</h2>
+              <List>
+                <ListItem
+                  leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                  primaryText="生成备份文件"
+                  innerDivStyle={{ paddingLeft: '58px' }}
+                  onTouchTap={this.createBackups}
+                />
+                <ListItem
+                  leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                  primaryText="从备份中恢复"
+                  innerDivStyle={{ paddingLeft: '58px' }}
+                >
+                  <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
+                </ListItem>
+                <ListItem
+                  leftIcon={<SettingsRestore style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                  primaryText="重置为默认设置"
+                  innerDivStyle={{ paddingLeft: '58px' }}
+                  onTouchTap={this.openReset}
+                />
+              </List>
+            </Paper>
+            <Dialog
+              title="选择主题"
+              open={this.state.themeOpen}
+              onRequestClose={this.hideTheme}
+              titleStyle={style.themeTitle}
+              contentStyle={style.themeContent}
+            >
+              {this.theme.map((color, index) => {
+                if (currentTheme === index) {
+                  return (
+                    <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.hideTheme() }}>
+                      <CheckCircle color={color} />
+                    </IconButton>
+                  )
+                } else {
+                  return (
+                    <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.switchTheme(index) }}>
+                      <ImageLens color={color} />
+                    </IconButton>
+                  )
+                }
+              })}
+            </Dialog>
+            <Dialog
+              title="确认重置设置？"
+              open={this.state.resetOpen}
+              actions={resetActions}
+              onRequestClose={this.hideReset}
+              contentStyle={style.themeContent}
+            >
+              将会重置为初始化设置
+            </Dialog>
+          </div>
+          <div className="setup-section">
+            <Paper className="setup-content about" zDepth={1}>
+              <h3>关于</h3>
+              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.0.0" /></a></p>
+              <div className="donor-feedback">
+                <Donor />
+                <Feedback />
+              </div>
+              <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>
+            </Paper>
+          </div>
+        </section>
         <Snackbar
           open={snackbarOpen}
           message={snackbarMessage}
