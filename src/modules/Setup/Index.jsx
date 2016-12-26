@@ -364,7 +364,7 @@ class Setup extends Component {
               <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.0.0" /></a></p>
               <div className="donor-feedback">
                 <Donor />
-                <Feedback />
+                <Feedback muiTheme={muiTheme} />
               </div>
               <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>
             </Paper>

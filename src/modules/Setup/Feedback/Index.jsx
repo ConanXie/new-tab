@@ -55,14 +55,14 @@ class Feedback extends Component {
   /**
    * watch email and content
    */
-  emailChange = (e) => {
+  emailChange = (e, nv) => {
     this.setState({
-      email: e.target.value
+      email: nv
     })
   }
-  contentChange = (e) => {
+  contentChange = (e, nv) => {
     this.setState({
-      content: e.target.value
+      content: nv
     })
   }
   /**
@@ -111,6 +111,7 @@ class Feedback extends Component {
   }
   render() {
     const { dialogOpen, snackbarOpen, snackbarMessage } = this.state
+    const { muiTheme } = this.props
     const actions = [
       <FlatButton
         label="取消"
@@ -139,6 +140,7 @@ class Feedback extends Component {
             floatingLabelText="你的电子邮件地址"
             style={style.textField}
             onChange={this.emailChange}
+            underlineFocusStyle={{color: '#ff0000'}}
           /><br />
           <TextField
             multiLine={true}

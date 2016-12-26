@@ -187,7 +187,7 @@ class Navigation extends Component {
   }
   render() {
     // const array = '0'.repeat(10).split('')
-    const { store, target } = this.props
+    const { store, target, muiTheme } = this.props
     const { edit, dialog, confirm, snackbarOpen, snackbarMessage, name, link} = this.state
     const actions = [
       <FlatButton
@@ -248,12 +248,14 @@ class Navigation extends Component {
               defaultValue={name}
               style={style.textField}
               onChange={this.nameChange}
+              underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
             /><br/>
             <TextField
               floatingLabelText="网址"
               defaultValue={link}
               style={style.textField}
               onChange={this.linkChange}
+              underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
             />
           </Dialog>
           <Dialog
