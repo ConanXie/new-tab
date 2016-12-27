@@ -40,14 +40,14 @@ class Donor extends Component {
           onTouchTap={this.showDialog}
         />
         <Dialog
-          title="支付宝扫描二维码"
+          title="微信扫一扫"
           open={this.state.dialog}
           onRequestClose={this.hideDialog}
           contentStyle={style.dialogContent}
           titleStyle={style.dialogTitle}
         >
-          <img className="qrcode" src={require('./images/alipay-qrcode.png')} alt="714751364@qq.com" />
-          <p className="谢谢">如果你认可我的付出就捐助我吧，多和少都是心意，谢谢</p>
+          <img className="qrcode" src={require('./images/weixinpay.png')} alt="weixin" />
+          <p className="谢谢">既然打开了就扫一扫捐助我吧</p>
         </Dialog>
       </div>
     )
