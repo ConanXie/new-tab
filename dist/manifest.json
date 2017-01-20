@@ -1,8 +1,8 @@
 {
-  "name": "Material Design New Tab Extension",
-  "version": "0.0.9",
+  "name": "Material Design New Tab",
+  "version": "1.0.0",
   "manifest_version": 2,
-  "description": "An extension to replace the default new tab of Chrome",
+  "description": "Material Design new tab page",
   "icons": {
     "192": "icons/icon192.png"
   },
