@@ -366,7 +366,7 @@ class Setup extends Component {
                 <Donor />
                 <Feedback muiTheme={muiTheme} />
               </div>
-              <p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>
+              {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
             </Paper>
           </div>
         </section>
