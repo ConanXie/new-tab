@@ -3,7 +3,7 @@
 
 ## Help
 You can add whatever websites you like and manage them. You will see the current local weather and your Chrome Apps on Drawer.
-If you like, you can donate me via Alipay on setup page.
+If you wish, please donate me via Wechat on setup page.
 
 ## Browser Support
 - Chrome 50+
