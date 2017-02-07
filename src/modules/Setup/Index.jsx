@@ -18,6 +18,7 @@ import ContentLink from 'material-ui/svg-icons/content/link'
 import ActionSearch from 'material-ui/svg-icons/action/search'
 import CheckCircle from 'material-ui/svg-icons/action/check-circle'
 import TextFormat from 'material-ui/svg-icons/content/text-format'
+import CallSplit from 'material-ui/svg-icons/communication/call-split'
 import ColorLens from 'material-ui/svg-icons/image/color-lens'
 import ImageLens from 'material-ui/svg-icons/image/lens'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
@@ -90,6 +91,9 @@ class Setup extends Component {
     data: PropTypes.object.isRequired,
     currentEngine: PropTypes.object.isRequired
   }
+  static contextTypes = {
+    intl: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
     this.state = {
@@ -138,6 +142,11 @@ class Setup extends Component {
     saveSettings('hideAppsName', bool)
     hideAppsName(bool)
   }
+  toggleUseHK = (event, bool) => {
+    const { saveSettings, useHK } = this.props
+    saveSettings('useHK', bool)
+    useHK(bool)
+  }
   openTheme = () => {
     this.setState({
       themeOpen: true
@@ -177,6 +186,7 @@ class Setup extends Component {
   restoreBackups = (e) => {
     const file = e.target.files[0]
     const fr = new FileReader()
+    const { intl } = this.context
     fr.onloadend = e => {
       const backups = JSON.parse(e.target.result)
       for (let i in backups) {
@@ -184,7 +194,7 @@ class Setup extends Component {
       }
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: '已从备份文件恢复, 刷新后生效'
+        snackbarMessage: intl.formatMessage({ id: 'settings.br.restore.message' })
       })
     }
     fr.readAsText(file)
@@ -202,9 +212,10 @@ class Setup extends Component {
   resetSettings = () => {
     window.localStorage.removeItem('currentEngine')
     window.localStorage.removeItem('settings')
+    const { intl } = this.context
     this.setState({
       snackbarOpen: true,
-      snackbarMessage: '已重置设置，刷新后生效'
+      snackbarMessage: intl.formatMessage({ id: 'settings.br.reset.message' })
     })
     this.hideReset()
   }
@@ -216,14 +227,15 @@ class Setup extends Component {
   render() {
     const { status, data, hideSetup, muiTheme } = this.props
     const { display, currentTheme, snackbarOpen, snackbarMessage } = this.state
+    const { intl } = this.context
     const resetActions = [
       <FlatButton
-        label="取消"
+        label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
         onTouchTap={this.hideReset}
       />,
       <FlatButton
-        label="确认"
+        label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
         onTouchTap={this.resetSettings}
       />
@@ -238,7 +250,7 @@ class Setup extends Component {
               <IconButton onTouchTap={hideSetup}>
                 <ArrowBack color="#fff" />
               </IconButton>
-              <div className="bar-label">设置</div>
+              <div className="bar-label">{intl.formatMessage({ id: 'settings.toolbar.title' })}</div>
             </div>
           </div>
         </Paper>
@@ -250,7 +262,7 @@ class Setup extends Component {
                 <div className="toggle-wrapper">
                   <Toggle
                     className="toggle"
-                    label="自动保存当前搜索引擎"
+                    label={intl.formatMessage({ id: 'settings.engine.save.label' })}
                     defaultToggled={data.autoSaveEngine}
                     onToggle={this.toggleAutoSaveEngine}
                     labelStyle={style.toggleLabel}
@@ -262,7 +274,7 @@ class Setup extends Component {
                 <div className="toggle-wrapper">
                   <Toggle
                     className="toggle"
-                    label="在新标签页中打开搜索"
+                    label={intl.formatMessage({ id: 'settings.engine.search.label' })}
                     defaultToggled={data.searchTarget}
                     onToggle={this.toggleSearchTarget}
                     labelStyle={style.toggleLabel}
@@ -274,7 +286,7 @@ class Setup extends Component {
                 <div className="toggle-wrapper">
                   <Toggle
                     className="toggle"
-                    label="在新标签页中打开链接"
+                    label={intl.formatMessage({ id: 'settings.website.open.label' })}
                     defaultToggled={data.linkTarget}
                     onToggle={this.toggleLinkTarget}
                     labelStyle={style.toggleLabel}
@@ -286,47 +298,62 @@ class Setup extends Component {
                 <div className="toggle-wrapper">
                   <Toggle
                     className="toggle"
-                    label="隐藏应用的标签"
+                    label={intl.formatMessage({ id: 'settings.apps.display.label' })}
                     defaultToggled={data.hideAppsName}
                     onToggle={this.toggleHideAppsName}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
               </div>
-              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>主题</h2>
+              {/*仅对中文用户展示*/}
+              {navigator.language === 'zh-CN' &&
+                <div className="toggle-box">
+                  <CallSplit style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                  <div className="toggle-wrapper">
+                    <Toggle
+                      className="toggle"
+                      label="Google 搜索使用 .hk"
+                      defaultToggled={data.useHK}
+                      onToggle={this.toggleUseHK}
+                      labelStyle={style.toggleLabel}
+                    />
+                  </div>
+                </div>
+              }
+              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
               <List>
                 <ListItem
                   leftIcon={<ColorLens style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                  primaryText="切换主题"
+                  primaryText={intl.formatMessage({ id: 'settings.theme.switch.label' })}
                   innerDivStyle={{ paddingLeft: '58px' }}
                   onTouchTap={this.openTheme}
                 />
               </List>
-              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>备份与重置</h2>
+              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
               <List>
                 <ListItem
                   leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                  primaryText="生成备份文件"
+                  primaryText={intl.formatMessage({ id: 'settings.br.backup.label' })}
                   innerDivStyle={{ paddingLeft: '58px' }}
                   onTouchTap={this.createBackups}
                 />
                 <ListItem
                   leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                  primaryText="从备份中恢复"
+                  primaryText={intl.formatMessage({ id: 'settings.br.restore.label' })}
                   innerDivStyle={{ paddingLeft: '58px' }}
                 >
                   <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
                 </ListItem>
                 <ListItem
                   leftIcon={<SettingsRestore style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                  primaryText="重置为默认设置"
+                  primaryText={intl.formatMessage({ id: 'settings.br.reset.label' })}
                   innerDivStyle={{ paddingLeft: '58px' }}
                   onTouchTap={this.openReset}
                 />
               </List>
             </Paper>
             <Dialog
-              title="选择主题"
+              title={intl.formatMessage({ id: 'settings.theme.select.title' })}
               open={this.state.themeOpen}
               onRequestClose={this.hideTheme}
               titleStyle={style.themeTitle}
@@ -349,23 +376,26 @@ class Setup extends Component {
               })}
             </Dialog>
             <Dialog
-              title="确认重置设置？"
+              title={intl.formatMessage({ id: 'settings.reset.title' })}
               open={this.state.resetOpen}
               actions={resetActions}
               onRequestClose={this.hideReset}
               contentStyle={style.themeContent}
             >
-              将会重置为初始化设置
+              {intl.formatMessage({ id: 'settings.reset.warning' })}
             </Dialog>
           </div>
           <div className="setup-section">
             <Paper className="setup-content about" zDepth={1}>
-              <h3>关于</h3>
-              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.0.0" /></a></p>
-              <div className="donor-feedback">
-                <Donor />
-                <Feedback muiTheme={muiTheme} />
-              </div>
+              <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
+              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.1.0" /></a></p>
+              {/*仅对中文用户展示*/}
+              {navigator.language === 'zh-CN' &&
+                <div className="donor-feedback">
+                  <Donor />
+                  <Feedback muiTheme={muiTheme} />
+                </div>
+              }
               {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
             </Paper>
           </div>
