@@ -8,10 +8,11 @@ const node_modules = path.resolve(__dirname, '../node_modules')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
+  context: path.resolve(__dirname, '../src'),
   entry: {
     app: [
       'babel-polyfill',
-      path.resolve(dir_src, 'Main.jsx')
+      './Main.jsx'
     ],
     vendors: [
       'react',
@@ -23,23 +24,30 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', 'less', 'css', '.jpg', '.png']
+    extensions: ['.js', '.jsx', '.less', '.css', '.jpg', '.png']
   },
   output: {
     path: buildPath,
     filename: 'bundle.min.js'
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      loaders: ['babel?presets[]=es2015&presets[]=react&presets[]=stage-0&plugins[]=react-hot-loader/babel']
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          presets: ['es2015', 'react', 'stage-0']
+        }
+      }]
     }, {
       test: /\.less$/,
-      loader: ExtractTextPlugin.extract('style', 'css!less')
+      use: ExtractTextPlugin.extract({
+        fallbackLoader: 'style-loader',
+        loader: ['css-loader', 'less-loader']
+      })
     }, {
       test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
-      loader: 'url?limit=2048&name=assets/[name].[ext]'
+      use: ['url-loader?limit=2048&name=assets/[name].[ext]']
     }]
   },
   plugins: [
@@ -48,7 +56,10 @@ module.exports = {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.min.js'),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendors',
+      filename: 'vendors.min.js'
+    }),
     new ExtractTextPlugin('style.min.css')
   ],
   stats: {

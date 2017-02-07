@@ -6,15 +6,16 @@ const buildPath = path.resolve(__dirname, '../dist')
 const node_modules = path.resolve(__dirname, '../node_modules')
 
 module.exports = {
+  context: path.resolve(__dirname, '../src'),
   entry: [
     'react-hot-loader/patch',
     'babel-polyfill',
     'webpack/hot/only-dev-server',
     'webpack-hot-middleware/client?path=https://localhost:5001/__webpack_hmr',
-    path.resolve(dir_src, 'Main.jsx')
+    './Main.jsx'
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx', 'less', 'css', '.jpg', '.png']
+    extensions: ['.js', '.jsx']
   },
   output: {
     path: buildPath,
@@ -22,22 +23,25 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [{
+    rules: [{
       test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      loaders: ['babel?presets[]=es2015&presets[]=react&presets[]=stage-0&plugins[]=react-hot-loader/babel']
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          presets: ['es2015', 'react', 'stage-0'],
+          plugins: ['react-hot-loader/babel']
+        }
+      }]
     }, {
       test: /\.less$/,
-      loader: 'style!css?sourceMap!less?sourceMap=source-map-less-inline'
+      use: ['style-loader', 'css-loader?sourceMap', 'less-loader']
     }, {
       test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
-      loader: 'url?limit=10000'
+      use: ['url-loader?limit=10000']
     }]
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.HotModuleReplacementPlugin()
   ],
   devtool: 'source-map'
 }
