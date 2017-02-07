@@ -1,7 +1,7 @@
 import './style.less'
 
 import classNames from 'classnames'
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 
 import Paper from 'material-ui/Paper'
@@ -21,6 +21,9 @@ const style = {
 }
 
 class Search extends Component {
+  static contextTypes = {
+    intl: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
     this.state = {
@@ -72,6 +75,7 @@ class Search extends Component {
   }
   render() {
     const { open, muiTheme } = this.props
+    const { intl } = this.context
     return (
       <div className={classNames('search-bookmarks', { 'show': open })}>
         <Paper zDepth={1}>
@@ -84,7 +88,7 @@ class Search extends Component {
                   </IconButton>
                 </div>
                 <div className="input-box">
-                  <input type="text" placeholder="搜索书签" ref="search" onChange={this.watchInput} />
+                  <input type="text" placeholder={intl.formatMessage({ id: 'bookmarks.search.placeholder' })} ref="search" onChange={this.watchInput} />
                 </div>
                 <div className={classNames('util-btn clear-btn', { 'show': this.state.clear })}>
                   <IconButton onTouchTap={this.clearSearch}>
@@ -117,6 +121,9 @@ class Search extends Component {
 }
 
 class Bookmark extends Component {
+  static contextTypes = {
+    intl: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
     this.state = {
@@ -184,6 +191,7 @@ class Bookmark extends Component {
   }
   render() {
     const { muiTheme } = this.props
+    const { intl } = this.context
     return (
       <div className="bookmark-component">
         <header style={{ backgroundColor: muiTheme.palette.primary1Color }}>
@@ -191,7 +199,7 @@ class Bookmark extends Component {
             <div className="search-icon">
               <ActionSearch color="#fff" />
             </div>
-            <div className="placeholder">搜索书签</div>
+            <div className="placeholder">{intl.formatMessage({ id: 'bookmarks.search.placeholder' })}</div>
           </div>
         </header>
         <aside className="folder-list">
