@@ -15,6 +15,11 @@ import SearchIcon from 'material-ui/svg-icons/action/search'
 
 import searchEngine from './search-engine'
 
+// 大陆以外地区去掉百度与搜狗
+if (navigator.language !== 'zh-CN') {
+  searchEngine.splice(1, 2)
+}
+
 const style = {
   searchBtn: {
     width: '38px',
@@ -58,7 +63,13 @@ class Search extends Component {
     e.preventDefault()
     const text = this.refs.text.value
     const { searchLink } = this.state
-    window.open(searchLink + text, this.props.target)
+    const { currentEngine, useHK } = this.props
+    // 判断是否使用.hk
+    if (useHK && currentEngine.name === 'Google') {
+      window.open(searchLink.replace(/\.com/, '.com.hk') + text, this.props.target)
+    } else {
+      window.open(searchLink + text, this.props.target)
+    }
   }
   changeEngine = (engine) => {
     const { name, link, className } = engine
