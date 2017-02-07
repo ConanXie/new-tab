@@ -67,8 +67,14 @@ class Weather extends Component {
   }
   render() {
     let Interface
+    let Qlty
     const { data } = this.state
     if (data) {
+      if (data.aqi) {
+        Qlty = (
+          <p className="qlty">空气{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
+        )
+      }
       Interface = (
         <div className="weather-interface" style={{ backgroundColor: this.props.muiTheme.palette.primary1Color }}>
           <header>
@@ -77,7 +83,7 @@ class Weather extends Component {
                 <h1 className="now-tmp">{data.now.tmp}°</h1>
                 <p className="now-cond">{data.now.cond.txt}</p>
               </div>
-              <p className="qlty">空气{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
+              {Qlty}
             </div>
             <div className="loc-info">
               <p className="loc-content">
