@@ -85,10 +85,9 @@ class Header extends Component {
           open={this.state.drawerOpen}
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
-          <Weather muiTheme={muiTheme} />
-          {/*<IconButton onTouchTap={this.trigger}>
-            <ActionRoom />
-          </IconButton>*/}
+          {/*仅对中文用户展示天气*/}
+          {navigator.language === 'zh-CN' && <Weather muiTheme={muiTheme} />}
+          
           <Apps hideAppsName={hideAppsName} muiTheme={muiTheme} />
         </Drawer>
         <Drawer
