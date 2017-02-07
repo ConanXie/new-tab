@@ -1,12 +1,12 @@
 {
   "name": "md-tab",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "description": "A new tab for Chrome",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "build": "webpack -p --config config/webpack.prod.config.js"
+    "build": "webpack -p --config webpack/webpack.prod.config.js"
   },
   "keywords": [
     "chrome"
@@ -18,6 +18,7 @@
     "material-ui": "^0.16.7",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-intl": "^2.2.3",
     "react-redux": "^5.0.2",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
@@ -32,16 +33,16 @@
     "babel-preset-react": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
     "css-loader": "^0.26.1",
-    "express": "^4.14.0",
-    "extract-text-webpack-plugin": "^1.0.1",
-    "file-loader": "^0.9.0",
+    "express": "^4.14.1",
+    "extract-text-webpack-plugin": "2.0.0-rc.2",
+    "file-loader": "0.10.0",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
     "react-hot-loader": "^3.0.0-beta.6",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack": "^1.14.0",
-    "webpack-dev-middleware": "^1.9.0",
-    "webpack-hot-middleware": "^2.15.0"
+    "webpack": "2.2.1",
+    "webpack-dev-middleware": "^1.10.0",
+    "webpack-hot-middleware": "^2.16.1"
   }
 }
