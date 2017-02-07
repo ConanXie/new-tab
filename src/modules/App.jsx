@@ -22,12 +22,13 @@ import Setup from './Setup'
 class App extends Component {
   constructor(props) {
     super(props)
-    const { linkTarget, searchTarget, hideAppsName, currentTheme } = props.settings
+    const { linkTarget, searchTarget, hideAppsName, useHK, currentTheme } = props.settings
     const index = currentTheme ? currentTheme : 0
     this.state = {
       linkTarget: linkTarget ? '_blank' : '_self',
       searchTarget: searchTarget ? '_blank' : '_self',
       hideAppsName,
+      useHK,
       muiTheme: this.createTheme(theme[index])
     }
   }
@@ -54,24 +55,30 @@ class App extends Component {
       hideAppsName: bool
     })
   }
+  useHK = (bool) => {
+    this.setState({
+      useHK: bool
+    })
+  }
   changeTheme = (index) => {
     this.setState({
       muiTheme: this.createTheme(theme[index])
     })
   }
   render() {
-    const { linkTarget, searchTarget, hideAppsName, muiTheme } = this.state
+    const { linkTarget, searchTarget, hideAppsName, useHK, muiTheme } = this.state
     // console.log(muiTheme)
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <Header hideAppsName={hideAppsName} muiTheme={muiTheme} />
-          <Search target={searchTarget} />
+          <Search target={searchTarget} useHK={useHK} />
           <Navigation target={linkTarget} muiTheme={muiTheme} />
           <Setup
             setLinkTarget={this.setLinkTarget}
             setSearchTarget={this.setSearchTarget}
             hideAppsName={this.hideAppsName}
+            useHK={this.useHK}
             changeTheme={this.changeTheme}
             muiTheme={muiTheme}
           />
