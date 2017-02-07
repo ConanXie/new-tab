@@ -1,11 +1,13 @@
 import './style.less'
 
 import classNames from 'classnames'
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as websiteActions from '../../actions/websites'
+
+import { FormattedMessage } from 'react-intl'
 
 import Paper from 'material-ui/Paper'
 import FlatButton from 'material-ui/FlatButton'
@@ -60,6 +62,9 @@ const style = {
 }
 
 class Navigation extends Component {
+  static contextTypes = {
+    intl: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
     this.state = {
@@ -107,17 +112,18 @@ class Navigation extends Component {
   handleSubmit = () => {
     const { name, link, edit, index } = this.state
     const { addWebsite, editWebsite } = this.props
+    const { intl } = this.context
     if (!name) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: '别忘了网站的名字🙂'
+        snackbarMessage: intl.formatMessage({ id: 'nav.edit.input.forget.name' })
       })
       return
     }
     if (!link) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: '别忘了网址🙂'
+        snackbarMessage: intl.formatMessage({ id: 'nav.edit.input.forget.URL' })
       })
       return
     }
@@ -186,29 +192,29 @@ class Navigation extends Component {
     this.openDialog()
   }
   render() {
-    // const array = '0'.repeat(10).split('')
     const { store, target, muiTheme } = this.props
     const { edit, dialog, confirm, snackbarOpen, snackbarMessage, name, link} = this.state
+    const { intl } = this.context
     const actions = [
       <FlatButton
-        label="取消"
+        label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
         onTouchTap={this.hideDialog}
       />,
       <FlatButton
-        label="确认"
+        label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
         onTouchTap={this.handleSubmit}
       />
     ]
     const confirmActions = [
       <FlatButton
-        label="取消"
+        label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
         onTouchTap={this.hideConfirm}
       />,
       <FlatButton
-        label="确认"
+        label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
         onTouchTap={this.handleConfirm}
       />
@@ -216,7 +222,9 @@ class Navigation extends Component {
     return (
       <Paper zDepth={1} className="navigation-box">
         <div className="tool-bar">
-          <h3 className="title">我的导航</h3>
+          <h3 className="title">
+            <FormattedMessage id="nav.title" />
+          </h3>
           <div className="tool-area">
             <div className={classNames('tool-box', { 'show-edit': edit })}>
               <div className="first-column">
@@ -235,7 +243,7 @@ class Navigation extends Component {
             </div>
           </div>
           <Dialog
-            title={edit ? '编辑网站' : '新增网站'}
+            title={edit ? intl.formatMessage({ id: 'nav.edit.title.edit' }) : intl.formatMessage({ id: 'nav.edit.title.add' })}
             actions={actions}
             modal={false}
             open={dialog}
@@ -244,14 +252,14 @@ class Navigation extends Component {
             titleStyle={style.dialogTitle}
           >
             <TextField
-              floatingLabelText="名称"
+              floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.website' })}
               defaultValue={name}
               style={style.textField}
               onChange={this.nameChange}
               underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
             /><br/>
             <TextField
-              floatingLabelText="网址"
+              floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.URL' })}
               defaultValue={link}
               style={style.textField}
               onChange={this.linkChange}
@@ -259,7 +267,7 @@ class Navigation extends Component {
             />
           </Dialog>
           <Dialog
-            title="确认删除？"
+            title={intl.formatMessage({ id: 'nav.delete.title' })}
             actions={confirmActions}
             modal={false}
             open={confirm}
@@ -267,7 +275,7 @@ class Navigation extends Component {
             contentStyle={style.dialogContent}
             titleStyle={style.confirmTitle}
           >
-            删除后不可撤销
+            {intl.formatMessage({ id: 'nav.delete.tip' })}
           </Dialog>
         </div>
         <div className="website-area">
@@ -280,7 +288,7 @@ class Navigation extends Component {
                   href={link}
                   target={target}
                   secondary={true}
-                  icon={<img className="nav-icon" src={`https://api.byi.pw/favicon/?url=${link}`} alt={name} />}
+                  icon={<img className="nav-icon" src={`http://api.byi.pw/favicon/?url=${link}`} alt={name} />}
                   className="website-link"
                   style={style.website}
                   onClick={this.checkClick}
