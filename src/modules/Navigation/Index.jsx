@@ -220,7 +220,7 @@ class Navigation extends Component {
       />
     ]
     return (
-      <Paper zDepth={1} className="navigation-box">
+      <Paper zDepth={0} className="navigation-box">
         <div className="tool-bar">
           <h3 className="title">
             <FormattedMessage id="nav.title" />
