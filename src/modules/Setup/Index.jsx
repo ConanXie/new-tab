@@ -24,6 +24,7 @@ import ImageLens from 'material-ui/svg-icons/image/lens'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
 import FileUpload from 'material-ui/svg-icons/file/file-upload'
 import SettingsRestore from 'material-ui/svg-icons/action/settings-backup-restore'
+import ActionInfo from 'material-ui/svg-icons/action/info-outline'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { List, ListItem } from 'material-ui/List'
@@ -391,9 +392,15 @@ class Setup extends Component {
               <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.1.3" /></a></p>
               {/*仅对中文用户展示*/}
               {navigator.language === 'zh-CN' &&
-                <div className="donor-feedback">
-                  <Donor />
-                  <Feedback muiTheme={muiTheme} />
+                <div>
+                  <div className="donor-feedback">
+                    <Donor />
+                    <Feedback muiTheme={muiTheme} />
+                  </div>
+                  <p className="tip">
+                    <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
+                    <span>翻墙使用体验更佳</span>
+                  </p>
                 </div>
               }
               {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
