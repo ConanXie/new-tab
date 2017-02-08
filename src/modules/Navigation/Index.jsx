@@ -288,7 +288,7 @@ class Navigation extends Component {
                   href={link}
                   target={target}
                   secondary={true}
-                  icon={<img className="nav-icon" src={`http://api.byi.pw/favicon/?url=${link}`} alt={name} />}
+                  icon={<img className="nav-icon" src={`https://www.google.com/s2/favicons?domain=${link}`} alt={name} />}
                   className="website-link"
                   style={style.website}
                   onClick={this.checkClick}
