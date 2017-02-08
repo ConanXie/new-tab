@@ -388,7 +388,7 @@ class Setup extends Component {
           <div className="setup-section">
             <Paper className="setup-content about" zDepth={1}>
               <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
-              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.1.2" /></a></p>
+              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.1.3" /></a></p>
               {/*仅对中文用户展示*/}
               {navigator.language === 'zh-CN' &&
                 <div className="donor-feedback">
