@@ -26,7 +26,8 @@ const style = {
     height: '38px',
     padding: '0',
     position: 'absolute',
-    right: '0'
+    right: '3px',
+    top: '3px'
   }
 }
 
@@ -84,6 +85,18 @@ class Search extends Component {
       saveToLocalStorage(engine)
     }
   }
+  mouseEnter = () => {
+    this.refs.text.classList.add('hover')
+  }
+  mouseLeave = () => {
+    this.refs.text.classList.remove('hover')
+  }
+  focus = () => {
+    this.refs.text.classList.add('focus')
+  }
+  blur = () => {
+    this.refs.text.classList.remove('focus')
+  }
   render() {
     const { searchName, searchClass } = this.state
     return (
@@ -110,7 +123,7 @@ class Search extends Component {
         <div className="search-box">
           <form action="" onSubmit={this.search}>
             <div className="input-box">
-              <input type="text" ref="text" />
+              <input type="text" ref="text" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onFocus={this.focus} onBlur={this.blur} />
               <IconButton
                 type="submit"
                 style={style.searchBtn}
