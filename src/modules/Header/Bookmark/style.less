@@ -23,8 +23,8 @@
     }
   }
   .folder-list {
-    width: 150px;
-    float: left;
+    // width: 150px;
+    // float: left;
     height: calc(~"100vh - 56px");
     overflow-y: scroll;
   }
@@ -44,6 +44,18 @@
   .bookmark-link {
     text-decoration: none;
   }
+  .children-wrap {
+    // max-height: 0;
+    height: 0;
+    overflow: hidden;
+    // transition: max-height 0.3s ease-in-out;
+    &.opened {
+      height: auto;
+      // max-height: 1000000px;
+      // transition: max-height 0.3s ease-in-out;
+    }
+  }
+
   .search-bookmarks {
     z-index: 1;
     position: absolute;
@@ -67,7 +79,7 @@
     }
     &.show {
       display: block;
-      animation: show-bookmarks-search 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: show-bookmarks-search 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .search-header {
