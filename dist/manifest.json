@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Material Design new tab page",
   "icons": {
-    "192": "icons/icon192.png"
+    "256": "icons/icon@256.png"
   },
   "chrome_url_overrides": {
     "newtab": "index.html"
