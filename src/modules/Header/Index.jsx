@@ -27,13 +27,39 @@ const style = {
 
 class Header extends Component {
   static propsType = {
-    showSetup: PropTypes.func.isRequired
+    showSetup: PropTypes.func.isRequired,
+    hideSetup: PropTypes.func.isRequired
   }
   constructor(props) {
     super(props)
     this.state = {
       drawerOpen: false,
       bookmarkOpen: false
+    }
+    this.setupOpen = false
+  }
+  componentDidMount() {
+    document.onkeydown = () => {
+      const { drawerOpen, bookmarkOpen } = this.state
+      const { setupOpen, showSetup, hideSetup } = this.props
+      const code = window.event.keyCode
+      // console.log(window.event)
+      // listen Alt + B
+      if (code === 66 && window.event.altKey) {
+        this.setState({
+          bookmarkOpen: !bookmarkOpen
+        })
+      }
+      // listen Alt + A
+      if (code === 65 && window.event.altKey) {
+        this.setState({
+          drawerOpen: !drawerOpen
+        })
+      }
+      // listen Alt + S
+      if (code === 83 && window.event.altKey) {
+        setupOpen ? hideSetup() : showSetup()
+      }
     }
   }
   openDrawer = () => {
@@ -59,6 +85,7 @@ class Header extends Component {
     })
   }*/
   render() {
+    // console.log(this.props)
     const { showSetup, hideAppsName, muiTheme } = this.props
     return (
       <Paper className="header-bar" rounded={false} zDepth={0}>
@@ -104,8 +131,13 @@ class Header extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  const { status } = state.setupPage
+  return { setupOpen: status }
+}
+
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(setupPageActions, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
