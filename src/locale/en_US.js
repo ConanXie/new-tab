@@ -31,7 +31,13 @@ const en_US = {
   'settings.reset.warning': 'It will reset to initialization settings',
   'settings.about.title': 'About',
   /*bookmarks*/
-  'bookmarks.search.placeholder': 'search your bookmarks'
+  'bookmarks.search.placeholder': 'search your bookmarks',
+  /*empty text*/
+  'empty.text.apps': 'Your browser does not have any application',
+  'empty.text.bookmarks': 'Without any bookmarks',
+  'empty.text.bookmarks.search': 'No bookmarks found',
+  'empty.text.navigation': 'There are no websites',
+  'empty.text.navigation.add': 'Add it now',
 }
 
 export default en_US

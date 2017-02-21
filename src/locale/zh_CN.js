@@ -31,7 +31,13 @@ const zh_CN = {
   'settings.reset.warning': '将会重置为初始化设置',
   'settings.about.title': '关于',
   /*bookmarks*/
-  'bookmarks.search.placeholder': '搜索书签'
+  'bookmarks.search.placeholder': '搜索书签',
+  /*empty text*/
+  'empty.text.apps': '你的浏览器没有任何应用',
+  'empty.text.bookmarks': '没有任何书签',
+  'empty.text.bookmarks.search': '没有找到符合条件的书签',
+  'empty.text.navigation': '这里还没有网站',
+  'empty.text.navigation.add': '立即添加',
 }
 
 export default zh_CN
