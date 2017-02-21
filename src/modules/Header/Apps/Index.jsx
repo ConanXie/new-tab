@@ -3,6 +3,8 @@ import './style.less'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
+import FlatButton from 'material-ui/FlatButton'
+
 class Apps extends Component {
   static contextTypes = {
     intl: PropTypes.object.isRequired
@@ -47,12 +49,14 @@ class Apps extends Component {
             const maxIcon = app.icons.length - 1
             return (
               <div className="app-box" key={index}>
-                <dl onClick={e => { chrome.management.launchApp(app.id) }}>
-                  <dt>
-                    <img src={app.icons[maxIcon].url} alt={app.shortName} />
-                  </dt>
-                  <dd className={classNames({ 'hide': hideAppsName })}>{app.shortName}</dd>
-                </dl>
+                <FlatButton style={{ height: 'auto', width: '100%', minWidth: 'none', lineHeight: 'normal' }}>
+                  <dl onClick={e => { chrome.management.launchApp(app.id) }}>
+                    <dt>
+                      <img src={app.icons[maxIcon].url} alt={app.shortName} />
+                    </dt>
+                    <dd className={classNames({ 'hide': hideAppsName })}>{app.shortName}</dd>
+                  </dl>
+                </FlatButton>
               </div>
             )
           })}
