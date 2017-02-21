@@ -5,7 +5,8 @@
   // border: 1px solid #eee;
   .tool-bar {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     height: 48px;
     margin-bottom: 12px;
@@ -19,6 +20,9 @@
     .tool-area {
       height: 48px;
       overflow: hidden;
+      &.hide {
+        display: none;
+      }
       .tool-box {
         transition: transform 0.3s;
         &.show-edit {
@@ -33,6 +37,19 @@
   }
   .website-area {
     padding: 0 20px 12px;
+    &.empty {
+      overflow: hidden;
+      height: 280px;
+      background: url(images/empty-state-website.svg) center 10% no-repeat;
+      background-size: 128px auto;
+      .empty-box {
+        text-align: center;
+        p.empty-text {
+          margin: 170px 0 20px;
+          color: #999;
+        }
+      }
+    }
     .website-box {
       position: relative;
       display: inline-block;

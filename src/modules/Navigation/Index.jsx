@@ -11,6 +11,7 @@ import { FormattedMessage } from 'react-intl'
 
 import Paper from 'material-ui/Paper'
 import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import ActionAndroid from 'material-ui/svg-icons/action/android'
@@ -93,9 +94,14 @@ class Navigation extends Component {
     })
   }
   handleConfirm = () => {
-    const { deleteWebsite } = this.props
+    const { deleteWebsite, store } = this.props
     deleteWebsite(this.state.index)
     this.hideConfirm()
+
+    // when store clear, restore the edit status
+    if (!store.length) {
+      this.finishedEdit()
+    }
   }
   openDialog = () => {
     this.setState({
@@ -222,10 +228,10 @@ class Navigation extends Component {
     return (
       <Paper zDepth={0} className="navigation-box">
         <div className="tool-bar">
-          <h3 className="title">
+          {/*<h3 className="title">
             <FormattedMessage id="nav.title" />
-          </h3>
-          <div className="tool-area">
+          </h3>*/}
+          <div className={classNames('tool-area', { 'hide': !store.length })}>
             <div className={classNames('tool-box', { 'show-edit': edit })}>
               <div className="first-column">
                 <IconButton onTouchTap={this.openDialog}>
@@ -278,7 +284,17 @@ class Navigation extends Component {
             {intl.formatMessage({ id: 'nav.delete.tip' })}
           </Dialog>
         </div>
-        <div className="website-area">
+        <div className={classNames('website-area', { 'empty': !store.length })}>
+          {!store.length && (
+            <div className="empty-box">
+              <p className="empty-text">{intl.formatMessage({ id: 'empty.text.navigation' })}</p>
+              <RaisedButton
+                label={intl.formatMessage({ id: 'empty.text.navigation.add' })}
+                primary={true}
+                onTouchTap={this.openDialog}
+              />
+            </div>
+          )}
           {store.map((value, index) => {
             const { name, link } = value
             return (
