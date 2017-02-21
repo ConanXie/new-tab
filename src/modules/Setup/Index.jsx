@@ -25,6 +25,7 @@ import FileDownload from 'material-ui/svg-icons/file/file-download'
 import FileUpload from 'material-ui/svg-icons/file/file-upload'
 import SettingsRestore from 'material-ui/svg-icons/action/settings-backup-restore'
 import ActionInfo from 'material-ui/svg-icons/action/info-outline'
+import HardwareKeyboard from 'material-ui/svg-icons/hardware/keyboard'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { List, ListItem } from 'material-ui/List'
@@ -403,6 +404,24 @@ class Setup extends Component {
                   </p>
                 </div>
               }
+              <div className="hot-key-box">
+                <div className="tip">
+                  <HardwareKeyboard style={{ width: 18, height: 18 }} color="#999" />
+                  <span>{intl.formatMessage({ id: 'hotkey.title' })}</span>
+                </div>
+                <div className="hot-key-list">
+                  <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.apps' })}</span>
+                  <span className="hot-key">Alt + A</span>
+                </div>
+                <div className="hot-key-list">
+                  <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.bookmarks' })}</span>
+                  <span className="hot-key">Alt + B</span>
+                </div>
+                <div className="hot-key-list">
+                  <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.settings' })}</span>
+                  <span className="hot-key">Alt + S</span>
+                </div>
+              </div>
               {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
             </Paper>
           </div>
