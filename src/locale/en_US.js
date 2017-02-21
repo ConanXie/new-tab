@@ -38,6 +38,11 @@ const en_US = {
   'empty.text.bookmarks.search': 'No bookmarks found',
   'empty.text.navigation': 'There are no websites',
   'empty.text.navigation.add': 'Add it now',
+  /*hot key*/
+  'hotkey.title': 'Hotkey',
+  'hotkey.apps': 'Apps',
+  'hotkey.bookmarks': 'Bookmarks',
+  'hotkey.settings': 'Settings',
 }
 
 export default en_US

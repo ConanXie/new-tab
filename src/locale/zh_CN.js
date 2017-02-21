@@ -33,11 +33,16 @@ const zh_CN = {
   /*bookmarks*/
   'bookmarks.search.placeholder': '搜索书签',
   /*empty text*/
-  'empty.text.apps': '你的浏览器没有任何应用',
-  'empty.text.bookmarks': '没有任何书签',
+  'empty.text.apps': '你没有任何应用',
+  'empty.text.bookmarks': '你没有任何书签',
   'empty.text.bookmarks.search': '没有找到符合条件的书签',
-  'empty.text.navigation': '这里还没有网站',
+  'empty.text.navigation': '你没有任何常用的网站',
   'empty.text.navigation.add': '立即添加',
+  /*hot key*/
+  'hotkey.title': '快捷键',
+  'hotkey.apps': '应用',
+  'hotkey.bookmarks': '书签',
+  'hotkey.settings': '设置',
 }
 
 export default zh_CN
