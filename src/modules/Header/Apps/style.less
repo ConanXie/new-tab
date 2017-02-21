@@ -6,6 +6,17 @@
 }
 
 .apps-collection {
+  &.empty {
+    overflow: hidden;
+    height: 240px;
+    background: url(images/empty-state-items.svg) center 10% no-repeat;
+    background-size: 124px auto;
+    p.empty-text {
+      margin-top: 150px;
+      text-align: center;
+      color: #999;
+    }
+  }
   .app-box {
     width: 25%;
     display: inline-block;

@@ -1,9 +1,12 @@
 import './style.less'
 
 import classNames from 'classnames'
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 class Apps extends Component {
+  static contextTypes = {
+    intl: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
     this.state = {
@@ -32,10 +35,14 @@ class Apps extends Component {
   render() {
     const { apps } = this.state
     const { hideAppsName, muiTheme } = this.props
+    const { intl } = this.context
     return (
       <div className="apps-component">
         <h1 style={{ color: muiTheme.palette.primary1Color }}>Apps</h1>
-        <div className="apps-collection">
+        <div className={classNames('apps-collection', { 'empty': !apps.length })}>
+          {!apps.length && (
+            <p className="empty-text">{intl.formatMessage({ id: 'empty.text.apps' })}</p>
+          )}
           {apps.map((app, index) => {
             const maxIcon = app.icons.length - 1
             return (
