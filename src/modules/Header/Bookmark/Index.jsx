@@ -31,7 +31,8 @@ class Search extends Component {
     super(props)
     this.state = {
       result: [],
-      clear: false
+      clear: false,
+      finished: false
     }
   }
   /**
@@ -44,7 +45,8 @@ class Search extends Component {
     clearTimeout(this.wait)
     const cond = e.target.value
     this.setState({
-      clear: cond ? true : false
+      clear: cond ? true : false,
+      finished: false
     })
     // if condition has more than 2 characters
     if (cond && cond.length > 1) {
@@ -57,7 +59,8 @@ class Search extends Component {
   searchBookmarks = (cond) => {
     chrome.bookmarks.search(cond, result => {
       this.setState({
-        result
+        result,
+        finished: true
       })
       // console.log(result)
     })
@@ -73,11 +76,13 @@ class Search extends Component {
     findDOMNode(this.refs.search).value = ''
     this.setState({
       result: [],
-      clear: false
+      clear: false,
+      finished: false
     })
   }
   render() {
     const { open, muiTheme } = this.props
+    const { result, finished } = this.state
     const { intl } = this.context
     return (
       <div className={classNames('search-bookmarks', { 'show': open })}>
@@ -102,9 +107,12 @@ class Search extends Component {
             </Paper>
           </div>
         </Paper>
-        <section className="result">
+        <section className={classNames('result', { 'empty': !result.length && finished })}>
+          {!result.length && finished && (
+            <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks.search' })}</p>
+          )}
           <List>
-            {this.state.result.map((value, index) => {
+            {result.map((value, index) => {
               return (
                 <a className="bookmark-link" href={value.url} key={index} title={value.title}>
                   <ListItem
@@ -351,9 +359,9 @@ class Bookmark extends Component {
       chrome.bookmarks.getTree(tree => {
         const { opens } = this.state
         const data = tree[0].children
-        let Lists
+        let bookmarks
         if (data) {
-          Lists = data.map(i => {
+          const result = data.map(i => {
             const title = i.title
             const id = i.id
             const level = 0
@@ -364,9 +372,10 @@ class Bookmark extends Component {
               <Folder key={id} id={id} title={title} isOpen={isOpen} level={level} />
             )
           })
+          bookmarks = <List>{result}</List>
         }
         this.setState({
-          bookmarks: Lists
+          bookmarks
         })
       })
     }, 1000)
@@ -466,6 +475,7 @@ class Bookmark extends Component {
   }
   render() {
     const { muiTheme } = this.props
+    const { bookmarks } = this.state
     const { intl } = this.context
     return (
       <div className="bookmark-component">
@@ -479,8 +489,11 @@ class Bookmark extends Component {
             </div>
           </header>
         </Paper>
-        <section className="folder-list">
-          {this.state.bookmarks}
+        <section className={classNames('folder-list', { 'empty': !bookmarks })}>
+          {!bookmarks && (
+            <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks' })}</p>
+          )}
+          {bookmarks}
         </section>
         {/*<aside className="folder-list">
           <List>

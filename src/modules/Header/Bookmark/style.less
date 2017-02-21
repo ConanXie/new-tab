@@ -27,6 +27,20 @@
     // float: left;
     height: calc(~"100vh - 56px");
     overflow-y: scroll;
+    &.empty {
+      overflow: hidden;
+      position: relative;
+      background: url(images/empty-state-items.svg) center 45% no-repeat;
+      background-size: 124px auto;
+      p.empty-text {
+        position: absolute;
+        top: 45%;
+        width: 100%;
+        transform: translateY(80px);
+        text-align: center;
+        color: #999;
+      }
+    }
   }
   .folder > div > div > div, .bookmark > div > div > div {
     height: 16px;
@@ -79,7 +93,7 @@
     }
     &.show {
       display: block;
-      animation: show-bookmarks-search 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: show-bookmarks-search 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .search-header {
@@ -115,6 +129,20 @@
     .result {
       height: calc(~"100vh - 56px");
       overflow-y: scroll;
+      &.empty {
+      overflow: hidden;
+      position: relative;
+      background: url(images/empty-state-search.svg) center 40% no-repeat;
+      background-size: 200px auto;
+      p.empty-text {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        transform: translateY(80px);
+        text-align: center;
+        color: #999;
+      }
+    }
     }
   }
 }
