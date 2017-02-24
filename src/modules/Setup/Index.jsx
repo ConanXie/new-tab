@@ -21,6 +21,7 @@ import TextFormat from 'material-ui/svg-icons/content/text-format'
 import CallSplit from 'material-ui/svg-icons/communication/call-split'
 import ColorLens from 'material-ui/svg-icons/image/color-lens'
 import ImageLens from 'material-ui/svg-icons/image/lens'
+import CloudQueue from 'material-ui/svg-icons/file/cloud-queue'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
 import FileUpload from 'material-ui/svg-icons/file/file-upload'
 import SettingsRestore from 'material-ui/svg-icons/action/settings-backup-restore'
@@ -148,6 +149,11 @@ class Setup extends Component {
     const { saveSettings, useHK } = this.props
     saveSettings('useHK', bool)
     useHK(bool)
+  }
+  toggleFahrenheit = (event, bool) => {
+    const { saveSettings, useFahrenheit } = this.props
+    saveSettings('useFahrenheit', bool)
+    useFahrenheit(bool)
   }
   openTheme = () => {
     this.setState({
@@ -322,6 +328,18 @@ class Setup extends Component {
                   </div>
                 </div>
               }
+              <div className="toggle-box">
+                <CloudQueue style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
+                    defaultToggled={data.useFahrenheit}
+                    onToggle={this.toggleFahrenheit}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
               <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
               <List>
                 <ListItem
@@ -390,7 +408,7 @@ class Setup extends Component {
           <div className="setup-section">
             <Paper className="setup-content about" zDepth={1}>
               <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
-              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.2.0" /></a></p>
+              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.2.1" /></a></p>
               {/*仅对中文用户展示*/}
               {navigator.language === 'zh-CN' &&
                 <div>
