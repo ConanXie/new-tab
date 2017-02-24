@@ -21,6 +21,9 @@ const style = {
 }
 
 class Weather extends Component {
+  static contextTypes = {
+    intl: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
     const local = JSON.parse(localStorage.getItem('weather'))
@@ -33,17 +36,36 @@ class Weather extends Component {
           data: local
         }
       } else {
-        this.state = {}
+        this.state = {
+          times: 1,
+          base: 0
+        }
         this.getData()
       }
     } else {
-      this.state = {}
+      this.state = {
+        times: 1,
+        base: 0
+      }
       this.getData()
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.useFahrenheit) {
+      this.setState({
+        times: 1.8,
+        base: 32
+      })
+    } else {
+      this.setState({
+        times: 1,
+        base: 0
+      })
     }
   }
   getData = () => {
     // 'https://api.heweather.com/x3/weather?cityid=CN101280601&key=258c581b778d440ab34a85d5c8d82902'
-    // const link = 'https://localhost:5001/api/weather'
+    // const link = 'http://localhost:5300/api/weather'
     const link = 'https://tab.xiejie.co/api/weather'
     fetch(link).then(res => {
       if (res.ok) {
@@ -61,18 +83,29 @@ class Weather extends Component {
     })
   }
   calcWeek = (date) => {
-    const weekArr = ['日', '一', '二', '三', '四', '五', '六']
+    const { intl } = this.context
+    const weekArr = [
+      intl.formatMessage({ id: 'weather.week.Sunday' }),
+      intl.formatMessage({ id: 'weather.week.Monday' }),
+      intl.formatMessage({ id: 'weather.week.Tuesday' }),
+      intl.formatMessage({ id: 'weather.week.Wednesday' }),
+      intl.formatMessage({ id: 'weather.week.Thurday' }),
+      intl.formatMessage({ id: 'weather.week.Friday' }),
+      intl.formatMessage({ id: 'weather.week.Saturday' })
+    ]
     const week = new Date(date).getDay()
-    return `周${weekArr[week]}`
+    // return `周${weekArr[week]}`
+    return weekArr[week]
   }
   render() {
     let Interface
     let Qlty
-    const { data } = this.state
+    const { data, times, base } = this.state
+    const { intl } = this.context
     if (data) {
       if (data.aqi) {
         Qlty = (
-          <p className="qlty">空气{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
+          <p className="qlty">{intl.formatMessage({ id: 'weather.air' })}{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
         )
       }
       Interface = (
@@ -80,7 +113,7 @@ class Weather extends Component {
           <header>
             <div className="now-info">
               <div className="now-tmp-sec">
-                <h1 className="now-tmp">{data.now.tmp}°</h1>
+                <h1 className="now-tmp">{(data.now.tmp * times + base).toFixed(0)}°</h1>
                 <p className="now-cond">{data.now.cond.txt}</p>
               </div>
               {Qlty}
@@ -100,14 +133,14 @@ class Weather extends Component {
           </section>
           <section className="daily-forecast">
             {data.daily_forecast.map((value, index) => {
-              const week = !index ? '今天' : this.calcWeek(value.date)
+              const week = this.calcWeek(value.date)
               return (
                 <div className="forecast-box" key={value.date}>
                   <p title={value.date}>{week}</p>
                   <div className={`weather-icon code-${value.cond.code_d}`} title={value.cond.txt_d}></div>
                   {/*<img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />*/}
                   {/*<p>{value.cond.txt_d}</p>*/}
-                  <p>{value.tmp.min}°~{value.tmp.max}°</p>
+                  <p>{(value.tmp.min * times + base).toFixed(0)}°~{(value.tmp.max * times + base).toFixed(0)}°</p>
                 </div>
               )
             })}

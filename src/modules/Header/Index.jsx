@@ -86,7 +86,7 @@ class Header extends Component {
   }*/
   render() {
     // console.log(this.props)
-    const { showSetup, hideAppsName, muiTheme } = this.props
+    const { showSetup, hideAppsName, useFahrenheit, muiTheme } = this.props
     return (
       <Paper className="header-bar" rounded={false} zDepth={0}>
         <div className="tool-bar">
@@ -112,9 +112,7 @@ class Header extends Component {
           open={this.state.drawerOpen}
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
-          {/*仅对中文用户展示天气*/}
-          {navigator.language === 'zh-CN' && <Weather muiTheme={muiTheme} />}
-          
+          <Weather useFahrenheit={useFahrenheit} muiTheme={muiTheme} />          
           <Apps hideAppsName={hideAppsName} muiTheme={muiTheme} />
         </Drawer>
         <Drawer
