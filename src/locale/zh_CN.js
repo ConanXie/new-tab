@@ -18,6 +18,7 @@ const zh_CN = {
   'settings.engine.search.label': '在新标签页中打开搜索',
   'settings.website.open.label': '在新标签页中打开网站',
   'settings.apps.display.label': '隐藏应用的标签',
+  'settings.weather.fahrenheit.label': '天气使用华氏度',
   'settings.theme.title': '主题',
   'settings.theme.switch.label': '切换主题',
   'settings.theme.select.title': '选择主题',
@@ -43,6 +44,16 @@ const zh_CN = {
   'hotkey.apps': '应用',
   'hotkey.bookmarks': '书签',
   'hotkey.settings': '设置',
+  /*weather*/
+  'weather.air': '空气',
+  'weather.week.Sunday': '周日',
+  'weather.week.Monday': '周一',
+  'weather.week.Tuesday': '周二',
+  'weather.week.Wednesday': '周三',
+  'weather.week.Thurday': '周四',
+  'weather.week.Friday': '周五',
+  'weather.week.Saturday': '周六',
+  'weather.today': '今天',
 }
 
 export default zh_CN

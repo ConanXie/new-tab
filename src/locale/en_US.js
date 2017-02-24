@@ -18,6 +18,7 @@ const en_US = {
   'settings.engine.search.label': 'Open search result in new tab',
   'settings.website.open.label': 'Open website in new tab',
   'settings.apps.display.label': 'Hide applications tags',
+  'settings.weather.fahrenheit.label': 'Use F° in weather',
   'settings.theme.title': 'Theme',
   'settings.theme.switch.label': 'Switch color theme',
   'settings.theme.select.title': 'Select',
@@ -43,6 +44,16 @@ const en_US = {
   'hotkey.apps': 'Apps',
   'hotkey.bookmarks': 'Bookmarks',
   'hotkey.settings': 'Settings',
+  /*weather*/
+  'weather.air': 'Air ',
+  'weather.week.Sunday': 'Sun',
+  'weather.week.Monday': 'Mon',
+  'weather.week.Tuesday': 'Tue',
+  'weather.week.Wednesday': 'Wed',
+  'weather.week.Thurday': 'Thu',
+  'weather.week.Friday': 'Fri',
+  'weather.week.Saturday': 'Sat',
+  'weather.today': 'Today',
 }
 
 export default en_US
