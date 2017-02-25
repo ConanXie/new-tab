@@ -1,10 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const dir_src = path.resolve(__dirname, '../src')
-const buildPath = path.resolve(__dirname, '../dist')
-const node_modules = path.resolve(__dirname, '../node_modules')
-
 module.exports = {
   context: path.resolve(__dirname, '../src'),
   entry: [
@@ -18,13 +14,14 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   output: {
-    path: buildPath,
+    path: path.resolve(__dirname, '../dist'),
     publicPath: 'https://localhost:5001/',
     filename: 'bundle.js'
   },
   module: {
     rules: [{
       test: /\.(js|jsx)$/,
+      exclude: /node_modules/,
       use: [{
         loader: 'babel-loader',
         options: {

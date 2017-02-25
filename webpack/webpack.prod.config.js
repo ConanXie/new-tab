@@ -1,10 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const dir_src = path.resolve(__dirname, '../src')
-const buildPath = path.resolve(__dirname, '../dist')
-const node_modules = path.resolve(__dirname, '../node_modules')
-
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
@@ -20,19 +16,22 @@ module.exports = {
       'react-tap-event-plugin',
       'react-redux',
       'redux',
-      'redux-thunk'
+      'redux-thunk',
+      'react-intl',
+      'classnames'
     ]
   },
   resolve: {
     extensions: ['.js', '.jsx', '.less', '.css', '.jpg', '.png']
   },
   output: {
-    path: buildPath,
+    path: path.resolve(__dirname, '../dist'),
     filename: 'bundle.min.js'
   },
   module: {
     rules: [{
       test: /\.(js|jsx)$/,
+      exclude: /node_modules/,
       use: [{
         loader: 'babel-loader',
         options: {
@@ -42,8 +41,8 @@ module.exports = {
     }, {
       test: /\.less$/,
       use: ExtractTextPlugin.extract({
-        fallbackLoader: 'style-loader',
-        loader: ['css-loader', 'less-loader']
+        fallback: 'style-loader',
+        use: ['css-loader', 'less-loader']
       })
     }, {
       test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
