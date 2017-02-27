@@ -11,7 +11,7 @@ module.exports = {
     './Main.jsx'
   ],
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.less', '.css', '.jpg', '.png', '.svg', '.woff2', '.gif']
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
@@ -20,12 +20,12 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.(js|jsx)$/,
+      test: /\.js(x)?$/,
       exclude: /node_modules/,
       use: [{
         loader: 'babel-loader',
         options: {
-          presets: ['es2015', 'react', 'stage-0'],
+          presets: [['es2015', { 'modules': false }], 'react', 'stage-0'],
           plugins: ['react-hot-loader/babel']
         }
       }]
