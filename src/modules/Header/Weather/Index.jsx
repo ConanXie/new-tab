@@ -66,7 +66,7 @@ class Weather extends Component {
   getData = () => {
     // 'https://api.heweather.com/x3/weather?cityid=CN101280601&key=258c581b778d440ab34a85d5c8d82902'
     // const link = 'http://localhost:5300/api/weather'
-    const link = 'https://tab.xiejie.co/api/weather'
+    /*const link = 'https://tab.xiejie.co/api/weather'
     fetch(link).then(res => {
       if (res.ok) {
         res.json().then(data => {
@@ -80,6 +80,22 @@ class Weather extends Component {
       }
     }, e => {
       console.log('Fetch failed!')
+    })*/
+    navigator.geolocation.getCurrentPosition(pos => {
+      const lat = pos.coords.latitude.toFixed(6)
+      const lng = pos.coords.longitude.toFixed(6)
+      fetch(`https://tab.xiejie.co/api/weather/v2/${lat},${lng}`).then(res => {
+        if (res.ok) {
+          res.json().then(data => {
+            this.setState({ data })
+            localStorage.setItem('weather', JSON.stringify(data))
+          })
+        } else {
+          console.error(`Response wasn't perfect, got status ${res.status}`)
+        }
+      }, e => {
+        console.error('Fetch failed!')
+      })
     })
   }
   calcWeek = (date) => {
