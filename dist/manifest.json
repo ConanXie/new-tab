@@ -13,6 +13,7 @@
     "storage",
     "management",
     "bookmarks",
+    "geolocation",
     "chrome://favicon/*"
   ],
   "content_security_policy": "script-src 'self' https://localhost:5001; object-src 'self'"
