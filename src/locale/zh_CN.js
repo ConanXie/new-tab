@@ -54,6 +54,12 @@ const zh_CN = {
   'weather.week.Friday': '周五',
   'weather.week.Saturday': '周六',
   'weather.today': '今天',
+  'weather.empty.noData': '很抱歉，暂时获取不到天气数据',
+  'weather.empty.requestError': '很抱歉，数据请求发生了错误',
+  'weather.empty.geolocationError': '尝试获取你的位置时发生错误，',
+  'weather.empty.geolocationClosed': '你拒绝了获取位置信息的请求',
+  'weather.empty.geolocationEmpty': '浏览器无法获取你的位置信息',
+  'weather.empty.geolocationTimeout': '获取位置信息超时',
 }
 
 export default zh_CN

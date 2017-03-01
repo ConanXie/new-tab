@@ -54,6 +54,12 @@ const en_US = {
   'weather.week.Friday': 'Fri',
   'weather.week.Saturday': 'Sat',
   'weather.today': 'Today',
+  'weather.empty.noData': 'Sorry, unable to get weather data for the time being',
+  'weather.empty.requestError': 'Sorry, the data request has made an error',
+  'weather.empty.geolocationError': 'An error occurred while trying to get your location, ',
+  'weather.empty.geolocationClosed': 'You have rejected a request to get location information',
+  'weather.empty.geolocationEmpty': 'The browser can not get your location information',
+  'weather.empty.geolocationTimeout': 'Get location information timeout',
 }
 
 export default en_US
