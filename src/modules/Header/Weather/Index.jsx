@@ -1,5 +1,6 @@
 import './style.less'
 
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import RaisedButton from 'material-ui/RaisedButton'
@@ -26,7 +27,14 @@ class Weather extends Component {
   }
   constructor(props) {
     super(props)
-    const local = JSON.parse(localStorage.getItem('weather'))
+    this.state = {
+      times: 1,
+      base: 0,
+      loading: true,
+      empty: false,
+      emptyText: ''
+    }
+    /*const local = JSON.parse(localStorage.getItem('weather'))
     if (local) {
       const lastUpdate = new Date(local.basic.update.loc).getTime()
       const now = Date.now()
@@ -47,6 +55,33 @@ class Weather extends Component {
         times: 1,
         base: 0
       }
+      this.getData()
+    }*/
+  }
+  componentWillMount() {
+    const { intl } = this.context
+    const local = JSON.parse(localStorage.getItem('weather'))
+    if (local) {
+      const lastUpdate = new Date(local.basic.update.loc).getTime()
+      const now = Date.now()
+      const diff = now - lastUpdate
+      if (diff < 3600000) {
+        if (local.daily_forecast) {
+          this.setState({
+            loading: false,
+            data: local
+          })
+        } else {
+          this.setState({
+            loading: false,
+            empty: true,
+            emptyText: intl.formatMessage({ id: 'weather.empty.noData' })
+          })
+        }
+      } else {
+        this.getData()
+      }
+    } else {
       this.getData()
     }
   }
@@ -81,22 +116,75 @@ class Weather extends Component {
     }, e => {
       console.log('Fetch failed!')
     })*/
+    const { intl } = this.context
+
     navigator.geolocation.getCurrentPosition(pos => {
       const lat = pos.coords.latitude.toFixed(6)
       const lng = pos.coords.longitude.toFixed(6)
-      fetch(`https://tab.xiejie.co/api/weather/v2/${lat},${lng}`).then(res => {
+      fetch(`https://tab.xiejie.co/api/weather/v3/${lat},${lng}`).then(res => {
         if (res.ok) {
           res.json().then(data => {
-            this.setState({ data })
-            localStorage.setItem('weather', JSON.stringify(data))
+            // 天气数据获取成功
+            if (data.status === 'OK') {
+              const result = data.result[0]
+              this.setState({
+                loading: false,
+                data: result
+              })
+              localStorage.setItem('weather', JSON.stringify(result))
+            } else {
+              this.setState({
+                loading: false,
+                empty: true,
+                emptyText: intl.formatMessage({ id: 'weather.empty.noData' })
+              })
+              // 防止请求不到数据而过度请求
+              const temp = {
+                basic: {
+                  update: {
+                    loc: Date.now()
+                  }
+                }
+              }
+              localStorage.setItem('weather', JSON.stringify(temp))
+            }
           })
         } else {
           console.error(`Response wasn't perfect, got status ${res.status}`)
+          this.setState({
+            empty: true,
+            emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
+          })
         }
       }, e => {
         console.error('Fetch failed!')
+        this.setState({
+          empty: true,
+          emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
+        })
       })
-    })
+    }, error => {
+      let emptyText
+      switch (error.code) {
+        case 0:
+          emptyText = intl.formatMessage({ id: 'weather.empty.geolocationError' }) + error.message
+          break
+        case 1:
+          emptyText = intl.formatMessage({ id: 'weather.empty.geolocationClosed' })
+          break
+        case 2:
+          emptyText = intl.formatMessage({ id: 'weather.empty.geolocationEmpty' })
+          break
+        case 3:
+          emptyText = intl.formatMessage({ id: 'weather.empty.geolocationTimeout' })
+          break
+      }
+      this.setState({
+        loading: false,
+        empty: true,
+        emptyText
+      })
+    }, { timeout: 2000 })
   }
   calcWeek = (date) => {
     const { intl } = this.context
@@ -116,73 +204,66 @@ class Weather extends Component {
   render() {
     let Interface
     let Qlty
-    const { data, times, base } = this.state
+    const { data, times, base, loading, empty, emptyText } = this.state
     const { intl } = this.context
-    if (data) {
-      if (data.aqi) {
-        Qlty = (
-          <p className="qlty">{intl.formatMessage({ id: 'weather.air' })}{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
-        )
-      }
-      Interface = (
-        <div className="weather-interface" style={{ backgroundColor: this.props.muiTheme.palette.primary1Color }}>
-          <header>
-            <div className="now-info">
-              <div className="now-tmp-sec">
-                <h1 className="now-tmp">{(data.now.tmp * times + base).toFixed(0)}°</h1>
-                <p className="now-cond">{data.now.cond.txt}</p>
-              </div>
-              {Qlty}
-            </div>
-            <div className="loc-info">
-              <p className="loc-content">
-                <MapsPlace style={style.icon} />
-                <span>{data.basic.city}</span>
-              </p>
-              <p className="update-time">
-                <NavigationRefresh style={style.icon} />
-                <span>{String.prototype.split.call(data.basic.update.loc, ' ')[1]}</span>
-              </p>
-            </div>
-          </header>
-          <section className="now">
-          </section>
-          <section className="daily-forecast">
-            {data.daily_forecast.map((value, index) => {
-              const week = this.calcWeek(value.date)
-              return (
-                <div className="forecast-box" key={value.date}>
-                  <p title={value.date}>{week}</p>
-                  <div className={`weather-icon code-${value.cond.code_d}`} title={value.cond.txt_d}></div>
-                  {/*<img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />*/}
-                  {/*<p>{value.cond.txt_d}</p>*/}
-                  <p>{(value.tmp.min * times + base).toFixed(0)}°~{(value.tmp.max * times + base).toFixed(0)}°</p>
-                </div>
-              )
-            })}
-          </section>
-        </div>
-      )
-    } else {
-      Interface = (
-        <RefreshIndicator
-          size={40}
-          left={280}
-          top={160}
-          loadingColor='#009688'
-          status="loading"
-          style={style.refresh}
-        />
-      )
-    }
     return (
-      <div className="weather-component">
-        {/*<RaisedButton
-          label="weather"
-          onTouchTap={this.getData}
-        />
-        <h1>Weather Component</h1>*/}
-        {Interface}
+      <div className={classNames('weather-component', { 'empty': empty })}>
+        {empty && (
+          <p className="empty-text">{emptyText}</p>
+        )}
+        {/*Weather data exist*/}
+        {data && (
+          <div className="weather-interface" style={{ backgroundColor: this.props.muiTheme.palette.primary1Color }}>
+            <header>
+              <div className="now-info">
+                <div className="now-tmp-sec">
+                  <h1 className="now-tmp">{(data.now.tmp * times + base).toFixed(0)}°</h1>
+                  <p className="now-cond">{data.now.cond.txt}</p>
+                </div>
+                {data.aqi && (
+                  <p className="qlty">{intl.formatMessage({ id: 'weather.air' })}{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
+                )}
+              </div>
+              <div className="loc-info">
+                <p className="loc-content">
+                  <MapsPlace style={style.icon} />
+                  <span>{data.basic.city}</span>
+                </p>
+                <p className="update-time">
+                  <NavigationRefresh style={style.icon} />
+                  <span>{String.prototype.split.call(data.basic.update.loc, ' ')[1]}</span>
+                </p>
+              </div>
+            </header>
+            <section className="now">
+            </section>
+            <section className="daily-forecast">
+              {data.daily_forecast.map((value, index) => {
+                const week = this.calcWeek(value.date)
+                return (
+                  <div className="forecast-box" key={value.date}>
+                    <p title={value.date}>{week}</p>
+                    <div className={`weather-icon code-${value.cond.code_d}`} title={value.cond.txt_d}></div>
+                    {/*<img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />*/}
+                    {/*<p>{value.cond.txt_d}</p>*/}
+                    <p>{(value.tmp.min * times + base).toFixed(0)}°~{(value.tmp.max * times + base).toFixed(0)}°</p>
+                  </div>
+                )
+              })}
+            </section>
+          </div>
+        )}
+        {/*Loading*/}
+        {loading && (
+          <RefreshIndicator
+            size={40}
+            left={280}
+            top={160}
+            loadingColor='#009688'
+            status="loading"
+            style={style.refresh}
+          />
+        )}
       </div>
     )
   }
