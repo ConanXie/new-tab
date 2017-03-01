@@ -8,7 +8,20 @@
 }
 
 .weather-component {
+  position: relative;
   height: 290px;
+  &.empty {
+    background: url(images/empty-hill.svg) center no-repeat;
+    background-size: 40% auto;
+    .empty-text {
+      position: absolute;
+      bottom: 10%;
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      color: #A5B1BD;
+    }
+  }
   .weather-interface {
     // background-color: #009688;
     color: #fff;
