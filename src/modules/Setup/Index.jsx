@@ -36,6 +36,8 @@ import MenuItem from 'material-ui/MenuItem'
 import Snackbar from 'material-ui/Snackbar'
 import { grey600, teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500 } from 'material-ui/styles/colors'
 
+import { version } from '../../config'
+
 import Donor from './Donor'
 import Feedback from './Feedback'
 
@@ -408,7 +410,7 @@ class Setup extends Component {
           <div className="setup-section">
             <Paper className="setup-content about" zDepth={1}>
               <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
-              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label="1.2.1" /></a></p>
+              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label={version} /></a></p>
               {/*仅对中文用户展示*/}
               {navigator.language === 'zh-CN' &&
                 <div>

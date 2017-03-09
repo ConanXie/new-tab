@@ -1,0 +1,84 @@
+.welcome-sec {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  background: #fff;
+  &.hide {
+    display: none;
+  }
+  & > header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    .logo {
+      width: 38px;
+      height: 38px;
+      background: url(images/logo.png) center no-repeat;
+      background-size: 100%;
+    }
+  }
+  .content-wrap {
+    .btn-box {
+      position: absolute;
+      left: 50%;
+      bottom: 10%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+  }
+}
+.step {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  // height: 800px;
+  overflow: hidden;
+  .illustration {
+    width: 380px;
+    height: 380px;
+    margin: 0 auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+  }
+  h1 {
+    margin: 40px 0 30px;
+    color: #424242;
+    font-size: 24px;
+    font-weight: normal;
+    text-align: center;
+  }
+  p {
+    width: 800px;
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 2em;
+    color: #999;
+    text-align: center;
+  }
+  &.step-one {
+    .illustration {
+      background-image: url(images/step-one.svg);
+    }
+  }
+  &.step-two {
+    .illustration {
+      background-image: url(images/step-two.svg);
+    }
+  }
+  &.step-three {
+    .illustration {
+      background-image: url(images/step-three.svg);
+    }
+  }
+  &.step-four {
+    .illustration {
+      background-image: url(images/step-four.svg);
+    }
+  }
+}

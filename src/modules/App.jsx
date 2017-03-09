@@ -12,12 +12,14 @@ import RaisedButton from 'material-ui/RaisedButton'
     primary1Color: teal500
   }
 }, {userAgent: 'all'})*/
+import { code } from '../config'
 import { theme } from './Setup'
 
 import Header from './Header'
 import Search from './Search'
 import Navigation from './Navigation'
 import Setup from './Setup'
+import Onboarding from './Onboarding'
 
 class App extends Component {
   constructor(props) {
@@ -31,6 +33,14 @@ class App extends Component {
       useHK,
       useFahrenheit,
       muiTheme: this.createTheme(theme[index])
+    }
+  }
+  componentWillMount() {
+    const _code = localStorage.getItem('code')
+    if (_code !== code) {
+      this.setState({
+        onboarding: true
+      })
     }
   }
   createTheme = (color) => {
@@ -72,7 +82,7 @@ class App extends Component {
     })
   }
   render() {
-    const { linkTarget, searchTarget, hideAppsName, useHK, useFahrenheit, muiTheme } = this.state
+    const { linkTarget, searchTarget, hideAppsName, useHK, useFahrenheit, muiTheme, onboarding } = this.state
     // console.log(muiTheme)
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -89,6 +99,9 @@ class App extends Component {
             changeTheme={this.changeTheme}
             muiTheme={muiTheme}
           />
+          {onboarding && (
+            <Onboarding />
+          )}
         </div>
       </MuiThemeProvider>
     )
