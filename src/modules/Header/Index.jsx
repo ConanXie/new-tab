@@ -86,7 +86,7 @@ class Header extends Component {
   }*/
   render() {
     // console.log(this.props)
-    const { showSetup, hideAppsName, useFahrenheit, muiTheme } = this.props
+    const { showSetup, hideAppsName, rememberBookmarksState, useFahrenheit, muiTheme } = this.props
     return (
       <Paper className="header-bar" rounded={false} zDepth={0}>
         <div className="tool-bar">
@@ -122,7 +122,7 @@ class Header extends Component {
           open={this.state.bookmarkOpen}
           onRequestChange={bookmarkOpen => this.setState({ bookmarkOpen })}
         >
-          <Bookmark muiTheme={muiTheme} />
+          <Bookmark rememberBookmarksState={rememberBookmarksState} muiTheme={muiTheme} />
         </Drawer>
       </Paper>
     )

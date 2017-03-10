@@ -176,8 +176,9 @@ class Folder extends Component {
     })
   }
   generateChildren = (data, level) => {
+    const { opens, recordFolders } = this.props
     const paddingLeft = padding * level
-
+    
     const Lists = data.map(i => {
       const children = i.children
       const title = i.title
@@ -186,8 +187,10 @@ class Folder extends Component {
       const parentId = i.parentId
       const isFolder = i.dateGroupModified || children || typeof url == 'undefined'
 
+
       if (isFolder) {
-        return <Folder key={id} id={id} title={title} isOpen={false} level={level} />
+        const isOpen = opens.indexOf(id) != -1
+        return <Folder key={id} id={id} title={title} level={level} isOpen={isOpen} opens={opens} recordFolders={recordFolders} />
       } else {
         return (
           <a className="bookmark-link" href={url} key={id} title={title}>
@@ -206,7 +209,7 @@ class Folder extends Component {
   }
   changeStatus = () => {
     const { folderStatus, generated } = this.state
-    
+    const { recordFolders, id } = this.props
     if (!generated) {
       this.createTree()
     } else {
@@ -214,6 +217,7 @@ class Folder extends Component {
         folderStatus: folderStatus === 'closed' ? 'opened' : 'closed'
       })
     }
+    recordFolders(id)
     /* else if (folderStatus === 'closed') {
       this.refs.children.style.display = 'block'
       this.setState({
@@ -262,8 +266,19 @@ class Bookmark extends Component {
     this.state = {
       search: false,
       bookmarks: [],
-      currentChildren: [],
-      opens: ['1']
+      currentChildren: []
+    }
+    this.opens = []
+  }
+  componentWillReceiveProps(nextProps, nextState) {
+    console.log(nextProps)
+    const { rememberBookmarksState } = nextProps
+    if (!rememberBookmarksState) {
+      localStorage.setItem('bookmarksScrollTop', 0)
+      localStorage.setItem('bookmarksOpens', '[]')
+    } else {
+      localStorage.setItem('bookmarksScrollTop', this.refs.wrapper.scrollTop)
+      localStorage.setItem('bookmarksOpens', JSON.stringify(this.opens))
     }
   }
   generateBookmarks = (data, level = 0) => {
@@ -355,21 +370,30 @@ class Bookmark extends Component {
     // }
   }
   componentDidMount() {
+
+    // get data from localStorage
+    if (this.props.rememberBookmarksState) {
+      this.opens = JSON.parse(localStorage.getItem('bookmarksOpens')) || []
+      this.scrollTop = Number(localStorage.getItem('bookmarksScrollTop'))
+    }
+
     setTimeout(() => {
       chrome.bookmarks.getTree(tree => {
-        const { opens } = this.state
+        // const { opens } = this.state
         const data = tree[0].children
         let bookmarks
         if (data) {
           const result = data.map(i => {
             const title = i.title
             const id = i.id
+            console.log(id)
             const level = 0
-            const isOpen = opens.indexOf(id) != -1
+            console.log(this)
+            const isOpen = this.opens.indexOf(id) !== -1
             // const isOpen = true
             
             return (
-              <Folder key={id} id={id} title={title} isOpen={isOpen} level={level} />
+              <Folder key={id} id={id} title={title} level={level} isOpen={isOpen} opens={this.opens} recordFolders={this.recordFolders} />
             )
           })
           bookmarks = <List>{result}</List>
@@ -377,8 +401,11 @@ class Bookmark extends Component {
         this.setState({
           bookmarks
         })
+        setTimeout(() => {
+          this.refs.wrapper.scrollTop = this.scrollTop
+        }, 200)
       })
-    }, 1000)
+    }, 500)
     /**
      * create bookmarks data
      */
@@ -419,6 +446,23 @@ class Bookmark extends Component {
       })
     })*/
     // this.generateBookmarks()
+  }
+  listenScroll = (event) => {
+    // if user need to remember bookmarks state
+    if (this.props.rememberBookmarksState) {
+      localStorage.setItem('bookmarksScrollTop', event.target.scrollTop)
+    }
+  }
+  recordFolders = (id) => {
+    const index = this.opens.indexOf(id)
+    if (index !== -1) {
+      this.opens.splice(index, 1)
+    } else {
+      this.opens.push(id)
+    }
+    if (this.props.rememberBookmarksState) {
+      localStorage.setItem('bookmarksOpens', JSON.stringify(this.opens))
+    }
   }
   /*folderStatus = (e, id, level) => {
     // chrome.bookmarks.get('1', v => { console.log(v) })
@@ -489,7 +533,7 @@ class Bookmark extends Component {
             </div>
           </header>
         </Paper>
-        <section className={classNames('folder-list', { 'empty': !bookmarks })}>
+        <section className={classNames('folder-list', { 'empty': !bookmarks })} ref="wrapper" onScroll={this.listenScroll}>
           {!bookmarks && (
             <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks' })}</p>
           )}

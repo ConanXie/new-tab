@@ -17,6 +17,7 @@ import HardwareMemory from 'material-ui/svg-icons/hardware/memory'
 import ContentLink from 'material-ui/svg-icons/content/link'
 import ActionSearch from 'material-ui/svg-icons/action/search'
 import CheckCircle from 'material-ui/svg-icons/action/check-circle'
+import BookmarkBorder from 'material-ui/svg-icons/action/bookmark-border'
 import TextFormat from 'material-ui/svg-icons/content/text-format'
 import CallSplit from 'material-ui/svg-icons/communication/call-split'
 import ColorLens from 'material-ui/svg-icons/image/color-lens'
@@ -146,6 +147,11 @@ class Setup extends Component {
     const { saveSettings, hideAppsName } = this.props
     saveSettings('hideAppsName', bool)
     hideAppsName(bool)
+  }
+  toggleRememberBookmarksState = (event, bool) => {
+    const { saveSettings, rememberBookmarksState } = this.props
+    saveSettings('rememberBookmarksState', bool)
+    rememberBookmarksState(bool)
   }
   toggleUseHK = (event, bool) => {
     const { saveSettings, useHK } = this.props
@@ -311,6 +317,18 @@ class Setup extends Component {
                     label={intl.formatMessage({ id: 'settings.apps.display.label' })}
                     defaultToggled={data.hideAppsName}
                     onToggle={this.toggleHideAppsName}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
+              <div className="toggle-box">
+                <BookmarkBorder style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.bookmarks.position.label' })}
+                    defaultToggled={data.rememberBookmarksState}
+                    onToggle={this.toggleRememberBookmarksState}
                     labelStyle={style.toggleLabel}
                   />
                 </div>

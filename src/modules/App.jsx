@@ -24,12 +24,13 @@ import Onboarding from './Onboarding'
 class App extends Component {
   constructor(props) {
     super(props)
-    const { linkTarget, searchTarget, hideAppsName, useHK, useFahrenheit, currentTheme } = props.settings
+    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, useHK, useFahrenheit, currentTheme } = props.settings
     const index = currentTheme ? currentTheme : 0
     this.state = {
       linkTarget: linkTarget ? '_blank' : '_self',
       searchTarget: searchTarget ? '_blank' : '_self',
       hideAppsName,
+      rememberBookmarksState,
       useHK,
       useFahrenheit,
       muiTheme: this.createTheme(theme[index])
@@ -66,6 +67,11 @@ class App extends Component {
       hideAppsName: bool
     })
   }
+  rememberBookmarksState = (bool) => {
+    this.setState({
+      rememberBookmarksState: bool
+    })
+  }
   useHK = (bool) => {
     this.setState({
       useHK: bool
@@ -82,18 +88,19 @@ class App extends Component {
     })
   }
   render() {
-    const { linkTarget, searchTarget, hideAppsName, useHK, useFahrenheit, muiTheme, onboarding } = this.state
+    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, useHK, useFahrenheit, muiTheme, onboarding } = this.state
     // console.log(muiTheme)
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <Header hideAppsName={hideAppsName} useFahrenheit={useFahrenheit} muiTheme={muiTheme} />
+          <Header hideAppsName={hideAppsName} rememberBookmarksState={rememberBookmarksState} useFahrenheit={useFahrenheit} muiTheme={muiTheme} />
           <Search target={searchTarget} useHK={useHK} />
           <Navigation target={linkTarget} muiTheme={muiTheme} />
           <Setup
             setLinkTarget={this.setLinkTarget}
             setSearchTarget={this.setSearchTarget}
             hideAppsName={this.hideAppsName}
+            rememberBookmarksState={this.rememberBookmarksState}
             useHK={this.useHK}
             useFahrenheit={this.useFahrenheit}
             changeTheme={this.changeTheme}
