@@ -18,6 +18,7 @@ const en_US = {
   'settings.engine.search.label': 'Open search result in new tab',
   'settings.website.open.label': 'Open website in new tab',
   'settings.apps.display.label': 'Hide applications tags',
+  'settings.bookmarks.position.label': 'Remember bookmarks previous state',
   'settings.weather.fahrenheit.label': 'Use F° in weather',
   'settings.theme.title': 'Theme',
   'settings.theme.switch.label': 'Switch color theme',

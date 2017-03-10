@@ -18,6 +18,7 @@ const zh_CN = {
   'settings.engine.search.label': '在新标签页中打开搜索',
   'settings.website.open.label': '在新标签页中打开网站',
   'settings.apps.display.label': '隐藏应用的标签',
+  'settings.bookmarks.position.label': '记住书签的状态',
   'settings.weather.fahrenheit.label': '天气使用华氏度',
   'settings.theme.title': '主题',
   'settings.theme.switch.label': '切换主题',
