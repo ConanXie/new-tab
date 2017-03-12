@@ -24,13 +24,14 @@ import Onboarding from './Onboarding'
 class App extends Component {
   constructor(props) {
     super(props)
-    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, useHK, useFahrenheit, currentTheme } = props.settings
+    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, currentTheme } = props.settings
     const index = currentTheme ? currentTheme : 0
     this.state = {
       linkTarget: linkTarget ? '_blank' : '_self',
       searchTarget: searchTarget ? '_blank' : '_self',
       hideAppsName,
       rememberBookmarksState,
+      searchPredict,
       useHK,
       useFahrenheit,
       muiTheme: this.createTheme(theme[index])
@@ -72,6 +73,11 @@ class App extends Component {
       rememberBookmarksState: bool
     })
   }
+  searchPredict = (bool) => {
+    this.setState({
+      searchPredict: bool
+    })
+  }
   useHK = (bool) => {
     this.setState({
       useHK: bool
@@ -88,19 +94,20 @@ class App extends Component {
     })
   }
   render() {
-    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, useHK, useFahrenheit, muiTheme, onboarding } = this.state
+    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, muiTheme, onboarding } = this.state
     // console.log(muiTheme)
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <Header hideAppsName={hideAppsName} rememberBookmarksState={rememberBookmarksState} useFahrenheit={useFahrenheit} muiTheme={muiTheme} />
-          <Search target={searchTarget} useHK={useHK} />
+          <Search target={searchTarget} searchPredict={searchPredict} useHK={useHK} />
           <Navigation target={linkTarget} muiTheme={muiTheme} />
           <Setup
             setLinkTarget={this.setLinkTarget}
             setSearchTarget={this.setSearchTarget}
             hideAppsName={this.hideAppsName}
             rememberBookmarksState={this.rememberBookmarksState}
+            searchPredict={this.searchPredict}
             useHK={this.useHK}
             useFahrenheit={this.useFahrenheit}
             changeTheme={this.changeTheme}

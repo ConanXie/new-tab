@@ -6,19 +6,19 @@
     height: 92px;
     margin: 0 auto;
     &.google {
-      background: url(images/googlelogo_color_272x92dp.png) center no-repeat;
+      background: url(images/Google.svg) center no-repeat;
       background-size: 100% auto;
     }
     &.baidu {
-      background: url(images/bd_logo1_31bdc765.png) center no-repeat;
+      background: url(images/Baidu.svg) center no-repeat;
       background-size: 100% auto;
     }
     &.bing {
-      background: url(images/bing-logo.png) center no-repeat;
+      background: url(images/Bing.svg) center no-repeat;
       background-size: auto 100%;
     }
     &.sougou {
-      background: url(images/sougou-logo.png) center no-repeat;
+      background: url(images/Sougou.png) center no-repeat;
       background-size: 100% auto;
     }
     &:hover .more-engine {
@@ -44,8 +44,8 @@
         box-sizing: border-box;
         width: 584px;
         height: 44px;
+        line-height: 44px;
         padding: 0 38px 0 16px;
-        // border: 1px solid #d9d9d9;
         font-size: 16px;
         border-radius: 2px;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
@@ -53,12 +53,29 @@
         &.hover, &.focus {
           box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
         }
-        /*&:hover {
-          border-color: #aaa;
+      }
+      .predictions-box {
+        display: none;
+        z-index: 90;
+        position: absolute;
+        top: 44px;
+        width: 100%;
+        &.show {
+          display: block;
         }
-        &:focus {
-          border-color: #03a9f4;
-        }*/
+        ul {
+          list-style: none;
+        }
+        ul li {
+          line-height: 1.5em;
+          text-align: left;
+          padding: 0 16px;
+          user-select: none;
+          cursor: default;
+          &.active {
+            background: #eee;
+          }
+        }
       }
     }
   }

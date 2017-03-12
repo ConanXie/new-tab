@@ -1,5 +1,6 @@
 import './style.less'
 
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import { bindActionCreators } from 'redux'
@@ -12,6 +13,7 @@ import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton/IconButton'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import SearchIcon from 'material-ui/svg-icons/action/search'
+import Paper from 'material-ui/Paper'
 
 import searchEngine from './search-engine'
 
@@ -42,24 +44,38 @@ class Search extends Component {
     super(props)
     const { currentEngine, saveEngine, saveToLocalStorage, settings } = this.props
 
+    let origin
     // currentEngine not exist, or autoSaveEngine is false
     if (!currentEngine.name || !settings.autoSaveEngine) {
-      const { link, name, className } = searchEngine[0]
-      this.state = {
-        searchLink: link,
-        searchName: name,
-        searchClass: className
-      }
-      saveEngine(searchEngine[0])
+      origin = searchEngine[0]
+      saveEngine(origin)
     } else {
-      const { link, name, className } = currentEngine
-      this.state = {
-        searchLink: link,
-        searchName: name,
-        searchClass: className
-      }
+      origin = currentEngine
     }
+    const { link, predict, name, className } = origin
+    this.state = {
+      searchLink: link,
+      searchPredict: predict,
+      searchName: name,
+      searchClass: className
+    }
+    // record the index of predictions, default value is -1
+    this.predictionsIndex = -1
   }
+  componentDidMount() {
+    this.refs.text.focus()
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    // if input is empty then prevent render of predictions change caused by network delay
+    if (this.inputText === '' && nextState.predictions.length) {
+      return false
+    }
+    
+    return true
+  }
+  /**
+   * open window to search
+   */
   search = (e) => {
     e.preventDefault()
     const text = this.refs.text.value
@@ -67,15 +83,16 @@ class Search extends Component {
     const { currentEngine, useHK } = this.props
     // 判断是否使用.hk
     if (useHK && currentEngine.name === 'Google') {
-      window.open(searchLink.replace(/\.com/, '.com.hk') + text, this.props.target)
+      window.open(searchLink.replace(/\.com/, '.com.hk').replace('%s', text), this.props.target)
     } else {
-      window.open(searchLink + text, this.props.target)
+      window.open(searchLink.replace('%s', text), this.props.target)
     }
   }
   changeEngine = (engine) => {
-    const { name, link, className } = engine
+    const { name, link, predict, className } = engine
     this.setState({
       searchLink: link,
+      searchPredict: predict,
       searchName: name,
       searchClass: className
     })
@@ -85,20 +102,197 @@ class Search extends Component {
       saveToLocalStorage(engine)
     }
   }
+  watchInput = event => {
+    const _this = this
+    // if input then set predictionsIndex to default
+    this.predictionsIndex = -1
+    // if user turn on search predict
+    if (this.props.searchPredict) {
+      // clearTimeout(this.delay)
+
+      const text = event.target.value
+      // record the input value as user type
+      this.inputText = text
+      if (text === '') {
+        this.setState({
+          predictions: []
+        })
+        return
+      }
+
+      // set a interval
+      const now = Date.now()
+      
+      if (!this.interval) {
+        this.interval = now
+      } else {
+        if (now - this.interval < 200) {
+          this.interval = now
+          return
+        }
+      }
+
+        
+      fetch(this.state.searchPredict.replace('%l', navigator.language).replace('%s', text) + `&r=${Date.now()}`).then(res => {
+        if (res.ok) {
+          // extract the encoding of response headers, e.g. UTF-8
+          const encoding = /[\w\-]+$/.exec(res.headers.get('Content-Type'))[0]
+          // analysis response body as blob and read as file with the current encoding
+          res.blob().then(blob => {
+            const reader = new FileReader()
+
+            reader.onload = e => {
+              const text = reader.result
+              const results = this.analysisData(this.state.searchName, text)
+              // remove predictions 'active' class
+              _this.clearPredictionsClassName()
+              this.setState({
+                predictions: results
+              })
+            }
+
+            reader.readAsText(blob, encoding)
+          })
+        }
+      })
+    }
+  }
+  /**
+   * return the results of predicting
+   */
+  analysisData = (engine, data) => {
+    const results = []
+    let formatted
+    switch (engine) {
+      // Google and Bing
+      case searchEngine[0].name:
+      case searchEngine[3].name:
+        formatted = JSON.parse(data)
+        formatted[1].forEach((v, i) => {
+          results.push(v[0])
+        })
+        break
+      // Baidu
+      case searchEngine[1].name:
+        formatted = JSON.parse(data.replace(/^window\.baidu\.sug\(/, '').replace(/\);$/, ''))
+        formatted.s.forEach((v, i) => {
+          results.push(v)
+        })
+        break
+      // Sogou
+      case searchEngine[2].name:
+        formatted = JSON.parse(data.replace(/^window\.sogou\.sug\(/, '').replace(/\,\-1\);$/, ''))
+        formatted[1].forEach((v, i) => {
+          results.push(v)
+        })
+        break
+    }
+    return results
+  }
+  // hover style
   mouseEnter = () => {
     this.refs.text.classList.add('hover')
   }
   mouseLeave = () => {
     this.refs.text.classList.remove('hover')
   }
+  documentMouseDown = (e) => {
+    // if the mousedown target is predictions then preventDefault
+    if (e.target.dataset.name === 'prediction') {
+      e.preventDefault()
+    }
+  }
+  documentKeyDown = (e) => {
+    // up arrow
+    if (e.keyCode === 38) {
+      e.preventDefault()
+    }
+  }
   focus = () => {
     this.refs.text.classList.add('focus')
+    if (this.props.searchPredict) {
+      this.setState({
+        showPredictions: true
+      })
+      document.addEventListener('mousedown', this.documentMouseDown, false)
+      document.addEventListener('keydown', this.documentKeyDown, false)
+    }
   }
   blur = () => {
+    console.log('blur')
     this.refs.text.classList.remove('focus')
+    this.setState({
+      showPredictions: false
+    })
+    document.removeEventListener('mousedown', this.documentMouseDown, false)
+    document.removeEventListener('keydown', this.documentKeyDown, false)
+  }
+  // select prediction via up or down arrow key
+  selectForcast = (event) => {
+    const predictions = this.refs.predictions.querySelectorAll('li')
+    const total = predictions.length
+    const lastIndex = this.predictionsIndex
+    switch (event.keyCode) {
+      // down
+      case 40:
+        if (this.predictionsIndex !== total - 1) {
+          this.predictionsIndex++
+        } else {
+          this.predictionsIndex = -1
+        }
+        break
+      // up
+      case 38:
+        if (this.predictionsIndex === -1) {
+          this.predictionsIndex = total - 1
+        } else {
+          this.predictionsIndex--
+        }
+        break
+    }
+
+    if (lastIndex !== this.predictionsIndex) {
+      if (lastIndex !== -1) {
+        // remove previous element class
+        predictions[lastIndex].classList.remove('active')
+      }
+      
+      if (this.predictionsIndex !== -1) {
+        // change input value and add element class
+        this.refs.text.value = predictions[this.predictionsIndex].innerHTML
+        predictions[this.predictionsIndex].classList.add('active')
+      } else {
+        this.refs.text.value = this.inputText
+      }
+    }
+
+  }
+  clearPredictionsClassName = () => {
+    const predictions = this.refs.predictions.querySelectorAll('li')
+    predictions.forEach(li => {
+      li.classList.remove('active')
+    })
+  }
+  // mouse move on predictions
+  predictionMouseEnter = (event) => {
+    this.clearPredictionsClassName()
+    event.target.classList.add('active')
+    this.predictionsIndex = Number(event.target.dataset.index)
+  }
+  predictionMouseLeave = (event) => {
+    event.target.classList.remove('active')
+    this.predictionsIndex = -1
+  }
+  // search by click prediction
+  searchPrediction = (event) => {
+    this.setState({
+      showPredictions: false
+    })
+    this.refs.text.value = event.target.innerHTML
+    this.search(event)
   }
   render() {
-    const { searchName, searchClass } = this.state
+    const { searchName, searchClass, showPredictions, predictions } = this.state
     return (
       <div className="search-wrapper">
         <div className={`search-logo ${searchClass}`}>
@@ -121,9 +315,19 @@ class Search extends Component {
           </IconMenu>
         </div>
         <div className="search-box">
-          <form action="" onSubmit={this.search}>
+          <form action="" onSubmit={this.search} autoComplete="off">
             <div className="input-box">
-              <input type="text" ref="text" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onFocus={this.focus} onBlur={this.blur} />
+              <input
+                type="text"
+                id="search-input"
+                ref="text"
+                onInput={this.watchInput}
+                onMouseEnter={this.mouseEnter}
+                onMouseLeave={this.mouseLeave}
+                onFocus={this.focus}
+                onBlur={this.blur}
+                onKeyUp={this.selectForcast}
+              />
               <IconButton
                 type="submit"
                 style={style.searchBtn}
@@ -133,6 +337,23 @@ class Search extends Component {
               >
                 <SearchIcon />
               </IconButton>
+              <Paper className={classNames('predictions-box', { 'show': showPredictions })} zDepth={1}>
+                <ul ref="predictions">
+                  {predictions && predictions.map((v, i) => {
+                    return (
+                      <li
+                        key={i}
+                        data-name="prediction"
+                        data-index={i}
+                        onMouseEnter={this.predictionMouseEnter}
+                        onMouseLeave={this.predictionMouseLeave}
+                        onMouseDown={this.predictionMouseDown}
+                        onClick={this.searchPrediction}
+                      >{v}</li>
+                    )
+                  })}
+                </ul>
+              </Paper>
             </div>
           </form>
         </div>
