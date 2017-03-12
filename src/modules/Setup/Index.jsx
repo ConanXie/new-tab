@@ -18,6 +18,7 @@ import ContentLink from 'material-ui/svg-icons/content/link'
 import ActionSearch from 'material-ui/svg-icons/action/search'
 import CheckCircle from 'material-ui/svg-icons/action/check-circle'
 import BookmarkBorder from 'material-ui/svg-icons/action/bookmark-border'
+import LightbulbOutline from 'material-ui/svg-icons/action/lightbulb-outline'
 import TextFormat from 'material-ui/svg-icons/content/text-format'
 import CallSplit from 'material-ui/svg-icons/communication/call-split'
 import ColorLens from 'material-ui/svg-icons/image/color-lens'
@@ -153,6 +154,11 @@ class Setup extends Component {
     saveSettings('rememberBookmarksState', bool)
     rememberBookmarksState(bool)
   }
+  toggleSearchPredict = (event, bool) => {
+    const { saveSettings, searchPredict } = this.props
+    saveSettings('searchPredict', bool)
+    searchPredict(bool)
+  }
   toggleUseHK = (event, bool) => {
     const { saveSettings, useHK } = this.props
     saveSettings('useHK', bool)
@@ -274,30 +280,6 @@ class Setup extends Component {
           <div className="setup-section">
             <Paper className="setup-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
               <div className="toggle-box">
-                <HardwareMemory style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.engine.save.label' })}
-                    defaultToggled={data.autoSaveEngine}
-                    onToggle={this.toggleAutoSaveEngine}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              <div className="toggle-box">
-                <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.engine.search.label' })}
-                    defaultToggled={data.searchTarget}
-                    onToggle={this.toggleSearchTarget}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              <div className="toggle-box">
                 <ContentLink style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
                   <Toggle
@@ -322,6 +304,18 @@ class Setup extends Component {
                 </div>
               </div>
               <div className="toggle-box">
+                <CloudQueue style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
+                    defaultToggled={data.useFahrenheit}
+                    onToggle={this.toggleFahrenheit}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
+              <div className="toggle-box">
                 <BookmarkBorder style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
                   <Toggle
@@ -329,6 +323,44 @@ class Setup extends Component {
                     label={intl.formatMessage({ id: 'settings.bookmarks.position.label' })}
                     defaultToggled={data.rememberBookmarksState}
                     onToggle={this.toggleRememberBookmarksState}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
+              {/*search*/}
+              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.search.title' })}</h2>
+              <div className="toggle-box">
+                <HardwareMemory style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.engine.save.label' })}
+                    defaultToggled={data.autoSaveEngine}
+                    onToggle={this.toggleAutoSaveEngine}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
+              <div className="toggle-box">
+                <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.engine.search.label' })}
+                    defaultToggled={data.searchTarget}
+                    onToggle={this.toggleSearchTarget}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
+              <div className="toggle-box">
+                <LightbulbOutline style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.search.predict.label' })}
+                    defaultToggled={data.searchPredict}
+                    onToggle={this.toggleSearchPredict}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -348,18 +380,7 @@ class Setup extends Component {
                   </div>
                 </div>
               }
-              <div className="toggle-box">
-                <CloudQueue style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
-                    defaultToggled={data.useFahrenheit}
-                    onToggle={this.toggleFahrenheit}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
+              {/*theme*/}
               <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
               <List>
                 <ListItem
@@ -369,6 +390,7 @@ class Setup extends Component {
                   onTouchTap={this.openTheme}
                 />
               </List>
+              {/*backup and restore*/}
               <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
               <List>
                 <ListItem
