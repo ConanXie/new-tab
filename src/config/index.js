@@ -2,6 +2,6 @@
  * some configs
  */
 
-export const version = '1.2.3'
+export const version = '1.3.0'
 
 export const code = 'Apricot'
