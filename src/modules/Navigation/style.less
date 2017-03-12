@@ -18,6 +18,8 @@
       font-size: 16px;
     }
     .tool-area {
+      display: flex;
+      align-items: center;
       height: 48px;
       overflow: hidden;
       &.hide {
@@ -66,12 +68,19 @@
         transform: translateY(-50%);
         width: 18px;
         height: 18px;
+        text-align: center;
         &.show {
           display: block;
         }
       }
       .delete-btn {
-        right: 10px;
+        right: 6px;
+        background: #bdbdbd;
+        border-radius: 100%;
+        transition: background 0.3s;
+        &:hover {
+          background: #9e9e9e;
+        }
       }
       .edit-btn {
         right: 30px;
@@ -86,6 +95,21 @@
     }
     .website-icon {
       width: 18px;
+    }
+  }
+  .float-actions {
+    position: fixed;
+    right: 54px;
+    bottom: 54px;
+    width: 56px;
+    height: 116px;
+  }
+  .edit-float-btn {
+    transform: scale(0);
+    transition: transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    &.show {
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform: scale(1);
     }
   }
 }

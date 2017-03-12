@@ -10,6 +10,8 @@ import * as websiteActions from '../../actions/websites'
 import { FormattedMessage } from 'react-intl'
 
 import Paper from 'material-ui/Paper'
+import Checkbox from 'material-ui/Checkbox'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import IconButton from 'material-ui/IconButton'
@@ -19,15 +21,15 @@ import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import ContentClear from 'material-ui/svg-icons/content/clear'
 import ContentLink from 'material-ui/svg-icons/content/link'
-import ActionDome from 'material-ui/svg-icons/action/done'
+import ActionDone from 'material-ui/svg-icons/action/done'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 import Snackbar from 'material-ui/Snackbar'
-import {blue500, red500, red300, greenA200} from 'material-ui/styles/colors'
+import {blue500, red500, red300, grey600, grey500, greenA200} from 'material-ui/styles/colors'
 
 const style = {
   website: {
-    width: '172px',
+    width: '150px',
     textAlign: 'left',
     color: '#333'
   },
@@ -51,14 +53,37 @@ const style = {
   toolArea: {
     transform: ''
   },
+  classifyCheckbox: {
+    width: 'auto',
+    marginRight: 10,
+    marginLeft: 10
+  },
+  classifyCheckboxLabel: {
+    fontSize: 14
+  },
   span: {
     display: 'none',
     width: '18px',
     height: '18px'
   },
-  icon: {
-    width: '18px',
-    height: '18px'
+  editHandleIcon: {
+    width: 18,
+    height: 18,
+  },
+  deleteHandleIcon: {
+    width: 14,
+    height: 14,
+    marginTop: 2
+  },
+  floatingActionButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0
+  },
+  editActionButton: {
+    position: 'absolute',
+    top: 0,
+    left: 8,
   }
 }
 
@@ -170,6 +195,7 @@ class Navigation extends Component {
    * toggle edit
    */
   startEdit = () => {
+    this.hideEditBtn()
     this.setState({
       edit: true
     })
@@ -196,6 +222,21 @@ class Navigation extends Component {
       link
     })
     this.openDialog()
+  }
+  showEditBtn = (event) => {
+    if (!this.state.edit) {
+      this.refs.editFloatBtn.classList.add('show')
+    }
+  }
+  hideEditBtn = (event) => {
+    this.refs.editFloatBtn.classList.remove('show')
+  }
+  handleMainFloatBtn = () => {
+    if (!this.state.edit) {
+      this.openDialog()
+    } else {
+      this.finishedEdit()
+    }
   }
   render() {
     const { store, target, muiTheme } = this.props
@@ -231,8 +272,13 @@ class Navigation extends Component {
           {/*<h3 className="title">
             <FormattedMessage id="nav.title" />
           </h3>*/}
-          <div className={classNames('tool-area', { 'hide': !store.length })}>
-            <div className={classNames('tool-box', { 'show-edit': edit })}>
+          <div className={classNames('tool-area', { 'hide': !edit })}>
+            <FlatButton
+              label="添加分类"
+              icon={<ContentAdd />}
+            />
+            <Checkbox label="显示分类" style={style.classifyCheckbox} labelStyle={style.classifyCheckboxLabel} />
+            {/*<div className={classNames('tool-box', { 'show-edit': edit })}>
               <div className="first-column">
                 <IconButton onTouchTap={this.openDialog}>
                   <ContentAdd />
@@ -243,46 +289,11 @@ class Navigation extends Component {
               </div>
               <div className="second-column">
                 <IconButton onTouchTap={this.finishedEdit}>
-                  <ActionDome />
+                  <ActionDone />
                 </IconButton>
               </div>
-            </div>
+            </div>*/}
           </div>
-          <Dialog
-            title={edit ? intl.formatMessage({ id: 'nav.edit.title.edit' }) : intl.formatMessage({ id: 'nav.edit.title.add' })}
-            actions={actions}
-            modal={false}
-            open={dialog}
-            onRequestClose={this.hideDialog}
-            contentStyle={style.dialogContent}
-            titleStyle={style.dialogTitle}
-          >
-            <TextField
-              floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.website' })}
-              defaultValue={name}
-              style={style.textField}
-              onChange={this.nameChange}
-              underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
-            /><br/>
-            <TextField
-              floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.URL' })}
-              defaultValue={link}
-              style={style.textField}
-              onChange={this.linkChange}
-              underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
-            />
-          </Dialog>
-          <Dialog
-            title={intl.formatMessage({ id: 'nav.delete.title' })}
-            actions={confirmActions}
-            modal={false}
-            open={confirm}
-            onRequestClose={this.hideConfirm}
-            contentStyle={style.dialogContent}
-            titleStyle={style.confirmTitle}
-          >
-            {intl.formatMessage({ id: 'nav.delete.tip' })}
-          </Dialog>
         </div>
         <div className={classNames('website-area', { 'empty': !store.length })}>
           {!store.length && (
@@ -311,16 +322,15 @@ class Navigation extends Component {
                 />
                 <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
                   <ModeEdit
-                    color={red500}
-                    hoverColor={red300}
-                    style={style.icon}
+                    color={grey500}
+                    hoverColor={grey600}
+                    style={style.editHandleIcon}
                   />
                 </span>
                 <span className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
                   <ContentClear
-                    color={red500}
-                    hoverColor={red300}
-                    style={style.icon}
+                    color="#fff"
+                    style={style.deleteHandleIcon}
                   />
                 </span>
               </div>
@@ -336,6 +346,58 @@ class Navigation extends Component {
             style={style.website}
           />*/}
         </div>
+        <div className="float-actions" onMouseLeave={this.hideEditBtn}>
+          <div className='edit-float-btn' ref="editFloatBtn" style={style.editActionButton}>
+            <FloatingActionButton
+              mini={true}
+              onTouchTap={this.startEdit}
+            >
+              <ModeEdit />
+            </FloatingActionButton>
+          </div>
+          <FloatingActionButton
+            style={style.floatingActionButton}
+            onTouchTap={this.handleMainFloatBtn}
+            onMouseEnter={this.showEditBtn}
+          >
+            { edit ? <ActionDone /> : <ContentAdd /> }
+          </FloatingActionButton>
+        </div>
+        <Dialog
+          title={edit ? intl.formatMessage({ id: 'nav.edit.title.edit' }) : intl.formatMessage({ id: 'nav.edit.title.add' })}
+          actions={actions}
+          modal={false}
+          open={dialog}
+          onRequestClose={this.hideDialog}
+          contentStyle={style.dialogContent}
+          titleStyle={style.dialogTitle}
+        >
+          <TextField
+            floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.website' })}
+            defaultValue={name}
+            style={style.textField}
+            onChange={this.nameChange}
+            underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
+          /><br/>
+          <TextField
+            floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.URL' })}
+            defaultValue={link}
+            style={style.textField}
+            onChange={this.linkChange}
+            underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
+          />
+        </Dialog>
+        <Dialog
+          title={intl.formatMessage({ id: 'nav.delete.title' })}
+          actions={confirmActions}
+          modal={false}
+          open={confirm}
+          onRequestClose={this.hideConfirm}
+          contentStyle={style.dialogContent}
+          titleStyle={style.confirmTitle}
+        >
+          {intl.formatMessage({ id: 'nav.delete.tip' })}
+        </Dialog>
         <Snackbar
           open={snackbarOpen}
           message={snackbarMessage}
