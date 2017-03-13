@@ -238,9 +238,18 @@ class Navigation extends Component {
       this.finishedEdit()
     }
   }
-  beginGrab = (event) => {
+  beginGrab = e => {
     if (this.state.edit) {
       this.beginGrabState = true
+      const ele = e.currentTarget
+      const mouseMove = e => {
+        console.log('pageX', e)
+        console.log('offsetX', ele.offsetX)
+      }
+      ele.addEventListener('mousemove', mouseMove, false)
+      ele.addEventListener('mouseup', e => {
+        ele.removeEventListener('mousemove', mouseMove, false)
+      }, false)
     }
     console.log('mousedown')
   }
@@ -333,10 +342,8 @@ class Navigation extends Component {
                 aria-grabbed="false"
                 id={`website:${index}`}
                 key={index}
-                style={{ transform: `translate(${15 + (index%5)*150 + 30*(index%5)}px, ${Math.floor(index/5)*25 + Math.floor(index/5)*36}px)` }}
+                style={{ transform: `translate(${15 + (index%5)*150 + 30*(index%5)}px, ${Math.floor(index/5)*15 + Math.floor(index/5)*36}px)` }}
                 onMouseDown={this.beginGrab}
-                onMouseMove={this.grabbing}
-                onMouseUp={this.endGrab}
               >
                 <FlatButton
                   label={name}
