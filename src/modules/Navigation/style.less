@@ -38,7 +38,8 @@
     }
   }
   .website-area {
-    padding: 0 20px 12px;
+    position: relative;
+    // padding: 0 20px 12px;
     &.empty {
       overflow: hidden;
       height: 280px;
@@ -53,9 +54,11 @@
       }
     }
     .website-box {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 10px;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      // display: inline-block;
+      // margin-bottom: 10px;
       .nav-icon {
         margin-top: -1px;
         width: 16px;
@@ -103,6 +106,9 @@
     bottom: 54px;
     width: 56px;
     height: 116px;
+    &.hide {
+      display: none;
+    }
   }
   .edit-float-btn {
     transform: scale(0);

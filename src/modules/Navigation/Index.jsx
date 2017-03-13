@@ -238,6 +238,25 @@ class Navigation extends Component {
       this.finishedEdit()
     }
   }
+  beginGrab = (event) => {
+    if (this.state.edit) {
+      this.beginGrabState = true
+    }
+    console.log('mousedown')
+  }
+  grabbing = (event) => {
+    if (this.beginGrabState) {
+      console.log('offsetX', event.offsetX)
+      console.log('clientX', event.clientX)
+      console.log('screenX', event.screenX)
+      console.log('mousemove')
+    }
+  }
+  endGrab = (event) => {
+    if (this.state.edit) {
+      this.beginGrabState = false
+    }
+  }
   render() {
     const { store, target, muiTheme } = this.props
     const { edit, dialog, confirm, snackbarOpen, snackbarMessage, name, link} = this.state
@@ -309,7 +328,16 @@ class Navigation extends Component {
           {store.map((value, index) => {
             const { name, link } = value
             return (
-              <div className="website-box" key={index}>
+              <div
+                className="website-box"
+                aria-grabbed="false"
+                id={`website:${index}`}
+                key={index}
+                style={{ transform: `translate(${15 + (index%5)*150 + 30*(index%5)}px, ${Math.floor(index/5)*25 + Math.floor(index/5)*36}px)` }}
+                onMouseDown={this.beginGrab}
+                onMouseMove={this.grabbing}
+                onMouseUp={this.endGrab}
+              >
                 <FlatButton
                   label={name}
                   href={link}
@@ -346,7 +374,7 @@ class Navigation extends Component {
             style={style.website}
           />*/}
         </div>
-        <div className="float-actions" onMouseLeave={this.hideEditBtn}>
+        <div className={classNames('float-actions', { 'hide': !store.length })} onMouseLeave={this.hideEditBtn}>
           <div className='edit-float-btn' ref="editFloatBtn" style={style.editActionButton}>
             <FloatingActionButton
               mini={true}
