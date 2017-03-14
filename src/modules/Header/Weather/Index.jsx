@@ -98,6 +98,54 @@ class Weather extends Component {
       })
     }
   }
+  responseHandler = res => {
+    const { intl } = this.context
+    if (res.ok) {
+      res.json().then(data => {
+        // 天气数据获取成功
+        if (data.status === 'OK') {
+          const result = data.result[0]
+          result.basic.update.loc = Date.now()
+          this.setState({
+            loading: false,
+            data: result
+          })
+          localStorage.setItem('weather', JSON.stringify(result))
+        } else {
+          this.setState({
+            loading: false,
+            empty: true,
+            emptyText: intl.formatMessage({ id: 'weather.empty.noData' })
+          })
+          // 防止请求不到数据而过度请求
+          const temp = {
+            basic: {
+              update: {
+                loc: Date.now()
+              }
+            }
+          }
+          localStorage.setItem('weather', JSON.stringify(temp))
+        }
+      })
+    } else {
+      console.error(`Response wasn't perfect, got status ${res.status}`)
+      this.setState({
+        empty: true,
+        emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
+      })
+    }
+  }
+  responseError = err => {
+    const { intl } = this.context
+
+    console.error('Fetch failed!')
+
+    this.setState({
+      empty: true,
+      emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
+    })
+  }
   getData = () => {
     // 'https://api.heweather.com/x3/weather?cityid=CN101280601&key=258c581b778d440ab34a85d5c8d82902'
     // const link = 'http://localhost:5300/api/weather'
@@ -121,48 +169,7 @@ class Weather extends Component {
     navigator.geolocation.getCurrentPosition(pos => {
       const lat = pos.coords.latitude.toFixed(6)
       const lng = pos.coords.longitude.toFixed(6)
-      fetch(`https://tab.xiejie.co/api/weather/v3/${lat},${lng}`).then(res => {
-        if (res.ok) {
-          res.json().then(data => {
-            // 天气数据获取成功
-            if (data.status === 'OK') {
-              const result = data.result[0]
-              this.setState({
-                loading: false,
-                data: result
-              })
-              localStorage.setItem('weather', JSON.stringify(result))
-            } else {
-              this.setState({
-                loading: false,
-                empty: true,
-                emptyText: intl.formatMessage({ id: 'weather.empty.noData' })
-              })
-              // 防止请求不到数据而过度请求
-              const temp = {
-                basic: {
-                  update: {
-                    loc: Date.now()
-                  }
-                }
-              }
-              localStorage.setItem('weather', JSON.stringify(temp))
-            }
-          })
-        } else {
-          console.error(`Response wasn't perfect, got status ${res.status}`)
-          this.setState({
-            empty: true,
-            emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
-          })
-        }
-      }, e => {
-        console.error('Fetch failed!')
-        this.setState({
-          empty: true,
-          emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
-        })
-      })
+      fetch(`https://tab.xiejie.co/api/weather/v4/${lat},${lng}`).then(this.responseHandler, this.responseError)
     }, error => {
       let emptyText
       switch (error.code) {
@@ -179,11 +186,12 @@ class Weather extends Component {
           emptyText = intl.formatMessage({ id: 'weather.empty.geolocationTimeout' })
           break
       }
-      this.setState({
+      fetch(`https://tab.xiejie.co/api/weather/v4`).then(this.responseHandler, this.responseError)
+      /*this.setState({
         loading: false,
         empty: true,
         emptyText
-      })
+      })*/
     }, { timeout: 2000 })
   }
   calcWeek = (date) => {
@@ -231,7 +239,7 @@ class Weather extends Component {
                 </p>
                 <p className="update-time">
                   <NavigationRefresh style={style.icon} />
-                  <span>{String.prototype.split.call(data.basic.update.loc, ' ')[1]}</span>
+                  <span>{new Date(data.basic.update.loc).getHours() + ':' + new Date(data.basic.update.loc).getMinutes()}</span>
                 </p>
               </div>
             </header>
