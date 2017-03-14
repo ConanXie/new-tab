@@ -25,6 +25,7 @@ const zh_CN = {
   'settings.theme.title': '主题',
   'settings.theme.switch.label': '切换主题',
   'settings.theme.select.title': '选择主题',
+  'settings.theme.dark.label': '夜间模式',
   'settings.br.title': '备份与重置',
   'settings.br.backup.label': '生成备份文件',
   'settings.br.restore.label': '从备份中恢复',

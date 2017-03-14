@@ -25,6 +25,7 @@ const en_US = {
   'settings.theme.title': 'Theme',
   'settings.theme.switch.label': 'Switch color theme',
   'settings.theme.select.title': 'Select',
+  'settings.theme.dark.label': 'Dark Mode',
   'settings.br.title': 'Backup and reset',
   'settings.br.backup.label': 'Create backup file',
   'settings.br.restore.label': 'Restore from backup',
