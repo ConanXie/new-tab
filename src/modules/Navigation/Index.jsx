@@ -31,7 +31,8 @@ const style = {
   website: {
     width: '150px',
     textAlign: 'left',
-    color: '#333'
+    color: '#333',
+    transition: 'background-color 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   dialogContent: {
     width: '380px'
@@ -69,16 +70,18 @@ const style = {
   editHandleIcon: {
     width: 18,
     height: 18,
+    transition: 'fill 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   deleteHandleIcon: {
     width: 14,
     height: 14,
-    marginTop: 2
+    marginTop: 2,
+    transition: 'fill 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   floatingActionButton: {
     position: 'absolute',
     right: 0,
-    bottom: 0
+    bottom: 0,
   },
   editActionButton: {
     position: 'absolute',
@@ -97,7 +100,8 @@ class Navigation extends Component {
       confirm: false,
       dialog: false,
       snackbarOpen: false,
-      snackbarMessage: ''
+      snackbarMessage: '',
+      edit: true
     }
     // this.checkLink = /^http(s)?:\/\/\S+$/
     // console.log(props)
@@ -242,28 +246,144 @@ class Navigation extends Component {
     if (this.state.edit) {
       this.beginGrabState = true
       const ele = e.currentTarget
+      console.log('mousedown', e.screenX)
+      const areaHeight = Math.ceil(this.props.store.length / 5) * 36 + (Math.ceil(this.props.store.length / 5) - 1) * 15
+      const downScreenX = e.screenX
+      const downScreenY = e.screenY
+      let clone
+      let state = 1
+      const origin = Array.prototype.indexOf.call(this.refs.area.childNodes, ele)
+      const moveClone = e => {
+        e.preventDefault()
+      }
       const mouseMove = e => {
-        console.log('pageX', e)
+        console.log('mousemove')
+        console.log(e)
         console.log('offsetX', ele.offsetX)
+        const moveScreenX = e.screenX
+        const moveScreenY = e.screenY
+        const clientToScreenX = moveScreenX - e.clientX
+        const clientToScreenY = moveScreenY - e.clientY
+        if (!clone && (downScreenX !== moveScreenX || downScreenY !== moveScreenY)) {
+          ele.removeEventListener('mousemove', mouseMove, false)
+          console.log('grab begin')
+          clone = ele.cloneNode(true)
+          ele.setAttribute('aria-grabbed', "true")
+          clone.classList.add('grabbing')
+          clone.style.transform = ''
+          clone.style.position = 'absolute'
+          const offsetX = e.offsetX
+          const offsetY = e.offsetY
+          console.log(offsetX, offsetY)
+          clone.style.left = moveScreenX - clientToScreenX - offsetX + 'px'
+          clone.style.top = moveScreenY - clientToScreenY - offsetY + 'px'
+          clone.querySelector('a').style.cursor = '-webkit-grabbing'
+          const moveClone = e => {
+            e.preventDefault()
+            // console.log('move')
+            clone.style.left = e.screenX - clientToScreenX - offsetX + 'px'
+            clone.style.top = e.screenY - clientToScreenY - offsetY + 'px'
+
+
+            const area = this.refs.area
+            const relativeX = e.screenX - clientToScreenX - area.offsetLeft
+            const relativeY = e.screenY - clientToScreenY - area.offsetTop
+            const origin = Array.prototype.indexOf.call(area.childNodes, ele)
+            console.log(origin)
+            if ((relativeX < 0 || relativeY < 0) || (relativeX > 900 || relativeY > areaHeight)) {
+              if (state) {
+                area.removeChild(ele)
+                this.setWebsitesPostion(origin, area.childNodes.length - 2)
+                state = 0
+              }
+              return
+            }
+            if ((relativeX >= 0 && relativeY >= 0) && (relativeX <= 900 && relativeY <= areaHeight)) {
+              if (!state) {
+                console.log('form out to in')
+                const posX = (relativeX - 15) % 180
+                const posY = relativeY % 51
+                const countX = Math.floor((relativeX - 15) / 180)
+                const countY = Math.floor(relativeY / 51)
+                const landing = countX + 5 * countY
+                area.insertBefore(ele, area.childNodes[landing])
+                this.setWebsitesPostion(landing + 1, area.childNodes.length - 1)
+                state = 1
+                return
+              }
+            }
+            // console.log('in')
+            const posX = (relativeX - 15) % 180
+            const posY = relativeY % 51
+            if (posX <= 150 && posY <= 36) {
+              const countX = Math.floor((relativeX - 15) / 180)
+              const countY = Math.floor(relativeY / 51)
+              const landing = countX + 5 * countY
+              if (landing >= 0 && landing < this.props.store.length) {
+                // console.log(origin)
+                if (landing < origin) {
+                  area.insertBefore(ele, area.childNodes[landing])
+                  this.setWebsitesPostion(landing, origin)
+                } else {
+                  area.insertBefore(ele, area.childNodes[landing + 1])
+                  this.setWebsitesPostion(origin, landing)
+                }
+              }
+            }
+          }
+          document.addEventListener('mousemove', moveClone, false)
+          /*clone.addEventListener('mousemove', cloneMove, false)*/
+          clone.addEventListener('mouseup', e => {
+            document.removeEventListener('mousemove', moveClone, false)
+            console.log(e)
+            const area = this.refs.area
+            const relativeX = e.screenX - clientToScreenX - area.offsetLeft
+            const relativeY = e.screenY - clientToScreenY - area.offsetTop
+            console.log(relativeX, relativeY)
+            const posX = (relativeX - 15) % 180
+            const posY = relativeY % 51
+            if (posX <= 150 && posY <= 36) {
+              const countX = Math.floor((relativeX - 15) / 180)
+              const countY = Math.floor(relativeY / 51)
+              const landing = countX + 5 * countY
+              console.log('landing', landing)
+              if (landing >= 0 && landing < this.props.store.length) {
+                // const origin = /\d+$/.exec(ele.getAttribute('id'))[0] * 1
+                const origin = Array.prototype.indexOf.call(area.childNodes, ele)
+                console.log('origin', origin)
+                if (landing < origin) {
+                  area.insertBefore(ele, area.childNodes[landing])
+                  this.setWebsitesPostion(landing, origin)
+                } else {
+                  area.insertBefore(ele, area.childNodes[landing + 1])
+                  this.setWebsitesPostion(origin, landing)
+                }
+              } else {
+                area.insertBefore(ele, area.childNodes[origin])
+                this.setWebsitesPostion(origin, area.childNodes.length - 1)
+              }
+            } else {
+              area.insertBefore(ele, area.childNodes[origin])
+              this.setWebsitesPostion(origin, area.childNodes.length - 1)
+            }
+            ele.setAttribute('aria-grabbed', "false")
+            document.body.removeChild(clone)
+          }, false)
+          document.body.appendChild(clone)
+        }
       }
       ele.addEventListener('mousemove', mouseMove, false)
       ele.addEventListener('mouseup', e => {
+        // document.removeEventListener('mousemove', preventDocumentMove, false)
         ele.removeEventListener('mousemove', mouseMove, false)
       }, false)
     }
     console.log('mousedown')
   }
-  grabbing = (event) => {
-    if (this.beginGrabState) {
-      console.log('offsetX', event.offsetX)
-      console.log('clientX', event.clientX)
-      console.log('screenX', event.screenX)
-      console.log('mousemove')
-    }
-  }
-  endGrab = (event) => {
-    if (this.state.edit) {
-      this.beginGrabState = false
+  setWebsitesPostion = (start, end) => {
+    const area = this.refs.area
+    for (let i = start; i <= end; i++) {
+      area.childNodes[i].style.transform = `translate(${15 + (i%5)*150 + 30*(i%5)}px, ${Math.floor(i/5)*15 + Math.floor(i/5)*36}px)`
     }
   }
   render() {
@@ -323,7 +443,7 @@ class Navigation extends Component {
             </div>*/}
           </div>
         </div>
-        <div className={classNames('website-area', { 'empty': !store.length })}>
+        <div className={classNames('website-area', { 'empty': !store.length })} ref="area">
           {!store.length && (
             <div className="empty-box">
               <p className="empty-text">{intl.formatMessage({ id: 'empty.text.navigation' })}</p>
@@ -338,7 +458,7 @@ class Navigation extends Component {
             const { name, link } = value
             return (
               <div
-                className="website-box"
+                className={classNames('website-box', { 'grabable': edit })}
                 aria-grabbed="false"
                 id={`website:${index}`}
                 key={index}
@@ -350,7 +470,7 @@ class Navigation extends Component {
                   href={link}
                   target={target}
                   secondary={true}
-                  icon={<img className="nav-icon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} />}
+                  icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} />}
                   className="website-link"
                   style={style.website}
                   onClick={this.checkClick}
@@ -371,6 +491,7 @@ class Navigation extends Component {
               </div>
             )
           })}
+          <div className={classNames('website-box', { 'grabable': edit })}></div>
           {/*<FlatButton
             key={Math.random()}
             label="Andriod"
