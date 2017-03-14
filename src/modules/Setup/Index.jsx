@@ -23,6 +23,7 @@ import TextFormat from 'material-ui/svg-icons/content/text-format'
 import CallSplit from 'material-ui/svg-icons/communication/call-split'
 import ColorLens from 'material-ui/svg-icons/image/color-lens'
 import ImageLens from 'material-ui/svg-icons/image/lens'
+import ImageBrightness from 'material-ui/svg-icons/image/brightness-2'
 import CloudQueue from 'material-ui/svg-icons/file/cloud-queue'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
 import FileUpload from 'material-ui/svg-icons/file/file-upload'
@@ -189,6 +190,11 @@ class Setup extends Component {
     setTimeout(() => {
       this.hideTheme()
     }, 200)
+  }
+  toggleDarkMode = (event, bool) => {
+    const { saveSettings, darkMode } = this.props
+    saveSettings('darkMode', bool)
+    darkMode(bool)
   }
   createBackups = () => {
     const currentEngine = JSON.parse(window.localStorage.currentEngine)
@@ -390,6 +396,18 @@ class Setup extends Component {
                   onTouchTap={this.openTheme}
                 />
               </List>
+              <div className="toggle-box">
+                <ImageBrightness style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.theme.dark.label' })}
+                    defaultToggled={data.darkMode}
+                    onToggle={this.toggleDarkMode}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
               {/*backup and restore*/}
               <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
               <List>

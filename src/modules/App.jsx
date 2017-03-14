@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import RaisedButton from 'material-ui/RaisedButton'
 // import { teal500, pink500 } from 'material-ui/styles/colors'
@@ -24,7 +25,7 @@ import Onboarding from './Onboarding'
 class App extends Component {
   constructor(props) {
     super(props)
-    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, currentTheme } = props.settings
+    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, currentTheme, darkMode } = props.settings
     const index = currentTheme ? currentTheme : 0
     this.state = {
       linkTarget: linkTarget ? '_blank' : '_self',
@@ -34,6 +35,7 @@ class App extends Component {
       searchPredict,
       useHK,
       useFahrenheit,
+      darkMode,
       muiTheme: this.createTheme(theme[index])
     }
   }
@@ -42,6 +44,12 @@ class App extends Component {
     if (_code !== code) {
       this.setState({
         onboarding: true
+      })
+    }
+    const { darkMode, muiTheme } = this.state
+    if (this.state.darkMode) {
+      this.setState({
+        muiTheme: getMuiTheme(darkBaseTheme)
       })
     }
   }
@@ -92,6 +100,19 @@ class App extends Component {
     this.setState({
       muiTheme: this.createTheme(theme[index])
     })
+    this.theme = this.state.muiTheme
+  }
+  darkMode = (bool) => {
+    /*this.setState({
+      darkMode: bool
+    })*/
+    if (bool) {
+      this.setState({
+        muiTheme: getMuiTheme(darkBaseTheme)
+      })
+    } else {
+      this.changeTheme(this.props.settings.currentTheme)
+    }
   }
   render() {
     const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, muiTheme, onboarding } = this.state
@@ -111,6 +132,7 @@ class App extends Component {
             useHK={this.useHK}
             useFahrenheit={this.useFahrenheit}
             changeTheme={this.changeTheme}
+            darkMode={this.darkMode}
             muiTheme={muiTheme}
           />
           {onboarding && (
