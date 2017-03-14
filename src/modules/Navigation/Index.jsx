@@ -244,71 +244,75 @@ class Navigation extends Component {
   }
   beginGrab = e => {
     if (this.state.edit) {
-      this.beginGrabState = true
       const ele = e.currentTarget
-      console.log('mousedown', e.screenX)
-      const areaHeight = Math.ceil(this.props.store.length / 5) * 36 + (Math.ceil(this.props.store.length / 5) - 1) * 15
+      const area = this.refs.area
+      const origin = Array.prototype.indexOf.call(area.childNodes, ele)
+      const areaHeight = Math.ceil(area.childNodes.length / 5) * 36 + (Math.ceil(area.childNodes.length / 5) - 1) * 15
+      // mouse down coordinate
       const downScreenX = e.screenX
       const downScreenY = e.screenY
       let clone
       let state = 1
-      const origin = Array.prototype.indexOf.call(this.refs.area.childNodes, ele)
-      const moveClone = e => {
-        e.preventDefault()
-      }
       const mouseMove = e => {
-        console.log('mousemove')
-        console.log(e)
-        console.log('offsetX', ele.offsetX)
         const moveScreenX = e.screenX
         const moveScreenY = e.screenY
         const clientToScreenX = moveScreenX - e.clientX
         const clientToScreenY = moveScreenY - e.clientY
+        // when the clone element not be cloned, mouse down and move
         if (!clone && (downScreenX !== moveScreenX || downScreenY !== moveScreenY)) {
+          // remove 'mousemove' listener on ele
           ele.removeEventListener('mousemove', mouseMove, false)
+          
           console.log('grab begin')
+
           clone = ele.cloneNode(true)
           ele.setAttribute('aria-grabbed', "true")
           clone.classList.add('grabbing')
           clone.style.transform = ''
           clone.style.position = 'absolute'
+
           const offsetX = e.offsetX
           const offsetY = e.offsetY
-          console.log(offsetX, offsetY)
           clone.style.left = moveScreenX - clientToScreenX - offsetX + 'px'
           clone.style.top = moveScreenY - clientToScreenY - offsetY + 'px'
-          clone.querySelector('a').style.cursor = '-webkit-grabbing'
+          /**
+           * move mouse on screen
+           * @param {Event Object} e 
+           */
           const moveClone = e => {
             e.preventDefault()
-            // console.log('move')
+
             clone.style.left = e.screenX - clientToScreenX - offsetX + 'px'
             clone.style.top = e.screenY - clientToScreenY - offsetY + 'px'
 
-
-            const area = this.refs.area
             const relativeX = e.screenX - clientToScreenX - area.offsetLeft
             const relativeY = e.screenY - clientToScreenY - area.offsetTop
-            const origin = Array.prototype.indexOf.call(area.childNodes, ele)
-            console.log(origin)
-            if ((relativeX < 0 || relativeY < 0) || (relativeX > 900 || relativeY > areaHeight)) {
+
+            // when mouse out of the area
+            if ((relativeX < 0 || relativeX > 900) || (relativeY < 0 || relativeY > areaHeight)) {
+              // from in to out
               if (state) {
+                const origin = Array.prototype.indexOf.call(area.childNodes, ele)
                 area.removeChild(ele)
-                this.setWebsitesPostion(origin, area.childNodes.length - 2)
+                this.setWebsitesPostion(origin)
                 state = 0
               }
               return
             }
-            if ((relativeX >= 0 && relativeY >= 0) && (relativeX <= 900 && relativeY <= areaHeight)) {
+            // when mouse in the area
+            if ((relativeX >= 0 && relativeX <= 900) && (relativeY >= 0 && relativeY <= areaHeight)) {
+              // from out to in
               if (!state) {
-                console.log('form out to in')
                 const posX = (relativeX - 15) % 180
                 const posY = relativeY % 51
-                const countX = Math.floor((relativeX - 15) / 180)
-                const countY = Math.floor(relativeY / 51)
-                const landing = countX + 5 * countY
-                area.insertBefore(ele, area.childNodes[landing])
-                this.setWebsitesPostion(landing + 1, area.childNodes.length - 1)
-                state = 1
+                if (posX <= 150 && posY <= 36) {
+                  const countX = Math.floor((relativeX - 15) / 180)
+                  const countY = Math.floor(relativeY / 51)
+                  const landing = countX + 5 * countY
+                  area.insertBefore(ele, area.childNodes[landing])
+                  this.setWebsitesPostion(landing + 1)
+                  state = 1
+                }
                 return
               }
             }
@@ -319,7 +323,8 @@ class Navigation extends Component {
               const countX = Math.floor((relativeX - 15) / 180)
               const countY = Math.floor(relativeY / 51)
               const landing = countX + 5 * countY
-              if (landing >= 0 && landing < this.props.store.length) {
+              if (landing >= 0 && landing < area.childNodes.length) {
+                const origin = Array.prototype.indexOf.call(area.childNodes, ele)
                 // console.log(origin)
                 if (landing < origin) {
                   area.insertBefore(ele, area.childNodes[landing])
@@ -328,16 +333,22 @@ class Navigation extends Component {
                   area.insertBefore(ele, area.childNodes[landing + 1])
                   this.setWebsitesPostion(origin, landing)
                 }
+              } else if (landing < 5 * (countY + 1)) {
+                area.appendChild(ele)
+                this.setWebsitesPostion(origin)
               }
             }
           }
           document.addEventListener('mousemove', moveClone, false)
-          /*clone.addEventListener('mousemove', cloneMove, false)*/
-          clone.addEventListener('mouseup', e => {
+          /**
+           * calc position when mouseup
+           * @param {Event Object} e 
+           */
+          const mouseUp = e => {
             document.removeEventListener('mousemove', moveClone, false)
-            console.log(e)
-            const area = this.refs.area
-            const relativeX = e.screenX - clientToScreenX - area.offsetLeft
+            // console.log(e)
+            // const area = this.refs.area
+            /*const relativeX = e.screenX - clientToScreenX - area.offsetLeft
             const relativeY = e.screenY - clientToScreenY - area.offsetTop
             console.log(relativeX, relativeY)
             const posX = (relativeX - 15) % 180
@@ -347,8 +358,7 @@ class Navigation extends Component {
               const countY = Math.floor(relativeY / 51)
               const landing = countX + 5 * countY
               console.log('landing', landing)
-              if (landing >= 0 && landing < this.props.store.length) {
-                // const origin = /\d+$/.exec(ele.getAttribute('id'))[0] * 1
+              if (landing >= 0 && landing < area.childNodes.length) {
                 const origin = Array.prototype.indexOf.call(area.childNodes, ele)
                 console.log('origin', origin)
                 if (landing < origin) {
@@ -365,22 +375,25 @@ class Navigation extends Component {
             } else {
               area.insertBefore(ele, area.childNodes[origin])
               this.setWebsitesPostion(origin, area.childNodes.length - 1)
+            }*/
+            if (area.childNodes.length !== this.props.store.length) {
+              area.insertBefore(ele, area.childNodes[origin])
+              this.setWebsitesPostion(origin, area.childNodes.length - 1)
             }
             ele.setAttribute('aria-grabbed', "false")
             document.body.removeChild(clone)
-          }, false)
+            document.removeEventListener('mouseup', mouseUp, false)
+          }
+          document.addEventListener('mouseup', mouseUp, false)
+
+          clone.querySelector('a').style.cursor = '-webkit-grabbing'
           document.body.appendChild(clone)
         }
       }
       ele.addEventListener('mousemove', mouseMove, false)
-      ele.addEventListener('mouseup', e => {
-        // document.removeEventListener('mousemove', preventDocumentMove, false)
-        ele.removeEventListener('mousemove', mouseMove, false)
-      }, false)
     }
-    console.log('mousedown')
   }
-  setWebsitesPostion = (start, end) => {
+  setWebsitesPostion = (start, end = this.refs.area.childNodes.length - 1) => {
     const area = this.refs.area
     for (let i = start; i <= end; i++) {
       area.childNodes[i].style.transform = `translate(${15 + (i%5)*150 + 30*(i%5)}px, ${Math.floor(i/5)*15 + Math.floor(i/5)*36}px)`
@@ -491,7 +504,6 @@ class Navigation extends Component {
               </div>
             )
           })}
-          <div className={classNames('website-box', { 'grabable': edit })}></div>
           {/*<FlatButton
             key={Math.random()}
             label="Andriod"
