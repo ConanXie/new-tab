@@ -63,6 +63,11 @@
       &[aria-grabbed=true] {
         visibility: hidden;
       }
+      &:hover {
+        .edit-btn.show {
+          display: block;
+        }
+      }
       .favicon {
         margin-top: -2px;
         width: 16px;
@@ -76,15 +81,15 @@
         width: 18px;
         height: 18px;
         text-align: center;
-        &.show {
-          display: block;
-        }
       }
       .delete-btn {
         right: 6px;
         background: #bdbdbd;
         border-radius: 100%;
         transition: background 0.3s;
+        &.show {
+          display: block;
+        }
         &:hover {
           background: #9e9e9e;
         }

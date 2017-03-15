@@ -106,6 +106,14 @@ class Navigation extends Component {
     }
     // this.checkLink = /^http(s)?:\/\/\S+$/
     // console.log(props)
+
+    // some variables
+    this.websiteWidth = 150
+    this.websiteHeight = 36
+    this.left = 15
+    this.row = 5
+    this.wrapperWidth = 900
+    this.space = 30
   }
   
   checkClick = (e) => {
