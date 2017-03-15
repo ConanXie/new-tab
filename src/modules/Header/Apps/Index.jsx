@@ -5,6 +5,17 @@ import React, { Component, PropTypes } from 'react'
 
 import FlatButton from 'material-ui/FlatButton'
 
+const style = {
+  appBtn: {
+    height: 'auto',
+    width: '110px',
+    minWidth: 'none',
+    lineHeight: 'normal',
+    borderRadius: '100%',
+    overFlow: 'hidden'
+  }
+}
+
 class Apps extends Component {
   static contextTypes = {
     intl: PropTypes.object.isRequired
@@ -49,8 +60,8 @@ class Apps extends Component {
             const maxIcon = app.icons.length - 1
             return (
               <div className="app-box" key={index}>
-                <FlatButton style={{ height: 'auto', width: '100%', minWidth: 'none', lineHeight: 'normal' }}>
-                  <dl onClick={e => { chrome.management.launchApp(app.id) }}>
+                <FlatButton style={style.appBtn}>
+                  <dl onClick={e => { chrome.management.launchApp(app.id) }} title={app.shortName}>
                     <dt>
                       <img src={app.icons[maxIcon].url} alt={app.shortName} />
                     </dt>
