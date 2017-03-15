@@ -3514,9 +3514,9 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/strip-json-comments/download/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
-style-loader@^0.13.2:
-  version "0.13.2"
-  resolved "http://registry.npm.taobao.org/style-loader/download/style-loader-0.13.2.tgz#74533384cf698c7104c7951150b49717adc2f3bb"
+style-loader@^0.14.0:
+  version "0.14.0"
+  resolved "http://registry.npm.taobao.org/style-loader/download/style-loader-0.14.0.tgz#e44fe69ef891513bb22fdd10c3167aaa99711164"
   dependencies:
     loader-utils "^1.0.2"
 
