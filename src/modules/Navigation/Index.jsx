@@ -99,6 +99,7 @@ class Navigation extends Component {
     this.state = {
       confirm: false,
       dialog: false,
+      classifyDialog: false,
       snackbarOpen: false,
       snackbarMessage: '',
       edit: true
@@ -209,6 +210,25 @@ class Navigation extends Component {
       edit: false
     })
   }
+  isClassified = (event, bool) => {
+    console.log(bool)
+    this.setState({
+      isClassified: bool
+    })
+  }
+  openClassifyDialog = () => {
+    this.setState({
+      classifyDialog: true
+    })
+  }
+  hideClassifyDialog = () => {
+    this.setState({
+      classifyDialog: false
+    })
+  }
+  addClassify = () => {
+
+  }
   /**
    * delete and edit
    */
@@ -229,7 +249,7 @@ class Navigation extends Component {
   }
   showEditBtn = (event) => {
     if (!this.state.edit) {
-      this.refs.editFloatBtn.classList.add('show')
+      this.refs.editFloatBtn.classList.add('show') 
     }
   }
   hideEditBtn = (event) => {
@@ -323,8 +343,8 @@ class Navigation extends Component {
               const countX = Math.floor((relativeX - 15) / 180)
               const countY = Math.floor(relativeY / 51)
               const landing = countX + 5 * countY
+              const origin = Array.prototype.indexOf.call(area.childNodes, ele)
               if (landing >= 0 && landing < area.childNodes.length) {
-                const origin = Array.prototype.indexOf.call(area.childNodes, ele)
                 // console.log(origin)
                 if (landing < origin) {
                   area.insertBefore(ele, area.childNodes[landing])
@@ -391,6 +411,12 @@ class Navigation extends Component {
         }
       }
       ele.addEventListener('mousemove', mouseMove, false)
+      // remove mousemove on ele
+      const mouseUp = e => {
+        ele.removeEventListener('mousemove', mouseMove)
+        document.removeEventListener('mouseup', mouseUp, false)
+      }
+      document.addEventListener('mouseup', mouseUp, false)
     }
   }
   setWebsitesPostion = (start, end = this.refs.area.childNodes.length - 1) => {
@@ -401,7 +427,7 @@ class Navigation extends Component {
   }
   render() {
     const { store, target, muiTheme } = this.props
-    const { edit, dialog, confirm, snackbarOpen, snackbarMessage, name, link} = this.state
+    const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, name, link, isClassified} = this.state
     const { intl } = this.context
     const actions = [
       <FlatButton
@@ -427,6 +453,18 @@ class Navigation extends Component {
         onTouchTap={this.handleConfirm}
       />
     ]
+    const addClassifyActions = [
+      <FlatButton
+        label={intl.formatMessage({ id: 'button.cancel' })}
+        primary={true}
+        onTouchTap={this.hideClassifyDialog}
+      />,
+      <FlatButton
+        label={intl.formatMessage({ id: 'button.confirm' })}
+        primary={true}
+        onTouchTap={this.addClassify}
+      />
+    ]
     return (
       <Paper zDepth={0} className="navigation-box">
         <div className="tool-bar">
@@ -434,11 +472,14 @@ class Navigation extends Component {
             <FormattedMessage id="nav.title" />
           </h3>*/}
           <div className={classNames('tool-area', { 'hide': !edit })}>
-            <FlatButton
-              label="添加分类"
-              icon={<ContentAdd />}
-            />
-            <Checkbox label="显示分类" style={style.classifyCheckbox} labelStyle={style.classifyCheckboxLabel} />
+            {isClassified && (
+              <FlatButton
+                label="添加分类"
+                icon={<ContentAdd />}
+                onTouchTap={this.openClassifyDialog}
+              />
+            )}
+            <Checkbox label="显示分类" style={style.classifyCheckbox} labelStyle={style.classifyCheckboxLabel} onCheck={this.isClassified} />
             {/*<div className={classNames('tool-box', { 'show-edit': edit })}>
               <div className="first-column">
                 <IconButton onTouchTap={this.openDialog}>
@@ -565,6 +606,22 @@ class Navigation extends Component {
           titleStyle={style.confirmTitle}
         >
           {intl.formatMessage({ id: 'nav.delete.tip' })}
+        </Dialog>
+        <Dialog
+          title="增加分类"
+          actions={addClassifyActions}
+          modal={false}
+          open={classifyDialog}
+          onRequestClose={this.hideClassifyDialog}
+          contentStyle={style.dialogContent}
+          titleStyle={style.dialogTitle}
+        >
+          <TextField
+            floatingLabelText="分类名"
+            style={style.textField}
+            /*onChange={this.linkChange}*/
+            underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
+          />
         </Dialog>
         <Snackbar
           open={snackbarOpen}
