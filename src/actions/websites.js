@@ -32,3 +32,15 @@ export function editWebsite(index, name, link) {
     ls.setItem('websites', JSON.stringify(websites))
   }
 }
+
+export function addEmptyClassification(name) {
+  return (dispatch, getState) => {
+    const classifications = getState().websites.classifiedStore
+    classifications.push({
+      name,
+      set: []
+    })
+    console.log(classifications)
+    ls.setItem('classified', JSON.stringify(classifications))
+  }
+}

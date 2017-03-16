@@ -162,6 +162,23 @@
   }
 }
 .classification {
+  &.empty {
+    display: none;
+  }
+  &.editing {
+    display: block;
+  }
+  &.empty.editing {
+    position: relative;
+    .delete-classification {
+      display: inline-block !important;
+    }
+  }
+  .delete-classification {
+    position: absolute !important;
+    right: 0 !important;
+    display: none !important;
+  }
   /*&:not(:first-child) .classification-area:after {
     content: '';
     position: absolute;
@@ -177,6 +194,7 @@
   float: left;
   width: 100px;
   line-height: 36px;
+  font-size: 18px;
   // text-align: right;
 }
 .classification-area {

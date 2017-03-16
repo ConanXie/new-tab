@@ -243,7 +243,14 @@ class Navigation extends Component {
     })
   }
   addClassify = () => {
+    const { addEmptyClassification } = this.props
+    const name = this.refs.classificationName.input.value
 
+    if (name) {
+      addEmptyClassification(name)
+    }
+    
+    this.hideClassifyDialog()
   }
   /**
    * delete and edit
@@ -282,8 +289,9 @@ class Navigation extends Component {
     if (this.state.edit) {
       const ele = e.currentTarget
       // const area = this.refs.area
-      const area = ele.parentNode
+      let area = ele.parentNode
       const total = area.childNodes.length
+      const wrap = area.parentNode
       const origin = Array.prototype.indexOf.call(area.childNodes, ele)
       // const areaHeight = Math.ceil(area.childNodes.length / 5) * 36 + (Math.ceil(area.childNodes.length / 5) - 1) * 15
       const areaHeight = Math.ceil(area.childNodes.length / this.row) * (this.websiteHeight + this.spacingY) - this.spacingY
@@ -325,12 +333,16 @@ class Navigation extends Component {
           const moveClone = e => {
             e.preventDefault()
 
+            const total = area.childNodes.length
+            const origin = Array.prototype.indexOf.call(area.childNodes, ele)
+            const areaHeight = Math.ceil(area.childNodes.length / this.row) * (this.websiteHeight + this.spacingY) - this.spacingY
+
             clone.style.left = e.screenX - clientToScreenX - offsetX + 'px'
             clone.style.top = e.screenY - clientToScreenY - offsetY + 'px'
 
-            const relativeX = e.screenX - clientToScreenX - area.offsetLeft + scrollLeft
-            const relativeY = e.screenY - clientToScreenY - area.offsetTop + scrollTop
-
+            let relativeX = e.screenX - clientToScreenX - area.offsetLeft + scrollLeft
+            let relativeY = e.screenY - clientToScreenY - area.offsetTop + scrollTop
+            
             // when mouse out of the area
             if ((relativeX < 0 || relativeX > this.wrapperWidth) || (relativeY < 0 || relativeY > areaHeight)) {
               // from in to out
@@ -340,7 +352,9 @@ class Navigation extends Component {
                 this.setWebsitesPostion(area, origin)
                 state = 0
               }
-              return
+              if (!this.state.isClassified) {
+                return
+              }
             }
             // when mouse in the area
             if ((relativeX >= 0 && relativeX <= this.wrapperWidth) && (relativeY >= 0 && relativeY <= areaHeight)) {
@@ -356,7 +370,9 @@ class Navigation extends Component {
                   this.setWebsitesPostion(area, landing + 1)
                   state = 1
                 }
-                return
+                if (!this.state.isClassified) {
+                  return
+                }
               }
             }
             // console.log('in')
@@ -367,7 +383,7 @@ class Navigation extends Component {
               const countY = Math.floor(relativeY / (this.websiteHeight + this.spacingY))
               const landing = countX + this.row * countY
               const origin = Array.prototype.indexOf.call(area.childNodes, ele)
-              // console.log(landing, origin, countY)
+              console.log(landing, origin, countY)
               if (landing >= 0 && landing < area.childNodes.length) {
                 // console.log(origin)
                 if (landing < origin) {
@@ -377,9 +393,19 @@ class Navigation extends Component {
                   area.insertBefore(ele, area.childNodes[landing + 1])
                   this.setWebsitesPostion(area, origin, landing)
                 }
-              } else if (landing < 5 * (countY + 1)) {
+              } else if (landing <= 5 * (countY + 1)) {
                 area.appendChild(ele)
                 this.setWebsitesPostion(area, origin)
+              }
+              if (this.state.isClassified) {
+                console.log(landing, 5 * Math.ceil(area.childNodes.length / 5))
+                if (landing < 0 && area.parentNode.previousSibling.nodeType === 1) {
+                  area = area.parentNode.previousSibling.querySelector('.classification-area')
+                  console.log('previous', area)
+                } else if (landing > 5 * Math.ceil(area.childNodes.length / 5) && area.parentNode.nextSibling.nodeType === 1) {
+                  area = area.parentNode.nextSibling.querySelector('.classification-area')
+                  console.log('next', area)
+                }
               }
             }
           }
@@ -576,7 +602,11 @@ class Navigation extends Component {
           )}
           {isClassified && classifiedStore.map((item, index) => {
             return (
-              <div className="classification" key={index} style={{ height: Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}>
+              <div
+                key={index}
+                className={classNames('classification', { 'empty': !item.set.length, 'editing': edit })}
+                style={{ minHeight: this.websiteHeight + this.spacingY, height: Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}
+              >
                 <div className="classification-name" style={{ color: muiTheme.palette.primary1Color }}>{item.name}</div>
                 <div className="classification-area" style={{ width: this.wrapperWidth }}>
                   {item.set.map((value, index) => {
@@ -617,6 +647,12 @@ class Navigation extends Component {
                     )
                   })}
                 </div>
+                <FlatButton
+                  label="删除分类"
+                  icon={<ContentClear />}
+                  onTouchTap={this.openClassifyDialog}
+                  className="delete-classification"
+                />
               </div>
             )
           })}
@@ -696,6 +732,7 @@ class Navigation extends Component {
             style={style.textField}
             /*onChange={this.linkChange}*/
             underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
+            ref="classificationName"
           />
         </Dialog>
         <Snackbar
