@@ -46,9 +46,10 @@ class Search extends Component {
 
     let origin
     // currentEngine not exist, or autoSaveEngine is false
-    if (!currentEngine.name || !settings.autoSaveEngine) {
+    if (!currentEngine.predict || !settings.autoSaveEngine) {
       origin = searchEngine[0]
       saveEngine(origin)
+      saveToLocalStorage(origin)
     } else {
       origin = currentEngine
     }
