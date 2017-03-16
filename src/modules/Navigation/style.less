@@ -1,5 +1,5 @@
 .navigation-box {
-  width: 900px;
+  width: 1000px;
   margin: 68px auto 0;
   // padding-bottom: 30px;
   // border: 1px solid #eee;
@@ -37,9 +37,7 @@
       }
     }
   }
-  .website-area {
-    position: relative;
-    // padding: 0 20px 12px;
+  .websites-wrap {
     &.empty {
       overflow: hidden;
       height: 280px;
@@ -98,6 +96,10 @@
         right: 30px;
       }
     }
+  }
+  .websites-area {
+    position: relative;
+    margin-left: 50px;
   }
   .float-actions {
     position: fixed;
@@ -158,4 +160,26 @@
   .website-icon {
     width: 18px;
   }
+}
+.classification {
+  /*&:not(:first-child) .classification-area:after {
+    content: '';
+    position: absolute;
+    bottom: 7.5px;
+    right: 0;
+    width: 885px;
+    height: 1px;
+    background: #eee;
+    // border-bottom: 1px solid #eee;
+  }*/
+}
+.classification-name {
+  float: left;
+  width: 100px;
+  line-height: 36px;
+  // text-align: right;
+}
+.classification-area {
+  position: relative;
+  margin-left: 100px;
 }

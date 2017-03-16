@@ -110,10 +110,11 @@ class Navigation extends Component {
     // some variables
     this.websiteWidth = 150
     this.websiteHeight = 36
-    this.left = 15
+    this.margin = 15
     this.row = 5
     this.wrapperWidth = 900
-    this.space = 30
+    this.spacingX = 30
+    this.spacingY = 15
   }
   
   checkClick = (e) => {
@@ -223,6 +224,13 @@ class Navigation extends Component {
     this.setState({
       isClassified: bool
     })
+    /*if (bool) {
+      this.wrapperWidth = 820
+      this.spacingX = 10
+    } else {
+      this.wrapperWidth = 900
+      this.spacingX = 30
+    }*/
   }
   openClassifyDialog = () => {
     this.setState({
@@ -273,15 +281,22 @@ class Navigation extends Component {
   beginGrab = e => {
     if (this.state.edit) {
       const ele = e.currentTarget
-      const area = this.refs.area
+      // const area = this.refs.area
+      const area = ele.parentNode
+      const total = area.childNodes.length
       const origin = Array.prototype.indexOf.call(area.childNodes, ele)
-      const areaHeight = Math.ceil(area.childNodes.length / 5) * 36 + (Math.ceil(area.childNodes.length / 5) - 1) * 15
+      // const areaHeight = Math.ceil(area.childNodes.length / 5) * 36 + (Math.ceil(area.childNodes.length / 5) - 1) * 15
+      const areaHeight = Math.ceil(area.childNodes.length / this.row) * (this.websiteHeight + this.spacingY) - this.spacingY
+      console.log(area)
       // mouse down coordinate
       const downScreenX = e.screenX
       const downScreenY = e.screenY
       let clone
       let state = 1
       const mouseMove = e => {
+        console.log(e)
+        const scrollTop = document.querySelector('#app').scrollTop
+        const scrollLeft = document.querySelector('#app').scrollLeft
         const moveScreenX = e.screenX
         const moveScreenY = e.screenY
         const clientToScreenX = moveScreenX - e.clientX
@@ -301,8 +316,8 @@ class Navigation extends Component {
 
           const offsetX = e.offsetX
           const offsetY = e.offsetY
-          clone.style.left = moveScreenX - clientToScreenX - offsetX + 'px'
-          clone.style.top = moveScreenY - clientToScreenY - offsetY + 'px'
+          clone.style.left = moveScreenX - clientToScreenX - scrollLeft - offsetX + 'px'
+          clone.style.top = moveScreenY - clientToScreenY - scrollTop - offsetY + 'px'
           /**
            * move mouse on screen
            * @param {Event Object} e 
@@ -313,57 +328,58 @@ class Navigation extends Component {
             clone.style.left = e.screenX - clientToScreenX - offsetX + 'px'
             clone.style.top = e.screenY - clientToScreenY - offsetY + 'px'
 
-            const relativeX = e.screenX - clientToScreenX - area.offsetLeft
-            const relativeY = e.screenY - clientToScreenY - area.offsetTop
+            const relativeX = e.screenX - clientToScreenX - area.offsetLeft + scrollLeft
+            const relativeY = e.screenY - clientToScreenY - area.offsetTop + scrollTop
 
             // when mouse out of the area
-            if ((relativeX < 0 || relativeX > 900) || (relativeY < 0 || relativeY > areaHeight)) {
+            if ((relativeX < 0 || relativeX > this.wrapperWidth) || (relativeY < 0 || relativeY > areaHeight)) {
               // from in to out
               if (state) {
                 const origin = Array.prototype.indexOf.call(area.childNodes, ele)
                 area.removeChild(ele)
-                this.setWebsitesPostion(origin)
+                this.setWebsitesPostion(area, origin)
                 state = 0
               }
               return
             }
             // when mouse in the area
-            if ((relativeX >= 0 && relativeX <= 900) && (relativeY >= 0 && relativeY <= areaHeight)) {
+            if ((relativeX >= 0 && relativeX <= this.wrapperWidth) && (relativeY >= 0 && relativeY <= areaHeight)) {
               // from out to in
               if (!state) {
-                const posX = (relativeX - 15) % 180
-                const posY = relativeY % 51
-                if (posX <= 150 && posY <= 36) {
-                  const countX = Math.floor((relativeX - 15) / 180)
-                  const countY = Math.floor(relativeY / 51)
-                  const landing = countX + 5 * countY
+                const posX = (relativeX - this.margin) % (this.websiteWidth + this.spacingX)
+                const posY = relativeY % (this.websiteHeight + this.spacingY)
+                if (posX <= this.websiteWidth && posY <= this.websiteHeight) {
+                  const countX = Math.floor((relativeX - this.margin) / (this.websiteWidth + this.spacingX))
+                  const countY = Math.floor(relativeY / (this.websiteHeight + this.spacingY))
+                  const landing = countX + this.row * countY
                   area.insertBefore(ele, area.childNodes[landing])
-                  this.setWebsitesPostion(landing + 1)
+                  this.setWebsitesPostion(area, landing + 1)
                   state = 1
                 }
                 return
               }
             }
             // console.log('in')
-            const posX = (relativeX - 15) % 180
-            const posY = relativeY % 51
-            if (posX <= 150 && posY <= 36) {
-              const countX = Math.floor((relativeX - 15) / 180)
-              const countY = Math.floor(relativeY / 51)
-              const landing = countX + 5 * countY
+            const posX = (relativeX - this.margin) % (this.websiteWidth + this.spacingX)
+            const posY = relativeY % (this.websiteHeight + this.spacingY)
+            if (posX <= this.websiteWidth && posY <= this.websiteHeight) {
+              const countX = Math.floor((relativeX - this.margin) / (this.websiteWidth + this.spacingX))
+              const countY = Math.floor(relativeY / (this.websiteHeight + this.spacingY))
+              const landing = countX + this.row * countY
               const origin = Array.prototype.indexOf.call(area.childNodes, ele)
+              // console.log(landing, origin, countY)
               if (landing >= 0 && landing < area.childNodes.length) {
                 // console.log(origin)
                 if (landing < origin) {
                   area.insertBefore(ele, area.childNodes[landing])
-                  this.setWebsitesPostion(landing, origin)
+                  this.setWebsitesPostion(area, landing, origin)
                 } else {
                   area.insertBefore(ele, area.childNodes[landing + 1])
-                  this.setWebsitesPostion(origin, landing)
+                  this.setWebsitesPostion(area, origin, landing)
                 }
               } else if (landing < 5 * (countY + 1)) {
                 area.appendChild(ele)
-                this.setWebsitesPostion(origin)
+                this.setWebsitesPostion(area, origin)
               }
             }
           }
@@ -404,9 +420,9 @@ class Navigation extends Component {
               area.insertBefore(ele, area.childNodes[origin])
               this.setWebsitesPostion(origin, area.childNodes.length - 1)
             }*/
-            if (area.childNodes.length !== this.props.store.length) {
+            if (area.childNodes.length !== total) {
               area.insertBefore(ele, area.childNodes[origin])
-              this.setWebsitesPostion(origin, area.childNodes.length - 1)
+              this.setWebsitesPostion(area, origin)
             }
             ele.setAttribute('aria-grabbed', "false")
             document.body.removeChild(clone)
@@ -427,14 +443,15 @@ class Navigation extends Component {
       document.addEventListener('mouseup', mouseUp, false)
     }
   }
-  setWebsitesPostion = (start, end = this.refs.area.childNodes.length - 1) => {
-    const area = this.refs.area
+  setWebsitesPostion = (area, start, end = area.childNodes.length - 1) => {
+    // const area = this.refs.area
     for (let i = start; i <= end; i++) {
-      area.childNodes[i].style.transform = `translate(${15 + (i%5)*150 + 30*(i%5)}px, ${Math.floor(i/5)*15 + Math.floor(i/5)*36}px)`
+      // area.childNodes[i].style.transform = `translate(${15 + (i%5)*150 + 30*(i%5)}px, ${Math.floor(i/5)*15 + Math.floor(i/5)*36}px)`
+      area.childNodes[i].style.transform = `translate(${this.margin + (i % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(i / this.row) * (this.websiteHeight + this.spacingY)}px)`
     }
   }
   render() {
-    const { store, target, muiTheme } = this.props
+    const { store, classifiedStore, target, muiTheme } = this.props
     const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, name, link, isClassified} = this.state
     const { intl } = this.context
     const actions = [
@@ -505,7 +522,7 @@ class Navigation extends Component {
             </div>*/}
           </div>
         </div>
-        <div className={classNames('website-area', { 'empty': !store.length })} ref="area">
+        <div className={classNames('websites-wrap', { 'empty': !store.length })}>
           {!store.length && (
             <div className="empty-box">
               <p className="empty-text">{intl.formatMessage({ id: 'empty.text.navigation' })}</p>
@@ -516,40 +533,90 @@ class Navigation extends Component {
               />
             </div>
           )}
-          {store.map((value, index) => {
-            const { name, link } = value
+          {!isClassified && (
+            <div className="websites-area">
+              {store.map((value, index) => {
+                const { name, link } = value
+                return (
+                  <div
+                    className={classNames('website-box', { 'grabable': edit })}
+                    aria-grabbed="false"
+                    id={`website:${index}`}
+                    key={index}
+                    style={{ transform: `translate(${15 + (index%5)*150 + 30*(index%5)}px, ${Math.floor(index/5)*15 + Math.floor(index/5)*36}px)` }}
+                    onMouseDown={this.beginGrab}
+                  >
+                    <FlatButton
+                      label={name}
+                      href={link}
+                      target={target}
+                      secondary={true}
+                      icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} />}
+                      className="website-link"
+                      style={style.website}
+                      onClick={this.checkClick}
+                    />
+                    <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
+                      <ModeEdit
+                        color={grey500}
+                        hoverColor={grey600}
+                        style={style.editHandleIcon}
+                      />
+                    </span>
+                    <span className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
+                      <ContentClear
+                        color="#fff"
+                        style={style.deleteHandleIcon}
+                      />
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+          {isClassified && classifiedStore.map((item, index) => {
             return (
-              <div
-                className={classNames('website-box', { 'grabable': edit })}
-                aria-grabbed="false"
-                id={`website:${index}`}
-                key={index}
-                style={{ transform: `translate(${15 + (index%5)*150 + 30*(index%5)}px, ${Math.floor(index/5)*15 + Math.floor(index/5)*36}px)` }}
-                onMouseDown={this.beginGrab}
-              >
-                <FlatButton
-                  label={name}
-                  href={link}
-                  target={target}
-                  secondary={true}
-                  icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} />}
-                  className="website-link"
-                  style={style.website}
-                  onClick={this.checkClick}
-                />
-                <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
-                  <ModeEdit
-                    color={grey500}
-                    hoverColor={grey600}
-                    style={style.editHandleIcon}
-                  />
-                </span>
-                <span className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
-                  <ContentClear
-                    color="#fff"
-                    style={style.deleteHandleIcon}
-                  />
-                </span>
+              <div className="classification" key={index} style={{ height: Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}>
+                <div className="classification-name" style={{ color: muiTheme.palette.primary1Color }}>{item.name}</div>
+                <div className="classification-area" style={{ width: this.wrapperWidth }}>
+                  {item.set.map((value, index) => {
+                    const { name, link } = value
+                    return (
+                      <div
+                        className={classNames('website-box', { 'grabable': edit })}
+                        aria-grabbed="false"
+                        id={`website:${index}`}
+                        key={index}
+                        style={{ transform: `translate(${this.margin + (index % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(index / this.row) * (this.websiteHeight + this.spacingY)}px)` }}
+                        onMouseDown={this.beginGrab}
+                      >
+                        <FlatButton
+                          label={name}
+                          href={link}
+                          target={target}
+                          secondary={true}
+                          icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} />}
+                          className="website-link"
+                          style={style.website}
+                          onClick={this.checkClick}
+                        />
+                        <span className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
+                          <ModeEdit
+                            color={grey500}
+                            hoverColor={grey600}
+                            style={style.editHandleIcon}
+                          />
+                        </span>
+                        <span className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
+                          <ContentClear
+                            color="#fff"
+                            style={style.deleteHandleIcon}
+                          />
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             )
           })}
@@ -644,8 +711,8 @@ class Navigation extends Component {
 }
 
 const mapStateToProps = state => {
-  const { store } = state.websites
-  return { store }
+  const { store, classifiedStore } = state.websites
+  return { store, classifiedStore }
 }
 
 const mapDispatchToProps = dispatch => {
