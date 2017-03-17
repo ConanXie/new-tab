@@ -290,12 +290,12 @@ class Navigation extends Component {
       const ele = e.currentTarget
       // const area = this.refs.area
       let area = ele.parentNode
-      const total = area.childNodes.length
+      let total = area.childNodes.length
       const wrap = area.parentNode
-      const origin = Array.prototype.indexOf.call(area.childNodes, ele)
+      let origin = Array.prototype.indexOf.call(area.childNodes, ele)
       // const areaHeight = Math.ceil(area.childNodes.length / 5) * 36 + (Math.ceil(area.childNodes.length / 5) - 1) * 15
-      const areaHeight = Math.ceil(area.childNodes.length / this.row) * (this.websiteHeight + this.spacingY) - this.spacingY
-      console.log(area)
+      const areaHeight = Math.ceil(area.childNodes.length / this.row) * (this.websiteHeight + this.spacingY) - this.spacingY + this.margin*2
+      console.log(areaHeight)
       // mouse down coordinate
       const downScreenX = e.screenX
       const downScreenY = e.screenY
@@ -333,8 +333,10 @@ class Navigation extends Component {
           const moveClone = e => {
             e.preventDefault()
 
-            const total = area.childNodes.length
-            const origin = Array.prototype.indexOf.call(area.childNodes, ele)
+            if (this.state.isClassified && Array.prototype.indexOf.call(area.childNodes, ele) !== -1) {
+              total = area.childNodes.length
+              origin = Array.prototype.indexOf.call(area.childNodes, ele)
+            }
             const areaHeight = Math.ceil(area.childNodes.length / this.row) * (this.websiteHeight + this.spacingY) - this.spacingY
 
             clone.style.left = e.screenX - clientToScreenX - offsetX + 'px'
@@ -342,12 +344,15 @@ class Navigation extends Component {
 
             let relativeX = e.screenX - clientToScreenX - area.offsetLeft + scrollLeft
             let relativeY = e.screenY - clientToScreenY - area.offsetTop + scrollTop
+            console.log('relativeX, relativeY', relativeX, relativeY)
             
             // when mouse out of the area
             if ((relativeX < 0 || relativeX > this.wrapperWidth) || (relativeY < 0 || relativeY > areaHeight)) {
               // from in to out
               if (state) {
+                console.log('from in to out')
                 const origin = Array.prototype.indexOf.call(area.childNodes, ele)
+                console.log(origin)
                 area.removeChild(ele)
                 this.setWebsitesPostion(area, origin)
                 state = 0
@@ -360,12 +365,14 @@ class Navigation extends Component {
             if ((relativeX >= 0 && relativeX <= this.wrapperWidth) && (relativeY >= 0 && relativeY <= areaHeight)) {
               // from out to in
               if (!state) {
+                console.log('from out to in')
                 const posX = (relativeX - this.margin) % (this.websiteWidth + this.spacingX)
-                const posY = relativeY % (this.websiteHeight + this.spacingY)
-                if (posX <= this.websiteWidth && posY <= this.websiteHeight) {
+                const posY = (relativeY - this.margin) % (this.websiteHeight + this.spacingY)
+                if ((posX >= 0 && posX <= this.websiteWidth) && (posY >= 0 && posY <= this.websiteHeight)) {
                   const countX = Math.floor((relativeX - this.margin) / (this.websiteWidth + this.spacingX))
-                  const countY = Math.floor(relativeY / (this.websiteHeight + this.spacingY))
+                  const countY = Math.floor((relativeY - this.margin) / (this.websiteHeight + this.spacingY))
                   const landing = countX + this.row * countY
+                  console.log('insert')
                   area.insertBefore(ele, area.childNodes[landing])
                   this.setWebsitesPostion(area, landing + 1)
                   state = 1
@@ -377,14 +384,15 @@ class Navigation extends Component {
             }
             // console.log('in')
             const posX = (relativeX - this.margin) % (this.websiteWidth + this.spacingX)
-            const posY = relativeY % (this.websiteHeight + this.spacingY)
-            if (posX <= this.websiteWidth && posY <= this.websiteHeight) {
+            const posY = (relativeY - this.margin) % (this.websiteHeight + this.spacingY)
+            console.log('posX, posY', posX, posY)
+            if ((posX >= 0 && posX <= this.websiteWidth) && (posY >= 0 && posY <= this.websiteHeight)) {
               const countX = Math.floor((relativeX - this.margin) / (this.websiteWidth + this.spacingX))
-              const countY = Math.floor(relativeY / (this.websiteHeight + this.spacingY))
+              const countY = Math.floor((relativeY - this.margin) / (this.websiteHeight + this.spacingY))
               const landing = countX + this.row * countY
               const origin = Array.prototype.indexOf.call(area.childNodes, ele)
-              console.log(landing, origin, countY)
-              if (landing >= 0 && landing < area.childNodes.length) {
+              console.log(landing, origin, countY, area.childNodes.length)
+              if (landing >= 0 && landing < area.childNodes.length && origin !== -1) {
                 // console.log(origin)
                 if (landing < origin) {
                   area.insertBefore(ele, area.childNodes[landing])
@@ -393,16 +401,17 @@ class Navigation extends Component {
                   area.insertBefore(ele, area.childNodes[landing + 1])
                   this.setWebsitesPostion(area, origin, landing)
                 }
-              } else if (landing <= 5 * (countY + 1)) {
+              } else if (landing >= area.childNodes.length && landing < 5 * (countY + 1) && origin !== -1) {
                 area.appendChild(ele)
+                console.log('append', area.childNodes.length, origin)
                 this.setWebsitesPostion(area, origin)
               }
               if (this.state.isClassified) {
                 console.log(landing, 5 * Math.ceil(area.childNodes.length / 5))
-                if (landing < 0 && area.parentNode.previousSibling.nodeType === 1) {
+                if (landing < 0 && area.parentNode.previousSibling) {
                   area = area.parentNode.previousSibling.querySelector('.classification-area')
                   console.log('previous', area)
-                } else if (landing > 5 * Math.ceil(area.childNodes.length / 5) && area.parentNode.nextSibling.nodeType === 1) {
+                } else if (landing >= 5 * Math.ceil(area.childNodes.length / 5) && area.parentNode.nextSibling) {
                   area = area.parentNode.nextSibling.querySelector('.classification-area')
                   console.log('next', area)
                 }
@@ -447,6 +456,7 @@ class Navigation extends Component {
               this.setWebsitesPostion(origin, area.childNodes.length - 1)
             }*/
             if (area.childNodes.length !== total) {
+              console.log(origin)
               area.insertBefore(ele, area.childNodes[origin])
               this.setWebsitesPostion(area, origin)
             }
@@ -472,8 +482,9 @@ class Navigation extends Component {
   setWebsitesPostion = (area, start, end = area.childNodes.length - 1) => {
     // const area = this.refs.area
     for (let i = start; i <= end; i++) {
+      // console.log(area.childNodes[i])
       // area.childNodes[i].style.transform = `translate(${15 + (i%5)*150 + 30*(i%5)}px, ${Math.floor(i/5)*15 + Math.floor(i/5)*36}px)`
-      area.childNodes[i].style.transform = `translate(${this.margin + (i % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(i / this.row) * (this.websiteHeight + this.spacingY)}px)`
+      area.childNodes[i].style.transform = `translate(${this.margin + (i % this.row) * (this.websiteWidth + this.spacingX)}px, ${this.margin + Math.floor(i / this.row) * (this.websiteHeight + this.spacingY)}px)`
     }
   }
   render() {
@@ -569,7 +580,7 @@ class Navigation extends Component {
                     aria-grabbed="false"
                     id={`website:${index}`}
                     key={index}
-                    style={{ transform: `translate(${15 + (index%5)*150 + 30*(index%5)}px, ${Math.floor(index/5)*15 + Math.floor(index/5)*36}px)` }}
+                    style={{ transform: `translate(${15 + (index%5)*150 + 30*(index%5)}px, ${15 + Math.floor(index/5)*15 + Math.floor(index/5)*36}px)` }}
                     onMouseDown={this.beginGrab}
                   >
                     <FlatButton
@@ -605,7 +616,7 @@ class Navigation extends Component {
               <div
                 key={index}
                 className={classNames('classification', { 'empty': !item.set.length, 'editing': edit })}
-                style={{ minHeight: this.websiteHeight + this.spacingY, height: Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}
+                style={{ minHeight: this.margin*2 + this.websiteHeight, height: this.margin + Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}
               >
                 <div className="classification-name" style={{ color: muiTheme.palette.primary1Color }}>{item.name}</div>
                 <div className="classification-area" style={{ width: this.wrapperWidth }}>
@@ -617,7 +628,7 @@ class Navigation extends Component {
                         aria-grabbed="false"
                         id={`website:${index}`}
                         key={index}
-                        style={{ transform: `translate(${this.margin + (index % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(index / this.row) * (this.websiteHeight + this.spacingY)}px)` }}
+                        style={{ transform: `translate(${this.margin + (index % this.row) * (this.websiteWidth + this.spacingX)}px, ${this.margin + Math.floor(index / this.row) * (this.websiteHeight + this.spacingY)}px)` }}
                         onMouseDown={this.beginGrab}
                       >
                         <FlatButton

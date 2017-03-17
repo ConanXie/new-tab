@@ -55,6 +55,7 @@
       position: absolute;
       top: 0px;
       left: 0px;
+      background: #fbfbfb;
       // display: inline-block;
       // margin-bottom: 10px;
 
@@ -162,6 +163,15 @@
   }
 }
 .classification {
+  &:first-child {
+    background: #eee;
+  }
+  &:nth-child(2) {
+    background: #ddd;
+  }
+  &:nth-child(3) {
+    background: #ccc;
+  }
   &.empty {
     display: none;
   }
