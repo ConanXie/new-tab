@@ -64,7 +64,7 @@ class Search extends Component {
     this.predictionsIndex = -1
   }
   componentDidMount() {
-    this.refs.text.focus()
+    // this.refs.text.focus()
   }
   shouldComponentUpdate(nextProps, nextState) {
     // if input is empty then prevent render of predictions change caused by network delay
@@ -220,7 +220,7 @@ class Search extends Component {
     }
   }
   blur = () => {
-    console.log('blur')
+    // console.log('blur')
     this.refs.text.classList.remove('focus')
     this.setState({
       showPredictions: false
@@ -294,6 +294,7 @@ class Search extends Component {
   }
   render() {
     const { searchName, searchClass, showPredictions, predictions } = this.state
+    const { muiTheme } = this.props
     return (
       <div className="search-wrapper">
         <div className={`search-logo ${searchClass}`}>
@@ -302,6 +303,7 @@ class Search extends Component {
             iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            iconStyle={{ color: muiTheme.palette.textColor }}
           >
             {searchEngine.map(value => {
               return (
@@ -328,6 +330,7 @@ class Search extends Component {
                 onFocus={this.focus}
                 onBlur={this.blur}
                 onKeyUp={this.selectForcast}
+                style={{ color: muiTheme.palette.textColor }}
               />
               <IconButton
                 type="submit"
@@ -338,7 +341,7 @@ class Search extends Component {
               >
                 <SearchIcon />
               </IconButton>
-              <Paper className={classNames('predictions-box', { 'show': showPredictions })} zDepth={1}>
+              <Paper className={classNames('predictions-box', { 'show': showPredictions })} zDepth={1} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
                 <ul ref="predictions">
                   {predictions && predictions.map((v, i) => {
                     return (
