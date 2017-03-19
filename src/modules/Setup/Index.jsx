@@ -30,6 +30,7 @@ import FileUpload from 'material-ui/svg-icons/file/file-upload'
 import SettingsRestore from 'material-ui/svg-icons/action/settings-backup-restore'
 import ActionInfo from 'material-ui/svg-icons/action/info-outline'
 import HardwareKeyboard from 'material-ui/svg-icons/hardware/keyboard'
+import FileCloud from 'material-ui/svg-icons/file/cloud'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { List, ListItem } from 'material-ui/List'
@@ -88,7 +89,7 @@ const style = {
   }
 }
 
-export const theme = [teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500]
+export const themes = [teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500]
 
 class Setup extends Component {
   static propTypes = {
@@ -112,7 +113,7 @@ class Setup extends Component {
       snackbarOpen: false,
       snackbarMessage: ''
     }
-    this.theme = theme
+    this.themes = themes
   }
   componentWillReceiveProps(next) {
     // show or hide the setup page
@@ -187,6 +188,7 @@ class Setup extends Component {
     this.setState({
       currentTheme: index
     })
+    this.toggleDarkMode(null, false)
     setTimeout(() => {
       this.hideTheme()
     }, 200)
@@ -282,7 +284,7 @@ class Setup extends Component {
             </div>
           </div>
         </Paper>
-        <section>
+        <section style={{ backgroundColor: muiTheme.palette.settingsBackgroundColor }}>
           <div className="setup-section">
             <Paper className="setup-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
               <div className="toggle-box">
@@ -439,7 +441,7 @@ class Setup extends Component {
               titleStyle={style.themeTitle}
               contentStyle={style.themeContent}
             >
-              {this.theme.map((color, index) => {
+              {this.themes.map((color, index) => {
                 if (currentTheme === index) {
                   return (
                     <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.hideTheme() }}>
@@ -499,6 +501,10 @@ class Setup extends Component {
                   <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.settings' })}</span>
                   <span className="hot-key">Alt + S</span>
                 </div>
+              </div>
+              <div className="tip">
+                <FileCloud style={{ width: 18, height: 18 }} color="#999" />
+                <span>天气数据来源 Yahoo! HeWeather</span>
               </div>
               {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
             </Paper>
