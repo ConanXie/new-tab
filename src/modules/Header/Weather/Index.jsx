@@ -1,5 +1,7 @@
 import './style.less'
 
+import dateformat from 'dateformat'
+
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
@@ -239,7 +241,7 @@ class Weather extends Component {
                 </p>
                 <p className="update-time">
                   <NavigationRefresh style={style.icon} />
-                  <span>{new Date(data.basic.update.loc).getHours() + ':' + new Date(data.basic.update.loc).getMinutes()}</span>
+                  <span>{dateformat(data.basic.update.loc, 'HH:MM')}</span>
                 </p>
               </div>
             </header>
