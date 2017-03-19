@@ -94,15 +94,15 @@ class Header extends Component {
             <IconButton
               onTouchTap={this.openDrawer}
             >
-              <NavigationMenu />
+              <NavigationMenu color={muiTheme.palette.textColor} />
             </IconButton>
           </div>
           <div className="bar-right">
             <IconButton onTouchTap={this.openBookmark}>
-              <ActionBookmark />
+              <ActionBookmark color={muiTheme.palette.textColor} />
             </IconButton>
             <IconButton onTouchTap={showSetup}>
-              <ActionSettings />
+              <ActionSettings color={muiTheme.palette.textColor} />
             </IconButton>
           </div>
         </div>
