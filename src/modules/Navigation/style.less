@@ -1,6 +1,7 @@
 .navigation-box {
   width: 1000px;
-  margin: 68px auto 0;
+  // margin: 68px auto 0;
+  margin: 40px auto;
   // padding-bottom: 30px;
   // border: 1px solid #eee;
   .tool-bar {
@@ -9,7 +10,7 @@
     justify-content: flex-end;
     align-items: center;
     height: 48px;
-    margin-bottom: 12px;
+    // margin-bottom: 12px;
     // padding: 24px;
     // border-top: 1px solid #ddd;
     h3 {
@@ -55,7 +56,7 @@
       position: absolute;
       top: 0px;
       left: 0px;
-      background: #fbfbfb;
+      // background: #eee;
       // display: inline-block;
       // margin-bottom: 10px;
 
@@ -138,7 +139,7 @@
     margin-top: -2px;
     width: 16px;
   }
-  & > span {
+  & > i {
     display: none;
   }
 }
@@ -163,7 +164,9 @@
   }
 }
 .classification {
-  &:first-child {
+  transition: height 0.2s cubic-bezier(0.333, 0, 0, 1);
+
+  /*&:first-child {
     background: #eee;
   }
   &:nth-child(2) {
@@ -171,7 +174,7 @@
   }
   &:nth-child(3) {
     background: #ccc;
-  }
+  }*/
   &.empty {
     display: none;
   }
@@ -186,6 +189,7 @@
   }
   .delete-classification {
     position: absolute !important;
+    // top: 15px;
     right: 0 !important;
     display: none !important;
   }
@@ -203,9 +207,16 @@
 .classification-name {
   float: left;
   width: 100px;
-  line-height: 36px;
-  font-size: 18px;
+  // padding-top: 15px;
   // text-align: right;
+  p {
+    line-height: 36px;
+    font-size: 14px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 .classification-area {
   position: relative;
