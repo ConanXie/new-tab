@@ -140,7 +140,6 @@ class Feedback extends Component {
             floatingLabelText="你的电子邮件地址"
             style={style.textField}
             onChange={this.emailChange}
-            underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
           /><br />
           <TextField
             multiLine={true}
@@ -149,7 +148,6 @@ class Feedback extends Component {
             rowsMax={4}
             style={style.textField}
             onChange={this.contentChange}
-            underlineFocusStyle={{ color: muiTheme.palette.primary1Color }}
           />
         </Dialog>
         <Snackbar
