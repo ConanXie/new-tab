@@ -64,11 +64,11 @@ class Weather extends Component {
     const { intl } = this.context
     const local = JSON.parse(localStorage.getItem('weather'))
     if (local) {
-      const lastUpdate = new Date(local.basic.update.loc).getTime()
+      const lastUpdate = new Date(local.basic.update).getTime()
       const now = Date.now()
       const diff = now - lastUpdate
       if (diff < 3600000) {
-        if (local.daily_forecast) {
+        if (local.basic) {
           this.setState({
             loading: false,
             data: local
@@ -107,7 +107,7 @@ class Weather extends Component {
         // 天气数据获取成功
         if (data.status === 'OK') {
           const result = data.result[0]
-          result.basic.update.loc = Date.now()
+          result.basic.update = Date.now()
           this.setState({
             loading: false,
             data: result
@@ -122,9 +122,7 @@ class Weather extends Component {
           // 防止请求不到数据而过度请求
           const temp = {
             basic: {
-              update: {
-                loc: Date.now()
-              }
+              update: Date.now()
             }
           }
           localStorage.setItem('weather', JSON.stringify(temp))
@@ -133,6 +131,7 @@ class Weather extends Component {
     } else {
       console.error(`Response wasn't perfect, got status ${res.status}`)
       this.setState({
+        loading: false,
         empty: true,
         emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
       })
@@ -144,6 +143,7 @@ class Weather extends Component {
     console.error('Fetch failed!')
 
     this.setState({
+      loading: false,
       empty: true,
       emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
     })
@@ -172,6 +172,7 @@ class Weather extends Component {
       const lat = pos.coords.latitude.toFixed(6)
       const lng = pos.coords.longitude.toFixed(6)
       fetch(`https://tab.xiejie.co/api/weather/v4/${lat},${lng}`).then(this.responseHandler, this.responseError)
+      // fetch(`http://localhost:5300/api/weather/v4/${lat},${lng}`).then(this.responseHandler, this.responseError)
     }, error => {
       let emptyText
       switch (error.code) {
@@ -188,13 +189,17 @@ class Weather extends Component {
           emptyText = intl.formatMessage({ id: 'weather.empty.geolocationTimeout' })
           break
       }
-      fetch(`https://tab.xiejie.co/api/weather/v4`).then(this.responseHandler, this.responseError)
-      /*this.setState({
-        loading: false,
-        empty: true,
-        emptyText
-      })*/
-    }, { timeout: 2000 })
+      if (navigator.language === 'zh-CN') {
+        fetch(`https://tab.xiejie.co/api/weather/v4`).then(this.responseHandler, this.responseError)
+        // fetch(`http://localhost:5300/api/weather/v4`).then(this.responseHandler, this.responseError)
+      } else {
+        this.setState({
+          loading: false,
+          empty: true,
+          emptyText
+        })
+      }
+    }, { timeout: 10000 })
   }
   calcWeek = (date) => {
     const { intl } = this.context
@@ -227,8 +232,8 @@ class Weather extends Component {
             <header>
               <div className="now-info">
                 <div className="now-tmp-sec">
-                  <h1 className="now-tmp">{(data.now.tmp * times + base).toFixed(0)}°</h1>
-                  <p className="now-cond">{data.now.cond.txt}</p>
+                  <h1 className="now-tmp">{(data.now.temp * times + base).toFixed(0)}°</h1>
+                  <p className="now-cond">{data.now.text}</p>
                 </div>
                 {data.aqi && (
                   <p className="qlty">{intl.formatMessage({ id: 'weather.air' })}{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
@@ -241,22 +246,22 @@ class Weather extends Component {
                 </p>
                 <p className="update-time">
                   <NavigationRefresh style={style.icon} />
-                  <span>{dateformat(data.basic.update.loc, 'HH:MM')}</span>
+                  <span>{dateformat(data.basic.update, 'HH:MM')}</span>
                 </p>
               </div>
             </header>
             <section className="now">
             </section>
             <section className="daily-forecast">
-              {data.daily_forecast.map((value, index) => {
+              {data.forecast.map((value, index) => {
                 const week = this.calcWeek(value.date)
                 return (
                   <div className="forecast-box" key={value.date}>
                     <p title={value.date}>{week}</p>
-                    <div className={`weather-icon code-${value.cond.code_d}`} title={value.cond.txt_d}></div>
+                    <div className={`weather-icon code-${value.code}`} title={value.text}></div>
                     {/*<img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />*/}
                     {/*<p>{value.cond.txt_d}</p>*/}
-                    <p>{(value.tmp.min * times + base).toFixed(0)}°~{(value.tmp.max * times + base).toFixed(0)}°</p>
+                    <p>{(value.low * times + base).toFixed(0)}°~{(value.high * times + base).toFixed(0)}°</p>
                   </div>
                 )
               })}
