@@ -122,7 +122,6 @@ class App extends Component {
       })
       document.querySelector('#app').style.background = this.darkTheme.paper.backgroundColor
     } else {
-      console.log(888)
       this.changeTheme(this.props.settings.currentTheme)
     }
   }
