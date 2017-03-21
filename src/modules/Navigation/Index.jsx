@@ -90,7 +90,8 @@ const style = {
     left: 8,
   },
   classficationInput: {
-    height: 36
+    height: 36,
+    fontSize: 14
   },
   classficationHintText: {
     bottom: 8
@@ -255,7 +256,7 @@ class Navigation extends Component {
     const { addEmptyClassification } = this.props
     const name = this.refs.classificationName.input.value
 
-    if (name) {
+    if (name && name !== 'unclassified') {
       addEmptyClassification(name)
     }
     
@@ -592,12 +593,15 @@ class Navigation extends Component {
     }
   }
   changeClassificationName = (e, index) => {
-    console.log(e.target, index)
+    // console.log(e.target, index)
     const { changeClassificationName, classifiedStore } = this.props
     const value = e.target.value.trim()
-    if (value && value !== classifiedStore[index].name) {
+    if (value && value !== classifiedStore[index].name && value !== 'unclassified') {
       changeClassificationName(index, value)
     }
+  }
+  imgError(e) {
+    e.target.src = require('./images/favicon-default.svg')
   }
   render() {
     const { store, classifiedStore, target, muiTheme } = this.props
@@ -698,14 +702,14 @@ class Navigation extends Component {
                     className={classNames('website-box', { 'grabable': edit })}
                     aria-grabbed="false"
                     key={Math.random()}
-                    style={{ transform: `translate(${15 + (index%5)*150 + 30*(index%5)}px, ${Math.floor(index/5)*15 + Math.floor(index/5)*36}px)` }}
+                    style={{ transform: `translate(${this.margin + (index % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(index / this.row) * (this.websiteHeight + this.spacingY)}px)` }}
                     onMouseDown={this.beginGrab}
                   >
                     <FlatButton
                       label={name}
                       href={link}
                       target={target}
-                      icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} />}
+                      icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
                       className="website-link"
                       style={style.website}
                       onClick={this.checkClick}
@@ -769,7 +773,7 @@ class Navigation extends Component {
                           label={name}
                           href={link}
                           target={target}
-                          icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} />}
+                          icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
                           className="website-link"
                           style={style.website}
                           onClick={this.checkClick}
