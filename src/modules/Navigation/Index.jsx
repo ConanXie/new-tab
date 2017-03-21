@@ -733,7 +733,7 @@ class Navigation extends Component {
               })}
             </div>
           )}
-          {isClassified && classifiedStore.map((item, index) => {
+          {isClassified && classifiedStore.map((item, cIndex) => {
             return (
               <div
                 key={Math.random()}
@@ -741,14 +741,14 @@ class Navigation extends Component {
                 style={{ minHeight: this.margin + this.websiteHeight, height: Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}
               >
                 <div className="classification-name" style={{ color: muiTheme.palette.primary1Color }}>
-                  {edit && item.name !== 'unclassified' &&(
+                  {edit && item.name !== 'unclassified' && (
                     <TextField
                       hintText={intl.formatMessage({ id: 'nav.edit.input.website' })}
                       defaultValue={item.name}
                       fullWidth={true}
                       style={style.classficationInput}
                       hintStyle={style.classficationHintText}
-                      onBlur={e => { this.changeClassificationName(e, index) }}
+                      onBlur={e => { this.changeClassificationName(e, cIndex) }}
                     />
                   )}
                   {(!edit && item.name !== 'unclassified') && (
@@ -778,14 +778,14 @@ class Navigation extends Component {
                           style={style.website}
                           onClick={this.checkClick}
                         />
-                        <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
+                        <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, cIndex)}}>
                           <ModeEdit
                             color={grey500}
                             hoverColor={grey600}
                             style={style.editHandleIcon}
                           />
                         </i>
-                        <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
+                        <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index, cIndex)}}>
                           <ContentClear
                             color="#fff"
                             style={style.deleteHandleIcon}
