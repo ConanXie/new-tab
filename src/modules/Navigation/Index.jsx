@@ -25,6 +25,8 @@ import ContentLink from 'material-ui/svg-icons/content/link'
 import ActionDone from 'material-ui/svg-icons/action/done'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 import Snackbar from 'material-ui/Snackbar'
 import {blue500, red500, red300, grey600, grey500, greenA200} from 'material-ui/styles/colors'
 
@@ -111,7 +113,8 @@ class Navigation extends Component {
       snackbarOpen: false,
       snackbarMessage: '',
       edit: false,
-      isClassified: props.settings.isClassified
+      isClassified: props.settings.isClassified,
+      cIndex: props.classifiedStore.length - 1
     }
     // this.checkLink = /^http(s)?:\/\/\S+$/
     // console.log(props)
@@ -124,6 +127,9 @@ class Navigation extends Component {
     this.wrapperWidth = 900
     this.spacingX = 30
     this.spacingY = 15
+
+    // storage
+    this.cache = {}
   }
   
   checkClick = (e) => {
@@ -160,11 +166,13 @@ class Navigation extends Component {
     this.setState({
       dialog: false,
       name: '',
-      link: ''
+      link: '',
+      cIndex: this.props.classifiedStore.length - 1
     })
   }
   handleSubmit = () => {
-    const { name, link, edit, index } = this.state
+    const { edit } = this.state
+    const { name, link, index, cIndex } = this.cache
     const { addWebsite, editWebsite } = this.props
     const { intl } = this.context
     if (!name) {
@@ -190,9 +198,9 @@ class Navigation extends Component {
     }*/
     // judge add or edit
     if (!edit) {
-      addWebsite(name, link)
+      addWebsite(name, link, this.state.cIndex)
     } else {
-      editWebsite(index, name, link)
+      editWebsite(index, name, link, cIndex)
     }
     this.hideDialog()
   }
@@ -200,13 +208,21 @@ class Navigation extends Component {
    * watch input
    */
   nameChange = (e) => {
-    this.setState({
+    /*this.setState({
       name: e.target.value
-    })
+    })*/
+    this.cache.name = e.target.value
   }
   linkChange = (e) => {
-    this.setState({
+    /*this.setState({
       link: e.target.value
+    })*/
+    this.cache.link = e.target.value
+  }
+  classifyChange = (e, key) => {
+    // console.log(key)
+    this.setState({
+      cIndex: key
     })
   }
   closeSnackerbar = () => {
@@ -279,9 +295,13 @@ class Navigation extends Component {
       index
     })
   }
-  handleEdit = (index, name, link) => {
+  handleEdit = (index, name, link, cIndex) => {
+    this.cache.index = index
+    this.cache.name = name
+    this.cache.link = link
+    this.cache.cIndex = cIndex
+
     this.setState({
-      index,
       name,
       link
     })
@@ -605,7 +625,7 @@ class Navigation extends Component {
   }
   render() {
     const { store, classifiedStore, target, muiTheme } = this.props
-    const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, name, link, isClassified} = this.state
+    const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, name, link, cIndex, isClassified} = this.state
     const { intl } = this.context
     const actions = [
       <FlatButton
@@ -799,7 +819,7 @@ class Navigation extends Component {
                   <FlatButton
                     label="删除分类"
                     icon={<ContentClear />}
-                    onTouchTap={e => { this.deleteClassification(index) }}
+                    onTouchTap={e => { this.deleteClassification(cIndex) }}
                     className="delete-classification"
                   />
                 )}
@@ -849,13 +869,31 @@ class Navigation extends Component {
             defaultValue={name}
             style={style.textField}
             onChange={this.nameChange}
-          /><br/>
+          /><br />
           <TextField
             floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.URL' })}
             defaultValue={link}
             style={style.textField}
             onChange={this.linkChange}
-          />
+          /><br />
+          {isClassified && !edit && (
+            <SelectField
+              floatingLabelText="选择分类"
+              value={cIndex}
+              fullWidth={true}
+              onChange={this.classifyChange}
+            >
+              {classifiedStore.map((cla, index) => {
+                return (
+                  <MenuItem
+                    key={index}
+                    value={index}
+                    primaryText={cla.name !== 'unclassified' ? cla.name : '未分类'}
+                  />
+                )
+              })}
+            </SelectField>
+          )}
         </Dialog>
         <Dialog
           title={intl.formatMessage({ id: 'nav.delete.title' })}

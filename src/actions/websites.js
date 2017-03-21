@@ -1,16 +1,23 @@
+import sha1 from 'sha1'
+
 const ls = window.localStorage
 const checkLink = /^http(s)?:\/\//
 
 export const ADD_WEBSITE = 'ADD_WEBSITE'
 
-export function addWebsite(name, link) {
+export function addWebsite(name, link, cIndex) {
   return (dispatch, getState) => {
     const websites = getState().websites.store
-    websites.push({
+    const classifications = getState().websites.classifiedStore
+    const nw = {
+      id: sha1(name + Math.random()),
       name,
       link: checkLink.test(link) ? link : `http://${link}`
-    })
+    }
+    websites.push(nw)
+    classifications[cIndex].set.push(nw)
     ls.setItem('websites', JSON.stringify(websites))
+    ls.setItem('classified', JSON.stringify(classifications))
   }
 }
 
@@ -22,14 +29,40 @@ export function deleteWebsite(index) {
   }
 }
 
-export function editWebsite(index, name, link) {
+export function editWebsite(index, name, link, cIndex) {
   return (dispatch, getState) => {
     const websites = getState().websites.store
-    websites[index] = {
-      name,
-      link: checkLink.test(link) ? link : `http://${link}`
+    const classifications = getState().websites.classifiedStore
+    if (cIndex === undefined) {
+      websites[index].name = name
+      websites[index].link = checkLink.test(link) ? link : `http://${link}`
+      const id = websites[index].id
+
+      for (let i = 0; i < classifications.length; i++) {
+        for (let j = 0; j < classifications[i].set.length; j++) {
+          let item = classifications[i].set[j]
+          if (item.id === id) {
+            item.name = name
+            item.link = websites[index].link
+            break;
+          }
+        }
+      }
+    } else {
+      const item = classifications[cIndex].set[index]
+      item.name = name
+      item.link = checkLink.test(link) ? link : `http://${link}`
+      
+      const id = item.id
+      for (let i = 0; i < websites.length; i++) {
+        if (websites[i].id === id) {
+          websites[i].name = name
+          websites[i].link = item.link
+        }
+      }
     }
     ls.setItem('websites', JSON.stringify(websites))
+    ls.setItem('classified', JSON.stringify(classifications))
   }
 }
 
@@ -53,7 +86,7 @@ export function deleteClassification(index) {
   return (dispatch, getState) => {
     const classifications = getState().websites.classifiedStore
     classifications.splice(index, 1)
-    console.log(classifications)
+    // console.log(classifications)
     ls.setItem('classified', JSON.stringify(classifications))
     /*dispatch({
       type: 'DELETE_CLASSIFICATION'
