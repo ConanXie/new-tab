@@ -274,7 +274,7 @@ class Weather extends Component {
             size={40}
             left={280}
             top={160}
-            loadingColor='#009688'
+            loadingColor={this.props.muiTheme.palette.primary1Color}
             status="loading"
             style={style.refresh}
           />
