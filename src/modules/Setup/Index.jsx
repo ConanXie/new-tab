@@ -202,10 +202,12 @@ class Setup extends Component {
     const currentEngine = JSON.parse(window.localStorage.currentEngine)
     const settings = JSON.parse(window.localStorage.settings)
     const websites = JSON.parse(window.localStorage.websites)
+    const classified = JSON.parse(window.localStorage.classified)
     const data = JSON.stringify({
       currentEngine,
       settings,
-      websites
+      websites,
+      classified
     })
     const backups = new Blob([data], { type: 'application/json' })
     const a = document.createElement('a')
@@ -221,6 +223,9 @@ class Setup extends Component {
       const backups = JSON.parse(e.target.result)
       for (let i in backups) {
         window.localStorage.setItem(i, JSON.stringify(backups[i]))
+      }
+      if (!backups.classified) {
+        window.localStorage.removeItem('classified')
       }
       this.setState({
         snackbarOpen: true,
