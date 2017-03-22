@@ -1,5 +1,41 @@
 {
-  "app_description": {
+  "appDescription": {
     "message": "Material Design 新标签页"
+  },
+  "previousBtn": {
+    "message": "上一步"
+  },
+  "NextBtn": {
+    "message": "下一步"
+  },
+  "skipBtn": {
+    "message": "跳过"
+  },
+  "tryIt": {
+    "message": "开始使用"
+  },
+  "onboardingFirstTitle": {
+    "message": "网站"
+  },
+  "onboardingFirstContent": {
+    "message": "你可以在主页添加你喜欢的网站。分类功能让你更快捷地打开网站。你可以随时编辑，删除，还能够拖动放置到合适的位置。"
+  },
+  "onboardingSecondTitle": {
+    "message": "搜索"
+  },
+  "onboardingSecondContent": {
+    "message": "这里有多款主流搜索引擎供你选择，鼠标移动至 LOGO 处可随时切换。你可以开启搜索预测，让搜索更加便捷。"
+  },
+  "onboardingThirdTitle": {
+    "message": "天气与应用"
+  },
+  "onboardingThirdContent": {
+    "message": "简洁美观的天气预报，前提是你允许扩展使用你的位置。你可以在这里浏览你的 Chrome 应用，点击可以启动。"
+  },
+  "onboardingFourthTitle": {
+    "message": "书签"
+  },
+  "onboardingFourthContent": {
+    "message": "一个简易的书签浏览功能，你可以选择保存书签位置。提供了书签搜索功能，方便你最快速地找到你的书签。"
   }
 }

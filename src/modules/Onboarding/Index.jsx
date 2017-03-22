@@ -56,7 +56,7 @@ class Welcome extends Component {
         <header>
           <div className="logo"></div>
           <FlatButton
-            label="跳过"
+            label={chrome.i18n.getMessage('skipBtn')}
             primary={true}
             onTouchTap={this.skip}
           />
@@ -65,13 +65,13 @@ class Welcome extends Component {
           {this.stepComponents[step - 1]}
           <div className="btn-box">
             <RaisedButton
-              label="上一步"
+              label={chrome.i18n.getMessage('previousBtn')}
               disabled={step == 1}
               style={{ marginRight: 48 }}
               onTouchTap={this.previousStep}
             />
             <RaisedButton
-              label={step === total ? '开始使用' : '下一步'}
+              label={step === total ? chrome.i18n.getMessage('tryIt') : chrome.i18n.getMessage('nextBtn')}
               onTouchTap={this.nextStep}
             />
           </div>

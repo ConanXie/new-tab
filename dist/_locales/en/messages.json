@@ -1,5 +1,41 @@
 {
-  "app_description": {
+  "appDescription": {
     "message": "Material Design new tab page"
+  },
+  "previousBtn": {
+    "message": "Previous"
+  },
+  "NextBtn": {
+    "message": "Next"
+  },
+  "skipBtn": {
+    "message": "Skip"
+  },
+  "tryIt": {
+    "message": "Try it"
+  },
+  "onboardingFirstTitle": {
+    "message": "Websites"
+  },
+  "onboardingFirstContent": {
+    "message": "You can add your favorite website on the home page. The classification feature allows you to find website more quickly. You can edit them, delete them, and drag them to the right place."
+  },
+  "onboardingSecondTitle": {
+    "message": "Search"
+  },
+  "onboardingSecondContent": {
+    "message": "Here are a variety of mainstream search engine for your choice. You can open the search predict so that make search more convenient."
+  },
+  "onboardingThirdTitle": {
+    "message": "Weather and Apps"
+  },
+  "onboardingThirdContent": {
+    "message": "Simple and beautiful weather forecast, the prerequisite is that you allow the extension to use your location. You can browse your Chrome apps here and click to start."
+  },
+  "onboardingFourthTitle": {
+    "message": "Bookmarks"
+  },
+  "onboardingFourthContent": {
+    "message": "A simple bookmarks browsing function, you can choose to save the state. Provides a bookmark search function that makes it quick for you to find your bookmarks."
   }
 }
