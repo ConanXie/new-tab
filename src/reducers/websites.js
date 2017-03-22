@@ -20,15 +20,13 @@ const getWebsites = () => {
   }
 }
 
-const websites = getWebsites()
-
 const getClassifiedWebsites = () => {
   try {
     let classified = JSON.parse(window.localStorage.getItem('classified'))
     if (!Array.isArray(classified)) {
       classified = [{
         name: 'unclassified',
-        set: websites
+        set: getWebsites()
       }]
       window.localStorage.setItem('classified', JSON.stringify(classified))
     }
@@ -40,7 +38,7 @@ const getClassifiedWebsites = () => {
 }
 
 const initialState = {
-  store: websites,
+  store: getWebsites(),
   classifiedStore: getClassifiedWebsites()
 }
 

@@ -131,7 +131,6 @@ class Navigation extends Component {
     // storage
     this.cache = {}
   }
-  
   checkClick = (e) => {
     if (this.state.edit) {
       e.preventDefault()
@@ -149,7 +148,8 @@ class Navigation extends Component {
   }
   handleConfirm = () => {
     const { deleteWebsite, store } = this.props
-    deleteWebsite(this.state.index)
+    const { index, cIndex } = this.cache
+    deleteWebsite(index, cIndex)
     this.hideConfirm()
 
     // when store clear, restore the edit status
@@ -159,15 +159,15 @@ class Navigation extends Component {
   }
   openDialog = () => {
     this.setState({
-      dialog: true
+      dialog: true,
+      cIndex: this.props.classifiedStore.length - 1
     })
   }
   hideDialog = () => {
     this.setState({
       dialog: false,
       name: '',
-      link: '',
-      cIndex: this.props.classifiedStore.length - 1
+      link: ''
     })
   }
   handleSubmit = () => {
@@ -288,12 +288,14 @@ class Navigation extends Component {
   /**
    * delete and edit
    */
-  handleDelete = (index) => {
+  handleDelete = (index, cIndex) => {
     this.openConfirm()
     // Record the index
-    this.setState({
+    this.cache.index = index
+    this.cache.cIndex = cIndex
+    /*this.setState({
       index
-    })
+    })*/
   }
   handleEdit = (index, name, link, cIndex) => {
     this.cache.index = index
@@ -568,17 +570,18 @@ class Navigation extends Component {
             if (originArea !== area) {
               if (Array.prototype.indexOf.call(area.childNodes, ele) === -1) {
                 originArea.insertBefore(ele, originArea.childNodes[origin])
+              } else {
+                this.props.updatePosition(origin, index, originArea, area, wrap)
               }
               this.setWebsitesPostion(originArea, 0)
               this.calcWrapHeight(originArea)
               this.setWebsitesPostion(area, 0)
               this.calcWrapHeight(area)
-
-              this.props.updatePosition(origin, index, originArea, area, wrap)
             }
-            /*this.setState({
+            // update interface
+            this.setState({
               r: Math.random()
-            })*/
+            })
             ele.setAttribute('aria-grabbed', "false")
             document.body.removeChild(clone)
             document.removeEventListener('mouseup', mouseUp, false)
