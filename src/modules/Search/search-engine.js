@@ -10,7 +10,7 @@ export default [{
   predict: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=%s&json=1'
 }, {
   name: '搜狗',
-  className: 'sougou',
+  className: 'sogou',
   link: 'https://www.sogou.com/web?query=%s',
   predict: 'https://www.sogou.com/suggnew/ajajjson?key=%s&type=web'
 }, {
