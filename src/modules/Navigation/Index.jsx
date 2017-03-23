@@ -855,25 +855,27 @@ class Navigation extends Component {
             style={style.website}
           />*/}
         </div>
-        <div className={classNames('float-actions', { 'hide': isEmpty })} onMouseLeave={this.hideEditBtn}>
-          <div className='edit-float-btn' ref="editFloatBtn" style={style.editActionButton}>
+        {!isEmpty && store.length && (
+          <div className="float-actions" onMouseLeave={this.hideEditBtn}>
+            <div className="edit-float-btn" ref="editFloatBtn" style={style.editActionButton}>
+              <FloatingActionButton
+                mini={true}
+                onTouchTap={this.startEdit}
+                backgroundColor={muiTheme.paper.backgroundColor}
+                iconStyle={{ fill: muiTheme.palette.textColor }}
+              >
+                <ModeEdit />
+              </FloatingActionButton>
+            </div>
             <FloatingActionButton
-              mini={true}
-              onTouchTap={this.startEdit}
-              backgroundColor={muiTheme.paper.backgroundColor}
-              iconStyle={{ fill: muiTheme.palette.textColor }}
+              style={style.floatingActionButton}
+              onTouchTap={this.handleMainFloatBtn}
+              onMouseEnter={this.showEditBtn}
             >
-              <ModeEdit />
+              { edit ? <ActionDone /> : <ContentAdd /> }
             </FloatingActionButton>
           </div>
-          <FloatingActionButton
-            style={style.floatingActionButton}
-            onTouchTap={this.handleMainFloatBtn}
-            onMouseEnter={this.showEditBtn}
-          >
-            { edit ? <ActionDone /> : <ContentAdd /> }
-          </FloatingActionButton>
-        </div>
+        )}
         <Dialog
           title={edit ? intl.formatMessage({ id: 'nav.edit.title.edit' }) : intl.formatMessage({ id: 'nav.edit.title.add' })}
           actions={actions}
