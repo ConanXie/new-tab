@@ -12,6 +12,13 @@ const zh_CN = {
   'nav.edit.input.forget.URL': '别忘了网址🙂',
   'nav.delete.title': '确认删除？',
   'nav.delete.tip': '删除后不可撤销',
+  'nav.classification.unclassified': '未分类',
+  'nav.add.choose.classification': '选择分类',
+  'nav.increase.classification.title': '增加分类',
+  'nav.increase.classification.label': '分类名',
+  'nav.delete.classification': '删除分类',
+  'nav.increase.classification.btn': '增加分类',
+  'nav.show.classification': '显示分类',
   /*settings*/
   'settings.toolbar.title': '设置',
   'settings.engine.save.label': '自动保存当前搜索引擎',
@@ -35,6 +42,7 @@ const zh_CN = {
   'settings.reset.title': '确认重置设置？',
   'settings.reset.warning': '将会重置为初始化设置',
   'settings.about.title': '关于',
+  'settings.about.weather.sources': '天气数据来源',
   /*bookmarks*/
   'bookmarks.search.placeholder': '搜索书签',
   /*empty text*/

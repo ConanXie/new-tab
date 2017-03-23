@@ -509,7 +509,7 @@ class Setup extends Component {
               </div>
               <div className="tip">
                 <FileCloud style={{ width: 18, height: 18 }} color="#999" />
-                <span>天气数据来源 Yahoo! HeWeather</span>
+                <span>{intl.formatMessage({ id: 'settings.about.weather.sources' })}: Yahoo! HeWeather</span>
               </div>
               {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
             </Paper>

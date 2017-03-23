@@ -12,6 +12,13 @@ const en_US = {
   'nav.edit.input.forget.URL': 'Don\'t forget website URL 🙂',
   'nav.delete.title': 'Confirm the deletion',
   'nav.delete.tip': 'It is irrevocable after deletion',
+  'nav.classification.unclassified': 'Unclassified',
+  'nav.add.choose.classification': 'Choose classification',
+  'nav.increase.classification.title': 'Increase classification',
+  'nav.increase.classification.label': 'Classification name',
+  'nav.delete.classification': 'Delete',
+  'nav.increase.classification.btn': 'Increase',
+  'nav.show.classification': 'Show classification',
   /*settings*/
   'settings.toolbar.title': 'Settings',
   'settings.engine.save.label': 'Automatically save the current search engine',
@@ -35,6 +42,7 @@ const en_US = {
   'settings.reset.title': 'Confirm reset settings',
   'settings.reset.warning': 'It will reset to initialization settings',
   'settings.about.title': 'About',
+  'settings.about.weather.sources': 'Weather data sources',
   /*bookmarks*/
   'bookmarks.search.placeholder': 'search your bookmarks',
   /*empty text*/

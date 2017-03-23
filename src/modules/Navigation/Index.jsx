@@ -675,13 +675,13 @@ class Navigation extends Component {
           <div className={classNames('tool-area', { 'hide': !edit })}>
             {isClassified && (
               <FlatButton
-                label="添加分类"
+                label={intl.formatMessage({ id: 'nav.increase.classification.btn' })}
                 icon={<ContentAdd />}
                 onTouchTap={this.openClassifyDialog}
               />
             )}
             <Checkbox
-              label="显示分类"
+              label={intl.formatMessage({ id: 'nav.show.classification' })}
               style={style.classifyCheckbox}
               labelStyle={style.classifyCheckboxLabel}
               defaultChecked={isClassified}
@@ -778,7 +778,7 @@ class Navigation extends Component {
                     <p>{item.name}</p>
                   )}
                   {(item.name === 'unclassified') && (
-                    <p>未分类</p>
+                    <p>{intl.formatMessage({ id: 'nav.classification.unclassified' })}</p>
                   )}
                 </div>
                 <div className="classification-area" style={{ width: this.wrapperWidth }}>
@@ -820,7 +820,7 @@ class Navigation extends Component {
                 </div>
                 {item.name !== 'unclassified' && (
                   <FlatButton
-                    label="删除分类"
+                    label={intl.formatMessage({ id: 'nav.delete.classification' })}
                     icon={<ContentClear />}
                     onTouchTap={e => { this.deleteClassification(cIndex) }}
                     className="delete-classification"
@@ -881,7 +881,7 @@ class Navigation extends Component {
           /><br />
           {isClassified && !edit && (
             <SelectField
-              floatingLabelText="选择分类"
+              floatingLabelText={intl.formatMessage({ id: 'nav.add.choose.classification' })}
               value={cIndex}
               fullWidth={true}
               onChange={this.classifyChange}
@@ -891,7 +891,7 @@ class Navigation extends Component {
                   <MenuItem
                     key={index}
                     value={index}
-                    primaryText={cla.name !== 'unclassified' ? cla.name : '未分类'}
+                    primaryText={cla.name !== 'unclassified' ? cla.name : intl.formatMessage({ id: 'nav.classification.unclassified' })}
                   />
                 )
               })}
@@ -910,7 +910,7 @@ class Navigation extends Component {
           {intl.formatMessage({ id: 'nav.delete.tip' })}
         </Dialog>
         <Dialog
-          title="增加分类"
+          title={intl.formatMessage({ id: 'nav.increase.classification.title' })}
           actions={addClassifyActions}
           modal={false}
           open={classifyDialog}
@@ -919,7 +919,7 @@ class Navigation extends Component {
           titleStyle={style.dialogTitle}
         >
           <TextField
-            floatingLabelText="分类名"
+            floatingLabelText={intl.formatMessage({ id: 'nav.increase.classification.label' })}
             style={style.textField}
             /*onChange={this.linkChange}*/
             ref="classificationName"
