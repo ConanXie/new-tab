@@ -19,6 +19,7 @@ const zh_CN = {
   'nav.delete.classification': '删除分类',
   'nav.increase.classification.btn': '增加分类',
   'nav.show.classification': '显示分类',
+  'nav.websites.max.tip': '网站数量上限是',
   /*settings*/
   'settings.toolbar.title': '设置',
   'settings.engine.save.label': '自动保存当前搜索引擎',

@@ -19,6 +19,7 @@ const en_US = {
   'nav.delete.classification': 'Delete',
   'nav.increase.classification.btn': 'Increase',
   'nav.show.classification': 'Show classification',
+  'nav.websites.max.tip': 'The maximum number of websites is',
   /*settings*/
   'settings.toolbar.title': 'Settings',
   'settings.engine.save.label': 'Automatically save the current search engine',
