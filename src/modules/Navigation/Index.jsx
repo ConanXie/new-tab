@@ -172,6 +172,11 @@ class Navigation extends Component {
       name: '',
       link: ''
     })
+    // clear cache
+    this.cache.index = ''
+    this.cache.name = ''
+    this.cache.link = ''
+    this.cache.cIndex = ''
   }
   handleSubmit = () => {
     const { edit } = this.state
