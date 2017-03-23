@@ -1,6 +1,6 @@
 import sha1 from 'sha1'
 
-import { INITIAL_DATA } from '../actions/websites'
+import { INITIAL_DATA, ADD_WEBSITE, DELETE_WEBSITE } from '../actions/websites'
 
 /*const getWebsites = () => {
   try {
@@ -101,6 +101,8 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case INITIAL_DATA:
+    case ADD_WEBSITE:
+    case DELETE_WEBSITE:
       return {
         ...state,
         ...action.data

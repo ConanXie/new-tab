@@ -5,6 +5,7 @@ const checkLink = /^http(s)?:\/\//
 
 export const INITIAL_DATA = 'INITIAL_DATA'
 export const ADD_WEBSITE = 'ADD_WEBSITE'
+export const DELETE_WEBSITE = 'DELETE_WEBSITE'
 
 const getWebsites = function () {
   return new Promise((resolve, reject) => {
@@ -17,7 +18,7 @@ const getWebsites = function () {
           if (Array.isArray(websites)) {
             if (websites[0] && !websites[0].id) {
               websites.map(item => {
-                item.id = sha1(item.name + Math.random())
+                item.id = sha1(item.name + Math.random()).slice(0, 6)
                 return item
               })
               localStorage.removeItem('websites')
@@ -72,7 +73,7 @@ export function addWebsite(name, link, cIndex) {
     const websites = getState().websites.store
     const classifications = getState().websites.classifiedStore
     const nw = {
-      id: sha1(name + Math.random()),
+      id: sha1(name + Math.random()).slice(0, 6),
       name,
       link: checkLink.test(link) ? link : `http://${link}`
     }
@@ -82,6 +83,14 @@ export function addWebsite(name, link, cIndex) {
     chrome.storage.sync.set({ classified: classifications })
     // ls.setItem('websites', JSON.stringify(websites))
     // ls.setItem('classified', JSON.stringify(classifications))
+    if (websites.length === 1) {
+      dispatch({
+        type: ADD_WEBSITE,
+        data: {
+          isEmpty: false
+        }
+      })
+    }
   }
 }
 
@@ -116,6 +125,14 @@ export function deleteWebsite(index, cIndex) {
     ls.setItem('classified', JSON.stringify(classifications))*/
     chrome.storage.sync.set({ websites })
     chrome.storage.sync.set({ classified: classifications })
+    if (!websites.length) {
+      dispatch({
+        type: DELETE_WEBSITE,
+        data: {
+          isEmpty: true
+        }
+      })
+    }
   }
 }
 
