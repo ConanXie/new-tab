@@ -38,6 +38,7 @@ const zh_CN = {
   'settings.br.backup.label': '生成备份文件',
   'settings.br.restore.label': '从备份中恢复',
   'settings.br.restore.message': '已从备份文件恢复, 刷新后生效',
+  'settings.br.restore.not.supported': '对不起，该备份文件已不受支持',
   'settings.br.reset.label': '重置为默认设置',
   'settings.br.reset.message': '已重置设置，刷新后生效',
   'settings.reset.title': '确认重置设置？',

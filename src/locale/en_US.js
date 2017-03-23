@@ -38,6 +38,7 @@ const en_US = {
   'settings.br.backup.label': 'Create backup file',
   'settings.br.restore.label': 'Restore from backup',
   'settings.br.restore.message': 'Success, please refresh window',
+  'settings.br.restore.not.supported': 'Sorry, the backup file is no longer supported',
   'settings.br.reset.label': 'Reset to default',
   'settings.br.reset.message': 'Success, please refresh window',
   'settings.reset.title': 'Confirm reset settings',
