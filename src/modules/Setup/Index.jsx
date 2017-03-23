@@ -198,35 +198,63 @@ class Setup extends Component {
     saveSettings('darkMode', bool)
     darkMode(bool)
   }
-  createBackups = () => {
-    const currentEngine = JSON.parse(window.localStorage.currentEngine)
-    const settings = JSON.parse(window.localStorage.settings)
-    const websites = JSON.parse(window.localStorage.websites)
-    const classified = JSON.parse(window.localStorage.classified)
-    const data = JSON.stringify({
-      currentEngine,
-      settings,
-      websites,
-      classified
+  createBackups = async () => {
+    const sync = await new Promise((resolve, reject) => {
+      chrome.storage.sync.get(['websites', 'classified'], result => {
+        const arr = []
+        const { websites, classified } = result
+        if (!Array.isArray(websites)) {
+          resolve([[], [{ name: 'unclassified', set: [] }]])
+        } else {
+          resolve([websites, classified])
+        }
+      })
     })
-    const backups = new Blob([data], { type: 'application/json' })
-    const a = document.createElement('a')
-    a.href = window.URL.createObjectURL(backups)
-    a.download = 'backups.json'
-    a.click()
+    try {
+      const currentEngine = JSON.parse(window.localStorage.currentEngine)
+      let settings
+      if (window.localStorage.settings) {
+        settings = JSON.parse(window.localStorage.settings)
+      }
+      // const websites = JSON.parse(window.localStorage.websites)
+      // const classified = JSON.parse(window.localStorage.classified)
+      const data = JSON.stringify({
+        currentEngine,
+        settings: settings ? settings : {},
+        websites: sync[0],
+        classified: sync[1]
+      })
+      const backups = new Blob([data], { type: 'application/json' })
+      const a = document.createElement('a')
+      a.href = window.URL.createObjectURL(backups)
+      a.download = 'backups.json'
+      a.click()
+    } catch (error) {
+      // console.log(error)
+    }
   }
   restoreBackups = (e) => {
     const file = e.target.files[0]
     const fr = new FileReader()
     const { intl } = this.context
     fr.onloadend = e => {
-      const backups = JSON.parse(e.target.result)
-      for (let i in backups) {
+      const { currentEngine, settings, websites, classified } = JSON.parse(e.target.result)
+      if (!classified) {
+        this.setState({
+          snackbarOpen: true,
+          snackbarMessage: intl.formatMessage({ id: 'settings.br.restore.not.supported' })
+        })
+        return
+      }
+      window.localStorage.setItem('currentEngine', JSON.stringify(currentEngine))
+      window.localStorage.setItem('settings', JSON.stringify(settings))
+      chrome.storage.sync.set({ websites, classified })
+      /*for (let i in backups) {
         window.localStorage.setItem(i, JSON.stringify(backups[i]))
       }
       if (!backups.classified) {
         window.localStorage.removeItem('classified')
-      }
+      }*/
       this.setState({
         snackbarOpen: true,
         snackbarMessage: intl.formatMessage({ id: 'settings.br.restore.message' })
