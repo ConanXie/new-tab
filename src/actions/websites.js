@@ -3,7 +3,70 @@ import sha1 from 'sha1'
 const ls = window.localStorage
 const checkLink = /^http(s)?:\/\//
 
+export const INITIAL_DATA = 'INITIAL_DATA'
 export const ADD_WEBSITE = 'ADD_WEBSITE'
+
+const getWebsites = function () {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get('websites', result => {
+      if (Array.isArray(result.websites)) {
+        resolve(result.websites)
+      } else {
+        try {
+          let websites = JSON.parse(localStorage.getItem('websites'))
+          if (Array.isArray(websites)) {
+            if (websites[0] && !websites[0].id) {
+              websites.map(item => {
+                item.id = sha1(item.name + Math.random())
+                return item
+              })
+              localStorage.removeItem('websites')
+            }
+          } else {
+            websites = []
+          }
+          chrome.storage.sync.set({ websites })
+          resolve(websites)
+        } catch (error) {
+          
+        }
+      }
+    })
+  })
+}
+const getClassifiedWebsites = function () {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get('classified', async function (result) {
+      if (result.classified) {
+        resolve(result.classified)
+      } else {
+        const all = await getWebsites()
+        const classified = [{
+          name: 'unclassified',
+          set: all
+        }]
+        chrome.storage.sync.set({ classified })
+        resolve(classified)
+      }
+    })
+  })
+}
+
+export function initialData() {
+  return async dispatch => {
+    const all = await getWebsites()
+    const classified = await getClassifiedWebsites()
+    dispatch({
+      type: INITIAL_DATA,
+      data: {
+        isEmpty: !all.length,
+        store: all,
+        classifiedStore: classified
+      }
+    })
+  }
+}
+
 export function addWebsite(name, link, cIndex) {
   return (dispatch, getState) => {
     const websites = getState().websites.store
@@ -15,8 +78,10 @@ export function addWebsite(name, link, cIndex) {
     }
     websites.push(nw)
     classifications[cIndex].set.push(nw)
-    ls.setItem('websites', JSON.stringify(websites))
-    ls.setItem('classified', JSON.stringify(classifications))
+    chrome.storage.sync.set({ websites })
+    chrome.storage.sync.set({ classified: classifications })
+    // ls.setItem('websites', JSON.stringify(websites))
+    // ls.setItem('classified', JSON.stringify(classifications))
   }
 }
 
@@ -47,8 +112,10 @@ export function deleteWebsite(index, cIndex) {
         }
       }
     }
-    ls.setItem('websites', JSON.stringify(websites))
-    ls.setItem('classified', JSON.stringify(classifications))
+    /*ls.setItem('websites', JSON.stringify(websites))
+    ls.setItem('classified', JSON.stringify(classifications))*/
+    chrome.storage.sync.set({ websites })
+    chrome.storage.sync.set({ classified: classifications })
   }
 }
 
@@ -85,8 +152,10 @@ export function editWebsite(index, name, link, cIndex) {
         }
       }
     }
-    ls.setItem('websites', JSON.stringify(websites))
-    ls.setItem('classified', JSON.stringify(classifications))
+    /*ls.setItem('websites', JSON.stringify(websites))
+    ls.setItem('classified', JSON.stringify(classifications))*/
+    chrome.storage.sync.set({ websites })
+    chrome.storage.sync.set({ classified: classifications })
   }
 }
 
@@ -97,7 +166,8 @@ export function addEmptyClassification(name) {
       name,
       set: []
     })
-    ls.setItem('classified', JSON.stringify(classifications))
+    // ls.setItem('classified', JSON.stringify(classifications))
+    chrome.storage.sync.set({ classified: classifications })
   }
 }
 
@@ -105,7 +175,8 @@ export function deleteClassification(index) {
   return (dispatch, getState) => {
     const classifications = getState().websites.classifiedStore
     classifications.splice(index, 1)
-    ls.setItem('classified', JSON.stringify(classifications))
+    // ls.setItem('classified', JSON.stringify(classifications))
+    chrome.storage.sync.set({ classified: classifications })
   }
 }
 
@@ -115,7 +186,7 @@ export function updatePosition(origin, index, originArea, newArea, wrap) {
     const classifications = getState().websites.classifiedStore
     if (!originArea) {
       websites.splice(index, 0, websites.splice(origin, 1)[0])
-      ls.setItem('websites', JSON.stringify(websites))
+      chrome.storage.sync.set({ websites })
     } else {
       const originAreaIndex = Array.prototype.indexOf.call(wrap.childNodes, originArea.parentNode)
       const originWebsites = classifications[originAreaIndex].set
@@ -128,7 +199,7 @@ export function updatePosition(origin, index, originArea, newArea, wrap) {
         newWebsites.splice(index, 0, item)
 
       }
-      ls.setItem('classified', JSON.stringify(classifications))
+      chrome.storage.sync.set({ classified: classifications })
     }
   }
 }
@@ -137,6 +208,7 @@ export function changeClassificationName(index, value) {
   return (dispatch, getState) => {
     const classifications = getState().websites.classifiedStore
     classifications[index].name = value
-    ls.setItem('classified', JSON.stringify(classifications))
+    // ls.setItem('classified', JSON.stringify(classifications))
+    chrome.storage.sync.set({ classified: classifications })
   }
 }

@@ -30,6 +30,8 @@ import MenuItem from 'material-ui/MenuItem'
 import Snackbar from 'material-ui/Snackbar'
 import {blue500, red500, red300, grey600, grey500, greenA200} from 'material-ui/styles/colors'
 
+import { classificationMax, websiteMax } from '../../config'
+
 const style = {
   website: {
     width: '150px',
@@ -106,6 +108,7 @@ class Navigation extends Component {
   }
   constructor(props) {
     super(props)
+    this.props.initialData()
     this.state = {
       confirm: false,
       dialog: false,
@@ -173,7 +176,7 @@ class Navigation extends Component {
   handleSubmit = () => {
     const { edit } = this.state
     const { name, link, index, cIndex } = this.cache
-    const { addWebsite, editWebsite } = this.props
+    const { addWebsite, editWebsite, store } = this.props
     const { intl } = this.context
     if (!name) {
       this.setState({
@@ -198,7 +201,15 @@ class Navigation extends Component {
     }*/
     // judge add or edit
     if (!edit) {
-      addWebsite(name, link, this.state.cIndex)
+      if (store.length < websiteMax) {
+        addWebsite(name, link, this.state.cIndex)
+      } else {
+        this.setState({
+          snackbarOpen: true,
+          snackbarMessage: intl.formatMessage({ id: 'nav.websites.max.tip' }) + websiteMax
+        })
+        return
+      }
     } else {
       editWebsite(index, name, link, cIndex)
     }
@@ -627,7 +638,7 @@ class Navigation extends Component {
     e.target.src = require('./images/favicon-default.svg')
   }
   render() {
-    const { store, classifiedStore, target, muiTheme } = this.props
+    const { store, classifiedStore, isEmpty, target, muiTheme } = this.props
     const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, name, link, cIndex, isClassified} = this.state
     const { intl } = this.context
     const actions = [
@@ -673,7 +684,7 @@ class Navigation extends Component {
             <FormattedMessage id="nav.title" />
           </h3>*/}
           <div className={classNames('tool-area', { 'hide': !edit })}>
-            {isClassified && (
+            {isClassified && (classifiedStore.length < classificationMax) && (
               <FlatButton
                 label={intl.formatMessage({ id: 'nav.increase.classification.btn' })}
                 icon={<ContentAdd />}
@@ -705,8 +716,8 @@ class Navigation extends Component {
             </div>*/}
           </div>
         </div>
-        <div className={classNames('websites-wrap', { 'empty': !store.length })}>
-          {!store.length && (
+        <div className={classNames('websites-wrap', { 'empty': isEmpty })}>
+          {isEmpty && (
             <div className="empty-box">
               <p className="empty-text">{intl.formatMessage({ id: 'empty.text.navigation' })}</p>
               <RaisedButton
@@ -839,7 +850,7 @@ class Navigation extends Component {
             style={style.website}
           />*/}
         </div>
-        <div className={classNames('float-actions', { 'hide': !store.length })} onMouseLeave={this.hideEditBtn}>
+        <div className={classNames('float-actions', { 'hide': isEmpty })} onMouseLeave={this.hideEditBtn}>
           <div className='edit-float-btn' ref="editFloatBtn" style={style.editActionButton}>
             <FloatingActionButton
               mini={true}
@@ -938,11 +949,12 @@ class Navigation extends Component {
 }
 
 const mapStateToProps = state => {
-  const { store, classifiedStore } = state.websites
+  const { store, classifiedStore, isEmpty } = state.websites
   const { data } = state.settings
   return {
     store,
     classifiedStore,
+    isEmpty,
     settings: data,
   }
 }
