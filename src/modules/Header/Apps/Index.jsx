@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
 
 const style = {
   appBtn: {
@@ -54,7 +55,29 @@ class Apps extends Component {
         <h1 style={{ color: muiTheme.palette.primary1Color }}>Apps</h1>
         <div className={classNames('apps-collection', { 'empty': !apps.length })}>
           {!apps.length && (
-            <p className="empty-text">{intl.formatMessage({ id: 'empty.text.apps' })}</p>
+            <div>
+              <p className="empty-text">{intl.formatMessage({ id: 'empty.text.apps' })}</p>
+              <RaisedButton
+                label="Web Store"
+                primary={true}
+                href="https://chrome.google.com/webstore?utm_source=MaterialDesignNewTab"
+                target="_blank"
+              />
+            </div>
+          )}
+          {!!apps.length && (
+            <div className="app-box">
+              <FlatButton style={style.appBtn}>
+                <a href="https://chrome.google.com/webstore?utm_source=MaterialDesignNewTab">
+                  <dl title="Chrome Web Store">
+                    <dt>
+                      <img src="chrome://extension-icon/ahfgeienlihckogmohjhadlkjgocpleb/128/0" alt="Chrome Web Store" />
+                    </dt>
+                    <dd className={classNames({ 'hide': hideAppsName })}>Chrome Web Store</dd>
+                  </dl>
+                </a>
+              </FlatButton>
+            </div>
           )}
           {apps.map((app, index) => {
             const maxIcon = app.icons.length - 1
