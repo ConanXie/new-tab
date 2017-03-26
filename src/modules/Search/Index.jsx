@@ -346,7 +346,7 @@ class Search extends Component {
                   {predictions && predictions.map((v, i) => {
                     return (
                       <li
-                        key={i}
+                        key={Math.random()}
                         data-name="prediction"
                         data-index={i}
                         onMouseEnter={this.predictionMouseEnter}
