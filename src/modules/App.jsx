@@ -39,7 +39,6 @@ class App extends Component {
       darkMode,
       muiTheme: this.createTheme(themes[index])
     }
-    this.darkTheme = getMuiTheme()
   }
   componentWillMount() {
     const _code = localStorage.getItem('code')
@@ -50,23 +49,32 @@ class App extends Component {
     }
     const { darkMode, muiTheme } = this.state
 
-    darkBaseTheme.palette.settingsBackgroundColor = 'rgba(42, 42, 42, 1)'
-    darkBaseTheme.fontFamily = 'Roboto, 微软雅黑'
-
-    this.darkTheme = getMuiTheme(darkBaseTheme)
+    this.darkTheme = this.createDarkTheme()
     // console.log(this.darkTheme)
-    if (this.state.darkMode) {
+    if (darkMode) {
       this.darkMode(true)
     }
   }
   createTheme = (color) => {
     return getMuiTheme({
-      fontFamily: 'Roboto, 微软雅黑',
+      fontFamily: 'Roboto, Arial, 微软雅黑',
       palette: {
         primary1Color: color,
         settingsBackgroundColor: 'rgba(235, 235, 235, 1)'
       }
     })
+  }
+  createDarkTheme = () => {
+    darkBaseTheme.palette.primary1Color = '#546e7a'
+    darkBaseTheme.palette.textColor = '#e2e4e4'
+    darkBaseTheme.palette.settingsBackgroundColor = 'rgba(42, 42, 42, 1)'
+    darkBaseTheme.fontFamily = 'Roboto, Arial, 微软雅黑'
+    darkBaseTheme.toggle = {}
+    darkBaseTheme.toggle.thumbOnColor = '#32c5fa'
+    darkBaseTheme.toggle.thumbOffColor = '#fafafa'
+    darkBaseTheme.toggle.trackOnColor = '#265b6f'
+    darkBaseTheme.toggle.trackOffColor = '#646b6f'
+    return getMuiTheme(darkBaseTheme)
   }
   setLinkTarget = (bool) => {
     this.setState({
@@ -105,24 +113,21 @@ class App extends Component {
   }
   changeTheme = (index) => {
     const theme = this.createTheme(themes[index])
+    // console.log(theme)
     this.setState({
       muiTheme: theme
     })
     document.querySelector('#app').style.background = theme.paper.backgroundColor
-
   }
   darkMode = (bool) => {
-    /*this.setState({
-      darkMode: bool
-    })*/
-    // const darkTheme = getMuiTheme(darkBaseTheme)
+    const { currentTheme } = this.props.settings
     if (bool) {
       this.setState({
         muiTheme: this.darkTheme
       })
       document.querySelector('#app').style.background = this.darkTheme.paper.backgroundColor
     } else {
-      this.changeTheme(this.props.settings.currentTheme)
+      this.changeTheme(currentTheme)
     }
   }
   render() {
