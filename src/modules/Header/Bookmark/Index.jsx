@@ -88,7 +88,7 @@ class Search extends Component {
       <div className={classNames('search-bookmarks', { 'show': open })}>
         <Paper zDepth={1}>
           <div className="search-header" style={{ backgroundColor: muiTheme.palette.primary1Color }}>
-            <Paper zDepth={1} style={{ backgroundColor: '#fff' }}>
+            <Paper zDepth={1} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
               <div className="search-box">
                 <div className="util-btn back-btn">
                   <IconButton onTouchTap={this.closeSearch}>
@@ -96,7 +96,13 @@ class Search extends Component {
                   </IconButton>
                 </div>
                 <div className="input-box">
-                  <input type="text" placeholder={intl.formatMessage({ id: 'bookmarks.search.placeholder' })} ref="search" onChange={this.watchInput} />
+                  <input
+                    type="text"
+                    placeholder={intl.formatMessage({ id: 'bookmarks.search.placeholder' })}
+                    ref="search"
+                    onChange={this.watchInput}
+                    style={{ color: muiTheme.palette.textColor }}
+                  />
                 </div>
                 <div className={classNames('util-btn clear-btn', { 'show': this.state.clear })}>
                   <IconButton onTouchTap={this.clearSearch}>
@@ -107,7 +113,7 @@ class Search extends Component {
             </Paper>
           </div>
         </Paper>
-        <section className={classNames('result', { 'empty': !result.length && finished })}>
+        <section className={classNames('result', { 'empty': !result.length && finished })} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
           {!result.length && finished && (
             <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks.search' })}</p>
           )}
