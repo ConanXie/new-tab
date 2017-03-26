@@ -1,3 +1,6 @@
+// process.traceDeprecation = true
+process.noDeprecation = true
+
 const path = require('path')
 const webpack = require('webpack')
 
@@ -31,10 +34,24 @@ module.exports = {
       }]
     }, {
       test: /\.less$/,
-      use: ['style-loader', 'css-loader?sourceMap', 'less-loader']
+      use: [{
+        loader: 'style-loader',
+      }, {
+        loader: 'css-loader',
+        options: {
+          sourceMap: true
+        }
+      }, {
+        loader: 'less-loader'
+      }]
     }, {
       test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
-      use: ['url-loader?limit=10000']
+      use: [{
+        loader: 'url-loader',
+        options: {
+          limit: 10000
+        }
+      }]
     }]
   },
   plugins: [
