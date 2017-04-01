@@ -47,6 +47,7 @@ const en_US = {
   'settings.about.weather.sources': 'Weather data sources',
   /*bookmarks*/
   'bookmarks.search.placeholder': 'search your bookmarks',
+  'bookmarks.bookmarks.manager': 'Bookmarks manager',
   'bookmarks.tabs.all': 'All',
   'bookmarks.tabs.recent': 'Recently added',
   /*empty text*/

@@ -47,6 +47,7 @@ const zh_CN = {
   'settings.about.weather.sources': '天气数据来源',
   /*bookmarks*/
   'bookmarks.search.placeholder': '搜索书签',
+  'bookmarks.bookmarks.manager': '书签管理器',
   'bookmarks.tabs.all': '全部',
   'bookmarks.tabs.recent': '最近添加',
   /*empty text*/

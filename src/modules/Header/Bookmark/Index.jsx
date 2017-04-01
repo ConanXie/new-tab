@@ -17,6 +17,7 @@ import ContentClear from 'material-ui/svg-icons/content/clear'
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 import FileFolder from 'material-ui/svg-icons/file/folder'
 import FolderOpen from 'material-ui/svg-icons/file/folder-open'
+import ToggleStar from 'material-ui/svg-icons/toggle/star'
 
 const style = {
   listItem: {
@@ -377,7 +378,7 @@ class Bookmark extends Component {
     const { intl } = this.context
     return (
       <div className="bookmark-component">
-        <Paper zDepth={1}>
+        <Paper zDepth={2}>
           <header style={{ backgroundColor: muiTheme.palette.primary1Color }}>
             <div className="search-box" onTouchTap={this.openSearch}>
               <div className="search-icon">
@@ -385,6 +386,15 @@ class Bookmark extends Component {
               </div>
               <div className="placeholder">{intl.formatMessage({ id: 'bookmarks.search.placeholder' })}</div>
             </div>
+            <IconButton
+              tooltip={intl.formatMessage({ id: 'bookmarks.bookmarks.manager' })}
+              tooltipPosition="bottom-left"
+              iconStyle={{ width: 24, height: 24 }}
+              style={{ width: 40, height: 40, padding: 8 }}
+              onTouchTap={e => { chrome.tabs.update({ url: 'chrome://bookmarks/' }) }}
+            >
+              <ToggleStar color="#fff" />
+            </IconButton>
           </header>
           <Tabs
             onChange={this.handleChange}
