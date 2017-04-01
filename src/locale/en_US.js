@@ -47,10 +47,13 @@ const en_US = {
   'settings.about.weather.sources': 'Weather data sources',
   /*bookmarks*/
   'bookmarks.search.placeholder': 'search your bookmarks',
+  'bookmarks.tabs.all': 'All',
+  'bookmarks.tabs.recent': 'Recently added',
   /*empty text*/
   'empty.text.apps': 'Your browser does not have any application',
   'empty.text.bookmarks': 'Without any bookmarks',
   'empty.text.bookmarks.search': 'No bookmarks found',
+  'empty.text.bookmarks.recent': 'No new bookmarks',
   'empty.text.navigation': 'There are no websites',
   'empty.text.navigation.add': 'Add it now',
   /*hot key*/

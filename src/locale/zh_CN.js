@@ -47,10 +47,13 @@ const zh_CN = {
   'settings.about.weather.sources': '天气数据来源',
   /*bookmarks*/
   'bookmarks.search.placeholder': '搜索书签',
+  'bookmarks.tabs.all': '全部',
+  'bookmarks.tabs.recent': '最近添加',
   /*empty text*/
   'empty.text.apps': '你没有任何应用',
   'empty.text.bookmarks': '你没有任何书签',
   'empty.text.bookmarks.search': '没有找到符合条件的书签',
+  'empty.text.bookmarks.recent': '你最近没有添加新的书签',
   'empty.text.navigation': '你没有任何常用的网站',
   'empty.text.navigation.add': '立即添加',
   /*hot key*/
