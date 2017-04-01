@@ -1,4 +1,4 @@
-import sha1 from 'sha1'
+import shortid from 'shortid'
 
 const ls = window.localStorage
 const checkLink = /^http(s)?:\/\//
@@ -18,7 +18,7 @@ const getWebsites = function () {
           if (Array.isArray(websites)) {
             if (websites[0] && !websites[0].id) {
               websites.map(item => {
-                item.id = sha1(item.name + Math.random()).slice(0, 6)
+                item.id = shortid.generate()
                 return item
               })
               localStorage.removeItem('websites')
@@ -73,7 +73,7 @@ export function addWebsite(name, link, cIndex) {
     const websites = getState().websites.store
     const classifications = getState().websites.classifiedStore
     const nw = {
-      id: sha1(name + Math.random()).slice(0, 6),
+      id: shortid.generate(),
       name,
       link: checkLink.test(link) ? link : `http://${link}`
     }
