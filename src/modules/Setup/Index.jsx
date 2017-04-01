@@ -38,7 +38,24 @@ import Dialog from 'material-ui/Dialog'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import Snackbar from 'material-ui/Snackbar'
-import { grey600, teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500 } from 'material-ui/styles/colors'
+import {
+  grey600,
+  teal500,
+  red500,
+  pink500,
+  indigo500,
+  blue500,
+  deepOrange500,
+  purple500,
+  green500,
+  orange500,
+  blueGrey500,
+  amber500,
+  brown500,
+  grey500,
+  lightBlue500,
+  deepPurple500
+} from 'material-ui/styles/colors'
 
 import { version } from '../../config'
 
@@ -89,7 +106,23 @@ const style = {
   }
 }
 
-export const themes = [teal500, red500, pink500, indigo500, blue500, deepOrange500, purple500, green500, orange500, blueGrey500]
+export const themes = [
+  teal500,
+  red500,
+  pink500,
+  indigo500,
+  blue500,
+  deepOrange500,
+  purple500,
+  green500,
+  orange500,
+  blueGrey500,
+  amber500,
+  brown500,
+  grey500,
+  lightBlue500,
+  deepPurple500
+]
 
 class Setup extends Component {
   static propTypes = {
