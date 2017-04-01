@@ -25,7 +25,7 @@
   .folder-list {
     // width: 150px;
     // float: left;
-    height: calc(~"100vh - 56px");
+    height: calc(~"100vh - 104px");
     overflow-y: scroll;
     &.empty {
       overflow: hidden;
@@ -49,12 +49,12 @@
     text-overflow: ellipsis;
     font-size: 14px;
   }
-  section.bookmarks-sec {
+  /*section.bookmarks-sec {
     height: calc(~"100vh - 56px");
     overflow-y: scroll;
     margin-left: 150px;
     height: calc(~"100vh - 56px");
-  }
+  }*/
   .bookmark-link {
     text-decoration: none;
   }
@@ -94,7 +94,10 @@
       display: block;
       animation: show-bookmarks-search 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
+    & > div:first-child {
+      position: relative;
+      z-index: 10;
+    }
     .search-header {
       padding: 4px;
       .search-box {
@@ -126,23 +129,28 @@
         }
       }
     }
-    .result {
-      height: calc(~"100vh - 56px");
-      overflow-y: scroll;
-      &.empty {
-        overflow: hidden;
-        position: relative;
-        background: url(images/empty-state-search.svg) center 40% no-repeat;
-        background-size: 200px auto;
-        p.empty-text {
-          position: absolute;
-          top: 40%;
-          width: 100%;
-          transform: translateY(80px);
-          text-align: center;
-          color: #999;
-        }
+  }
+  .result, .recent {
+    height: calc(~"100vh - 56px");
+    overflow-y: scroll;
+    /*position: relative;
+    z-index: -1;*/
+    &.empty {
+      overflow: hidden;
+      position: relative;
+      background: url(images/empty-state-search.svg) center 40% no-repeat;
+      background-size: 200px auto;
+      p.empty-text {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        transform: translateY(80px);
+        text-align: center;
+        color: #999;
       }
     }
+  }
+  .recent {
+    height: calc(~"100vh - 104px");
   }
 }

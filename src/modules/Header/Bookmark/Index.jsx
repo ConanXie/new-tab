@@ -1,11 +1,15 @@
 import './style.less'
 
+import moment from 'moment'
+
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 import { findDOMNode } from 'react-dom'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Paper from 'material-ui/Paper'
+import { Tabs, Tab } from 'material-ui/Tabs'
+import SwipeableViews from 'react-swipeable-views'
 import { List, ListItem } from 'material-ui/List'
 import IconButton from 'material-ui/IconButton'
 import ActionSearch from 'material-ui/svg-icons/action/search'
@@ -265,9 +269,10 @@ class Bookmark extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      slideIndex: 0,
       search: false,
       bookmarks: [],
-      currentChildren: []
+      recent: []
     }
     this.opens = []
   }
@@ -283,6 +288,11 @@ class Bookmark extends Component {
       localStorage.setItem('bookmarksScrollTop', this.refs.wrapper.scrollTop)
       localStorage.setItem('bookmarksOpens', JSON.stringify(this.opens))
     }
+  }
+  handleChange = value => {
+    this.setState({
+      slideIndex: value
+    })
   }
   // load bookmarks
   componentDidMount() {
@@ -323,7 +333,14 @@ class Bookmark extends Component {
         })
         setTimeout(() => {
           this.refs.wrapper.scrollTop = this.scrollTop
-        }, 200)
+        }, 500)
+      })
+      // recent added bookmarks
+      chrome.bookmarks.getRecent(30, results => {
+        // console.log(results)
+        this.setState({
+          recent: results
+        })
       })
     }, 500)
   }
@@ -356,7 +373,7 @@ class Bookmark extends Component {
   }
   render() {
     const { muiTheme } = this.props
-    const { bookmarks } = this.state
+    const { bookmarks, recent, slideIndex } = this.state
     const { intl } = this.context
     return (
       <div className="bookmark-component">
@@ -369,13 +386,46 @@ class Bookmark extends Component {
               <div className="placeholder">{intl.formatMessage({ id: 'bookmarks.search.placeholder' })}</div>
             </div>
           </header>
+          <Tabs
+            onChange={this.handleChange}
+            value={slideIndex}
+            inkBarStyle={{ backgroundColor: '#fff' }}
+          >
+            <Tab label={intl.formatMessage({ id: 'bookmarks.tabs.all' })} value={0} />
+            <Tab label={intl.formatMessage({ id: 'bookmarks.tabs.recent' })} value={1} />
+          </Tabs>
         </Paper>
-        <section className={classNames('folder-list', { 'empty': !bookmarks })} ref="wrapper" onScroll={this.listenScroll}>
-          {!bookmarks && (
-            <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks' })}</p>
-          )}
-          {bookmarks}
-        </section>
+        <SwipeableViews
+          index={slideIndex}
+          onChangeIndex={this.handleChange}
+        >
+          <section className={classNames('folder-list', { 'empty': !bookmarks })} ref="wrapper" onScroll={this.listenScroll}>
+            {!bookmarks && (
+              <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks' })}</p>
+            )}
+            {bookmarks}
+          </section>
+          <section className={classNames('recent', { 'empty': !recent.length })}>
+            {!recent.length && (
+              <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks.recent' })}</p>
+            )}
+            <List>
+              {recent.map((value, index) => {
+                return (
+                  <a className="bookmark-link" href={value.url} key={index} title={value.title}>
+                    <ListItem
+                      primaryText={value.title}
+                      secondaryText={moment(value.dateAdded).fromNow()}
+                      leftIcon={<div style={{ width: 16, height: 16, margin: 8, content: `-webkit-image-set(url("chrome://favicon/size/16@1x/${value.url}") 1x, url("chrome://favicon/size/16@2x/${value.url}") 2x)` }}></div>}
+                      className="bookmark"
+                      innerDivStyle={style.bookmark}
+                    />
+                  </a>
+                )
+              })}
+            </List>
+          </section>
+        </SwipeableViews>
         <Search open={this.state.search} muiTheme={muiTheme} close={this.closeSearch} />
       </div>
     )
