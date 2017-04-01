@@ -1,6 +1,6 @@
 import './style.less'
 
-import dateformat from 'dateformat'
+import moment from 'moment'
 
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
@@ -246,7 +246,7 @@ class Weather extends Component {
                 </p>
                 <p className="update-time">
                   <NavigationRefresh style={style.icon} />
-                  <span>{dateformat(data.basic.update, 'HH:MM')}</span>
+                  <span>{moment(data.basic.update).format('HH:mm')}</span>
                 </p>
               </div>
             </header>
