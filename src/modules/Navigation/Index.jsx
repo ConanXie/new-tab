@@ -116,6 +116,8 @@ class Navigation extends Component {
       classifyDialog: false,
       snackbarOpen: false,
       snackbarMessage: '',
+      deleteOpen: false,
+      deleteMessage: '',
       edit: false,
       isClassified: props.settings.isClassified,
       cIndex: props.classifiedStore.length - 1
@@ -140,14 +142,9 @@ class Navigation extends Component {
       e.preventDefault()
     }
   }
-  openConfirm = () => {
+  closeDelete = () => {
     this.setState({
-      confirm: true
-    })
-  }
-  hideConfirm = () => {
-    this.setState({
-      confirm: false
+      deleteOpen: false
     })
   }
   handleConfirm = () => {
@@ -305,14 +302,27 @@ class Navigation extends Component {
   /**
    * delete and edit
    */
-  handleDelete = (index, cIndex) => {
-    this.openConfirm()
-    // Record the index
+  handleDelete = (name, index, cIndex) => {
+    // this.openDeleteMessage()
+    const { deleteWebsite, store } = this.props
+    this.setState({
+      deleteOpen: true,
+      deleteMessage: '已删除 ' + name
+    })
+    // Record the info
     this.cache.index = index
     this.cache.cIndex = cIndex
+    deleteWebsite(index, cIndex)
+    // when store clear, restore the edit status
+    if (!store.length) {
+      this.finishedEdit()
+    }
     /*this.setState({
       index
     })*/
+  }
+  undoDelete = () => {
+    
   }
   handleEdit = (index, name, link, cIndex) => {
     this.cache.index = index
@@ -645,7 +655,7 @@ class Navigation extends Component {
   }
   render() {
     const { store, classifiedStore, isEmpty, target, muiTheme } = this.props
-    const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, name, link, cIndex, isClassified} = this.state
+    const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, deleteOpen, deleteMessage, name, link, cIndex, isClassified} = this.state
     const { intl } = this.context
     const actions = [
       <FlatButton
@@ -761,7 +771,7 @@ class Navigation extends Component {
                         style={style.editHandleIcon}
                       />
                     </i>
-                    <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index)}}>
+                    <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(name, index)}}>
                       <ContentClear
                         color="#fff"
                         style={style.deleteHandleIcon}
@@ -825,7 +835,7 @@ class Navigation extends Component {
                             style={style.editHandleIcon}
                           />
                         </i>
-                        <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(index, cIndex)}}>
+                        <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(name, index, cIndex)}}>
                           <ContentClear
                             color="#fff"
                             style={style.deleteHandleIcon}
@@ -949,6 +959,15 @@ class Navigation extends Component {
           message={snackbarMessage}
           autoHideDuration={2000}
           onRequestClose={this.closeSnackerbar}
+          bodyStyle={style.snackbar}
+        />
+        <Snackbar
+          open={deleteOpen}
+          message={deleteMessage}
+          action="撤销"
+          autoHideDuration={2000}
+          onRequestClose={this.closeDelete}
+          onActionTouchTap={this.undoDelete}
           bodyStyle={style.snackbar}
         />
       </Paper>
