@@ -3,7 +3,8 @@ import './style.less'
 import moment from 'moment'
 
 import classNames from 'classnames'
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import RaisedButton from 'material-ui/RaisedButton'
 import MapsPlace from 'material-ui/svg-icons/maps/place'

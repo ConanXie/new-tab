@@ -1,7 +1,7 @@
 import './style.less'
 
 import classNames from 'classnames'
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
