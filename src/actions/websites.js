@@ -1,11 +1,11 @@
 import shortid from 'shortid'
 
-const ls = window.localStorage
 const checkLink = /^http(s)?:\/\//
 
 export const INITIAL_DATA = 'INITIAL_DATA'
 export const ADD_WEBSITE = 'ADD_WEBSITE'
 export const DELETE_WEBSITE = 'DELETE_WEBSITE'
+export const UNDO = 'UNDO'
 
 const getWebsites = function () {
   return new Promise((resolve, reject) => {
@@ -94,17 +94,29 @@ export function addWebsite(name, link, cIndex) {
   }
 }
 
+let temp
+// index of websites
+let _index
+// index in classification
+let _c_index
+// index of classification
+let _c_cIndex
+
 export function deleteWebsite(index, cIndex) {
   return (dispatch, getState) => {
     const websites = getState().websites.store
     const classifications = getState().websites.classifiedStore
     if (cIndex === undefined) {
       // console.log(websites[index])
+      _index = index
+      temp = {...websites[index]}
       const id = websites[index].id
       websites.splice(index, 1)
       for (let i = 0; i < classifications.length; i++) {
         for (let j = 0; j < classifications[i].set.length; j++) {
           if (classifications[i].set[j].id === id) {
+            _c_cIndex = i
+            _c_index = j
             classifications[i].set.splice(j, 1)
             break
           }
@@ -112,10 +124,14 @@ export function deleteWebsite(index, cIndex) {
       }
     } else {
       // console.log(classifications[cIndex].set[index])
+      temp = {...classifications[cIndex].set[index]}
+      _c_cIndex = cIndex
+      _c_index = index
       const id = classifications[cIndex].set[index].id
       classifications[cIndex].set.splice(index, 1)
       for (let i = 0; i < websites.length; i++) {
         if (websites[i].id === id) {
+          _index = i
           websites.splice(i, 1)
           break
         }
@@ -133,6 +149,25 @@ export function deleteWebsite(index, cIndex) {
         }
       })
     }
+  }
+}
+
+export function undoDeletedWebsite() {
+  return (dispatch, getState) => {
+    const websites = getState().websites.store
+    const classifications = getState().websites.classifiedStore
+    websites.splice(_index, 0, temp)
+    classifications[_c_cIndex].set.splice(_c_index, 0, temp)
+    
+    chrome.storage.sync.set({ websites })
+    chrome.storage.sync.set({ classified: classifications })
+
+    dispatch({
+      type: UNDO,
+      data: {
+        isEmpty: false
+      }
+    })
   }
 }
 

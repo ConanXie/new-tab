@@ -322,7 +322,10 @@ class Navigation extends Component {
     })*/
   }
   undoDelete = () => {
-    
+    const { undoDeletedWebsite } = this.props
+    undoDeletedWebsite()
+    this.closeDelete()
+    // console.log(this.cache)
   }
   handleEdit = (index, name, link, cIndex) => {
     this.cache.index = index
@@ -866,7 +869,7 @@ class Navigation extends Component {
             style={style.website}
           />*/}
         </div>
-        {!isEmpty && store.length && (
+        {!isEmpty && store.length !== 0 && (
           <div className="float-actions" onMouseLeave={this.hideEditBtn}>
             <div className="edit-float-btn" ref="editFloatBtn" style={style.editActionButton}>
               <FloatingActionButton
