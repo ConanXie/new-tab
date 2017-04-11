@@ -60,7 +60,7 @@ class App extends Component {
       fontFamily: 'Roboto, Arial, 微软雅黑',
       palette: {
         primary1Color: color,
-        settingsBackgroundColor: 'rgba(235, 235, 235, 1)'
+        settingsBackgroundColor: 'hsla(0, 0%, 98%, 1)'
       }
     })
   }
