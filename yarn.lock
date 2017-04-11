@@ -2286,9 +2286,9 @@ macaddress@^0.2.8:
   version "0.2.8"
   resolved "http://registry.npm.taobao.org/macaddress/download/macaddress-0.2.8.tgz#5904dc537c39ec6dbefeae902327135fa8511f12"
 
-material-ui@^0.17.2:
-  version "0.17.2"
-  resolved "http://registry.npm.taobao.org/material-ui/download/material-ui-0.17.2.tgz#6cb0250f34d98e9d5c42d5ee0666491492b252f1"
+material-ui@^0.17.3:
+  version "0.17.3"
+  resolved "http://registry.npm.taobao.org/material-ui/download/material-ui-0.17.3.tgz#1c8d82da7909dab39d5e292b575516fe13b055c7"
   dependencies:
     babel-runtime "^6.23.0"
     inline-style-prefixer "^3.0.2"
