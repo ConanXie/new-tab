@@ -64,6 +64,7 @@ const zh_CN = {
   'hotkey.settings': '设置',
   /*weather*/
   'weather.air': '空气',
+  'weather.humidity': '湿度',
   'weather.week.Sunday': '周日',
   'weather.week.Monday': '周一',
   'weather.week.Tuesday': '周二',

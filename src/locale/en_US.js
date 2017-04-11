@@ -63,7 +63,8 @@ const en_US = {
   'hotkey.bookmarks': 'Bookmarks',
   'hotkey.settings': 'Settings',
   /*weather*/
-  'weather.air': 'Air ',
+  'weather.air': 'Air',
+  'weather.humidity': 'Humidity',
   'weather.week.Sunday': 'Sun',
   'weather.week.Monday': 'Mon',
   'weather.week.Tuesday': 'Tue',
