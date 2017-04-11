@@ -30,25 +30,41 @@
       display: flex;
       justify-content: space-between;
       padding: 10px 24px;
-      margin-bottom: 30px;
+      margin-bottom: 33px;
       .now-info {
-        .now-tmp-sec {
-          .now-tmp {
-            // float: left;
-            display: inline-block;
-            font-size: 80px;
-            font-family: RobotoLight;
-            font-weight: normal;
-          }
-          .now-cond {
-            // float: left;
-            display: inline-block;
-            position: relative;
-            left: -24px;
+        .now-tmp {
+          // float: left;
+          display: inline-block;
+          font-size: 80px;
+          font-family: RobotoLight;
+          font-weight: normal;
+        }
+        .now-cond {
+          // float: left;
+          display: inline-block;
+          position: relative;
+          left: -24px;
+        }
+        .state {
+          display: flex;
+          & > p {
+            display: flex;
+            align-items: center;
             font-size: 14px;
           }
+          p.qlty {
+            margin-right: 20px;
+          }
         }
-        .qlty {
+        .qlty:before {
+          content: '';
+          width: 18px;
+          height: 18px;
+          margin-right: 3px;
+          background: url(images/leaf.svg) center no-repeat;
+          background-size: 16px;
+        }
+        /*.qlty {
           display: inline-block;
           height: 28px;
           padding: 0 14px;
@@ -56,7 +72,7 @@
           font-size: 13px;
           background-color: rgba(255, 255, 255, 0.15);
           border-radius: 28px;
-        }
+        }*/
       }
       .loc-info {
         padding-top: 20px;
@@ -82,162 +98,162 @@
       .forecast-box {
         flex: 1;
         text-align: center;
-        .weather-icon {
-          width: 60px;
-          height: 60px;
-          margin: 0 auto;
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: 70%;
-          // 晴
-          &.code-100,
-          &.code-31,
-          &.code-32,
-          &.code-33,
-          &.code-34 {
-            background-image: url(icons/clear.svg);
-          }
-          &.code-101,
-          &.code-102,
-          &.code-104,
-          &.code-26,
-          &.code-44 {
-            background-image: url(icons/cloudy2.svg);
-          }
-          &.code-103,
-          &.code-27,
-          &.code-28,
-          &.code-29,
-          &.code-30 {
-            background-image: url(icons/cloudy.svg);
-          }
-          &.code-200,
-          &.code-201,
-          &.code-202,
-          &.code-203,
-          &.code-204,
-          &.code-205,
-          &.code-206,
-          &.code-207,
-          &.code-208,
-          &.code-209,
-          &.code-210,
-          &.code-23,
-          &.code-24 {
-            background-image: url(icons/wind.svg);
-          }
-          &.code-211,
-          &.code-212,
-          &.code-213,
-          &.code-0,
-          &.code-1,
-          &.code-2 {
-            background-image: url(icons/tornado.svg);
-          }
-          &.code-300,
-          &.code-301,
-          &.code-11,
-          &.code-12,
-          &.code-40 {
-            background-image: url(icons/rain4.svg);
-          }
-          &.code-302,
-          &.code-303,
-          &.code-304,
-          &.code-38,
-          &.code-39,
-          &.code-45,
-          &.code-47 {
-            background-image: url(icons/rain6.svg);
-          }
-          &.code-305,
-          &.code-309,
-          &.code-9 {
-            background-image: url(icons/rain.svg);
-          }
-          &.code-306 {
-            background-image: url(icons/rain1.svg);
-          }
-          &.code-307 {
-            background-image: url(icons/rain2.svg);
-          }
-          &.code-308,
-          &.code-310,
-          &.code-311,
-          &.code-312 {
-            background-image: url(icons/rain5.svg);
-          }
-          &.code-313,
-          &.code-8,
-          &.code-10 {
-            background-image: url(icons/ice.svg);
-          }
-          &.code-17,
-          &.code-35 {
-            background-image: url(icons/ice2.svg);
-          }
-          &.code-400,
-          &.code-404,
-          &.code-405,
-          &.code-406,
-          &.code-407,
-          &.code-13,
-          &.code-14,
-          &.code-15,
-          &.code-16,
-          &.code-42,
-          &.code-46 {
-            background-image: url(icons/snow.svg);
-          }
-          &.code-401 {
-            background-image: url(icons/snow1.svg);
-          }
-          &.code-402,
-          &.code-403,
-          &.code-41,
-          &.code-43 {
-            background-image: url(icons/snow2.svg);
-          }
-          &.code-404,
-          &.code-405,
-          &.code-5,
-          &.code-6,
-          &.code-7, {
-            background-image: url(icons/rainSnow.svg);
-          }
-          &.code-500,
-          &.code-501,
-          &.code-20 {
-            background-image: url(icons/fog.svg);
-          }
-          &.code-22 {
-            background-image: url(icons/smoke.svg);
-          }
-          &.code-502,
-          &.code-18,
-          &.code-21 {
-            background-image: url(icons/haze.svg);
-          }
-          &.code-503,
-          &.code-507,
-          &.code-508 {
-            background-image: url(icons/sand.svg);
-          }
-          &.code-504,
-          &.code-19 {
-            background-image: url(icons/dust.svg);
-          }
-          &.code-3,
-          &.code-4,
-          &.code-37 {
-            background-image: url(icons/thunder.svg);
-          }
-          &.code-999,
-          &.code-3200 {
-            background-image: url(icons/noMessage.svg);
-          }
-        }
       }
     }
+  }
+}
+.weather-icon {
+  width: 60px;
+  height: 60px;
+  margin: 10px auto 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70%;
+  // 晴
+  &.code-100,
+  &.code-31,
+  &.code-32,
+  &.code-33,
+  &.code-34 {
+    background-image: url(icons/clear.svg);
+  }
+  &.code-101,
+  &.code-102,
+  &.code-104,
+  &.code-26,
+  &.code-44 {
+    background-image: url(icons/cloudy2.svg);
+  }
+  &.code-103,
+  &.code-27,
+  &.code-28,
+  &.code-29,
+  &.code-30 {
+    background-image: url(icons/cloudy.svg);
+  }
+  &.code-200,
+  &.code-201,
+  &.code-202,
+  &.code-203,
+  &.code-204,
+  &.code-205,
+  &.code-206,
+  &.code-207,
+  &.code-208,
+  &.code-209,
+  &.code-210,
+  &.code-23,
+  &.code-24 {
+    background-image: url(icons/wind.svg);
+  }
+  &.code-211,
+  &.code-212,
+  &.code-213,
+  &.code-0,
+  &.code-1,
+  &.code-2 {
+    background-image: url(icons/tornado.svg);
+  }
+  &.code-300,
+  &.code-301,
+  &.code-11,
+  &.code-12,
+  &.code-40 {
+    background-image: url(icons/rain4.svg);
+  }
+  &.code-302,
+  &.code-303,
+  &.code-304,
+  &.code-38,
+  &.code-39,
+  &.code-45,
+  &.code-47 {
+    background-image: url(icons/rain6.svg);
+  }
+  &.code-305,
+  &.code-309,
+  &.code-9 {
+    background-image: url(icons/rain.svg);
+  }
+  &.code-306 {
+    background-image: url(icons/rain1.svg);
+  }
+  &.code-307 {
+    background-image: url(icons/rain2.svg);
+  }
+  &.code-308,
+  &.code-310,
+  &.code-311,
+  &.code-312 {
+    background-image: url(icons/rain5.svg);
+  }
+  &.code-313,
+  &.code-8,
+  &.code-10 {
+    background-image: url(icons/ice.svg);
+  }
+  &.code-17,
+  &.code-35 {
+    background-image: url(icons/ice2.svg);
+  }
+  &.code-400,
+  &.code-404,
+  &.code-405,
+  &.code-406,
+  &.code-407,
+  &.code-13,
+  &.code-14,
+  &.code-15,
+  &.code-16,
+  &.code-42,
+  &.code-46 {
+    background-image: url(icons/snow.svg);
+  }
+  &.code-401 {
+    background-image: url(icons/snow1.svg);
+  }
+  &.code-402,
+  &.code-403,
+  &.code-41,
+  &.code-43 {
+    background-image: url(icons/snow2.svg);
+  }
+  &.code-404,
+  &.code-405,
+  &.code-5,
+  &.code-6,
+  &.code-7, {
+    background-image: url(icons/rainSnow.svg);
+  }
+  &.code-500,
+  &.code-501,
+  &.code-20 {
+    background-image: url(icons/fog.svg);
+  }
+  &.code-22 {
+    background-image: url(icons/smoke.svg);
+  }
+  &.code-502,
+  &.code-18,
+  &.code-21 {
+    background-image: url(icons/haze.svg);
+  }
+  &.code-503,
+  &.code-507,
+  &.code-508 {
+    background-image: url(icons/sand.svg);
+  }
+  &.code-504,
+  &.code-19 {
+    background-image: url(icons/dust.svg);
+  }
+  &.code-3,
+  &.code-4,
+  &.code-37 {
+    background-image: url(icons/thunder.svg);
+  }
+  &.code-999,
+  &.code-3200 {
+    background-image: url(icons/noMessage.svg);
   }
 }

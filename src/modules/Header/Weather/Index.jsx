@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import RaisedButton from 'material-ui/RaisedButton'
 import MapsPlace from 'material-ui/svg-icons/maps/place'
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh'
+import ActionOpacity from 'material-ui/svg-icons/action/opacity'
 import RefreshIndicator from 'material-ui/RefreshIndicator'
 
 const style = {
@@ -236,9 +237,15 @@ class Weather extends Component {
                   <h1 className="now-tmp">{(data.now.temp * times + base).toFixed(0)}°</h1>
                   <p className="now-cond">{data.now.text}</p>
                 </div>
-                {data.aqi && (
-                  <p className="qlty">{intl.formatMessage({ id: 'weather.air' })}{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
-                )}
+                <div className="state">
+                  {data.aqi && (
+                    <p className="qlty">{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
+                  )}
+                  <p className="humidity">
+                    <ActionOpacity style={style.icon} />
+                    <span>{intl.formatMessage({ id: 'weather.humidity' })} {data.now.humidity}%</span>
+                  </p>
+                </div>
               </div>
               <div className="loc-info">
                 <p className="loc-content">
