@@ -55,6 +55,9 @@ class App extends Component {
       this.darkMode(true)
     }
   }
+  componentDidMount() {
+    chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT')
+  }
   createTheme = (color) => {
     return getMuiTheme({
       fontFamily: 'Roboto, Arial, 微软雅黑',
