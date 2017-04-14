@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton'
 import MapsPlace from 'material-ui/svg-icons/maps/place'
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh'
@@ -292,4 +293,4 @@ class Weather extends Component {
   }
 }
 
-export default Weather
+export default muiThemeable()(Weather)

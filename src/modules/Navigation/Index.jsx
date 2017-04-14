@@ -11,6 +11,7 @@ import * as settingsActions from '../../actions/settings'
 
 import { FormattedMessage } from 'react-intl'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
 import Checkbox from 'material-ui/Checkbox'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
@@ -996,4 +997,4 @@ const mapDispatchToProps = dispatch => {
   }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation)
+export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Navigation))

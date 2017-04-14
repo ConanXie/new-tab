@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as searchEngineActions from '../../actions/search-engine'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton'
 import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
@@ -376,4 +377,4 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(searchEngineActions, dispatch)
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Search)
+export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Search))

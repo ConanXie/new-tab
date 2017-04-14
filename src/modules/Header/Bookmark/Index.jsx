@@ -7,7 +7,7 @@ import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
 import PropTypes from 'prop-types'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import SwipeableViews from 'react-swipeable-views'
@@ -443,4 +443,4 @@ class Bookmark extends Component {
   }
 }
 
-export default Bookmark
+export default muiThemeable()(Bookmark)

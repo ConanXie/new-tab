@@ -10,6 +10,7 @@ import * as searchEngineActions from '../../actions/search-engine'
 import * as setupPageActions from '../../actions/setup-page'
 import * as settingsActions from '../../actions/settings'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
 import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -543,7 +544,7 @@ class Setup extends Component {
                 <div>
                   <div className="donor-feedback">
                     <Donor />
-                    <Feedback muiTheme={muiTheme} />
+                    <Feedback />
                   </div>
                   <p className="tip">
                     <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
@@ -608,4 +609,4 @@ const mapDispatchToProps = dispatch => {
   }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Setup)
+export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Setup))

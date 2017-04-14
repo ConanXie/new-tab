@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 
@@ -101,4 +102,4 @@ class Apps extends Component {
   }
 }
 
-export default Apps
+export default muiThemeable()(Apps)

@@ -139,9 +139,9 @@ class App extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <Header hideAppsName={hideAppsName} rememberBookmarksState={rememberBookmarksState} useFahrenheit={useFahrenheit} muiTheme={muiTheme} />
-          <Search target={searchTarget} searchPredict={searchPredict} useHK={useHK} muiTheme={muiTheme} />
-          <Navigation target={linkTarget} muiTheme={muiTheme} />
+          <Header hideAppsName={hideAppsName} rememberBookmarksState={rememberBookmarksState} useFahrenheit={useFahrenheit} />
+          <Search target={searchTarget} searchPredict={searchPredict} useHK={useHK} />
+          <Navigation target={linkTarget} />
           <Setup
             setLinkTarget={this.setLinkTarget}
             setSearchTarget={this.setSearchTarget}
@@ -152,7 +152,6 @@ class App extends Component {
             useFahrenheit={this.useFahrenheit}
             changeTheme={this.changeTheme}
             darkMode={this.darkMode}
-            muiTheme={muiTheme}
           />
           {onboarding && (
             <Onboarding />

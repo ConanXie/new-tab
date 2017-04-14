@@ -2,6 +2,7 @@ import './style.less'
 
 import React, { Component } from 'react'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
@@ -162,4 +163,4 @@ class Feedback extends Component {
   }
 }
 
-export default Feedback
+export default muiThemeable()(Feedback)

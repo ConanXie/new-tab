@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as setupPageActions from '../../actions/setup-page'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
 import IconButton from 'material-ui/IconButton'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -113,8 +114,8 @@ class Header extends Component {
           open={this.state.drawerOpen}
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
-          <Weather useFahrenheit={useFahrenheit} muiTheme={muiTheme} />          
-          <Apps hideAppsName={hideAppsName} muiTheme={muiTheme} />
+          <Weather useFahrenheit={useFahrenheit} />          
+          <Apps hideAppsName={hideAppsName} />
         </Drawer>
         <Drawer
           docked={false}
@@ -123,7 +124,7 @@ class Header extends Component {
           open={this.state.bookmarkOpen}
           onRequestChange={bookmarkOpen => this.setState({ bookmarkOpen })}
         >
-          <Bookmark rememberBookmarksState={rememberBookmarksState} muiTheme={muiTheme} />
+          <Bookmark rememberBookmarksState={rememberBookmarksState} />
         </Drawer>
       </Paper>
     )
@@ -139,4 +140,4 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(setupPageActions, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Header))
