@@ -306,9 +306,10 @@ class Navigation extends Component {
   handleDelete = (name, index, cIndex) => {
     // this.openDeleteMessage()
     const { deleteWebsite, store } = this.props
+    const { intl } = this.context
     this.setState({
       deleteOpen: true,
-      deleteMessage: '已删除 ' + name
+      deleteMessage: `${intl.formatMessage({ id: 'nav.delete.status' })} ${name}`
     })
     // Record the info
     this.cache.index = index
@@ -932,17 +933,6 @@ class Navigation extends Component {
           )}
         </Dialog>
         <Dialog
-          title={intl.formatMessage({ id: 'nav.delete.title' })}
-          actions={confirmActions}
-          modal={false}
-          open={confirm}
-          onRequestClose={this.hideConfirm}
-          contentStyle={style.dialogContent}
-          titleStyle={style.confirmTitle}
-        >
-          {intl.formatMessage({ id: 'nav.delete.tip' })}
-        </Dialog>
-        <Dialog
           title={intl.formatMessage({ id: 'nav.increase.classification.title' })}
           actions={addClassifyActions}
           modal={false}
@@ -968,7 +958,7 @@ class Navigation extends Component {
         <Snackbar
           open={deleteOpen}
           message={deleteMessage}
-          action="撤销"
+          action={intl.formatMessage({ id: 'nav.delete.undo' })}
           autoHideDuration={2000}
           onRequestClose={this.closeDelete}
           onActionTouchTap={this.undoDelete}
