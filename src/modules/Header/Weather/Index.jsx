@@ -270,7 +270,10 @@ class Weather extends Component {
                     <div className={`weather-icon code-${value.code}`} title={value.text}></div>
                     {/*<img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />*/}
                     {/*<p>{value.cond.txt_d}</p>*/}
-                    <p>{(value.low * times + base).toFixed(0)}°~{(value.high * times + base).toFixed(0)}°</p>
+                    <p>
+                      <span className="high">{(value.high * times + base).toFixed(0)}°</span>
+                      <span className="low">{(value.low * times + base).toFixed(0)}°</span>
+                    </p>
                   </div>
                 )
               })}
