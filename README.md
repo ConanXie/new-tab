@@ -11,7 +11,7 @@ A new tab page extension for Chrome which uses Material Design.
 
 ![Screenshot](https://lh3.googleusercontent.com/_kSehfzV-4cIRwP801jzOV3LGHB9tT-0hOe6IRn6Oyo32BSHMU95ZpibCjulizFi7I9jAddO=s640-h400-e365)
 
-## [Try it](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
+## [Install from the Chrome Web Store](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 
 ## Features
 - Manage your favorite websites
