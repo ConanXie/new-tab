@@ -11,6 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import MapsPlace from 'material-ui/svg-icons/maps/place'
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh'
 import ActionOpacity from 'material-ui/svg-icons/action/opacity'
+import MapsNavigation from 'material-ui/svg-icons/maps/navigation'
 import RefreshIndicator from 'material-ui/RefreshIndicator'
 
 const style = {
@@ -245,6 +246,10 @@ class Weather extends Component {
                   <p className="humidity">
                     <ActionOpacity style={style.icon} />
                     <span>{intl.formatMessage({ id: 'weather.humidity' })} {data.now.humidity}%</span>
+                  </p>
+                  <p className="wind">
+                    <MapsNavigation style={{...style.icon, transform: `rotate(${180 + data.now.wind.direction * 1}deg)`}} />
+                    <span>{data.now.wind.speed} km/h</span>
                   </p>
                 </div>
               </div>
