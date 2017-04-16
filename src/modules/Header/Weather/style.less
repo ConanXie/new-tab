@@ -55,14 +55,14 @@
             font-size: 14px;
           }
         }
-        .qlty:before {
+        /*.qlty:before {
           content: '';
           width: 18px;
           height: 18px;
           margin-right: 3px;
           background: url(images/leaf.svg) center no-repeat;
           background-size: 16px;
-        }
+        }*/
         /*.qlty {
           display: inline-block;
           height: 28px;
@@ -85,7 +85,6 @@
           float: right;
           display: flex;
           align-items: center;
-          // height: 25px;
           margin-top: 2px;
           margin-left: 22px;
         }
@@ -96,7 +95,6 @@
       padding: 0 0 12px 24px;
       .forecast-box {
         flex: 1;
-        // text-align: center;
       }
       span.high {
         font-size: 20px;
@@ -104,163 +102,197 @@
       }
       span.low {
         font-size: 13px;
-        color: rgba(255, 255, 255, 0.8);
+        opacity: 0.8;
       }
     }
   }
 }
+[class^="code-"], [class*=" code-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: Weather !important;
+  font-size: 36px;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .weather-icon {
-  // width: 60px;
+  display: flex;
+  align-items: center;
   height: 60px;
-  // margin: 0 auto;
   background-repeat: no-repeat;
   background-position: left center;
   background-size: auto 36px;
   // 晴
-  &.code-100,
-  &.code-31,
-  &.code-32,
-  &.code-33,
-  &.code-34 {
-    background-image: url(icons/clear.svg);
+  &.code-100:before,
+  &.code-31:before,
+  &.code-32:before,
+  &.code-33:before,
+  &.code-34:before {
+    // background-image: url(icons/clear.svg);
+    content: '\e901';
   }
-  &.code-101,
-  &.code-102,
-  &.code-104,
-  &.code-26,
-  &.code-44 {
-    background-image: url(icons/cloudy2.svg);
+  &.code-101:before,
+  &.code-102:before,
+  &.code-104:before,
+  &.code-26:before,
+  &.code-44:before {
+    // background-image: url(icons/cloudy2.svg);
+    content: '\e903';
   }
-  &.code-103,
-  &.code-27,
-  &.code-28,
-  &.code-29,
-  &.code-30 {
-    background-image: url(icons/cloudy.svg);
+  &.code-103:before,
+  &.code-27:before,
+  &.code-28:before,
+  &.code-29:before,
+  &.code-30:before {
+    // background-image: url(icons/cloudy.svg);
+    content: '\e902';
   }
-  &.code-200,
-  &.code-201,
-  &.code-202,
-  &.code-203,
-  &.code-204,
-  &.code-205,
-  &.code-206,
-  &.code-207,
-  &.code-208,
-  &.code-209,
-  &.code-210,
-  &.code-23,
-  &.code-24 {
-    background-image: url(icons/wind.svg);
+  &.code-200:before,
+  &.code-201:before,
+  &.code-202:before,
+  &.code-203:before,
+  &.code-204:before,
+  &.code-205:before,
+  &.code-206:before,
+  &.code-207:before,
+  &.code-208:before,
+  &.code-209:before,
+  &.code-210:before,
+  &.code-23:before,
+  &.code-24:before {
+    // background-image: url(icons/wind.svg);
+    content: '\e91b';
   }
-  &.code-211,
-  &.code-212,
-  &.code-213,
-  &.code-0,
-  &.code-1,
-  &.code-2 {
-    background-image: url(icons/tornado.svg);
+  &.code-211:before,
+  &.code-212:before,
+  &.code-213:before,
+  &.code-0:before,
+  &.code-1:before,
+  &.code-2:before {
+    // background-image: url(icons/tornado.svg);
+    content: '\e91a';
   }
-  &.code-300,
-  &.code-301,
-  &.code-11,
-  &.code-12,
-  &.code-40 {
-    background-image: url(icons/rain4.svg);
+  &.code-300:before,
+  &.code-301:before,
+  &.code-11:before,
+  &.code-12:before,
+  &.code-40:before {
+    // background-image: url(icons/rain4.svg);
+    content: '\e90f';
   }
-  &.code-302,
-  &.code-303,
-  &.code-304,
-  &.code-38,
-  &.code-39,
-  &.code-45,
-  &.code-47 {
-    background-image: url(icons/rain6.svg);
+  &.code-302:before,
+  &.code-303:before,
+  &.code-304:before,
+  &.code-38:before,
+  &.code-39:before,
+  &.code-45:before,
+  &.code-47:before {
+    // background-image: url(icons/rain6.svg);
+    content: '\e911';
   }
-  &.code-305,
-  &.code-309,
-  &.code-9 {
-    background-image: url(icons/rain.svg);
+  &.code-305:before,
+  &.code-309:before,
+  &.code-9:before {
+    // background-image: url(icons/rain.svg);
+    content: '\e90b';
   }
-  &.code-306 {
-    background-image: url(icons/rain1.svg);
+  &.code-306:before {
+    // background-image: url(icons/rain1.svg);
+    content: '\e90c';
   }
-  &.code-307 {
-    background-image: url(icons/rain2.svg);
+  &.code-307:before {
+    // background-image: url(icons/rain2.svg);
+    content: '\e90d';
   }
-  &.code-308,
-  &.code-310,
-  &.code-311,
-  &.code-312 {
-    background-image: url(icons/rain5.svg);
+  &.code-308:before,
+  &.code-310:before,
+  &.code-311:before,
+  &.code-312:before {
+    // background-image: url(icons/rain5.svg);
+    content: '\e910';
   }
-  &.code-313,
-  &.code-8,
-  &.code-10 {
-    background-image: url(icons/ice.svg);
+  &.code-313:before,
+  &.code-8:before,
+  &.code-10:before {
+    // background-image: url(icons/ice.svg);
+    content: '\e907';
   }
-  &.code-17,
-  &.code-35 {
-    background-image: url(icons/ice2.svg);
+  &.code-17:before,
+  &.code-35:before {
+    // background-image: url(icons/ice2.svg);
+    content: '\e909';
   }
-  &.code-400,
-  &.code-404,
-  &.code-405,
-  &.code-406,
-  &.code-407,
-  &.code-13,
-  &.code-14,
-  &.code-15,
-  &.code-16,
-  &.code-42,
-  &.code-46 {
-    background-image: url(icons/snow.svg);
+  &.code-400:before,
+  &.code-404:before,
+  &.code-405:before,
+  &.code-406:before,
+  &.code-407:before,
+  &.code-13:before,
+  &.code-14:before,
+  &.code-15:before,
+  &.code-16:before,
+  &.code-42:before,
+  &.code-46:before {
+    // background-image: url(icons/snow.svg);
+    content: '\e916';
   }
-  &.code-401 {
-    background-image: url(icons/snow1.svg);
+  &.code-401:before {
+    // background-image: url(icons/snow1.svg);
+    content: '\e917';
   }
-  &.code-402,
-  &.code-403,
-  &.code-41,
-  &.code-43 {
-    background-image: url(icons/snow2.svg);
+  &.code-402:before,
+  &.code-403:before,
+  &.code-41:before,
+  &.code-43:before {
+    // background-image: url(icons/snow2.svg);
+    content: '\e918';
   }
-  &.code-404,
-  &.code-405,
-  &.code-5,
-  &.code-6,
-  &.code-7, {
-    background-image: url(icons/rainSnow.svg);
+  &.code-404:before,
+  &.code-405:before,
+  &.code-5:before,
+  &.code-6:before,
+  &.code-7:before, {
+    // background-image: url(icons/rainSnow.svg);
+    content: '\e912';
   }
-  &.code-500,
-  &.code-501,
-  &.code-20 {
-    background-image: url(icons/fog.svg);
+  &.code-500:before,
+  &.code-501:before,
+  &.code-20:before {
+    // background-image: url(icons/fog.svg);
+    content: '\e905';
   }
-  &.code-22 {
-    background-image: url(icons/smoke.svg);
+  &.code-22:before {
+    // background-image: url(icons/smoke.svg);
+    content: '\e915';
   }
-  &.code-502,
-  &.code-18,
-  &.code-21 {
-    background-image: url(icons/haze.svg);
+  &.code-502:before,
+  &.code-18:before,
+  &.code-21:before {
+    // background-image: url(icons/haze.svg);
+    content: '\e906';
   }
-  &.code-503,
-  &.code-507,
-  &.code-508 {
-    background-image: url(icons/sand.svg);
+  &.code-503:before,
+  &.code-507:before,
+  &.code-508:before {
+    // background-image: url(icons/sand.svg);
+    content: '\e913';
   }
-  &.code-504,
-  &.code-19 {
-    background-image: url(icons/dust.svg);
+  &.code-504:before,
+  &.code-19:before {
+    // background-image: url(icons/dust.svg);
+    content: '\e904';
   }
-  &.code-3,
-  &.code-4,
-  &.code-37 {
-    background-image: url(icons/thunder.svg);
+  &.code-3:before,
+  &.code-4:before,
+  &.code-37:before {
+    // background-image: url(icons/thunder.svg);
+    content: '\e919';
   }
-  &.code-999,
-  &.code-3200 {
-    background-image: url(icons/noMessage.svg);
+  &.code-999:before,
+  &.code-3200:before {
+    // background-image: url(icons/noMessage.svg);
+    content: '\e90a';
   }
 }
