@@ -23,8 +23,6 @@ import BookmarkBorder from 'material-ui/svg-icons/action/bookmark-border'
 import LightbulbOutline from 'material-ui/svg-icons/action/lightbulb-outline'
 import TextFormat from 'material-ui/svg-icons/content/text-format'
 import CallSplit from 'material-ui/svg-icons/communication/call-split'
-import ColorLens from 'material-ui/svg-icons/image/color-lens'
-import ImageLens from 'material-ui/svg-icons/image/lens'
 import ImageBrightness from 'material-ui/svg-icons/image/brightness-2'
 import CloudQueue from 'material-ui/svg-icons/file/cloud-queue'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
@@ -40,34 +38,23 @@ import Dialog from 'material-ui/Dialog'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import Snackbar from 'material-ui/Snackbar'
-import {
-  grey600,
-  teal500,
-  red500,
-  pink500,
-  indigo500,
-  blue500,
-  deepOrange500,
-  purple500,
-  green500,
-  orange500,
-  blueGrey500,
-  amber500,
-  brown500,
-  grey500,
-  lightBlue500,
-  deepPurple500
-} from 'material-ui/styles/colors'
+import SvgIcon from 'material-ui/SvgIcon'
+
+const FahrenheitIcon = props => {
+  return (
+    <SvgIcon {...props}>
+      <path d="M11,20V5H20V8H14V11H19V14H14V20H11M6,3A3,3 0 0,1 9,6A3,3 0 0,1 6,9A3,3 0 0,1 3,6A3,3 0 0,1 6,3M6,5A1,1 0 0,0 5,6A1,1 0 0,0 6,7A1,1 0 0,0 7,6A1,1 0 0,0 6,5Z" />
+    </SvgIcon>
+  )
+}
 
 import { version } from '../../config'
 
 import Donor from './Donor'
 import Feedback from './Feedback'
+import Theme from './Theme'
 
 const style = {
-  headerBar: {
-    backgroundColor: grey600
-  },
   toggleLabel: {
     fontSize: '15px'
   },
@@ -78,11 +65,8 @@ const style = {
   listIcon: {
     marginLeft: 0
   },
-  themeContent: {
-    width: '380px'
-  },
-  themeTitle: {
-    paddingBottom: '18px'
+  dialogContent: {
+    width: 380
   },
   smallIcon: {
     width: 32,
@@ -108,24 +92,6 @@ const style = {
   }
 }
 
-export const themes = [
-  teal500,
-  red500,
-  pink500,
-  indigo500,
-  blue500,
-  deepOrange500,
-  purple500,
-  green500,
-  orange500,
-  blueGrey500,
-  amber500,
-  brown500,
-  grey500,
-  lightBlue500,
-  deepPurple500
-]
-
 class Setup extends Component {
   static propTypes = {
     status: PropTypes.bool.isRequired,
@@ -142,13 +108,10 @@ class Setup extends Component {
     super(props)
     this.state = {
       display: 'none',
-      currentTheme: props.data.currentTheme ? props.data.currentTheme : 0,
-      themeOpen: false,
       resetOpen: false,
       snackbarOpen: false,
       snackbarMessage: ''
     }
-    this.themes = themes
   }
   componentWillReceiveProps(next) {
     // show or hide the setup page
@@ -205,28 +168,6 @@ class Setup extends Component {
     const { saveSettings, useFahrenheit } = this.props
     saveSettings('useFahrenheit', bool)
     useFahrenheit(bool)
-  }
-  openTheme = () => {
-    this.setState({
-      themeOpen: true
-    })
-  }
-  hideTheme = () => {
-    this.setState({
-      themeOpen: false
-    })
-  }
-  switchTheme = (index) => {
-    const { saveTheme, changeTheme } = this.props
-    saveTheme(index)
-    changeTheme(index)
-    this.setState({
-      currentTheme: index
-    })
-    this.toggleDarkMode(null, false)
-    setTimeout(() => {
-      this.hideTheme()
-    }, 200)
   }
   toggleDarkMode = (event, bool) => {
     const { saveSettings, darkMode } = this.props
@@ -323,7 +264,7 @@ class Setup extends Component {
     })
   }
   render() {
-    const { status, data, hideSetup, muiTheme } = this.props
+    const { status, data, hideSetup, changeTheme, muiTheme } = this.props
     const { display, currentTheme, snackbarOpen, snackbarMessage } = this.state
     const { intl } = this.context
     const resetActions = [
@@ -346,9 +287,9 @@ class Setup extends Component {
           <div className="tool-bar">
             <div className="bar-left">
               <IconButton onTouchTap={hideSetup}>
-                <ArrowBack color="#fff" />
+                <ArrowBack color={muiTheme.palette.alternateTextColor} />
               </IconButton>
-              <div className="bar-label">{intl.formatMessage({ id: 'settings.toolbar.title' })}</div>
+              <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'settings.toolbar.title' })}</div>
             </div>
           </div>
         </Paper>
@@ -380,7 +321,7 @@ class Setup extends Component {
                 </div>
               </div>
               <div className="toggle-box">
-                <CloudQueue style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <FahrenheitIcon style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
                   <Toggle
                     className="toggle"
@@ -458,14 +399,10 @@ class Setup extends Component {
               }
               {/*theme*/}
               <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
-              <List>
-                <ListItem
-                  leftIcon={<ColorLens style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                  primaryText={intl.formatMessage({ id: 'settings.theme.switch.label' })}
-                  innerDivStyle={{ paddingLeft: '58px' }}
-                  onTouchTap={this.openTheme}
-                />
-              </List>
+              <Theme
+                changeTheme={changeTheme}
+                toggleDarkMode={this.toggleDarkMode}
+              />
               <div className="toggle-box">
                 <ImageBrightness style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
@@ -480,57 +417,32 @@ class Setup extends Component {
               </div>
               {/*backup and restore*/}
               <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
-              <List>
-                <ListItem
-                  leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                  primaryText={intl.formatMessage({ id: 'settings.br.backup.label' })}
-                  innerDivStyle={{ paddingLeft: '58px' }}
-                  onTouchTap={this.createBackups}
-                />
-                <ListItem
-                  leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                  primaryText={intl.formatMessage({ id: 'settings.br.restore.label' })}
-                  innerDivStyle={{ paddingLeft: '58px' }}
-                >
-                  <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
-                </ListItem>
-                <ListItem
-                  leftIcon={<SettingsRestore style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                  primaryText={intl.formatMessage({ id: 'settings.br.reset.label' })}
-                  innerDivStyle={{ paddingLeft: '58px' }}
-                  onTouchTap={this.openReset}
-                />
-              </List>
+              <ListItem
+                leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                primaryText={intl.formatMessage({ id: 'settings.br.backup.label' })}
+                innerDivStyle={{ paddingLeft: '58px' }}
+                onTouchTap={this.createBackups}
+              />
+              <ListItem
+                leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                primaryText={intl.formatMessage({ id: 'settings.br.restore.label' })}
+                innerDivStyle={{ paddingLeft: '58px' }}
+              >
+                <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
+              </ListItem>
+              <ListItem
+                leftIcon={<SettingsRestore style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                primaryText={intl.formatMessage({ id: 'settings.br.reset.label' })}
+                innerDivStyle={{ paddingLeft: '58px' }}
+                onTouchTap={this.openReset}
+              />
             </Paper>
-            <Dialog
-              title={intl.formatMessage({ id: 'settings.theme.select.title' })}
-              open={this.state.themeOpen}
-              onRequestClose={this.hideTheme}
-              titleStyle={style.themeTitle}
-              contentStyle={style.themeContent}
-            >
-              {this.themes.map((color, index) => {
-                if (currentTheme === index) {
-                  return (
-                    <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.hideTheme() }}>
-                      <CheckCircle color={color} />
-                    </IconButton>
-                  )
-                } else {
-                  return (
-                    <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.switchTheme(index) }}>
-                      <ImageLens color={color} />
-                    </IconButton>
-                  )
-                }
-              })}
-            </Dialog>
             <Dialog
               title={intl.formatMessage({ id: 'settings.reset.title' })}
               open={this.state.resetOpen}
               actions={resetActions}
               onRequestClose={this.hideReset}
-              contentStyle={style.themeContent}
+              contentStyle={style.dialogContent}
             >
               {intl.formatMessage({ id: 'settings.reset.warning' })}
             </Dialog>
@@ -572,7 +484,7 @@ class Setup extends Component {
               </div>
               <div className="tip">
                 <FileCloud style={{ width: 18, height: 18 }} color="#999" />
-                <span>{intl.formatMessage({ id: 'settings.about.weather.sources' })}: Yahoo! HeWeather</span>
+                <span>{intl.formatMessage({ id: 'settings.about.weather.sources' })}: YAHOO! HeWeather</span>
               </div>
               {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
             </Paper>

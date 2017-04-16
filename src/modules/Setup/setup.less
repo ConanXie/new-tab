@@ -54,7 +54,6 @@
       margin-left: 12px;
       height: 48px;
       font-size: 18px;
-      color: #fff;
     }
   }
   .setup-section {
@@ -62,77 +61,77 @@
     &:last-child {
       padding-top: 0;
     }
-    .setup-content {
-      box-sizing: border-box;
-      width: 600px;
-      // height: 300px;
-      padding: 32px;
-      margin: 0 auto;
-      .setup-title {
-        padding-left: 5px;
-        margin: 8px 0;
-        font-weight: normal;
-        font-size: 14px;
-      }
-      .toggle-box {
+  }
+  .setup-content {
+    box-sizing: border-box;
+    width: 600px;
+    // height: 300px;
+    padding: 32px;
+    margin: 0 auto;
+    .setup-title {
+      padding-left: 5px;
+      margin: 16px 0;
+      font-weight: normal;
+      font-size: 14px;
+    }
+    .toggle-box {
+      display: flex;
+      align-items: center;
+      .toggle-wrapper {
+        flex: 1;
         display: flex;
         align-items: center;
-        .toggle-wrapper {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          height: 48px;
-        }
+        height: 48px;
       }
-      .toggle {
-        flex: 1;
-        // margin-bottom: 24px;
-      }
-      .toggle > div {
-        justify-content: space-between;
-      }
-      &.about {
-        height: auto;
-        .name {
-          margin: 14px 0;
-          font-size: 16px;
-          .version {
-            margin-left: 10px;
-            font-size: 14px;
-          }
-        }
-        .donor-feedback {
-        }
-        .intro {
-          margin-top: 24px;
+    }
+    .toggle {
+      flex: 1;
+      // margin-bottom: 24px;
+    }
+    .toggle > div {
+      justify-content: space-between;
+    }
+    &.about {
+      height: auto;
+      .name {
+        margin: 14px 0;
+        font-size: 16px;
+        .version {
+          margin-left: 10px;
           font-size: 14px;
-          color: #bbb;
-          a {
-            color: inherit;
-          }
         }
-        .tip {
-          display: flex;
-          align-items: center;
-          height: 20px;
-          margin-top: 24px;
-          span {
-            margin-left: 8px;
-            color: #999;
-            font-size: 13px;
-          }
+      }
+      .donor-feedback {
+      }
+      .intro {
+        margin-top: 24px;
+        font-size: 14px;
+        color: #bbb;
+        a {
+          color: inherit;
         }
-        .hot-key-list {
-          display: flex;
-          justify-content: space-between;
-          // width: 241px;
-          width: 215px;
-          padding-left: 26px;
-          margin: 8px 0;
-          span {
-            color: #757575;
-            font-size: 13px;
-          }
+      }
+      .tip {
+        display: flex;
+        align-items: center;
+        height: 20px;
+        margin-top: 24px;
+        span {
+          margin-left: 8px;
+          color: #999;
+          font-size: 13px;
+        }
+      }
+      .hot-key-list {
+        display: flex;
+        justify-content: space-between;
+        // width: 241px;
+        width: 215px;
+        padding-left: 26px;
+        margin: 8px 0;
+        span {
+          color: #757575;
+          font-size: 13px;
         }
       }
     }
