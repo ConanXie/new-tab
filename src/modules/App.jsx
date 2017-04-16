@@ -14,7 +14,7 @@ import RaisedButton from 'material-ui/RaisedButton'
   }
 }, {userAgent: 'all'})*/
 import { code } from '../config'
-import { themes } from './Setup'
+import { themes } from './Setup/Theme'
 
 import Header from './Header'
 import Search from './Search'
@@ -26,8 +26,14 @@ import Onboarding from './Onboarding'
 class App extends Component {
   constructor(props) {
     super(props)
-    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, currentTheme, darkMode } = props.settings
+    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, currentTheme, darkMode, customTheme } = props.settings
     const index = currentTheme ? currentTheme : 0
+    let muiTheme
+    if (index !== -1) {
+      muiTheme = this.createTheme(themes[index].color)
+    } else {
+      muiTheme = this.createTheme(customTheme.color, customTheme.hue)
+    }
     this.state = {
       linkTarget: linkTarget ? '_blank' : '_self',
       searchTarget: searchTarget ? '_blank' : '_self',
@@ -37,7 +43,7 @@ class App extends Component {
       useHK,
       useFahrenheit,
       darkMode,
-      muiTheme: this.createTheme(themes[index])
+      muiTheme
     }
   }
   componentWillMount() {
@@ -58,14 +64,18 @@ class App extends Component {
   componentDidMount() {
     chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT')
   }
-  createTheme = (color) => {
-    return getMuiTheme({
+  createTheme = (color, hue) => {
+    const theme = {
       fontFamily: 'Roboto, Arial, 微软雅黑',
       palette: {
         primary1Color: color,
         settingsBackgroundColor: 'hsla(0, 0%, 98%, 1)'
       }
-    })
+    }
+    if (hue === 'bright') {
+      theme.palette.alternateTextColor = '#303030'
+    }
+    return getMuiTheme(theme)
   }
   createDarkTheme = () => {
     darkBaseTheme.palette.primary1Color = '#546e7a'
@@ -114,8 +124,13 @@ class App extends Component {
       useFahrenheit: bool
     })
   }
-  changeTheme = (index) => {
-    const theme = this.createTheme(themes[index])
+  changeTheme = data => {
+    let theme
+    if (typeof data === 'number') {
+      theme = this.createTheme(themes[data].color)
+    } else {
+      theme = this.createTheme(data.color, data.hue)
+    }
     // console.log(theme)
     this.setState({
       muiTheme: theme
@@ -123,14 +138,18 @@ class App extends Component {
     document.querySelector('#app').style.background = theme.paper.backgroundColor
   }
   darkMode = (bool) => {
-    const { currentTheme } = this.props.settings
+    const { currentTheme, customTheme } = this.props.settings
     if (bool) {
       this.setState({
         muiTheme: this.darkTheme
       })
       document.querySelector('#app').style.background = this.darkTheme.paper.backgroundColor
     } else {
-      this.changeTheme(currentTheme)
+      if (currentTheme !== -1) {
+        this.changeTheme(currentTheme)
+      } else {
+        this.changeTheme(customTheme)
+      }
     }
   }
   render() {
