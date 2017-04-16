@@ -28,13 +28,13 @@ const en_US = {
   'settings.apps.display.label': 'Hide applications tags',
   'settings.bookmarks.position.label': 'Remember bookmarks previous state',
   'settings.search.predict.label': 'See instant results as you type in search',
-  'settings.weather.fahrenheit.label': 'Use F° in weather',
+  'settings.weather.fahrenheit.label': 'Use fahrenheit in the weather',
   'settings.search.title': 'Search',
   'settings.theme.title': 'Theme',
-  'settings.theme.switch.label': 'Switch color theme',
+  'settings.theme.switch.label': 'Switch theme colors',
   'settings.theme.select.title': 'Select',
   'settings.theme.dark.label': 'Dark Mode',
-  'settings.br.title': 'Backup and reset',
+  'settings.br.title': 'Backup & reset',
   'settings.br.backup.label': 'Create backup file',
   'settings.br.restore.label': 'Restore from backup',
   'settings.br.restore.message': 'Success, please refresh window',
@@ -79,6 +79,11 @@ const en_US = {
   'weather.empty.geolocationClosed': 'You have rejected a request to get location information',
   'weather.empty.geolocationEmpty': 'The browser can not get your location information',
   'weather.empty.geolocationTimeout': 'Get location information timeout',
+  /*theme*/
+  'theme.custom.label': 'Custom',
+  'theme.input.placeholder': 'Color code, e.g., #009688',
+  'theme.radio.dark': 'Dark Theme',
+  'theme.radio.bright': 'Bright Theme',
 }
 
 export default en_US

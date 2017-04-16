@@ -79,6 +79,11 @@ const zh_CN = {
   'weather.empty.geolocationClosed': '你拒绝了获取位置信息的请求',
   'weather.empty.geolocationEmpty': '浏览器无法获取你的位置信息',
   'weather.empty.geolocationTimeout': '获取位置信息超时',
+  /*theme*/
+  'theme.custom.label': '自定义',
+  'theme.input.placeholder': '颜色代码，例如 #009688',
+  'theme.radio.dark': '暗色主题',
+  'theme.radio.bright': '亮色主题',
 }
 
 export default zh_CN
