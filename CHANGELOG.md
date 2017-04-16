@@ -1,5 +1,10 @@
 ## Changelog
 
+## 1.3.4
+###### _Apr 16, 2017_
+- Customize the theme color
+- Interface adjustment
+
 ## 1.3.3
 ###### _Apr 14, 2017_
 - Delete website no longer popup confirm window, you can undo within 2 seconds
