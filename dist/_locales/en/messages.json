@@ -37,5 +37,50 @@
   },
   "onboardingFourthContent": {
     "message": "A simple bookmarks browsing function, you can choose to save the state. Provides a bookmark search function that makes it quick for you to find your bookmarks."
+  },
+  "themeTeal": {
+    "message": "Teal"
+  },
+  "themeRed": {
+    "message": "Red"
+  },
+  "themePink": {
+    "message": "Pink"
+  },
+  "themeIndigo": {
+    "message": "Indigo"
+  },
+  "themeBlue": {
+    "message": "Blue"
+  },
+  "themeDeepOrange": {
+    "message": "Deep Orange"
+  },
+  "themePurple": {
+    "message": "Purple"
+  },
+  "themeGreen": {
+    "message": "Green"
+  },
+  "themeOrange": {
+    "message": "Orange"
+  },
+  "themeBlueGrey": {
+    "message": "Blue Grey"
+  },
+  "themeAmber": {
+    "message": "Amber"
+  },
+  "themeBrown": {
+    "message": "Brown"
+  },
+  "themeGrey": {
+    "message": "Grey"
+  },
+  "themeLightBlue": {
+    "message": "Light Blue"
+  },
+  "themeDeepPurple": {
+    "message": "Deep Purple"
   }
 }

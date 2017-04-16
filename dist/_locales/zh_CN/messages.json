@@ -37,5 +37,50 @@
   },
   "onboardingFourthContent": {
     "message": "一个简易的书签浏览功能，你可以选择保存书签位置。提供了书签搜索功能，方便你最快速地找到你的书签。"
+  },
+  "themeTeal": {
+    "message": "水鸭青"
+  },
+  "themeRed": {
+    "message": "红色"
+  },
+  "themePink": {
+    "message": "粉红"
+  },
+  "themeIndigo": {
+    "message": "靛青"
+  },
+  "themeBlue": {
+    "message": "蓝色"
+  },
+  "themeDeepOrange": {
+    "message": "深橙"
+  },
+  "themePurple": {
+    "message": "紫色"
+  },
+  "themeGreen": {
+    "message": "绿色"
+  },
+  "themeOrange": {
+    "message": "橙色"
+  },
+  "themeBlueGrey": {
+    "message": "灰蓝"
+  },
+  "themeAmber": {
+    "message": "琥珀"
+  },
+  "themeBrown": {
+    "message": "棕色"
+  },
+  "themeGrey": {
+    "message": "灰色"
+  },
+  "themeLightBlue": {
+    "message": "浅蓝"
+  },
+  "themeDeepPurple": {
+    "message": "深紫"
   }
 }
