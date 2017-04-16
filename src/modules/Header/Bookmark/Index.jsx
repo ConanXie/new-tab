@@ -383,9 +383,9 @@ class Bookmark extends Component {
           <header style={{ backgroundColor: muiTheme.palette.primary1Color }}>
             <div className="search-box" onTouchTap={this.openSearch}>
               <div className="search-icon">
-                <ActionSearch color="#fff" />
+                <ActionSearch color={muiTheme.palette.alternateTextColor} />
               </div>
-              <div className="placeholder">{intl.formatMessage({ id: 'bookmarks.search.placeholder' })}</div>
+              <div className="placeholder" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'bookmarks.search.placeholder' })}</div>
             </div>
             <IconButton
               tooltip={intl.formatMessage({ id: 'bookmarks.bookmarks.manager' })}
@@ -394,7 +394,7 @@ class Bookmark extends Component {
               style={{ width: 40, height: 40, padding: 8 }}
               onTouchTap={e => { chrome.tabs.update({ url: 'chrome://bookmarks/' }) }}
             >
-              <ToggleStar color="#fff" />
+              <ToggleStar color={muiTheme.palette.alternateTextColor} />
             </IconButton>
           </header>
           <Tabs
