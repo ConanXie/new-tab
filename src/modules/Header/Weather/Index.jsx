@@ -13,6 +13,15 @@ import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh'
 import ActionOpacity from 'material-ui/svg-icons/action/opacity'
 import MapsNavigation from 'material-ui/svg-icons/maps/navigation'
 import RefreshIndicator from 'material-ui/RefreshIndicator'
+import SvgIcon from 'material-ui/SvgIcon'
+
+const LeafIcon = props => {
+  return (
+    <SvgIcon {...props}>
+      <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z" />
+    </SvgIcon>
+  )
+}
 
 const style = {
   icon: {
@@ -224,6 +233,7 @@ class Weather extends Component {
     let Interface
     let Qlty
     const { data, times, base, loading, empty, emptyText } = this.state
+    const { primary1Color, alternateTextColor } = this.props.muiTheme.palette
     const { intl } = this.context
     return (
       <div className={classNames('weather-component', { 'empty': empty })}>
@@ -232,7 +242,7 @@ class Weather extends Component {
         )}
         {/*Weather data exist*/}
         {data && (
-          <div className="weather-interface" style={{ backgroundColor: this.props.muiTheme.palette.primary1Color }}>
+          <div className="weather-interface" style={{ backgroundColor: primary1Color, color: alternateTextColor }}>
             <header>
               <div className="now-info">
                 <div className="now-tmp-sec">
@@ -241,25 +251,28 @@ class Weather extends Component {
                 </div>
                 <div className="state">
                   {data.aqi && (
-                    <p className="qlty">{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}</p>
+                    <p className="qlty">
+                      <LeafIcon color={alternateTextColor} style={style.icon} />
+                      <span></span>{data.aqi.city.qlty + ' '}{data.aqi.city.pm25}
+                    </p>
                   )}
                   <p className="humidity">
-                    <ActionOpacity style={style.icon} />
+                    <ActionOpacity color={alternateTextColor} style={style.icon} />
                     <span>{intl.formatMessage({ id: 'weather.humidity' })} {data.now.humidity}%</span>
                   </p>
                   <p className="wind">
-                    <MapsNavigation style={{...style.icon, transform: `rotate(${180 + data.now.wind.direction * 1}deg)`}} />
+                    <MapsNavigation color={alternateTextColor} style={{...style.icon, transform: `rotate(${180 + data.now.wind.direction * 1}deg)`}} />
                     <span>{data.now.wind.speed} km/h</span>
                   </p>
                 </div>
               </div>
               <div className="loc-info">
                 <p className="loc-content">
-                  <MapsPlace style={style.icon} />
+                  <MapsPlace color={alternateTextColor} style={style.icon} />
                   <span>{data.basic.city}</span>
                 </p>
                 <p className="update-time">
-                  <NavigationRefresh style={style.icon} />
+                  <NavigationRefresh color={alternateTextColor} style={style.icon} />
                   <span>{moment(data.basic.update).format('HH:mm')}</span>
                 </p>
               </div>
