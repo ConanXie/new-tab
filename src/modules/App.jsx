@@ -74,6 +74,9 @@ class App extends Component {
     }
     if (hue === 'bright') {
       theme.palette.alternateTextColor = '#303030'
+      theme.snackbar = {
+        textColor: '#ffffff'
+      }
     }
     return getMuiTheme(theme)
   }
@@ -139,6 +142,7 @@ class App extends Component {
   }
   darkMode = (bool) => {
     const { currentTheme, customTheme } = this.props.settings
+    // console.log(this.darkTheme)
     if (bool) {
       this.setState({
         muiTheme: this.darkTheme
