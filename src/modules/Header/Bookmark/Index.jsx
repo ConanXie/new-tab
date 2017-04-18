@@ -26,6 +26,14 @@ const style = {
   },
   bookmark: {
     padding: '8px 16px 8px 42px'
+  },
+  header: {
+    position: 'relative',
+    zIndex: 1
+  },
+  searchHeader: {
+    position: 'relative',
+    zIndex: 2
   }
 }
 
@@ -92,7 +100,7 @@ class Search extends Component {
     const { intl } = this.context
     return (
       <div className={classNames('search-bookmarks', { 'show': open })}>
-        <Paper zDepth={1}>
+        <Paper zDepth={1} style={style.searchHeader}>
           <div className="search-header" style={{ backgroundColor: muiTheme.palette.primary1Color }}>
             <Paper zDepth={1} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
               <div className="search-box">
@@ -379,7 +387,7 @@ class Bookmark extends Component {
     const { intl } = this.context
     return (
       <div className="bookmark-component">
-        <Paper zDepth={2}>
+        <Paper zDepth={2} style={style.header}>
           <header style={{ backgroundColor: muiTheme.palette.primary1Color }}>
             <div className="search-box" onTouchTap={this.openSearch}>
               <div className="search-icon">
