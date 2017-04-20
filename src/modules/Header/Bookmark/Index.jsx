@@ -408,7 +408,7 @@ class Bookmark extends Component {
           <Tabs
             onChange={this.handleChange}
             value={slideIndex}
-            inkBarStyle={{ backgroundColor: '#fff' }}
+            inkBarStyle={{ backgroundColor: muiTheme.palette.alternateTextColor }}
           >
             <Tab label={intl.formatMessage({ id: 'bookmarks.tabs.all' })} value={0} />
             <Tab label={intl.formatMessage({ id: 'bookmarks.tabs.recent' })} value={1} />
