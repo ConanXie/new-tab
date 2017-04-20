@@ -81,15 +81,19 @@ class App extends Component {
     return getMuiTheme(theme)
   }
   createDarkTheme = () => {
-    darkBaseTheme.palette.primary1Color = '#546e7a'
-    darkBaseTheme.palette.textColor = '#e2e4e4'
-    darkBaseTheme.palette.settingsBackgroundColor = 'rgba(42, 42, 42, 1)'
     darkBaseTheme.fontFamily = 'Roboto, Arial, 微软雅黑'
-    darkBaseTheme.toggle = {}
-    darkBaseTheme.toggle.thumbOnColor = '#32c5fa'
-    darkBaseTheme.toggle.thumbOffColor = '#fafafa'
-    darkBaseTheme.toggle.trackOnColor = '#265b6f'
-    darkBaseTheme.toggle.trackOffColor = '#646b6f'
+    darkBaseTheme.palette = {
+      ...darkBaseTheme.palette,
+      primary1Color: '#546e7a',
+      textColor: '#e2e4e4',
+      settingsBackgroundColor: 'rgba(42, 42, 42, 1)'
+    }
+    darkBaseTheme.toggle = {
+      thumbOnColor: '#32c5fa',
+      thumbOffColor: '#fafafa',
+      trackOnColor: '#265b6f',
+      trackOffColor: '#646b6f'
+    }
     return getMuiTheme(darkBaseTheme)
   }
   setLinkTarget = (bool) => {
@@ -151,7 +155,7 @@ class App extends Component {
     } else {
       if (currentTheme !== -1) {
         this.changeTheme(currentTheme)
-      } else {
+      } else if (customTheme) {
         this.changeTheme(customTheme)
       }
     }
