@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.3.5
+###### _Apr 20, 2017_
+- Fixed a bug that code runs error when user adds new custom theme on dark mode
+
 ## 1.3.4
 ###### _Apr 16, 2017_
 - Customize the theme color
