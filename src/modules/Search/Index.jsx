@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as searchEngineActions from '../../actions/search-engine'
+import * as searchEngineActions from '../../actions/search-engines'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -17,7 +17,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import Paper from 'material-ui/Paper'
 
-import searchEngine from './search-engine'
+import searchEngine from './search-engines'
 
 // 大陆以外地区去掉百度与搜狗
 if (navigator.language !== 'zh-CN') {

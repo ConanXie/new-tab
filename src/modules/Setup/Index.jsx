@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as searchEngineActions from '../../actions/search-engine'
+import * as searchEngineActions from '../../actions/search-engines'
 import * as setupPageActions from '../../actions/setup-page'
 import * as settingsActions from '../../actions/settings'
 
@@ -53,6 +53,7 @@ import { version } from '../../config'
 import Donor from './Donor'
 import Feedback from './Feedback'
 import Theme from './Theme'
+import Engines from './Engines/Engines'
 
 const style = {
   toggleLabel: {
@@ -97,9 +98,7 @@ class Setup extends Component {
     status: PropTypes.bool.isRequired,
     hideSetup: PropTypes.func.isRequired,
     saveSettings: PropTypes.func.isRequired,
-    saveCurrentEngine: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
-    currentEngine: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired
   }
   static contextTypes = {
     intl: PropTypes.object.isRequired
@@ -125,13 +124,6 @@ class Setup extends Component {
           display: 'none'
         })
       }, 200)
-    }
-  }
-  toggleAutoSaveEngine = (event, bool) => {
-    const { saveSettings, saveCurrentEngine } = this.props
-    saveSettings('autoSaveEngine', bool)
-    if (bool) {
-      saveCurrentEngine()
     }
   }
   toggleLinkTarget = (event, bool) => {
@@ -346,7 +338,8 @@ class Setup extends Component {
               </div>
               {/*search*/}
               <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.search.title' })}</h2>
-              <div className="toggle-box">
+              <Engines />
+              {/*<div className="toggle-box">
                 <HardwareMemory style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
                   <Toggle
@@ -357,7 +350,7 @@ class Setup extends Component {
                     labelStyle={style.toggleLabel}
                   />
                 </div>
-              </div>
+              </div>*/}
               <div className="toggle-box">
                 <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
@@ -505,19 +498,16 @@ class Setup extends Component {
 const mapStateToProps = state => {
   const { status } = state.setupPage
   const { data } = state.settings
-  const { currentEngine } = state.searchEngine
   return {
     status,
-    data,
-    currentEngine
+    data
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     ...setupPageActions,
-    ...settingsActions,
-    ...searchEngineActions
+    ...settingsActions
   }, dispatch)
 }
 
