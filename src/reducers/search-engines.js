@@ -1,27 +1,26 @@
-import { SAVE_ENGINE } from '../actions/search-engine'
-
-/**
- * initial state from localStorage
- */
-const getEngine = () => {
-  let engine
-  try {
-    engine = JSON.parse(window.localStorage.getItem('currentEngine'))
-    return engine ? engine : {}
-  } catch (error) {
-    
-  }
-}
+import {
+  GET_ENGINES,
+  ADD_ENGINE,
+  DELETE_ENGINE,
+  UPDATE_ENGINE,
+  SET_DEFAULT
+} from '../actions/search-engines'
 
 const initialState = {
-  currentEngine: getEngine()
+  engines: []
 }
 
 export default function (state = initialState, action) {
+
   switch (action.type) {
-    case SAVE_ENGINE:
+    case GET_ENGINES:
+    case ADD_ENGINE:
+    case DELETE_ENGINE:
+    case UPDATE_ENGINE:
+    case SET_DEFAULT:
       return {
-        currentEngine: action.engine
+        ...state,
+        engines: action.engines
       }
     default:
       return state
