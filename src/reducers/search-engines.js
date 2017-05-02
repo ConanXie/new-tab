@@ -7,17 +7,27 @@ import {
 } from '../actions/search-engines'
 
 const initialState = {
-  engines: []
+  engines: [],
+  defaultIndex: undefined
 }
 
 export default function (state = initialState, action) {
-
-  switch (action.type) {
+  const { type, engines, defaultIndex } = action
+  switch (type) {
     case GET_ENGINES:
+      return {
+        ...state,
+        engines,
+        defaultIndex
+      }
+    case SET_DEFAULT:
+      return {
+        ...state,
+        defaultIndex
+      }
     case ADD_ENGINE:
     case DELETE_ENGINE:
     case UPDATE_ENGINE:
-    case SET_DEFAULT:
       return {
         ...state,
         engines: action.engines

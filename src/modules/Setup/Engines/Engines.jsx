@@ -21,6 +21,7 @@ import Snackbar from 'material-ui/Snackbar'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import ViewList from 'material-ui/svg-icons/action/view-list'
 import ContentAdd from 'material-ui/svg-icons/content/add'
+import ActionInfo from 'material-ui/svg-icons/action/info-outline'
 
 const style = {
   tableDialog: {
@@ -96,9 +97,9 @@ class Engines extends Component {
     })
   }
   setAsDefault = index => {
-    const { engines, setDefault } = this.props
+    const { engines, setDefault, defaultIndex } = this.props
     // when the target engine is not default
-    if (!engines[index].isDefault) {
+    if (defaultIndex !== index) {
       setDefault(index)
     }
   }
@@ -135,13 +136,14 @@ class Engines extends Component {
     this.form.link = value
   }
   handleSubmit = () => {
+    const { intl } = this.context
     const { name, link, index } = this.form
     const { addEngine, updateEngine, engines } = this.props
     // check format of user inputing
     let passed = true
     if (!name.trim()) {
       this.setState({
-        nameError: '别忘了搜索引擎名字'
+        nameError: intl.formatMessage({ id: 'engines.custom.name.error' })
       })
       passed = false
     } else {
@@ -151,7 +153,7 @@ class Engines extends Component {
     }
     if (!/^http(s)?:\/\/\S+%s/.test(link)) {
       this.setState({
-        linkError: '网址格式不正确'
+        linkError: intl.formatMessage({ id: 'engines.custom.URL.error' })
       })
       passed = false
     } else {
@@ -173,7 +175,7 @@ class Engines extends Component {
   }
   render() {
     const { intl } = this.context
-    const { muiTheme, engines } = this.props
+    const { muiTheme, engines, defaultIndex } = this.props
     const { status, tableOpen, formOpen, nameError, linkError } = this.state
     const { name, link } = this.form
 
@@ -193,7 +195,7 @@ class Engines extends Component {
       <div>
         <ListItem
           leftIcon={<ViewList style={{ marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
-          primaryText="管理搜索引擎"
+          primaryText={intl.formatMessage({ id: 'engines.settings.management' })}
           innerDivStyle={{ paddingLeft: '58px' }}
           onTouchTap={this.openTableDialog}
         />
@@ -203,7 +205,7 @@ class Engines extends Component {
           onRequestClose={this.closeTableDialog}
         >
           <AppBar
-            title="管理搜索引擎"
+            title={intl.formatMessage({ id: 'engines.settings.management' })}
             iconElementRight={<IconButton onTouchTap={e => this.openFormDialog()}><ContentAdd /></IconButton>}
             showMenuIconButton={false}
             style={style.appbar}
@@ -222,8 +224,8 @@ class Engines extends Component {
               enableSelectAll={false}
             >
               <TableRow>
-                <TableHeaderColumn>搜索引擎</TableHeaderColumn>
-                <TableHeaderColumn>网址</TableHeaderColumn>
+                <TableHeaderColumn>{intl.formatMessage({ id: 'engines.text' })}</TableHeaderColumn>
+                <TableHeaderColumn>{intl.formatMessage({ id: 'engines.URL' })}</TableHeaderColumn>
                 <TableHeaderColumn style={style.menuRow}></TableHeaderColumn>
               </TableRow>
             </TableHeader>
@@ -231,10 +233,10 @@ class Engines extends Component {
               displayRowCheckbox={false}
             >
               {engines.map((row, index) => {
-                const { name, predict, link, isDefault } = row
+                const { name, predict, link } = row
                 return (
                   <TableRow key={index}>
-                    <TableRowColumn>{name} {isDefault ? '（默认）' : undefined}</TableRowColumn>
+                    <TableRowColumn>{name} {index === defaultIndex ? intl.formatMessage({ id: 'engines.table.default' }) : undefined}</TableRowColumn>
                     <TableRowColumn>{link}</TableRowColumn>
                     <TableRowColumn
                       style={style.menuRow}
@@ -244,12 +246,12 @@ class Engines extends Component {
                         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                         targetOrigin={{horizontal: 'right', vertical: 'top'}}
                       >
-                        <MenuItem onTouchTap={e => { this.setAsDefault(index) }} primaryText="设为默认搜索引擎" />
+                        <MenuItem onTouchTap={e => { this.setAsDefault(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.default' })} />
                         {!predict && (
-                          <MenuItem onTouchTap={e => { this.edit(index) }} primaryText="修改" />
+                          <MenuItem onTouchTap={e => { this.edit(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.edit' })} />
                         )}
                         {!predict && (
-                          <MenuItem onTouchTap={e => { this.remove(index) }} primaryText="从列表中移除" />
+                          <MenuItem onTouchTap={e => { this.remove(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.remove' })} />
                         )}
                       </IconMenu>
                     </TableRowColumn>
@@ -260,7 +262,7 @@ class Engines extends Component {
           </Table>
         </Dialog>
         <Dialog
-          title={(status === ADD ? '增加' : '修改') + '搜索引擎'}
+          title={status === ADD ? intl.formatMessage({ id: 'engines.add' }) : intl.formatMessage({ id: 'engines.edit' })}
           modal={false}
           actions={actions}
           open={formOpen}
@@ -269,19 +271,23 @@ class Engines extends Component {
           titleStyle={style.editDialogTitle}
         >
           <TextField
-            floatingLabelText="搜索引擎"
+            floatingLabelText={intl.formatMessage({ id: 'engines.custom.name.placeholder' })}
             defaultValue={name}
             style={style.textField}
             onChange={this.nameChange}
             errorText={nameError}
           /><br />
           <TextField
-            floatingLabelText="网址（用 %s 代替搜索字词）"
+            floatingLabelText={intl.formatMessage({ id: 'engines.custom.URL.placeholder' })}
             defaultValue={link}
             style={style.textField}
             onChange={this.linkChange}
             errorText={linkError}
           />
+          <p className="custom-engines-tip">
+            <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
+            <span>{intl.formatMessage({ id: 'engines.custom.tip' })}</span>
+          </p>
         </Dialog>
       </div>
     )
@@ -289,8 +295,8 @@ class Engines extends Component {
 }
 
 const mapStateToProps = state => {
-  const { engines } = state.searchEngines
-  return { engines }
+  const { engines, defaultIndex } = state.searchEngines
+  return { engines, defaultIndex }
 }
 
 const mapDispatchToProps = dispatch => {
