@@ -22,7 +22,6 @@ const zh_CN = {
   'nav.websites.max.tip': '网站数量上限是',
   /*settings*/
   'settings.toolbar.title': '设置',
-  'settings.engine.save.label': '自动保存当前搜索引擎',
   'settings.engine.search.label': '在新标签页中打开搜索',
   'settings.website.open.label': '在新标签页中打开网站',
   'settings.apps.display.label': '隐藏应用的标签',
@@ -84,6 +83,21 @@ const zh_CN = {
   'theme.input.placeholder': '颜色代码，例如 #009688',
   'theme.radio.dark': '暗色主题',
   'theme.radio.bright': '亮色主题',
+  /*search engines*/
+  'engines.settings.management': '管理搜索引擎',
+  'engines.text': '搜索引擎',
+  'engines.URL': '网址',
+  'engines.table.default': '（默认）',
+  'engines.menu.default': '设为默认搜索引擎',
+  'engines.menu.edit': '修改',
+  'engines.menu.remove': '从列表中移除',
+  'engines.add': '增加搜索引擎',
+  'engines.edit': '修改搜索引擎',
+  'engines.custom.URL.placeholder': '网址（用 %s 代替搜索字词）',
+  'engines.custom.tip': '自定义搜索引擎没有输入预测',
+  'engines.custom.name.error': '别忘了搜索引擎名字',
+  'engines.custom.URL.error': '网址格式不正确',
+
 }
 
 export default zh_CN

@@ -4,9 +4,9 @@ const en_US = {
   'button.confirm': 'OK',
   /*Nav*/
   'nav.title': 'Navigation',
-  'nav.edit.title.edit': 'Edit Website',
-  'nav.edit.title.add': 'Add Website',
-  'nav.edit.input.website': 'website name',
+  'nav.edit.title.edit': 'Edit website',
+  'nav.edit.title.add': 'Add website',
+  'nav.edit.input.website': 'Website name',
   'nav.edit.input.URL': 'URL',
   'nav.edit.input.forget.name': 'Don\'t forget website name 🙂',
   'nav.edit.input.forget.URL': 'Don\'t forget website URL 🙂',
@@ -22,7 +22,6 @@ const en_US = {
   'nav.websites.max.tip': 'The maximum number of websites is',
   /*settings*/
   'settings.toolbar.title': 'Settings',
-  'settings.engine.save.label': 'Automatically save the current search engine',
   'settings.engine.search.label': 'Open search result in new tab',
   'settings.website.open.label': 'Open website in new tab',
   'settings.apps.display.label': 'Hide applications tags',
@@ -33,8 +32,8 @@ const en_US = {
   'settings.theme.title': 'Theme',
   'settings.theme.switch.label': 'Switch theme colors',
   'settings.theme.select.title': 'Select',
-  'settings.theme.dark.label': 'Dark Mode',
-  'settings.br.title': 'Backup & reset',
+  'settings.theme.dark.label': 'Dark mode',
+  'settings.br.title': 'Backup & Reset',
   'settings.br.backup.label': 'Create backup file',
   'settings.br.restore.label': 'Restore from backup',
   'settings.br.restore.message': 'Success, please refresh window',
@@ -84,6 +83,21 @@ const en_US = {
   'theme.input.placeholder': 'Color code, e.g., #009688',
   'theme.radio.dark': 'Dark Theme',
   'theme.radio.bright': 'Bright Theme',
+  /*search engines*/
+  'engines.settings.management': 'Manage search engines',
+  'engines.text': 'Search Engine',
+  'engines.URL': 'Query URL',
+  'engines.table.default': '(Default)',
+  'engines.menu.default': 'Make default',
+  'engines.menu.edit': 'Edit',
+  'engines.menu.remove': 'Remove from list',
+  'engines.add': 'Add search engine',
+  'engines.edit': 'Edit search engine',
+  'engines.custom.name.placeholder': 'Search engine',
+  'engines.custom.URL.placeholder': 'URL with %s in place of query',
+  'engines.custom.tip': 'Custom search engines do not have input predictions',
+  'engines.custom.name.error': 'Do not forget the search engine name',
+  'engines.custom.URL.error': 'The URL format is incorrect',
 }
 
 export default en_US
