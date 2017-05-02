@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as searchEngineActions from '../../actions/search-engines'
+import * as searchEnginesActions from '../../actions/search-engines'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -16,12 +16,16 @@ import IconButton from 'material-ui/IconButton/IconButton'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import Paper from 'material-ui/Paper'
+import SvgIcon from 'material-ui/SvgIcon'
 
-import searchEngine from './search-engines'
+import defaultEngines from './search-engines'
 
-// 大陆以外地区去掉百度与搜狗
-if (navigator.language !== 'zh-CN') {
-  searchEngine.splice(1, 2)
+const WebIcon = props => {
+  return (
+    <SvgIcon {...props}>
+      <path d="M14.36,12a16.52,16.52,0,0,0,.14-2,16.52,16.52,0,0,0-.14-2h3.38A8.24,8.24,0,0,1,18,10a8.24,8.24,0,0,1-.26,2m-5.15,5.56A15.65,15.65,0,0,0,14,14h2.95a8,8,0,0,1-4.33,3.56M12.34,12H7.66a13.27,13.27,0,0,1-.16-2,13.16,13.16,0,0,1,.16-2h4.68a14.58,14.58,0,0,1,.16,2,14.71,14.71,0,0,1-.16,2M10,18a13.56,13.56,0,0,1-1.91-4h3.82A13.56,13.56,0,0,1,10,18M6,6H3.08A7.92,7.92,0,0,1,7.4,2.44,17.23,17.23,0,0,0,6,6M3.08,14H6a17.23,17.23,0,0,0,1.4,3.56A8,8,0,0,1,3.08,14m-.82-2A8.24,8.24,0,0,1,2,10a8.24,8.24,0,0,1,.26-2H5.64a16.52,16.52,0,0,0-.14,2,16.52,16.52,0,0,0,.14,2M10,2a13.62,13.62,0,0,1,1.91,4H8.09A13.62,13.62,0,0,1,10,2m6.92,4H14a15.65,15.65,0,0,0-1.38-3.56A8,8,0,0,1,16.92,6M10,0A10,10,0,1,0,20,10,10,10,0,0,0,10,0Z"/>
+    </SvgIcon>
+  )
 }
 
 const style = {
@@ -37,36 +41,31 @@ const style = {
 
 class Search extends Component {
   static propsType = {
-    currentEngine: PropTypes.object.isRequired,
-    settings: PropTypes.object.isRequired,
-    saveEngine: PropTypes.func.isRequired,
-    saveToLocalStorage: PropTypes.func.isRequired
+    settings: PropTypes.object.isRequired
   }
   constructor(props) {
     super(props)
-    const { currentEngine, saveEngine, saveToLocalStorage, settings } = this.props
-
-    let origin
-    // currentEngine not exist, or autoSaveEngine is false
-    if (!currentEngine.predict || !settings.autoSaveEngine) {
-      origin = searchEngine[0]
-      saveEngine(origin)
-      saveToLocalStorage(origin)
-    } else {
-      origin = currentEngine
-    }
-    const { link, predict, name, className } = origin
-    this.state = {
-      searchLink: link,
-      searchPredict: predict,
-      searchName: name,
-      searchClass: className
-    }
+    this.state = {}
+    // the default engine has rendered
+    this.isDone = false
     // record the index of predictions, default value is -1
     this.predictionsIndex = -1
+    // record current engine index
+    this.engineIndex = 0
   }
-  componentDidMount() {
-    // this.refs.text.focus()
+  componentWillReceiveProps(props) {
+    if (!this.isDone) {
+      const { engines, defaultIndex } = props
+      const { link, predict, name, className } = engines[defaultIndex]
+      this.setState({
+        searchLink: link,
+        searchPredict: predict,
+        searchName: name,
+        searchClass: className
+      })
+      this.isDone = true
+      this.engineIndex = defaultIndex
+    }
   }
   shouldComponentUpdate(nextProps, nextState) {
     // if input is empty then prevent render of predictions change caused by network delay
@@ -99,18 +98,28 @@ class Search extends Component {
       searchName: name,
       searchClass: className
     })
-    const { settings, saveEngine, saveToLocalStorage } = this.props
+    /*const { settings, saveEngine, saveToLocalStorage } = this.props
     saveEngine(engine)
     if (settings.autoSaveEngine) {
       saveToLocalStorage(engine)
+    }*/
+  }
+  toTheNext = event => {
+    const { engines } = this.props
+    if (this.engineIndex < engines.length - 1) {
+      this.engineIndex += 1
+    } else {
+      this.engineIndex = 0
     }
+    this.changeEngine(engines[this.engineIndex])
   }
   watchInput = event => {
     const _this = this
     // if input then set predictionsIndex to default
     this.predictionsIndex = -1
+    const { searchName, searchPredict } = this.state
     // if user turn on search predict
-    if (this.props.searchPredict) {
+    if (this.props.searchPredict && searchPredict) {
       // clearTimeout(this.delay)
 
       const text = event.target.value
@@ -124,7 +133,7 @@ class Search extends Component {
       }
 
       // set a interval
-      const now = Date.now()
+      /*const now = Date.now()
       
       if (!this.interval) {
         this.interval = now
@@ -133,10 +142,10 @@ class Search extends Component {
           this.interval = now
           return
         }
-      }
+      }*/
 
         
-      fetch(this.state.searchPredict.replace('%l', navigator.language).replace('%s', text) + `&r=${Date.now()}`).then(res => {
+      fetch(searchPredict.replace('%l', navigator.language).replace('%s', text) + `&r=${Date.now()}`).then(res => {
         if (res.ok) {
           // extract the encoding of response headers, e.g. UTF-8
           const encoding = /[\w\-]+$/.exec(res.headers.get('Content-Type'))[0]
@@ -146,7 +155,7 @@ class Search extends Component {
 
             reader.onload = e => {
               const text = reader.result
-              const results = this.analysisData(this.state.searchName, text)
+              const results = this.analysisData(searchName, text)
               // remove predictions 'active' class
               _this.clearPredictionsClassName()
               this.setState({
@@ -168,22 +177,22 @@ class Search extends Component {
     let formatted
     switch (engine) {
       // Google and Bing
-      case searchEngine[0].name:
-      case searchEngine[3].name:
+      case defaultEngines[0].name:
+      case defaultEngines[3].name:
         formatted = JSON.parse(data)
         formatted[1].forEach((v, i) => {
           results.push(v[0])
         })
         break
       // Baidu
-      case searchEngine[1].name:
+      case defaultEngines[1].name:
         formatted = JSON.parse(data.replace(/^window\.baidu\.sug\(/, '').replace(/\);$/, ''))
         formatted.s.forEach((v, i) => {
           results.push(v)
         })
         break
       // Sogou
-      case searchEngine[2].name:
+      case defaultEngines[2].name:
         formatted = JSON.parse(data.replace(/^window\.sogou\.sug\(/, '').replace(/\,\-1\);$/, ''))
         formatted[1].forEach((v, i) => {
           results.push(v)
@@ -231,7 +240,7 @@ class Search extends Component {
     document.removeEventListener('keydown', this.documentKeyDown, false)
   }
   // select prediction via up or down arrow key
-  selectForcast = (event) => {
+  selectPredictions = (event) => {
     const predictions = this.refs.predictions.querySelectorAll('li')
     const total = predictions.length
     const lastIndex = this.predictionsIndex
@@ -296,10 +305,19 @@ class Search extends Component {
   }
   render() {
     const { searchName, searchClass, showPredictions, predictions } = this.state
-    const { muiTheme } = this.props
+    const { muiTheme, engines } = this.props
     return (
       <div className="search-wrapper">
-        <div className={`search-logo ${searchClass}`}>
+        <div className="logo-area">
+          {!!searchClass && searchName && (
+            <div className={`logo ${searchClass}`} onTouchTap={this.toTheNext}></div>
+          )}
+          {!searchClass && searchName && (
+            <div className="default-logo" onTouchTap={this.toTheNext}>
+              <WebIcon viewBox="0 0 20 20" style={{ width: 92, height: 92 }} color={muiTheme.palette.primary1Color} />
+              <span>{searchName}</span>
+            </div>
+          )}
           <IconMenu
             className="more-engine"
             iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
@@ -307,7 +325,7 @@ class Search extends Component {
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             iconStyle={{ color: muiTheme.palette.textColor }}
           >
-            {searchEngine.map(value => {
+            {engines.map(value => {
               return (
                 <MenuItem
                   key={value.name}
@@ -331,15 +349,13 @@ class Search extends Component {
                 onMouseLeave={this.mouseLeave}
                 onFocus={this.focus}
                 onBlur={this.blur}
-                onKeyUp={this.selectForcast}
+                onKeyUp={this.selectPredictions}
                 style={{ color: muiTheme.palette.textColor }}
               />
               <IconButton
                 type="submit"
                 style={style.searchBtn}
-                iconStyle={{
-                  color: '#666'
-                }}
+                iconStyle={{ color: '#666' }}
               >
                 <SearchIcon />
               </IconButton>
@@ -348,7 +364,7 @@ class Search extends Component {
                   {predictions && predictions.map((v, i) => {
                     return (
                       <li
-                        key={Math.random()}
+                        key={v}
                         data-name="prediction"
                         data-index={i}
                         onMouseEnter={this.predictionMouseEnter}
@@ -369,12 +385,16 @@ class Search extends Component {
 }
 
 const mapStateToProps = state => {
-  const { currentEngine } = state.searchEngine
+  const { engines, defaultIndex } = state.searchEngines
   const { data } = state.settings
-  return { currentEngine, settings: data }
+  return {
+    engines,
+    defaultIndex,
+    settings: data
+  }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators(searchEngineActions, dispatch)
+  return bindActionCreators(searchEnginesActions, dispatch)
 }
 export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Search))
