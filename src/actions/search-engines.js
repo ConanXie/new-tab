@@ -1,5 +1,10 @@
 import defaultEngines from '../modules/Search/search-engines'
 
+// 简体中文以外去掉百度与搜狗
+if (navigator.language !== 'zh-CN') {
+  defaultEngines.splice(1, 2)
+}
+
 export const GET_ENGINES = 'GET_ENGINES'
 export const ADD_ENGINE = 'ADD_ENGINE'
 export const DELETE_ENGINE = 'DELETE_ENGINE'
@@ -24,11 +29,30 @@ function getEngines() {
   })
 }
 
+/**
+ * Get default engine index
+ */
+function getDefaultIndex() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get('defaultEngineIndex', result => {
+      const { defaultEngineIndex } = result
+      if (typeof defaultEngineIndex === 'number') {
+        resolve(defaultEngineIndex)
+      } else {
+        resolve(0)
+        chrome.storage.sync.set({ defaultEngineIndex: 0 })
+      }
+    })
+  })
+}
+
 export function initialData() {
   return async dispatch => {
     const engines = await getEngines()
+    const defaultIndex = await getDefaultIndex()
     dispatch({
       type: GET_ENGINES,
+      defaultIndex,
       engines
     })
   }
@@ -38,11 +62,7 @@ export function addEngine(name, link) {
   return (dispatch, getState) => {
     const current = getState().searchEngines.engines
 
-    const newEngine = {
-      name,
-      link,
-      isDefault: false
-    }
+    const newEngine = { name, link }
 
     const added = [...current, newEngine]
     chrome.storage.sync.set({ engines: added })
@@ -86,20 +106,9 @@ export function updateEngine(index, name, link) {
 }
 
 export function setDefault(index) {
-  return (dispatch, getState) => {
-    const current = getState().searchEngines.engines
-
-    const update = [...current]
-    update.map(item => {
-      item.isDefault = false
-      return item
-    })
-    update[index].isDefault = true
-    chrome.storage.sync.set({ engines: update })
-
-    dispatch({
-      type: SET_DEFAULT,
-      engines: update
-    })
+  chrome.storage.sync.set({ defaultEngineIndex: index })
+  return {
+    type: SET_DEFAULT,
+    defaultIndex: index
   }
 }
