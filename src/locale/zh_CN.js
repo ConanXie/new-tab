@@ -93,11 +93,11 @@ const zh_CN = {
   'engines.menu.remove': '从列表中移除',
   'engines.add': '增加搜索引擎',
   'engines.edit': '修改搜索引擎',
+  'engines.custom.name.placeholder': '搜索引擎',
   'engines.custom.URL.placeholder': '网址（用 %s 代替搜索字词）',
   'engines.custom.tip': '自定义搜索引擎没有输入预测',
   'engines.custom.name.error': '别忘了搜索引擎名字',
   'engines.custom.URL.error': '网址格式不正确',
-
 }
 
 export default zh_CN

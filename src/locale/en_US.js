@@ -45,7 +45,7 @@ const en_US = {
   'settings.about.title': 'About',
   'settings.about.weather.sources': 'Weather data sources',
   /*bookmarks*/
-  'bookmarks.search.placeholder': 'search your bookmarks',
+  'bookmarks.search.placeholder': 'Search your bookmarks',
   'bookmarks.bookmarks.manager': 'Bookmarks manager',
   'bookmarks.tabs.all': 'All',
   'bookmarks.tabs.recent': 'Recently added',
