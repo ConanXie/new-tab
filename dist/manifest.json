@@ -15,10 +15,7 @@
     "management",
     "bookmarks",
     "geolocation",
-    "chrome://favicon/*",
-    "https://www.google.com/",
-    "https://sp0.baidu.com/",
-    "https://www.sogou.com/"
+    "<all_urls>"
   ],
   "content_security_policy": "script-src 'self' https://localhost:5001; object-src 'self'"
 }
