@@ -45,6 +45,7 @@ class Weather extends Component {
     this.state = {
       times: 1,
       base: 0,
+      data: {},
       loading: true,
       empty: false,
       emptyText: ''
@@ -81,7 +82,7 @@ class Weather extends Component {
       const now = Date.now()
       const diff = now - lastUpdate
       if (diff < 3600000) {
-        if (local.basic) {
+        if (local.forecast) {
           this.setState({
             loading: false,
             data: local
@@ -241,7 +242,7 @@ class Weather extends Component {
           <p className="empty-text">{emptyText}</p>
         )}
         {/*Weather data exist*/}
-        {data && (
+        {data.forecast && (
           <div className="weather-interface" style={{ backgroundColor: primary1Color, color: alternateTextColor }}>
             <header>
               <div className="now-info">
