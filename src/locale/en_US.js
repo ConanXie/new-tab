@@ -22,7 +22,7 @@ const en_US = {
   'nav.websites.max.tip': 'The maximum number of websites is',
   /*settings*/
   'settings.toolbar.title': 'Settings',
-  'settings.engine.search.label': 'Open search result in new tab',
+  'settings.engine.search.label': 'Open search results in new tab',
   'settings.website.open.label': 'Open website in new tab',
   'settings.apps.display.label': 'Hide applications tags',
   'settings.bookmarks.position.label': 'Remember bookmarks previous state',
@@ -55,7 +55,7 @@ const en_US = {
   'empty.text.bookmarks.search': 'No bookmarks found',
   'empty.text.bookmarks.recent': 'No new bookmarks',
   'empty.text.navigation': 'There are no websites',
-  'empty.text.navigation.add': 'Add it now',
+  'empty.text.navigation.add': 'Add now',
   /*hot key*/
   'hotkey.title': 'Hotkey',
   'hotkey.apps': 'Apps',
