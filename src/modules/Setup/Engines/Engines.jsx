@@ -23,6 +23,8 @@ import ViewList from 'material-ui/svg-icons/action/view-list'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import ActionInfo from 'material-ui/svg-icons/action/info-outline'
 
+import { searchEnginesMax } from '../../../config'
+
 const style = {
   tableDialog: {
     padding: 0
@@ -77,7 +79,8 @@ class Engines extends Component {
     }
     this.form = {
       name: '',
-      link: ''
+      link: '',
+      predict: ''
     }
   }
   componentDidMount() {
@@ -96,17 +99,11 @@ class Engines extends Component {
       tableOpen: false
     })
   }
-  setAsDefault = index => {
-    const { engines, setDefault, defaultIndex } = this.props
-    // when the target engine is not default
-    if (defaultIndex !== index) {
-      setDefault(index)
-    }
-  }
   edit = index => {
-    const { name, link } = this.props.engines[index]
+    const { name, link, predict } = this.props.engines[index]
     this.form.name = name
     this.form.link = link
+    this.form.predict = predict
     this.form.index = index
     this.openFormDialog(EDIT)
   }
@@ -123,11 +120,12 @@ class Engines extends Component {
     this.setState({
       formOpen: false,
       nameError: '',
-      linkError: ''
+      linkError: '',
     })
     // restore edit form
     this.form.name = ''
     this.form.link = ''
+    this.form.predict = ''
   }
   nameChange = (event, value) => {
     this.form.name = value
@@ -175,9 +173,9 @@ class Engines extends Component {
   }
   render() {
     const { intl } = this.context
-    const { muiTheme, engines, defaultIndex } = this.props
+    const { muiTheme, engines, makeDefault } = this.props
     const { status, tableOpen, formOpen, nameError, linkError } = this.state
-    const { name, link } = this.form
+    const { name, link, predict } = this.form
 
     const actions = [
       <FlatButton
@@ -190,6 +188,8 @@ class Engines extends Component {
         onTouchTap={this.handleSubmit}
       />
     ]
+    // amount limit
+    const AddBtn = engines.length < searchEnginesMax ? <IconButton onTouchTap={e => this.openFormDialog()}><ContentAdd /></IconButton> : null
     
     return (
       <div>
@@ -206,7 +206,7 @@ class Engines extends Component {
         >
           <AppBar
             title={intl.formatMessage({ id: 'engines.settings.management' })}
-            iconElementRight={<IconButton onTouchTap={e => this.openFormDialog()}><ContentAdd /></IconButton>}
+            iconElementRight={AddBtn}
             showMenuIconButton={false}
             style={style.appbar}
             titleStyle={style.appbarTitle}
@@ -233,10 +233,10 @@ class Engines extends Component {
               displayRowCheckbox={false}
             >
               {engines.map((row, index) => {
-                const { name, predict, link } = row
+                const { id, name, predict, link, isDefault } = row
                 return (
-                  <TableRow key={index}>
-                    <TableRowColumn>{name} {index === defaultIndex ? intl.formatMessage({ id: 'engines.table.default' }) : undefined}</TableRowColumn>
+                  <TableRow key={id}>
+                    <TableRowColumn>{name} {isDefault ? intl.formatMessage({ id: 'engines.table.default' }) : ''}</TableRowColumn>
                     <TableRowColumn>{link}</TableRowColumn>
                     <TableRowColumn
                       style={style.menuRow}
@@ -246,11 +246,11 @@ class Engines extends Component {
                         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                         targetOrigin={{horizontal: 'right', vertical: 'top'}}
                       >
-                        <MenuItem onTouchTap={e => { this.setAsDefault(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.default' })} />
-                        {!predict && (
-                          <MenuItem onTouchTap={e => { this.edit(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.edit' })} />
+                        {!isDefault && (
+                          <MenuItem onTouchTap={e => { makeDefault(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.default' })} />
                         )}
-                        {!predict && (
+                        <MenuItem onTouchTap={e => { this.edit(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.edit' })} />
+                        {!predict && !isDefault && (
                           <MenuItem onTouchTap={e => { this.remove(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.remove' })} />
                         )}
                       </IconMenu>
@@ -278,16 +278,19 @@ class Engines extends Component {
             errorText={nameError}
           /><br />
           <TextField
+            disabled={!!predict}
             floatingLabelText={intl.formatMessage({ id: 'engines.custom.URL.placeholder' })}
             defaultValue={link}
             style={style.textField}
             onChange={this.linkChange}
             errorText={linkError}
           />
-          <p className="custom-engines-tip">
-            <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
-            <span>{intl.formatMessage({ id: 'engines.custom.tip' })}</span>
-          </p>
+          {!predict && (
+            <p className="custom-engines-tip">
+              <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
+              <span>{intl.formatMessage({ id: 'engines.custom.tip' })}</span>
+            </p>
+          )}
         </Dialog>
       </div>
     )
@@ -295,8 +298,8 @@ class Engines extends Component {
 }
 
 const mapStateToProps = state => {
-  const { engines, defaultIndex } = state.searchEngines
-  return { engines, defaultIndex }
+  const { engines } = state.searchEngines
+  return { engines }
 }
 
 const mapDispatchToProps = dispatch => {

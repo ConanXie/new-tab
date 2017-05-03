@@ -1,15 +1,12 @@
-import defaultEngines from '../modules/Search/search-engines'
+import shortid from 'shortid'
 
-// 简体中文以外去掉百度与搜狗
-if (navigator.language !== 'zh-CN') {
-  defaultEngines.splice(1, 2)
-}
+import defaultEngines from '../modules/Search/search-engines'
 
 export const GET_ENGINES = 'GET_ENGINES'
 export const ADD_ENGINE = 'ADD_ENGINE'
 export const DELETE_ENGINE = 'DELETE_ENGINE'
 export const UPDATE_ENGINE = 'UPDATE_ENGINE'
-export const SET_DEFAULT = 'SET_DEFAULT'
+export const MAKE_DEFAULT = 'MAKE_DEFAULT'
 
 /**
  * get data from chrome storage sync
@@ -21,26 +18,18 @@ function getEngines() {
       if (Array.isArray(engines)) {
         resolve(engines)
       } else {
-        resolve(defaultEngines)
+        const temp = [...defaultEngines]
+        // 简体中文以外去掉百度与搜狗
+        if (navigator.language !== 'zh-CN') {
+          temp.splice(1, 2)
+        }
+        temp.map(engine => {
+          engine.id = shortid.generate()
+          return engine
+        })
+        resolve(temp)
         // save the default engines to chrome storage sync
-        chrome.storage.sync.set({ engines: defaultEngines })
-      }
-    })
-  })
-}
-
-/**
- * Get default engine index
- */
-function getDefaultIndex() {
-  return new Promise((resolve, reject) => {
-    chrome.storage.sync.get('defaultEngineIndex', result => {
-      const { defaultEngineIndex } = result
-      if (typeof defaultEngineIndex === 'number') {
-        resolve(defaultEngineIndex)
-      } else {
-        resolve(0)
-        chrome.storage.sync.set({ defaultEngineIndex: 0 })
+        chrome.storage.sync.set({ engines: temp })
       }
     })
   })
@@ -49,10 +38,8 @@ function getDefaultIndex() {
 export function initialData() {
   return async dispatch => {
     const engines = await getEngines()
-    const defaultIndex = await getDefaultIndex()
     dispatch({
       type: GET_ENGINES,
-      defaultIndex,
       engines
     })
   }
@@ -62,7 +49,12 @@ export function addEngine(name, link) {
   return (dispatch, getState) => {
     const current = getState().searchEngines.engines
 
-    const newEngine = { name, link }
+    const newEngine = { 
+      id: shortid.generate(),
+      name,
+      link,
+      isDefault: false
+    }
 
     const added = [...current, newEngine]
     chrome.storage.sync.set({ engines: added })
@@ -105,10 +97,23 @@ export function updateEngine(index, name, link) {
   }
 }
 
-export function setDefault(index) {
-  chrome.storage.sync.set({ defaultEngineIndex: index })
-  return {
-    type: SET_DEFAULT,
-    defaultIndex: index
+export function makeDefault(index) {
+  return (dispatch, getState) => {
+    const { engines } = getState().searchEngines
+
+    const update = [...engines]
+    for (let i = 0; i < update.length; i++) {
+      if (update[i].isDefault) {
+        update[i].isDefault = false
+        break
+      }
+    }
+    update[index].isDefault = true
+    chrome.storage.sync.set({ engines: update })
+
+    dispatch({
+      type: MAKE_DEFAULT,
+      engines: update
+    })
   }
 }
