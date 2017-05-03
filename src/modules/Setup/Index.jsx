@@ -168,29 +168,27 @@ class Setup extends Component {
   }
   createBackups = async () => {
     const sync = await new Promise((resolve, reject) => {
-      chrome.storage.sync.get(['websites', 'classified'], result => {
+      chrome.storage.sync.get(['websites', 'classified', 'engines'], result => {
         const arr = []
-        const { websites, classified } = result
+        const { websites, classified, engines } = result
         if (!Array.isArray(websites)) {
-          resolve([[], [{ name: 'unclassified', set: [] }]])
+          resolve([[], [{ name: 'unclassified', set: [] }], engines])
         } else {
-          resolve([websites, classified])
+          resolve([websites, classified, engines])
         }
       })
     })
     try {
-      const currentEngine = JSON.parse(window.localStorage.currentEngine)
       let settings
       if (window.localStorage.settings) {
         settings = JSON.parse(window.localStorage.settings)
       }
-      // const websites = JSON.parse(window.localStorage.websites)
-      // const classified = JSON.parse(window.localStorage.classified)
+
       const data = JSON.stringify({
-        currentEngine,
         settings: settings ? settings : {},
         websites: sync[0],
-        classified: sync[1]
+        classified: sync[1],
+        engines: sync[2]
       })
       const backups = new Blob([data], { type: 'application/json' })
       const a = document.createElement('a')
@@ -206,7 +204,7 @@ class Setup extends Component {
     const fr = new FileReader()
     const { intl } = this.context
     fr.onloadend = e => {
-      const { currentEngine, settings, websites, classified } = JSON.parse(e.target.result)
+      const { settings, websites, classified, engines } = JSON.parse(e.target.result)
       if (!classified) {
         this.setState({
           snackbarOpen: true,
@@ -214,15 +212,10 @@ class Setup extends Component {
         })
         return
       }
-      window.localStorage.setItem('currentEngine', JSON.stringify(currentEngine))
+
       window.localStorage.setItem('settings', JSON.stringify(settings))
-      chrome.storage.sync.set({ websites, classified })
-      /*for (let i in backups) {
-        window.localStorage.setItem(i, JSON.stringify(backups[i]))
-      }
-      if (!backups.classified) {
-        window.localStorage.removeItem('classified')
-      }*/
+      chrome.storage.sync.set({ websites, classified, engines })
+
       this.setState({
         snackbarOpen: true,
         snackbarMessage: intl.formatMessage({ id: 'settings.br.restore.message' })
@@ -241,7 +234,6 @@ class Setup extends Component {
     })
   }
   resetSettings = () => {
-    window.localStorage.removeItem('currentEngine')
     window.localStorage.removeItem('settings')
     const { intl } = this.context
     this.setState({
