@@ -10,6 +10,8 @@ const classificationMax = 20
 
 const websiteMax = 100
 
+const searchEnginesMax = 30
+
 /**
  * i18n
  */
@@ -35,5 +37,6 @@ export {
   code,
   classificationMax,
   websiteMax,
+  searchEnginesMax,
   messages
 }
