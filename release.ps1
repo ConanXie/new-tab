@@ -10,7 +10,7 @@ npm run build
 # CHANGELOG.md
 $changelog = Get-Content CHANGELOG.md
 [System.Collections.ArrayList]$changelog = $changelog
-$timestamp = Get-Date -Format "MM d, yyyy"
+$timestamp = Get-Date -Format "MM dd, yyyy"
 $changelog.Insert(2, "## $args`n###### _$timestamp`_`n- `n")
 Set-Content CHANGELOG.md -Value $changelog
 
