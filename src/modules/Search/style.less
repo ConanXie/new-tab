@@ -31,12 +31,18 @@
   }
   .default-logo {
     text-align: center;
+    height: 100%;
     span {
       position: absolute;
       bottom: 0;
+      max-width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-size: 14px;
       color: #bbb;
       line-height: 1;
+      user-select: none;
     }
   }
   .more-engine {

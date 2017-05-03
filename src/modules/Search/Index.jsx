@@ -55,8 +55,14 @@ class Search extends Component {
   }
   componentWillReceiveProps(props) {
     if (!this.isDone) {
-      const { engines, defaultIndex } = props
-      const { link, predict, name, className } = engines[defaultIndex]
+      const { engines } = props
+      const theDefault = props.engines.filter((engine, index) => {
+        if (engine.isDefault) {
+          this.engineIndex = index
+        }
+        return engine.isDefault
+      })
+      const { link, predict, name, className } = theDefault[0]
       this.setState({
         searchLink: link,
         searchPredict: predict,
@@ -64,7 +70,6 @@ class Search extends Component {
         searchClass: className
       })
       this.isDone = true
-      this.engineIndex = defaultIndex
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -90,28 +95,24 @@ class Search extends Component {
       window.open(searchLink.replace('%s', text), this.props.target)
     }
   }
-  changeEngine = (engine) => {
-    const { name, link, predict, className } = engine
+  changeEngine = (index) => {
+    const { name, link, predict, className } = this.props.engines[index]
     this.setState({
       searchLink: link,
       searchPredict: predict,
       searchName: name,
       searchClass: className
     })
-    /*const { settings, saveEngine, saveToLocalStorage } = this.props
-    saveEngine(engine)
-    if (settings.autoSaveEngine) {
-      saveToLocalStorage(engine)
-    }*/
+    this.engineIndex = index
   }
   toTheNext = event => {
-    const { engines } = this.props
-    if (this.engineIndex < engines.length - 1) {
-      this.engineIndex += 1
+    let index = this.engineIndex
+    if (index < this.props.engines.length - 1) {
+      index +=  1
     } else {
-      this.engineIndex = 0
+      index = 0
     }
-    this.changeEngine(engines[this.engineIndex])
+    this.changeEngine(index)
   }
   watchInput = event => {
     const _this = this
@@ -131,19 +132,6 @@ class Search extends Component {
         })
         return
       }
-
-      // set a interval
-      /*const now = Date.now()
-      
-      if (!this.interval) {
-        this.interval = now
-      } else {
-        if (now - this.interval < 200) {
-          this.interval = now
-          return
-        }
-      }*/
-
         
       fetch(searchPredict.replace('%l', navigator.language).replace('%s', text) + `&r=${Date.now()}`).then(res => {
         if (res.ok) {
@@ -271,7 +259,7 @@ class Search extends Component {
       
       if (this.predictionsIndex !== -1) {
         // change input value and add element class
-        this.refs.text.value = predictions[this.predictionsIndex].innerHTML
+        this.refs.text.value = predictions[this.predictionsIndex].innerHTML.replace(/(<b>|<\/b>)/gi, '')
         predictions[this.predictionsIndex].classList.add('active')
       } else {
         this.refs.text.value = this.inputText
@@ -324,13 +312,15 @@ class Search extends Component {
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             iconStyle={{ color: muiTheme.palette.textColor }}
+            maxHeight={280}
           >
-            {engines.map(value => {
+            {engines.map((engine, index) => {
+              const { id, name } = engine
               return (
                 <MenuItem
-                  key={value.name}
-                  primaryText={value.name}
-                  onTouchTap={e => this.changeEngine(value)}
+                  key={id}
+                  primaryText={name}
+                  onTouchTap={e => this.changeEngine(index)}
                   innerDivStyle={{minWidth: '100px'}}
                 />
               )
@@ -364,14 +354,15 @@ class Search extends Component {
                   {predictions && predictions.map((v, i) => {
                     return (
                       <li
-                        key={v}
+                        key={Math.random()}
                         data-name="prediction"
                         data-index={i}
                         onMouseEnter={this.predictionMouseEnter}
                         onMouseLeave={this.predictionMouseLeave}
                         onMouseDown={this.predictionMouseDown}
                         onClick={this.searchPrediction}
-                      >{v}</li>
+                        dangerouslySetInnerHTML={{ __html: v }}
+                      ></li>
                     )
                   })}
                 </ul>
@@ -385,11 +376,10 @@ class Search extends Component {
 }
 
 const mapStateToProps = state => {
-  const { engines, defaultIndex } = state.searchEngines
+  const { engines } = state.searchEngines
   const { data } = state.settings
   return {
     engines,
-    defaultIndex,
     settings: data
   }
 }
