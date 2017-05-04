@@ -31,6 +31,7 @@ import SettingsRestore from 'material-ui/svg-icons/action/settings-backup-restor
 import ActionInfo from 'material-ui/svg-icons/action/info-outline'
 import HardwareKeyboard from 'material-ui/svg-icons/hardware/keyboard'
 import FileCloud from 'material-ui/svg-icons/file/cloud'
+import SocialMood from 'material-ui/svg-icons/social/mood'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { List, ListItem } from 'material-ui/List'
@@ -469,8 +470,14 @@ class Setup extends Component {
               </div>
               <div className="tip">
                 <FileCloud style={{ width: 18, height: 18 }} color="#999" />
-                <span>{intl.formatMessage({ id: 'settings.about.weather.sources' })}: YAHOO! HeWeather</span>
+                <span>{intl.formatMessage({ id: 'settings.about.weather.sources' })}: YAHOO! & HeWeather</span>
               </div>
+              {navigator.language !== 'zh-CN' && (
+                <div className="tip">
+                  <SocialMood style={{ width: 18, height: 18 }} color="#999" />
+                  <span>Forgive me for my poor English. You can also give me some advice on translation to add or improve the language you are using. Thank you.</span>
+                </div>
+              )}
               {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
             </Paper>
           </div>
