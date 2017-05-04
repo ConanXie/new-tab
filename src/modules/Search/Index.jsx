@@ -86,10 +86,10 @@ class Search extends Component {
   search = (e) => {
     e.preventDefault()
     const text = this.refs.text.value
-    const { searchLink } = this.state
-    const { currentEngine, useHK } = this.props
+    const { searchLink, searchClass } = this.state
+    const { useHK } = this.props
     // 判断是否使用.hk
-    if (useHK && currentEngine.name === 'Google') {
+    if (useHK && searchClass === 'google') {
       window.open(searchLink.replace(/\.com/, '.com.hk').replace('%s', text), this.props.target)
     } else {
       window.open(searchLink.replace('%s', text), this.props.target)
