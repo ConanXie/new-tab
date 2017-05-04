@@ -259,7 +259,7 @@ class Search extends Component {
       
       if (this.predictionsIndex !== -1) {
         // change input value and add element class
-        this.refs.text.value = predictions[this.predictionsIndex].innerHTML.replace(/(<b>|<\/b>)/gi, '')
+        this.refs.text.value = predictions[this.predictionsIndex].innerText
         predictions[this.predictionsIndex].classList.add('active')
       } else {
         this.refs.text.value = this.inputText
