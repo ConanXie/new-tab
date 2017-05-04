@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.4.1
+###### _May 04, 2017_
+- Fixed search cannot be used when user chooses Google .hk
+
 ## 1.4.0
 ###### _May 03, 2017_
 - Customize search engines
