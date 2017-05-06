@@ -20,33 +20,23 @@ import App from './modules/App'
 
 import { messages } from './config'
 
-render((
-  <IntlProvider
-    locale={'en-US'}
-    messages={messages}
-  >
-    <Provider store={store}>
-        <AppContainer>
-          <App />
-        </AppContainer>
-    </Provider>
-  </IntlProvider>
-), document.querySelector('#app'))
+const renderApp = (Component = App) => {
+  render((
+    <IntlProvider
+      locale={'en-US'}
+      messages={messages}
+    >
+      <Provider store={store}>
+          <AppContainer>
+            <Component />
+          </AppContainer>
+      </Provider>
+    </IntlProvider>
+  ), document.querySelector('#app'))
+}
+
+renderApp()
 
 if (module.hot) {
-  module.hot.accept('./modules/App', () => {
-    const NextApp = require('./modules/App').default
-    render((
-      <IntlProvider
-        locale={'en-US'}
-        messages={messages}
-      >
-        <Provider store={store}>
-          <AppContainer>
-            <NextApp />
-          </AppContainer>
-        </Provider>
-      </IntlProvider>
-    ), document.querySelector('#app'))
-  })
+  module.hot.accept('./modules/App', () => { renderApp() })
 }
