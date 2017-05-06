@@ -135,8 +135,10 @@ class App extends Component {
     let theme
     if (typeof data === 'number') {
       theme = this.createTheme(themes[data].color)
-    } else {
+    } else if (typeof data === 'object') {
       theme = this.createTheme(data.color, data.hue)
+    } else {
+      theme = this.createTheme(themes[0].color)
     }
     // console.log(theme)
     this.setState({
