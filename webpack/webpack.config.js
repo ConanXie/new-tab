@@ -7,8 +7,8 @@ const webpack = require('webpack')
 module.exports = {
   context: path.resolve(__dirname, '../src'),
   entry: [
-    'react-hot-loader/patch',
     'babel-polyfill',
+    'react-hot-loader/patch',
     'webpack/hot/only-dev-server',
     'webpack-hot-middleware/client?path=https://localhost:5001/__webpack_hmr',
     './Main.jsx'
@@ -56,5 +56,5 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],
-  devtool: 'source-map'
+  devtool: 'eval'
 }
