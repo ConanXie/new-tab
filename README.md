@@ -4,7 +4,7 @@
 
 # [Material Design New Tab](https://tab.xiejie.co)
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.4.1-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.4.2-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 [![Powered by](https://img.shields.io/badge/Powered%20by-material--ui-green.svg)](http://www.material-ui.com)
 
 A new tab page extension for Chrome which uses Material Design.
@@ -27,7 +27,7 @@ A new tab page extension for Chrome which uses Material Design.
 Please create an issue if you have any questions or suggestions about it.
 
 ## Donation
-If you find the extension useful, you can buy me a cup of ☕.  
+If you find the extension useful, you can buy me a cup of ☕. 
 The Wechat QR code at settings page.💖
 
 ## License

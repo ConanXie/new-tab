@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.4.2
+###### _May 06, 2017_
+- Fixed dark mode can't be closed when no theme is selected
+
 ## 1.4.1
 ###### _May 04, 2017_
 - Fixed search cannot be used when user chooses Google .hk
