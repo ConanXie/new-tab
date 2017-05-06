@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.4.3
+###### _May 06, 2017_
+- Fixed incorrect text when user click search predictions
+
 ## 1.4.2
 ###### _May 06, 2017_
 - Fixed dark mode can't be closed when no theme is selected
