@@ -288,7 +288,7 @@ class Search extends Component {
     this.setState({
       showPredictions: false
     })
-    this.refs.text.value = event.target.innerHTML
+    this.refs.text.value = event.target.innerText
     this.search(event)
   }
   render() {
