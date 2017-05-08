@@ -13,13 +13,13 @@ import RaisedButton from 'material-ui/RaisedButton'
     primary1Color: teal500
   }
 }, {userAgent: 'all'})*/
-import { code } from '../config'
-import { themes } from './Setup/Theme'
+import { code } from '../configs'
+import { themes } from './Settings/Theme'
 
 import Header from './Header'
 import Search from './Search'
 import Navigation from './Navigation'
-import Setup from './Setup'
+import Settings from './Settings'
 import Onboarding from './Onboarding'
 
 
@@ -171,7 +171,7 @@ class App extends Component {
           <Header hideAppsName={hideAppsName} rememberBookmarksState={rememberBookmarksState} useFahrenheit={useFahrenheit} />
           <Search target={searchTarget} searchPredict={searchPredict} useHK={useHK} />
           <Navigation target={linkTarget} />
-          <Setup
+          <Settings
             setLinkTarget={this.setLinkTarget}
             setSearchTarget={this.setSearchTarget}
             hideAppsName={this.hideAppsName}

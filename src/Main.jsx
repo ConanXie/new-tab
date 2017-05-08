@@ -18,7 +18,7 @@ import { IntlProvider } from 'react-intl'
 import { AppContainer } from 'react-hot-loader'
 import App from './modules/App'
 
-import { messages } from './config'
+import { messages } from './configs'
 
 const renderApp = (Component = App) => {
   render((

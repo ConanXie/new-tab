@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as setupPageActions from '../../actions/setup-page'
+import * as settingsPageActions from '../../actions/settings-page'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
@@ -29,8 +29,8 @@ const style = {
 
 class Header extends Component {
   static propsType = {
-    showSetup: PropTypes.func.isRequired,
-    hideSetup: PropTypes.func.isRequired
+    showSettings: PropTypes.func.isRequired,
+    hideSettings: PropTypes.func.isRequired
   }
   constructor(props) {
     super(props)
@@ -38,12 +38,12 @@ class Header extends Component {
       drawerOpen: false,
       bookmarkOpen: false
     }
-    this.setupOpen = false
+    this.settingsOpen = false
   }
   componentDidMount() {
     document.onkeydown = () => {
       const { drawerOpen, bookmarkOpen } = this.state
-      const { setupOpen, showSetup, hideSetup } = this.props
+      const { settingsOpen, showSettings, hideSettings } = this.props
       const code = window.event.keyCode
       // console.log(window.event)
       // listen Alt + B
@@ -60,7 +60,7 @@ class Header extends Component {
       }
       // listen Alt + S
       if (code === 83 && window.event.altKey) {
-        setupOpen ? hideSetup() : showSetup()
+        settingsOpen ? hideSettings() : showSettings()
       }
     }
   }
@@ -88,7 +88,7 @@ class Header extends Component {
   }*/
   render() {
     // console.log(this.props)
-    const { showSetup, hideAppsName, rememberBookmarksState, useFahrenheit, muiTheme } = this.props
+    const { showSettings, hideAppsName, rememberBookmarksState, useFahrenheit, muiTheme } = this.props
     return (
       <Paper className="header-bar" rounded={false} zDepth={0}>
         <div className="tool-bar">
@@ -103,7 +103,7 @@ class Header extends Component {
             <IconButton onTouchTap={this.openBookmark}>
               <ActionBookmark color={muiTheme.palette.textColor} />
             </IconButton>
-            <IconButton onTouchTap={showSetup}>
+            <IconButton onTouchTap={showSettings}>
               <ActionSettings color={muiTheme.palette.textColor} />
             </IconButton>
           </div>
@@ -132,12 +132,12 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-  const { status } = state.setupPage
-  return { setupOpen: status }
+  const { status } = state.settingsPage
+  return { settingsOpen: status }
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators(setupPageActions, dispatch)
+  return bindActionCreators(settingsPageActions, dispatch)
 }
 
 export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Header))

@@ -15,7 +15,7 @@ const style = {
   }
 }
 
-class Donor extends Component {
+class Donate extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -55,4 +55,4 @@ class Donor extends Component {
   }
 }
 
-export default Donor
+export default Donate

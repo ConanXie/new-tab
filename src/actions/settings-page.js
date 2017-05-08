@@ -1,16 +1,16 @@
-export const SHOW_SETUP = 'SHOW_SETUP'
-export const HIDE_SETUP = 'HIDE_SETUP'
+export const SHOW_SETTINGS = 'SHOW_SETTINGS'
+export const HIDE_SETTINGS = 'HIDE_SETTINGS'
 
-export function showSetup() {
+export function showSettings() {
   return {
-    type: SHOW_SETUP,
+    type: SHOW_SETTINGS,
     status: true
   }
 }
 
-export function hideSetup() {
+export function hideSettings() {
   return {
-    type: HIDE_SETUP,
+    type: HIDE_SETTINGS,
     status: false
   }
 }

@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux'
 
-import setupPage from './setup-page'
+import settingsPage from './settings-page'
 import settings from './settings'
 import searchEngines from './search-engines'
 import websites from './websites'
 
 export default combineReducers({
-  setupPage,
+  settingsPage,
   settings,
   searchEngines,
   websites

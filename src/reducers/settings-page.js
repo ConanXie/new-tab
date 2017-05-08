@@ -1,4 +1,4 @@
-import { SHOW_SETUP, HIDE_SETUP } from '../actions/setup-page'
+import { SHOW_SETTINGS, HIDE_SETTINGS } from '../actions/settings-page'
 
 const initalState = {
   status: false
@@ -6,12 +6,12 @@ const initalState = {
 
 export default function (state = initalState, action) {
   switch (action.type) {
-    case SHOW_SETUP:
+    case SHOW_SETTINGS:
       return {
         ...state,
         status: action.status
       }
-    case HIDE_SETUP:
+    case HIDE_SETTINGS:
       return {
         ...state,
         status: action.status

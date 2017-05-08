@@ -1,4 +1,4 @@
-import './setup.less'
+import './settings.less'
 
 import classNames from 'classnames'
 import React, { Component } from 'react'
@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as searchEngineActions from '../../actions/search-engines'
-import * as setupPageActions from '../../actions/setup-page'
+import * as settingsPageActions from '../../actions/settings-page'
 import * as settingsActions from '../../actions/settings'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
@@ -49,12 +49,12 @@ const FahrenheitIcon = props => {
   )
 }
 
-import { version } from '../../config'
+import { version } from '../../configs'
 
-import Donor from './Donor'
+import Donate from './Donate'
 import Feedback from './Feedback'
 import Theme from './Theme'
-import Engines from './Engines/Engines'
+import Engines from './Engines'
 
 const style = {
   toggleLabel: {
@@ -94,10 +94,10 @@ const style = {
   }
 }
 
-class Setup extends Component {
+class Settings extends Component {
   static propTypes = {
     status: PropTypes.bool.isRequired,
-    hideSetup: PropTypes.func.isRequired,
+    hideSettings: PropTypes.func.isRequired,
     saveSettings: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired
   }
@@ -114,7 +114,7 @@ class Setup extends Component {
     }
   }
   componentWillReceiveProps(next) {
-    // show or hide the setup page
+    // show or hide the settings page
     if (next.status) {
       this.setState({
         display: 'block'
@@ -249,7 +249,7 @@ class Setup extends Component {
     })
   }
   render() {
-    const { status, data, hideSetup, changeTheme, muiTheme } = this.props
+    const { status, data, hideSettings, changeTheme, muiTheme } = this.props
     const { display, currentTheme, snackbarOpen, snackbarMessage } = this.state
     const { intl } = this.context
     const resetActions = [
@@ -265,13 +265,13 @@ class Setup extends Component {
       />
     ]
     return (
-      <div className={classNames('setup-page', { 'show-setup-page': status, 'hide-setup-page': !status })}
+      <div className={classNames('settings-page', { 'show-settings-page': status, 'hide-settings-page': !status })}
         style={{ display }}
       >
-        <Paper className="header-bar setup-header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
+        <Paper className="header-bar settings-header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
           <div className="tool-bar">
             <div className="bar-left">
-              <IconButton onTouchTap={hideSetup}>
+              <IconButton onTouchTap={hideSettings}>
                 <ArrowBack color={muiTheme.palette.alternateTextColor} />
               </IconButton>
               <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'settings.toolbar.title' })}</div>
@@ -279,8 +279,8 @@ class Setup extends Component {
           </div>
         </Paper>
         <section style={{ backgroundColor: muiTheme.palette.settingsBackgroundColor }}>
-          <div className="setup-section">
-            <Paper className="setup-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
+          <div className="settings-section">
+            <Paper className="settings-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
               <div className="toggle-box">
                 <ContentLink style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
@@ -330,7 +330,7 @@ class Setup extends Component {
                 </div>
               </div>
               {/*search*/}
-              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.search.title' })}</h2>
+              <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.search.title' })}</h2>
               <Engines />
               {/*<div className="toggle-box">
                 <HardwareMemory style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
@@ -384,7 +384,7 @@ class Setup extends Component {
                 </div>
               }
               {/*theme*/}
-              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
+              <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
               <Theme
                 changeTheme={changeTheme}
                 toggleDarkMode={this.toggleDarkMode}
@@ -402,7 +402,7 @@ class Setup extends Component {
                 </div>
               </div>
               {/*backup and restore*/}
-              <h2 className="setup-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
+              <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
               <ListItem
                 leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
                 primaryText={intl.formatMessage({ id: 'settings.br.backup.label' })}
@@ -433,8 +433,8 @@ class Setup extends Component {
               {intl.formatMessage({ id: 'settings.reset.warning' })}
             </Dialog>
           </div>
-          <div className="setup-section">
-            <Paper className="setup-content about" zDepth={1}>
+          <div className="settings-section">
+            <Paper className="settings-content about" zDepth={1}>
               <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
               <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label={version} /></a></p>
               {/*仅对中文用户展示*/}
@@ -495,7 +495,7 @@ class Setup extends Component {
 }
 
 const mapStateToProps = state => {
-  const { status } = state.setupPage
+  const { status } = state.settingsPage
   const { data } = state.settings
   return {
     status,
@@ -505,9 +505,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    ...setupPageActions,
+    ...settingsPageActions,
     ...settingsActions
   }, dispatch)
 }
 
-export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Setup))
+export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Settings))

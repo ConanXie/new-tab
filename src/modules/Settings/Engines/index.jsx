@@ -23,7 +23,7 @@ import ViewList from 'material-ui/svg-icons/action/view-list'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import ActionInfo from 'material-ui/svg-icons/action/info-outline'
 
-import { searchEnginesMax } from '../../../config'
+import { searchEnginesMax } from '../../../configs'
 
 const style = {
   tableDialog: {

@@ -1,4 +1,4 @@
-.setup-page {
+.settings-page {
   position: absolute;
   top: 0;
   right: 0;
@@ -11,7 +11,7 @@
   display: none;
   overflow-y: scroll;
   overflow-x: hidden;
-  @keyframes show-setup-page {
+  @keyframes show-settings-page {
     0% {
       opacity: 0;
       transform: translateY(48px);
@@ -23,7 +23,7 @@
       transform: translateY(0);
     }
   }
-  @keyframes hide-setup-page {
+  @keyframes hide-settings-page {
     0% {
       opacity: 1;
     }
@@ -31,13 +31,13 @@
       opacity: 0;
     }
   }
-  &.show-setup-page {
-    animation: show-setup-page 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &.show-settings-page {
+    animation: show-settings-page 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  &.hide-setup-page {
-    animation: hide-setup-page 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  &.hide-settings-page {
+    animation: hide-settings-page 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
-  .setup-header-bar {
+  .settings-header-bar {
     position: absolute;
     top: 0;
   }
@@ -56,19 +56,19 @@
       font-size: 18px;
     }
   }
-  .setup-section {
+  .settings-section {
     padding: 28px;
     &:last-child {
       padding-top: 0;
     }
   }
-  .setup-content {
+  .settings-content {
     box-sizing: border-box;
     width: 600px;
     // height: 300px;
     padding: 32px;
     margin: 0 auto;
-    .setup-title {
+    .settings-title {
       padding-left: 5px;
       margin: 16px 0;
       font-weight: normal;
