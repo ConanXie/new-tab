@@ -1,5 +1,10 @@
 ## Changelog
 
+## 1.4.4
+###### _May 10, 2017_
+- Optimized night mode
+- Open feedback and donate
+
 ## 1.4.3
 ###### _May 06, 2017_
 - Fixed incorrect text when user click search predictions
