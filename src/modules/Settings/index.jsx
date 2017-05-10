@@ -437,18 +437,16 @@ class Settings extends Component {
             <Paper className="settings-content about" zDepth={1}>
               <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
               <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label={version} /></a></p>
+              <div className="donate-feedback">
+                <Donate />
+                <Feedback />
+              </div>
               {/*仅对中文用户展示*/}
               {navigator.language === 'zh-CN' &&
-                <div>
-                  <div className="donor-feedback">
-                    <Donor />
-                    <Feedback />
-                  </div>
-                  <p className="tip">
-                    <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
-                    <span>翻墙使用体验更佳</span>
-                  </p>
-                </div>
+                <p className="tip">
+                  <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
+                  <span>翻墙使用体验更佳</span>
+                </p>
               }
               <div className="hot-key-box">
                 <div className="tip">
