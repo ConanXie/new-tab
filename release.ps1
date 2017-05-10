@@ -1,9 +1,9 @@
 Write-Output "---------- Release $args ----------"
 
 # config.js
-$config = Get-Content src/config/index.js
+$config = Get-Content src/configs/index.js
 $config = $config -replace "(\d+\.){2}\d+", $args
-Set-Content src/config/index.js -Value $config
+Set-Content src/configs/index.js -Value $config
 
 npm run build
 
@@ -53,8 +53,8 @@ Move-Item -Force dist/*.zip releases
 
 Write-Output "---------- Done ----------"
 
-$confirmation = Read-Host "Do you want to clean up the dist folder changes? [y/n]"
-if ($confirmation -eq 'y') {
+$confirmation = Read-Host "Do you want to clean up the dist folder changes? [Y/n]"
+if ($confirmation -eq 'y' -or $confirmation -eq 'Y') {
   Remove-Item -Recurse dist/assets
   git checkout -- dist
 
