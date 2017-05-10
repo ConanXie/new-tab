@@ -213,7 +213,7 @@ class Weather extends Component {
           emptyText
         })
       }
-    }, { maximumAge: 60000, timeout: 3000 })
+    }, { maximumAge: 60000, timeout: 6000 })
   }
   calcWeek = (date) => {
     const { intl } = this.context
