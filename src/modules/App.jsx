@@ -86,6 +86,7 @@ class App extends Component {
       ...darkBaseTheme.palette,
       primary1Color: '#546e7a',
       textColor: '#e2e4e4',
+      alternateTextColor: '#e2e4e4',
       settingsBackgroundColor: 'rgba(42, 42, 42, 1)'
     }
     darkBaseTheme.toggle = {
