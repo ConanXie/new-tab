@@ -3,7 +3,6 @@ const zh_CN = {
   'button.cancel': '取消',
   'button.confirm': '确认',
   /*Nav*/
-  'nav.title': '我的导航',
   'nav.edit.title.edit': '编辑网站',
   'nav.edit.title.add': '增加网站',
   'nav.edit.input.website': '名称',
@@ -11,7 +10,7 @@ const zh_CN = {
   'nav.edit.input.forget.name': '别忘了网站的名字🙂',
   'nav.edit.input.forget.URL': '别忘了网址🙂',
   'nav.delete.status': '已删除',
-  'nav.delete.undo': '撤销',
+  'nav.delete.undo': '撤消',
   'nav.classification.unclassified': '未分类',
   'nav.add.choose.classification': '选择分类',
   'nav.increase.classification.title': '增加分类',
@@ -26,12 +25,11 @@ const zh_CN = {
   'settings.website.open.label': '在新标签页中打开网站',
   'settings.apps.display.label': '隐藏应用的标签',
   'settings.bookmarks.position.label': '记住书签的状态',
-  'settings.search.predict.label': '输入搜索内容时显示预测结果',
+  'settings.search.predict.label': '输入内容时显示搜索预测',
   'settings.weather.fahrenheit.label': '天气使用华氏度',
   'settings.search.title': '搜索',
   'settings.theme.title': '主题',
-  'settings.theme.switch.label': '切换主题',
-  'settings.theme.select.title': '选择主题',
+  'settings.theme.switch.label': '主题颜色',
   'settings.theme.dark.label': '夜间模式',
   'settings.br.title': '备份与重置',
   'settings.br.backup.label': '生成备份文件',
@@ -43,6 +41,8 @@ const zh_CN = {
   'settings.reset.title': '确认重置设置？',
   'settings.reset.warning': '将会重置为初始化设置',
   'settings.about.title': '关于',
+  'settings.donate': '捐助',
+  'settings.feedback': '反馈',
   'settings.about.weather.sources': '天气数据来源',
   /*bookmarks*/
   'bookmarks.search.placeholder': '搜索书签',
@@ -98,6 +98,12 @@ const zh_CN = {
   'engines.custom.tip': '自定义搜索引擎没有输入预测',
   'engines.custom.name.error': '别忘了搜索引擎名字',
   'engines.custom.URL.error': '网址格式不正确',
+  /*feedback*/
+  'feedback.email.placeholder': '你的电子邮件地址',
+  'feedback.message.placeholder': '有什么想对我说的',
+  'feedback.email.error': '电子邮件格式不正确',
+  'feedback.message.error': '说点什么吧🙂',
+  'feedback.success': '反馈成功，十分感谢',
 }
 
 export default zh_CN
