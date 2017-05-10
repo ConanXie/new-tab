@@ -3,12 +3,19 @@ import './style.less'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog'
+import Paper from 'material-ui/Paper'
+import { Tabs, Tab } from 'material-ui/Tabs'
+import SwipeableViews from 'react-swipeable-views'
 
 const style = {
   dialogContent: {
     width: '380px'
+  },
+  dialogBody: {
+    padding: 0
   },
   dialogTitle: {
     textAlign: 'center'
@@ -16,43 +23,81 @@ const style = {
 }
 
 class Donate extends Component {
+  static contextTypes = {
+    intl: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
     this.state = {
-      dialog: false
+      dialogOpen: false
     }
   }
   showDialog = () => {
     this.setState({
-      dialog: true
+      dialogOpen: true
     })
   }
   hideDialog = () => {
     this.setState({
-      dialog: false
+      dialogOpen: false
+    })
+  }
+  openDonation = () => {
+    if (navigator.language !== 'zh-CN') {
+      chrome.tabs.create({ url: 'https://www.paypal.me/conanxie' })
+    } else {
+      this.showDialog()
+    }
+  }
+  handleChange = value => {
+    this.setState({
+      slideIndex: value
     })
   }
   render() {
+    const { dialogOpen, slideIndex } = this.state
+    const { muiTheme } = this.props
+    const { intl } = this.context
     return (
       <div className="donor">
         <RaisedButton
-          label="捐助"
+          label={intl.formatMessage({ id: 'settings.donate' })}
           primary={true}
-          onTouchTap={this.showDialog}
+          onTouchTap={this.openDonation}
         />
         <Dialog
-          title="微信扫一扫"
-          open={this.state.dialog}
+          open={dialogOpen}
           onRequestClose={this.hideDialog}
           contentStyle={style.dialogContent}
-          titleStyle={style.dialogTitle}
+          bodyStyle={style.dialogBody}
         >
-          <img className="qrcode" src={require('./images/weixinpay.png')} alt="weixin" />
-          <p className="谢谢">既然打开了就扫一扫捐助我吧</p>
+          <Paper zDepth={2}>
+            <Tabs
+              onChange={this.handleChange}
+              value={slideIndex}
+              inkBarStyle={{ backgroundColor: muiTheme.palette.alternateTextColor }}
+            >
+              {/*<Tab label={intl.formatMessage({ id: 'bookmarks.tabs.all' })} value={0} />*/}
+              <Tab label="微信" value={0} />
+              <Tab label="支付宝" value={1} />
+            </Tabs>
+          </Paper>
+          <SwipeableViews
+            index={slideIndex}
+            onChangeIndex={this.handleChange}
+          >
+            <section>
+              <img className="qrcode" src={require('./images/wechat.png')} alt="wechat" />
+            </section>
+            <section>
+              <img className="qrcode" src={require('./images/alipay.png')} alt="alipay" />
+            </section>
+          </SwipeableViews>
+          <p className="谢谢">如果你觉得这个扩展有用就支持我一下吧</p>
         </Dialog>
       </div>
     )
   }
 }
 
-export default Donate
+export default muiThemeable()(Donate)
