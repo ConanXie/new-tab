@@ -8,6 +8,7 @@ import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 import Snackbar from 'material-ui/Snackbar'
+import CircularProgress from 'material-ui/CircularProgress'
 
 const style = {
   dialogContent: {
@@ -21,6 +22,13 @@ const style = {
   },
   snackbar: {
     maxWidth: '150px'
+  },
+  loading: {
+    position: 'relative',
+    top: '6px',
+    height: '24px',
+    minWidth: '88px',
+    textAlign: 'center'
   }
 }
 
@@ -35,12 +43,12 @@ class Feedback extends Component {
       content: '',
       dialogOpen: false,
       snackbarOpen: false,
-      snackbarMessage: ''
+      snackbarMessage: '',
+      loading: false
     }
     this.emailPattern = /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/
-    this.feedbackUrl = 'http://localhost:5300/api/feedback'
-    // this.feedbackUrl = 'https://tab.xiejie.co/api/feedback'
-    this.loading = false
+    // this.feedbackUrl = 'http://localhost:5300/api/feedback'
+    this.feedbackUrl = 'https://tab.xiejie.co/api/feedback'
   }
   openDialog = () => {
     this.setState({
@@ -77,10 +85,10 @@ class Feedback extends Component {
    */
   handleSubmit = () => {
     const { intl } = this.context
-    // prevent multipul submit
-    if (this.loading) return
+    const { email, content, loading } = this.state
 
-    const { email, content } = this.state
+    // prevent multipul submit
+    if (loading) return
     
     if (email && !this.emailPattern.test(email)) {
       this.setState({
@@ -96,7 +104,9 @@ class Feedback extends Component {
       })
       return
     }
-    this.loading = true
+    this.setState({
+      loading: true
+    })
     fetch(this.feedbackUrl, {
       method: 'POST',
       headers: {
@@ -108,35 +118,48 @@ class Feedback extends Component {
         res.json().then(data => {
           this.setState({
             snackbarOpen: true,
-            snackbarMessage: data.code ? data.msg : 'I received your feedback, thank you.'
+            snackbarMessage: data.code ? data.msg : intl.formatMessage({ id: 'feedback.success' })
+          })
+          this.setState({
+            loading: false
           })
           setTimeout(() => {
-            this.loading = false
             this.hideDialog()
-          }, 500)
+          }, 1500)
         })
       }
     })
   }
   render() {
-    const { dialogOpen, snackbarOpen, snackbarMessage } = this.state
+    const { dialogOpen, snackbarOpen, snackbarMessage, loading } = this.state
     const { muiTheme } = this.props
     const { intl } = this.context
+
+    const Loading = <CircularProgress style={style.loading} size={24} thickness={2} />
+    const Confirm = (
+      <FlatButton
+        label={intl.formatMessage({ id: 'button.confirm' })}
+        primary={true}
+        onTouchTap={this.handleSubmit}
+      />
+    )
+
     const actions = [
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
         onTouchTap={this.hideDialog}
       />,
-      <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
-        primary={true}
-        onTouchTap={this.handleSubmit}
-      />
+      loading ? Loading : Confirm
     ]
+
     return (
-      <div className="feedback">
-        <FlatButton label={intl.formatMessage({ id: 'settings.feedback' })} onTouchTap={this.openDialog} />
+      <div>
+        <FlatButton
+          className="feedback"
+          label={intl.formatMessage({ id: 'settings.feedback' })}
+          onTouchTap={this.openDialog}
+        />
         <Dialog
           title={intl.formatMessage({ id: 'settings.feedback' })}
           actions={actions}
