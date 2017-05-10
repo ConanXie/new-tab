@@ -95,6 +95,9 @@ class App extends Component {
       trackOnColor: '#265b6f',
       trackOffColor: '#646b6f'
     }
+    darkBaseTheme.snackbar = {
+      textColor: '#333'
+    }
     return getMuiTheme(darkBaseTheme)
   }
   setLinkTarget = (bool) => {
