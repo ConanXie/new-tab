@@ -104,6 +104,9 @@ const en_US = {
   'feedback.email.error': 'The email format is incorrect',
   'feedback.message.error': 'Write something',
   'feedback.success': 'I received your feedback, thank you',
+  /*Apps*/
+  'apps.title': 'Apps',
+  'apps.manager.tip': 'Apps manager',
 }
 
 export default en_US

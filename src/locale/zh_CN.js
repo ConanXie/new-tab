@@ -104,6 +104,9 @@ const zh_CN = {
   'feedback.email.error': '电子邮件格式不正确',
   'feedback.message.error': '说点什么吧🙂',
   'feedback.success': '反馈成功，十分感谢',
+  /*Apps*/
+  'apps.title': '应用',
+  'apps.manager.tip': '应用管理器',
 }
 
 export default zh_CN
