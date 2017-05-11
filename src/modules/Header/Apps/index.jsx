@@ -7,6 +7,8 @@ import PropTypes from 'prop-types'
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
+import IconButton from 'material-ui/IconButton'
+import NavigationApps from 'material-ui/svg-icons/navigation/apps'
 
 const style = {
   appBtn: {
@@ -16,6 +18,9 @@ const style = {
     lineHeight: 'normal',
     borderRadius: '100%',
     overFlow: 'hidden'
+  },
+  tooltip: {
+    fontSize: '14px'
   }
 }
 
@@ -34,18 +39,8 @@ class Apps extends Component {
      * Get all installed Chrome Apps
      */
     chrome.management.getAll(exInfoArray => {
-      const apps = []
-      const end = exInfoArray.length - 1
-      exInfoArray.forEach((ex, index) => {
-        if (ex.isApp) {
-          apps.push(ex)
-        }
-        if (index === end) {
-          this.setState({
-            apps
-          })
-        }
-      })
+      const apps = exInfoArray.filter(ex => ex.isApp)
+      this.setState({ apps })
     })
   }
   render() {
@@ -54,7 +49,17 @@ class Apps extends Component {
     const { intl } = this.context
     return (
       <div className="apps-component">
-        <h1 style={{ color: muiTheme.palette.primary1Color }}>Apps</h1>
+        <div className="tool">
+          <IconButton
+            tooltip={intl.formatMessage({ id: 'apps.manager.tip' })}
+            tooltipPosition="bottom-right"
+            tooltipStyles={style.tooltip}
+            onTouchTap={e => chrome.tabs.update({ url: 'chrome://apps' })}
+          >
+            <NavigationApps color={muiTheme.palette.primary1Color} />
+          </IconButton>
+          <h1 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'apps.title' })}</h1>
+        </div>
         <div className={classNames('apps-collection', { 'empty': !apps.length })}>
           {!apps.length && (
             <div>
@@ -81,16 +86,20 @@ class Apps extends Component {
               </FlatButton>
             </div>
           )}
-          {apps.map((app, index) => {
-            const maxIcon = app.icons.length - 1
+          {apps.map(app => {
+            const { id, icons, shortName, enabled } = app
+            
+            const finds = icons.filter(icon => icon.size === 48)
+            const { url } = finds.length ? finds[0] : icons[icons.length - 1]
+
             return (
-              <div className="app-box" key={index}>
+              <div className="app-box" key={id}>
                 <FlatButton style={style.appBtn}>
-                  <dl onClick={e => { chrome.management.launchApp(app.id) }} title={app.shortName}>
+                  <dl onClick={e => chrome.management.launchApp(id)} title={shortName}>
                     <dt>
-                      <img src={app.icons[maxIcon].url} alt={app.shortName} />
+                      <img src={`${url}?grayscale=${!enabled}`} alt={shortName} />
                     </dt>
-                    <dd className={classNames({ 'hide': hideAppsName })}>{app.shortName}</dd>
+                    <dd className={classNames({ 'hide': hideAppsName })}>{shortName}</dd>
                   </dl>
                 </FlatButton>
               </div>
