@@ -51,7 +51,7 @@ class Apps extends Component {
       <div className="apps-component">
         <div className="tool">
           <IconButton
-            tooltip={intl.formatMessage({ id: 'apps.manager.tip' })}
+            tooltip={intl.formatMessage({ id: 'apps.manage.tip' })}
             tooltipPosition="bottom-right"
             tooltipStyles={style.tooltip}
             onTouchTap={e => chrome.tabs.update({ url: 'chrome://apps' })}

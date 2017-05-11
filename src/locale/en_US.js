@@ -106,7 +106,7 @@ const en_US = {
   'feedback.success': 'I received your feedback, thank you',
   /*Apps*/
   'apps.title': 'Apps',
-  'apps.manager.tip': 'Apps manager',
+  'apps.manage.tip': 'Manage apps',
 }
 
 export default en_US

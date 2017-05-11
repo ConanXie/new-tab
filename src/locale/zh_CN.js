@@ -106,7 +106,7 @@ const zh_CN = {
   'feedback.success': '反馈成功，十分感谢',
   /*Apps*/
   'apps.title': '应用',
-  'apps.manager.tip': '应用管理器',
+  'apps.manage.tip': '管理应用',
 }
 
 export default zh_CN
