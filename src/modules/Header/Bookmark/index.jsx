@@ -34,6 +34,16 @@ const style = {
   searchHeader: {
     position: 'relative',
     zIndex: 2
+  },
+  managerButton: {
+    position: 'relative',
+    zIndex: 3,
+    width: 40,
+    height: 40,
+    padding: 8
+  },
+  tooltip: {
+    fontSize: '14px'
   }
 }
 
@@ -398,8 +408,8 @@ class Bookmark extends Component {
             <IconButton
               tooltip={intl.formatMessage({ id: 'bookmarks.bookmarks.manager' })}
               tooltipPosition="bottom-left"
-              iconStyle={{ width: 24, height: 24 }}
-              style={{ width: 40, height: 40, padding: 8 }}
+              tooltipStyles={style.tooltip}
+              style={style.managerButton}
               onTouchTap={e => { chrome.tabs.update({ url: 'chrome://bookmarks/' }) }}
             >
               <ToggleStar color={muiTheme.palette.alternateTextColor} />
