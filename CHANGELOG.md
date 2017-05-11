@@ -1,5 +1,10 @@
 ## Changelog
 
+## 1.4.5
+###### _May 11, 2017_
+- Added a `Manage apps` icon button
+- The icon of app not enabled is gray now
+
 ## 1.4.4
 ###### _May 10, 2017_
 - Optimized night mode
