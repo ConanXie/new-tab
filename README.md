@@ -28,7 +28,7 @@ Please create an issue if you have any questions or suggestions about it.
 
 ## Donation
 If you find the extension useful, you can buy me a cup of coffee.  
-The Wechat QR code at settings page.💖
+The `DONATE` button at settings page.💖
 
 ## License
 [MIT](LICENSE)  
