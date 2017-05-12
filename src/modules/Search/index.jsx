@@ -83,7 +83,7 @@ class Search extends Component {
   /**
    * open window to search
    */
-  search = (e) => {
+  search = e => {
     e.preventDefault()
     const text = this.refs.text.value
     const { searchLink, searchClass } = this.state
@@ -95,7 +95,7 @@ class Search extends Component {
       window.open(searchLink.replace('%s', text), this.props.target)
     }
   }
-  changeEngine = (index) => {
+  changeEngine = index => {
     const { name, link, predict, className } = this.props.engines[index]
     this.setState({
       searchLink: link,
@@ -196,13 +196,13 @@ class Search extends Component {
   mouseLeave = () => {
     this.refs.text.classList.remove('hover')
   }
-  documentMouseDown = (e) => {
+  documentMouseDown = e => {
     // if the mousedown target is predictions then preventDefault
-    if (e.target.dataset.name === 'prediction') {
+    if (e.target.dataset.name === 'prediction' || e.target.parentNode.dataset.name === 'prediction') {
       e.preventDefault()
     }
   }
-  documentKeyDown = (e) => {
+  documentKeyDown = e => {
     // up arrow
     if (e.keyCode === 38) {
       e.preventDefault()
@@ -228,7 +228,7 @@ class Search extends Component {
     document.removeEventListener('keydown', this.documentKeyDown, false)
   }
   // select prediction via up or down arrow key
-  selectPredictions = (event) => {
+  selectPredictions = event => {
     const predictions = this.refs.predictions.querySelectorAll('li')
     const total = predictions.length
     const lastIndex = this.predictionsIndex
@@ -274,7 +274,7 @@ class Search extends Component {
     })
   }
   // mouse move on predictions
-  predictionMouseEnter = (event) => {
+  predictionMouseEnter = event => {
     this.clearPredictionsClassName()
     event.target.classList.add('active')
     this.predictionsIndex = Number(event.target.dataset.index)
@@ -284,11 +284,11 @@ class Search extends Component {
     this.predictionsIndex = -1
   }
   // search by click prediction
-  searchPrediction = (event) => {
+  searchPrediction = event => {
     this.setState({
       showPredictions: false
     })
-    this.refs.text.value = event.target.innerText
+    this.refs.text.value = this.refs.predictions.childNodes[this.predictionsIndex].innerText
     this.search(event)
   }
   render() {
@@ -359,7 +359,6 @@ class Search extends Component {
                         data-index={i}
                         onMouseEnter={this.predictionMouseEnter}
                         onMouseLeave={this.predictionMouseLeave}
-                        onMouseDown={this.predictionMouseDown}
                         onClick={this.searchPrediction}
                         dangerouslySetInnerHTML={{ __html: v }}
                       ></li>
