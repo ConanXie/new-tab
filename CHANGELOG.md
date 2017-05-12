@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.4.6
+###### _May 12, 2017_
+- Fixed search didn't trigger
+
 ## 1.4.5
 ###### _May 11, 2017_
 - Added a `Manage apps` icon button
