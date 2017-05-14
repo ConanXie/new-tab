@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.4.7
+###### _May 14, 2017_
+- Fixed some English text and added three sizes of icons
+
 ## 1.4.6
 ###### _May 12, 2017_
 - Fixed search didn't trigger
