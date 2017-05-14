@@ -24,9 +24,9 @@ Set-Location "dist"
 # manifest.json
 $manifest = Get-Content manifest.json
 $manifest = $manifest -replace "(\d+\.){2}\d+", $args -replace "\]\,", "]"
-# $manifest = $manifest[0..18] + $manifest[20]
+# $manifest = $manifest[0..20] + $manifest[22]
 [System.Collections.ArrayList]$manifest = $manifest
-$manifest.RemoveAt(19)
+$manifest.RemoveAt(20)
 Set-Content manifest.json -Value $manifest
 
 # index.html
