@@ -53,7 +53,8 @@ Move-Item -Force dist/*.zip releases
 
 Write-Output "---------- Done ----------"
 
-$confirmation = Read-Host "Do you want to clean up the dist folder changes? [Y/n]"
+Write-Output "After this operation, changes of the dist folder will be cleaned up."
+$confirmation = Read-Host "Do you want to continue? [Y/n]"
 if ($confirmation -eq 'y' -or $confirmation -eq 'Y') {
   Remove-Item -Recurse dist/assets
   git checkout -- dist
