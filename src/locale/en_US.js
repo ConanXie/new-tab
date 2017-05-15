@@ -1,4 +1,4 @@
-const en_US = {
+export default {
   /*general*/
   'button.cancel': 'CANCEL',
   'button.confirm': 'OK',
@@ -35,11 +35,11 @@ const en_US = {
   'settings.br.backup.label': 'Create backup file',
   'settings.br.restore.label': 'Restore from backup',
   'settings.br.restore.message': 'Success, please refresh window',
-  'settings.br.restore.not.supported': 'Sorry, the backup file is no longer supported',
-  'settings.br.reset.label': 'Reset to default',
+  'settings.br.restore.not.supported': 'Sorry, the backup is no longer supported',
+  'settings.br.reset.label': 'Reset to defaults',
   'settings.br.reset.message': 'Success, please refresh window',
   'settings.reset.title': 'Confirm reset settings',
-  'settings.reset.warning': 'It will reset to initialization settings',
+  'settings.reset.warning': 'It will reset to the default',
   'settings.about.title': 'About',
   'settings.donate': 'Donate',
   'settings.feedback': 'Feedback',
@@ -50,7 +50,7 @@ const en_US = {
   'bookmarks.tabs.all': 'All',
   'bookmarks.tabs.recent': 'Recently added',
   /*empty text*/
-  'empty.text.apps': 'Your browser does not have any applications',
+  'empty.text.apps': 'There aren\'t any applications here',
   'empty.text.bookmarks': 'Without any bookmarks',
   'empty.text.bookmarks.search': 'No bookmarks found',
   'empty.text.bookmarks.recent': 'No new bookmarks',
@@ -108,5 +108,3 @@ const en_US = {
   'apps.title': 'Apps',
   'apps.manage.tip': 'Manage apps',
 }
-
-export default en_US

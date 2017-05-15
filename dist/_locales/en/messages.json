@@ -30,13 +30,13 @@
     "message": "Weather & Apps"
   },
   "onboardingThirdContent": {
-    "message": "Beautiful weather. You can browse your Chrome apps here and click to start."
+    "message": "Beautiful weather. You can view your Chrome apps here and click to start."
   },
   "onboardingFourthTitle": {
     "message": "Bookmarks"
   },
   "onboardingFourthContent": {
-    "message": "Simple bookmarks. There are Recently added and bookmarks search."
+    "message": "Simple bookmarks. Search bookmarks and view the recently added bookmarks."
   },
   "themeTeal": {
     "message": "Teal"

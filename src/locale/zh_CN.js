@@ -1,4 +1,4 @@
-const zh_CN = {
+export default {
   /*general*/
   'button.cancel': '取消',
   'button.confirm': '确认',
@@ -99,14 +99,12 @@ const zh_CN = {
   'engines.custom.name.error': '别忘了搜索引擎名字',
   'engines.custom.URL.error': '网址格式不正确',
   /*feedback*/
-  'feedback.email.placeholder': '你的电子邮件地址',
+  'feedback.email.placeholder': '你的邮箱',
   'feedback.message.placeholder': '有什么想对我说的',
-  'feedback.email.error': '电子邮件格式不正确',
+  'feedback.email.error': '邮箱格式不正确',
   'feedback.message.error': '说点什么吧🙂',
   'feedback.success': '反馈成功，十分感谢',
   /*Apps*/
   'apps.title': '应用',
   'apps.manage.tip': '管理应用',
 }
-
-export default zh_CN
