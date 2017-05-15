@@ -1,0 +1,86 @@
+{
+  "appDescription": {
+    "message": "Material Design 新增分頁"
+  },
+  "previousBtn": {
+    "message": "上一步"
+  },
+  "NextBtn": {
+    "message": "下一步"
+  },
+  "skipBtn": {
+    "message": "跳過"
+  },
+  "tryIt": {
+    "message": "開始使用"
+  },
+  "onboardingFirstTitle": {
+    "message": "網站"
+  },
+  "onboardingFirstContent": {
+    "message": "你可以在主頁添加你喜歡的網站。分類功能讓你更快捷地打開網站。你可以隨時編輯，刪除，還能夠拖動放置到合適的位置。"
+  },
+  "onboardingSecondTitle": {
+    "message": "搜尋"
+  },
+  "onboardingSecondContent": {
+    "message": "這裡有多個主流搜尋引擎供你選擇，鼠標移動至 LOGO 處可隨時切換。你可以開啟搜尋預測，讓搜尋更加便捷。"
+  },
+  "onboardingThirdTitle": {
+    "message": "天氣與應用程式"
+  },
+  "onboardingThirdContent": {
+    "message": "簡潔美觀的天氣預報，前提是你允許扩充功能使用你的位置。你可以在這裡瀏覽你的 Chrome 應用程式，點擊可以啟動。"
+  },
+  "onboardingFourthTitle": {
+    "message": "書籤"
+  },
+  "onboardingFourthContent": {
+    "message": "一個簡易的書籤瀏覽功能，你可以選擇記憶書籤位置。提供了書籤搜尋功能，方便你最快速地找到你的書籤。"
+  },
+  "themeTeal": {
+    "message": "水鴨青"
+  },
+  "themeRed": {
+    "message": "紅色"
+  },
+  "themePink": {
+    "message": "粉紅"
+  },
+  "themeIndigo": {
+    "message": "靛青"
+  },
+  "themeBlue": {
+    "message": "藍色"
+  },
+  "themeDeepOrange": {
+    "message": "深橙"
+  },
+  "themePurple": {
+    "message": "紫色"
+  },
+  "themeGreen": {
+    "message": "綠色"
+  },
+  "themeOrange": {
+    "message": "橙色"
+  },
+  "themeBlueGrey": {
+    "message": "灰藍"
+  },
+  "themeAmber": {
+    "message": "琥珀"
+  },
+  "themeBrown": {
+    "message": "棕色"
+  },
+  "themeGrey": {
+    "message": "灰色"
+  },
+  "themeLightBlue": {
+    "message": "淺藍"
+  },
+  "themeDeepPurple": {
+    "message": "深紫"
+  }
+}

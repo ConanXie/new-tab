@@ -19,6 +19,7 @@ import moment from 'moment'
 
 import zh_CN from '../locale/zh_CN'
 import en_US from '../locale/en_US'
+import zh_TW from '../locale/zh_TW'
 
 let messages
 switch (navigator.language) {
@@ -26,7 +27,11 @@ switch (navigator.language) {
     messages = zh_CN
     moment.locale('zh-CN')
     break
-
+  case 'zh-TW':
+  case 'zh-HK':
+    messages = zh_TW
+    moment.locale('zh-TW')
+    break
   default:
     messages = en_US
     break
