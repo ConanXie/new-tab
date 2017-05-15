@@ -4,7 +4,7 @@
 
 # [Material Design New Tab](https://tab.xiejie.co)
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.4.7-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.4.8-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 [![Powered by](https://img.shields.io/badge/Powered%20by-material--ui-green.svg)](http://www.material-ui.com)
 
 A new tab page extension for Chrome which uses Material Design.

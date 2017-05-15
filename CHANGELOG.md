@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.4.8
+###### _May 15, 2017_
+- Added Traditional Chinese
+
 ## 1.4.7
 ###### _May 14, 2017_
 - Fixed some English text and added three sizes of icons
