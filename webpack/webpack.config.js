@@ -58,10 +58,7 @@ module.exports = {
   devServer: {
     port,
     hot: true,
-    https: {
-      key: fs.readFileSync('./cert/privatekey.pem'),
-      cert: fs.readFileSync('./cert/certificate.pem')
-    },
+    https: true,
     overlay: true,
     stats: {
       assets: false,
