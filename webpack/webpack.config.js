@@ -1,8 +1,8 @@
-// process.traceDeprecation = true
-process.noDeprecation = true
-
 const path = require('path')
 const webpack = require('webpack')
+const fs = require('fs')
+
+const port = 5001
 
 module.exports = {
   context: path.resolve(__dirname, '../src'),
@@ -10,7 +10,6 @@ module.exports = {
     'babel-polyfill',
     'react-hot-loader/patch',
     'webpack/hot/only-dev-server',
-    'webpack-hot-middleware/client?path=https://localhost:5001/__webpack_hmr',
     './Main.jsx'
   ],
   resolve: {
@@ -18,7 +17,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    publicPath: 'https://localhost:5001/',
+    publicPath: `https://localhost:${port}/`,
     filename: 'bundle.js'
   },
   module: {
@@ -56,5 +55,20 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],
+  devServer: {
+    port,
+    hot: true,
+    https: {
+      key: fs.readFileSync('./cert/privatekey.pem'),
+      cert: fs.readFileSync('./cert/certificate.pem')
+    },
+    overlay: true,
+    stats: {
+      assets: false,
+      chunks: false,
+      timings: true,
+      version: false
+    }
+  },
   devtool: 'eval'
 }
