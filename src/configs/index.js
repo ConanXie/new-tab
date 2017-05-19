@@ -17,9 +17,11 @@ const searchEnginesMax = 30
  */
 import moment from 'moment'
 
-import zh_CN from '../locale/zh_CN'
-import en_US from '../locale/en_US'
-import zh_TW from '../locale/zh_TW'
+import {
+  zh_CN,
+  zh_TW,
+  en_US
+} from '../locales'
 
 let messages
 switch (navigator.language) {
