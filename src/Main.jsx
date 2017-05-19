@@ -27,9 +27,9 @@ const renderApp = (Component = App) => {
       messages={messages}
     >
       <Provider store={store}>
-          <AppContainer>
-            <Component />
-          </AppContainer>
+        <AppContainer>
+          <Component />
+        </AppContainer>
       </Provider>
     </IntlProvider>
   ), document.querySelector('#app'))
