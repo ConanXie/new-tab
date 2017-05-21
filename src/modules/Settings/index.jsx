@@ -32,6 +32,7 @@ import ActionInfo from 'material-ui/svg-icons/action/info-outline'
 import HardwareKeyboard from 'material-ui/svg-icons/hardware/keyboard'
 import FileCloud from 'material-ui/svg-icons/file/cloud'
 import SocialMood from 'material-ui/svg-icons/social/mood'
+import GPSOff from 'material-ui/svg-icons/device/gps-off'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { List, ListItem } from 'material-ui/List'
@@ -55,6 +56,7 @@ import Donate from './Donate'
 import Feedback from './Feedback'
 import Theme from './Theme'
 import Engines from './Engines'
+import Region from './Region'
 
 const style = {
   toggleLabel: {
@@ -166,6 +168,11 @@ class Settings extends Component {
     const { saveSettings, darkMode } = this.props
     saveSettings('darkMode', bool)
     darkMode(bool)
+  }
+  toggleGeolocation = (event, bool) => {
+    const { saveSettings, blockGeolocation } = this.props
+    saveSettings('blockGeolocation', bool)
+    blockGeolocation(bool)
   }
   createBackups = async () => {
     const sync = await new Promise((resolve, reject) => {
@@ -306,18 +313,6 @@ class Settings extends Component {
                 </div>
               </div>
               <div className="toggle-box">
-                <FahrenheitIcon style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
-                    defaultToggled={data.useFahrenheit}
-                    onToggle={this.toggleFahrenheit}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              <div className="toggle-box">
                 <BookmarkBorder style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
                   <Toggle
@@ -332,18 +327,6 @@ class Settings extends Component {
               {/*search*/}
               <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.search.title' })}</h2>
               <Engines />
-              {/*<div className="toggle-box">
-                <HardwareMemory style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.engine.save.label' })}
-                    defaultToggled={data.autoSaveEngine}
-                    onToggle={this.toggleAutoSaveEngine}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>*/}
               <div className="toggle-box">
                 <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
@@ -401,6 +384,33 @@ class Settings extends Component {
                   />
                 </div>
               </div>
+              {/*Weather*/}
+              <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.weather.title' })}</h2>
+              <div className="toggle-box">
+                <FahrenheitIcon style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
+                    defaultToggled={data.useFahrenheit}
+                    onToggle={this.toggleFahrenheit}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
+              <div className="toggle-box">
+                <GPSOff style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                <div className="toggle-wrapper">
+                  <Toggle
+                    className="toggle"
+                    label={intl.formatMessage({ id: 'settings.weather.gps.off.label' })}
+                    defaultToggled={data.blockGeolocation}
+                    onToggle={this.toggleGeolocation}
+                    labelStyle={style.toggleLabel}
+                  />
+                </div>
+              </div>
+              <Region />
               {/*backup and restore*/}
               <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
               <ListItem

@@ -6,6 +6,10 @@ import classNames from 'classnames'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as settingsActions from '../../../actions/settings'
+
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton'
 import MapsPlace from 'material-ui/svg-icons/maps/place'
@@ -50,32 +54,14 @@ class Weather extends Component {
       empty: false,
       emptyText: ''
     }
-    /*const local = JSON.parse(localStorage.getItem('weather'))
-    if (local) {
-      const lastUpdate = new Date(local.basic.update.loc).getTime()
-      const now = Date.now()
-      const diff = now - lastUpdate
-      if (diff < 3600000) {
-        this.state = {
-          data: local
-        }
-      } else {
-        this.state = {
-          times: 1,
-          base: 0
-        }
-        this.getData()
-      }
-    } else {
-      this.state = {
-        times: 1,
-        base: 0
-      }
-      this.getData()
-    }*/
   }
   componentWillMount() {
     const { intl } = this.context
+    
+    this.setState({
+      region: this.props.settings.region
+    })
+    
     const local = JSON.parse(localStorage.getItem('weather'))
     if (local) {
       const lastUpdate = new Date(local.basic.update).getTime()
@@ -102,20 +88,28 @@ class Weather extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.useFahrenheit) {
+    const { useFahrenheit, settings } = nextProps
+    if (useFahrenheit) {
       this.setState({
         times: 1.8,
         base: 32
       })
-    } else {
+    } else if (!useFahrenheit) {
       this.setState({
         times: 1,
         base: 0
       })
     }
+    if (settings.region !== this.state.region) {
+      this.setState({
+        region: settings.region
+      })
+      console.log('fetch data')
+    }
   }
   responseHandler = res => {
     const { intl } = this.context
+    const { saveSettings, settings } = this.props
     if (res.ok) {
       res.json().then(data => {
         // 天气数据获取成功
@@ -127,6 +121,7 @@ class Weather extends Component {
             data: result
           })
           localStorage.setItem('weather', JSON.stringify(result))
+          saveSettings('region', result.basic.city)
         } else {
           this.setState({
             loading: false,
@@ -163,23 +158,6 @@ class Weather extends Component {
     })
   }
   getData = () => {
-    // 'https://api.heweather.com/x3/weather?cityid=CN101280601&key=258c581b778d440ab34a85d5c8d82902'
-    // const link = 'http://localhost:5300/api/weather'
-    /*const link = 'https://tab.xiejie.co/api/weather'
-    fetch(link).then(res => {
-      if (res.ok) {
-        res.json().then(data => {
-          this.setState({
-            data
-          })
-          localStorage.setItem('weather', JSON.stringify(data))
-        })
-      } else {
-        console.log(`Response wasn't perfect, got status ${res.status}`)
-      }
-    }, e => {
-      console.log('Fetch failed!')
-    })*/
     const { intl } = this.context
 
     navigator.geolocation.getCurrentPosition(pos => {
@@ -227,7 +205,6 @@ class Weather extends Component {
       intl.formatMessage({ id: 'weather.week.Saturday' })
     ]
     const week = new Date(date).getDay()
-    // return `周${weekArr[week]}`
     return weekArr[week]
   }
   render() {
@@ -278,8 +255,6 @@ class Weather extends Component {
                 </p>
               </div>
             </header>
-            <section className="now">
-            </section>
             <section className="daily-forecast">
               {data.forecast.map((value, index) => {
                 const week = this.calcWeek(value.date)
@@ -287,8 +262,6 @@ class Weather extends Component {
                   <div className="forecast-box" key={value.date}>
                     <p title={value.date}>{week}</p>
                     <div className={`weather-icon code-${value.code}`} title={value.text}></div>
-                    {/*<img src={`http://files.heweather.com/cond_icon/${value.cond.code_d}.png`} alt={value.cond.txt_d} />*/}
-                    {/*<p>{value.cond.txt_d}</p>*/}
                     <p>
                       <span className="high">{(value.high * times + base).toFixed(0)}°</span>
                       <span className="low">{(value.low * times + base).toFixed(0)}°</span>
@@ -315,4 +288,13 @@ class Weather extends Component {
   }
 }
 
-export default muiThemeable()(Weather)
+const mapStateToProps = state => {
+  const { data } = state.settings
+  return { settings: data }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(settingsActions, dispatch)
+}
+
+export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Weather))
