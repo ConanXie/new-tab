@@ -1,12 +1,19 @@
 const ls = window.localStorage
-const settings = ls.getItem('settings')
+
+export const SAVE_SETTINGS = 'SAVE_SETTINGS'
 
 export function saveSettings(key, value) {
   return (dispatch, getState) => {
-    const data = getState().settings.data
+    const { data } = getState().settings
     data[key] = value
-    ls.setItem('settings', JSON.stringify(data))
-    // console.log(chrome.storage.sync.set({ settings: data }))
+    
+    const save = JSON.stringify(data)
+    ls.setItem('settings', save)
+    
+    dispatch({
+      type: SAVE_SETTINGS,
+      data: JSON.parse(save)
+    })
   }
 }
 
@@ -15,16 +22,5 @@ export function saveTheme(index) {
     const data = getState().settings.data
     data.currentTheme = index
     ls.setItem('settings', JSON.stringify(data))
-  }
-}
-
-/**
- * If autoSaveEngine Toggle is true,
- * save the current engine
- */
-export function saveCurrentEngine() {
-  return (dispatch, getState) => {
-    const { currentEngine } = getState().searchEngine
-    ls.setItem('currentEngine', JSON.stringify(currentEngine))
   }
 }
