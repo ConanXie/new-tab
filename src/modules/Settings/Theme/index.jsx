@@ -238,19 +238,6 @@ class Theme extends Component {
           contentClassName="palette-content"
         >
           {themes.map((item, index) => {
-            {/*if (currentTheme === index) {
-              return (
-                <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.hideTheme() }}>
-                  <CheckCircle color={color} />
-                </IconButton>
-              )
-            } else {
-              return (
-                <IconButton style={style.small} iconStyle={style.smallIcon} key={index} onTouchTap={e => { this.switchTheme(index) }}>
-                  <ImageLens color={color} />
-                </IconButton>
-              )
-            }*/}
             const { name, color } = item
             return (
               <ListItem

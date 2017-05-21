@@ -20,7 +20,7 @@ export default function (state = initialState, action) {
     case UPDATE_ENGINE:
       return {
         ...state,
-        engines: engines
+        engines
       }
     default:
       return state

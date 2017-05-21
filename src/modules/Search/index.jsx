@@ -386,4 +386,5 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(searchEnginesActions, dispatch)
 }
+
 export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Search))

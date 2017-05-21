@@ -1,3 +1,5 @@
+import { SAVE_SETTINGS } from '../actions/settings'
+
 /**
  * Get data from localStorage to create initialState,
  * because the Toggle component of material-ui can't be setting different defaultToggled value twice
@@ -21,7 +23,14 @@ const initialState = {
 }
 
 export default function (state = initialState, action) {
-  switch (action.type) {
+  const { type, data } = action
+  
+  switch (type) {
+    case SAVE_SETTINGS:
+      return {
+        ...state,
+        data
+      }
     default:
       return state
   }

@@ -74,21 +74,16 @@ class Header extends Component {
       bookmarkOpen: true
     })
   }
-  /*trigger = () => {
-    navigator.geolocation.getCurrentPosition(position => {
-      const { latitude, longitude } = position.coords
-      fetch(`https://localhost:5001/api/position/${latitude}/${longitude}`, {
-        method: 'GET'
-      }).then(res => {
-        res.json().then(data => {
-          console.log(data)
-        })
-      }) 
-    })
-  }*/
   render() {
     // console.log(this.props)
-    const { showSettings, hideAppsName, rememberBookmarksState, useFahrenheit, muiTheme } = this.props
+    const {
+      showSettings,
+      hideAppsName,
+      rememberBookmarksState,
+      useFahrenheit,
+      blockGeolocation,
+      muiTheme
+    } = this.props
     return (
       <Paper className="header-bar" rounded={false} zDepth={0}>
         <div className="tool-bar">
@@ -114,7 +109,7 @@ class Header extends Component {
           open={this.state.drawerOpen}
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
-          <Weather useFahrenheit={useFahrenheit} />          
+          <Weather useFahrenheit={useFahrenheit} blockGeolocation={blockGeolocation} />          
           <Apps hideAppsName={hideAppsName} />
         </Drawer>
         <Drawer

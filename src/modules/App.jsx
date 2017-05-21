@@ -26,7 +26,19 @@ import Onboarding from './Onboarding'
 class App extends Component {
   constructor(props) {
     super(props)
-    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, currentTheme, darkMode, customTheme } = props.settings
+    const {
+      linkTarget,
+      searchTarget,
+      hideAppsName,
+      rememberBookmarksState,
+      searchPredict,
+      useHK,
+      useFahrenheit,
+      currentTheme,
+      darkMode,
+      customTheme,
+      blockGeolocation
+    } = props.settings
     const index = currentTheme ? currentTheme : 0
     let muiTheme
     if (index !== -1) {
@@ -43,7 +55,8 @@ class App extends Component {
       useHK,
       useFahrenheit,
       darkMode,
-      muiTheme
+      muiTheme,
+      blockGeolocation
     }
   }
   componentWillMount() {
@@ -69,7 +82,7 @@ class App extends Component {
       fontFamily: 'Roboto, Arial, 微软雅黑',
       palette: {
         primary1Color: color,
-        settingsBackgroundColor: 'hsla(0, 0%, 98%, 1)'
+        settingsBackgroundColor: 'hsla(0, 0%, 95%, 1)'
       }
     }
     if (hue === 'bright') {
@@ -100,39 +113,44 @@ class App extends Component {
     }
     return getMuiTheme(darkBaseTheme)
   }
-  setLinkTarget = (bool) => {
+  setLinkTarget = bool => {
     this.setState({
       linkTarget: bool ? '_blank' : '_self'
     })
   }
-  setSearchTarget = (bool) => {
+  setSearchTarget = bool => {
     this.setState({
       searchTarget: bool ? '_blank' : '_self'
     })
   }
-  hideAppsName = (bool) => {
+  hideAppsName = bool => {
     this.setState({
       hideAppsName: bool
     })
   }
-  rememberBookmarksState = (bool) => {
+  rememberBookmarksState = bool => {
     this.setState({
       rememberBookmarksState: bool
     })
   }
-  searchPredict = (bool) => {
+  searchPredict = bool => {
     this.setState({
       searchPredict: bool
     })
   }
-  useHK = (bool) => {
+  useHK = bool => {
     this.setState({
       useHK: bool
     })
   }
-  useFahrenheit = (bool) => {
+  useFahrenheit = bool => {
     this.setState({
       useFahrenheit: bool
+    })
+  }
+  blockGeolocation = bool => {
+    this.setState({
+      blockGeolocation: bool
     })
   }
   changeTheme = data => {
@@ -167,12 +185,28 @@ class App extends Component {
     }
   }
   render() {
-    const { linkTarget, searchTarget, hideAppsName, rememberBookmarksState, searchPredict, useHK, useFahrenheit, muiTheme, onboarding } = this.state
+    const {
+      linkTarget,
+      searchTarget,
+      hideAppsName,
+      rememberBookmarksState,
+      searchPredict,
+      useHK,
+      useFahrenheit,
+      muiTheme,
+      onboarding,
+      blockGeolocation
+    } = this.state
     // console.log(muiTheme)
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <Header hideAppsName={hideAppsName} rememberBookmarksState={rememberBookmarksState} useFahrenheit={useFahrenheit} />
+          <Header
+            hideAppsName={hideAppsName}
+            rememberBookmarksState={rememberBookmarksState}
+            useFahrenheit={useFahrenheit}
+            blockGeolocation={blockGeolocation}
+          />
           <Search target={searchTarget} searchPredict={searchPredict} useHK={useHK} />
           <Navigation target={linkTarget} />
           <Settings
@@ -185,6 +219,7 @@ class App extends Component {
             useFahrenheit={this.useFahrenheit}
             changeTheme={this.changeTheme}
             darkMode={this.darkMode}
+            blockGeolocation={this.blockGeolocation}
           />
           {onboarding && (
             <Onboarding />
