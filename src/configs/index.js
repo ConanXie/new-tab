@@ -2,7 +2,7 @@
  * some configs
  */
 
-const version = '1.4.8'
+const version = '1.5.0'
 
 const code = 'Apricot'
 

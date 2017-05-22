@@ -1,5 +1,10 @@
 ## Changelog
 
+## 1.5.0
+###### _May 22, 2017_
+- You can choose to block the geolocation
+- Custom region
+
 ## 1.4.8
 ###### _May 15, 2017_
 - Added Traditional Chinese
