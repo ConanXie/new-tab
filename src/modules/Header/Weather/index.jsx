@@ -64,10 +64,19 @@ class Weather extends Component {
   componentWillMount() {
     const { intl } = this.context
     
-    const { useFahrenheit } = this.props.settings
+    const { useFahrenheit, region, blockGeolocation } = this.props.settings
     
     this.setParams(useFahrenheit)
     
+    if (blockGeolocation && !region) {
+      this.setState({
+        loading: false,
+        empty: true,
+        emptyText: intl.formatMessage({ id: 'weather.empty.region' })
+      })
+      return
+    }
+
     const local = JSON.parse(localStorage.getItem('weather'))
     if (local) {
       const lastUpdate = new Date(local.basic.update).getTime()
