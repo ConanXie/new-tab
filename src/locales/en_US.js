@@ -81,9 +81,11 @@ export default {
   'weather.empty.geolocationClosed': 'You have rejected a request to get location information',
   'weather.empty.geolocationEmpty': 'The browser can not get your location information',
   'weather.empty.geolocationTimeout': 'Get location information timeout',
+  'weather.empty.region': 'Region is not available',
   /*weather region*/
   'region.edit.title': 'Edit region',
   'region.input.placeholder': 'Region',
+  'region.tip.geolocation': 'Currently using geolocation',
   /*theme*/
   'theme.custom.label': 'Custom',
   'theme.input.placeholder': 'Color code, e.g., #009688',

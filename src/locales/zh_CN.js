@@ -81,9 +81,11 @@ export default {
   'weather.empty.geolocationClosed': '你拒绝了获取位置信息的请求',
   'weather.empty.geolocationEmpty': '浏览器无法获取你的位置信息',
   'weather.empty.geolocationTimeout': '获取位置信息超时',
+  'weather.empty.region': '当前地区不可用',
   /*weather region*/
   'region.edit.title': '编辑地区',
   'region.input.placeholder': '地区',
+  'region.tip.geolocation': '当前使用地理位置',
   /*theme*/
   'theme.custom.label': '自定义',
   'theme.input.placeholder': '颜色代码，例如 #009688',
