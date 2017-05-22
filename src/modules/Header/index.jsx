@@ -38,12 +38,11 @@ class Header extends Component {
       drawerOpen: false,
       bookmarkOpen: false
     }
-    this.settingsOpen = false
   }
   componentDidMount() {
     document.onkeydown = () => {
       const { drawerOpen, bookmarkOpen } = this.state
-      const { settingsOpen, showSettings, hideSettings } = this.props
+      const { settingsPage, showSettings, hideSettings } = this.props
       const code = window.event.keyCode
       // console.log(window.event)
       // listen Alt + B
@@ -60,7 +59,7 @@ class Header extends Component {
       }
       // listen Alt + S
       if (code === 83 && window.event.altKey) {
-        settingsOpen ? hideSettings() : showSettings()
+        settingsPage ? hideSettings() : showSettings()
       }
     }
   }
@@ -75,15 +74,7 @@ class Header extends Component {
     })
   }
   render() {
-    // console.log(this.props)
-    const {
-      showSettings,
-      hideAppsName,
-      rememberBookmarksState,
-      useFahrenheit,
-      blockGeolocation,
-      muiTheme
-    } = this.props
+    const { showSettings, muiTheme } = this.props
     return (
       <Paper className="header-bar" rounded={false} zDepth={0}>
         <div className="tool-bar">
@@ -109,8 +100,8 @@ class Header extends Component {
           open={this.state.drawerOpen}
           onRequestChange={drawerOpen => this.setState({ drawerOpen })}
         >
-          <Weather useFahrenheit={useFahrenheit} blockGeolocation={blockGeolocation} />          
-          <Apps hideAppsName={hideAppsName} />
+          <Weather />
+          <Apps />
         </Drawer>
         <Drawer
           docked={false}
@@ -119,7 +110,7 @@ class Header extends Component {
           open={this.state.bookmarkOpen}
           onRequestChange={bookmarkOpen => this.setState({ bookmarkOpen })}
         >
-          <Bookmark rememberBookmarksState={rememberBookmarksState} />
+          <Bookmark />
         </Drawer>
       </Paper>
     )
@@ -127,8 +118,8 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-  const { status } = state.settingsPage
-  return { settingsOpen: status }
+  const { settingsPage } = state
+  return { settingsPage }
 }
 
 const mapDispatchToProps = dispatch => {

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as websiteActions from '../../actions/websites'
+import * as websitesActions from '../../actions/websites'
 import * as settingsActions from '../../actions/settings'
 
 import { FormattedMessage } from 'react-intl'
@@ -264,7 +264,7 @@ class Navigation extends Component {
     this.setState({
       isClassified: bool
     })
-    this.props.saveSettings('isClassified', bool)
+    this.props.saveSettings({ isClassified: bool })
     /*if (bool) {
       this.wrapperWidth = 820
       this.spacingX = 10
@@ -659,9 +659,10 @@ class Navigation extends Component {
     e.target.src = require('./images/favicon-default.svg')
   }
   render() {
-    const { store, classifiedStore, isEmpty, target, muiTheme } = this.props
-    const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, deleteOpen, deleteMessage, name, link, cIndex, isClassified} = this.state
     const { intl } = this.context
+    const { store, classifiedStore, isEmpty, muiTheme, settings } = this.props
+    const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, deleteOpen, deleteMessage, name, link, cIndex, isClassified} = this.state
+    const target = settings.linkTarget ? '_blank' : '_self'
     const actions = [
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
@@ -701,9 +702,6 @@ class Navigation extends Component {
     return (
       <Paper zDepth={0} className="navigation-box">
         <div className="tool-bar">
-          {/*<h3 className="title">
-            <FormattedMessage id="nav.title" />
-          </h3>*/}
           <div className={classNames('tool-area', { 'hide': !edit })}>
             {isClassified && (classifiedStore.length < classificationMax) && (
               <FlatButton
@@ -720,21 +718,6 @@ class Navigation extends Component {
               onCheck={this.isClassified}
               labelStyle={{ width: 'auto' }}
             />
-            {/*<div className={classNames('tool-box', { 'show-edit': edit })}>
-              <div className="first-column">
-                <IconButton onTouchTap={this.openDialog}>
-                  <ContentAdd />
-                </IconButton>
-                <IconButton onTouchTap={this.startEdit}>
-                  <ModeEdit />
-                </IconButton>
-              </div>
-              <div className="second-column">
-                <IconButton onTouchTap={this.finishedEdit}>
-                  <ActionDone />
-                </IconButton>
-              </div>
-            </div>*/}
           </div>
         </div>
         <div className={classNames('websites-wrap', { 'empty': isEmpty })}>
@@ -953,7 +936,6 @@ class Navigation extends Component {
           message={snackbarMessage}
           autoHideDuration={2000}
           onRequestClose={this.closeSnackerbar}
-          bodyStyle={style.snackbar}
         />
         <Snackbar
           open={deleteOpen}
@@ -962,7 +944,6 @@ class Navigation extends Component {
           autoHideDuration={2000}
           onRequestClose={this.closeDelete}
           onActionTouchTap={this.undoDelete}
-          bodyStyle={style.snackbar}
         />
       </Paper>
     )
@@ -971,18 +952,18 @@ class Navigation extends Component {
 
 const mapStateToProps = state => {
   const { store, classifiedStore, isEmpty } = state.websites
-  const { data } = state.settings
+  const { settings } = state
   return {
     store,
     classifiedStore,
     isEmpty,
-    settings: data,
+    settings
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    ...websiteActions,
+    ...websitesActions,
     ...settingsActions,
   }, dispatch)
 }

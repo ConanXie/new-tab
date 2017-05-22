@@ -18,18 +18,16 @@ const getSettings = () => {
   }
 }
 
-const initialState = {
-  data: getSettings()
-}
+const initialState = getSettings()
 
 export default function (state = initialState, action) {
-  const { type, data } = action
+  const { type, settings } = action
   
   switch (type) {
     case SAVE_SETTINGS:
       return {
         ...state,
-        data
+        ...settings
       }
     default:
       return state

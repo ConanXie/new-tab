@@ -6,13 +6,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import RaisedButton from 'material-ui/RaisedButton'
-// import { teal500, pink500 } from 'material-ui/styles/colors'
 
-/*const muiTheme = getMuiTheme({
-  palette: {
-    primary1Color: teal500
-  }
-}, {userAgent: 'all'})*/
 import { code } from '../configs'
 import { themes } from './Settings/Theme'
 
@@ -26,19 +20,13 @@ import Onboarding from './Onboarding'
 class App extends Component {
   constructor(props) {
     super(props)
+    
     const {
-      linkTarget,
-      searchTarget,
-      hideAppsName,
-      rememberBookmarksState,
-      searchPredict,
-      useHK,
-      useFahrenheit,
       currentTheme,
       darkMode,
-      customTheme,
-      blockGeolocation
+      customTheme
     } = props.settings
+
     const index = currentTheme ? currentTheme : 0
     let muiTheme
     if (index !== -1) {
@@ -47,16 +35,9 @@ class App extends Component {
       muiTheme = this.createTheme(customTheme.color, customTheme.hue)
     }
     this.state = {
-      linkTarget: linkTarget ? '_blank' : '_self',
-      searchTarget: searchTarget ? '_blank' : '_self',
-      hideAppsName,
-      rememberBookmarksState,
-      searchPredict,
-      useHK,
-      useFahrenheit,
+      settingsPageOpen: false,
       darkMode,
-      muiTheme,
-      blockGeolocation
+      muiTheme
     }
   }
   componentWillMount() {
@@ -113,114 +94,56 @@ class App extends Component {
     }
     return getMuiTheme(darkBaseTheme)
   }
-  setLinkTarget = bool => {
-    this.setState({
-      linkTarget: bool ? '_blank' : '_self'
-    })
-  }
-  setSearchTarget = bool => {
-    this.setState({
-      searchTarget: bool ? '_blank' : '_self'
-    })
-  }
-  hideAppsName = bool => {
-    this.setState({
-      hideAppsName: bool
-    })
-  }
-  rememberBookmarksState = bool => {
-    this.setState({
-      rememberBookmarksState: bool
-    })
-  }
-  searchPredict = bool => {
-    this.setState({
-      searchPredict: bool
-    })
-  }
-  useHK = bool => {
-    this.setState({
-      useHK: bool
-    })
-  }
-  useFahrenheit = bool => {
-    this.setState({
-      useFahrenheit: bool
-    })
-  }
-  blockGeolocation = bool => {
-    this.setState({
-      blockGeolocation: bool
-    })
-  }
-  changeTheme = data => {
-    let theme
-    if (typeof data === 'number') {
-      theme = this.createTheme(themes[data].color)
-    } else if (typeof data === 'object') {
-      theme = this.createTheme(data.color, data.hue)
-    } else {
-      theme = this.createTheme(themes[0].color)
+  componentWillReceiveProps(nextProps) {
+    // console.log(this.props, nextProps)
+    const { currentTheme, darkMode, customTheme } = nextProps.settings
+    if (currentTheme !== this.props.settings.currentTheme || (currentTheme === -1 && (customTheme.color !== this.props.settings.customTheme.color || customTheme.hue !== this.props.settings.customTheme.hue))) {
+      setTimeout(() => {
+        this.changeTheme(currentTheme)
+      }, 0)
     }
-    // console.log(theme)
+    if (darkMode !== this.props.settings.darkMode) {
+      this.darkMode(darkMode)
+    }
+  }
+  changeTheme = (index = 0) => {
+    let theme
+    if (index === -1) {
+      const { color, hue } = this.props.settings.customTheme
+      theme = this.createTheme(color, hue)
+    } else {
+      theme = this.createTheme(themes[index].color)
+    }
     this.setState({
       muiTheme: theme
     })
     document.querySelector('#app').style.background = theme.paper.backgroundColor
   }
-  darkMode = (bool) => {
+  darkMode = bool => {
     const { currentTheme, customTheme } = this.props.settings
-    // console.log(this.darkTheme)
     if (bool) {
       this.setState({
         muiTheme: this.darkTheme
       })
       document.querySelector('#app').style.background = this.darkTheme.paper.backgroundColor
     } else {
-      if (currentTheme !== -1) {
-        this.changeTheme(currentTheme)
-      } else if (customTheme) {
-        this.changeTheme(customTheme)
-      }
+      this.changeTheme(currentTheme)
     }
   }
   render() {
     const {
-      linkTarget,
-      searchTarget,
-      hideAppsName,
-      rememberBookmarksState,
-      searchPredict,
-      useHK,
-      useFahrenheit,
       muiTheme,
       onboarding,
-      blockGeolocation
+      settingsPageOpen
     } = this.state
-    // console.log(muiTheme)
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <Header
-            hideAppsName={hideAppsName}
-            rememberBookmarksState={rememberBookmarksState}
-            useFahrenheit={useFahrenheit}
-            blockGeolocation={blockGeolocation}
-          />
-          <Search target={searchTarget} searchPredict={searchPredict} useHK={useHK} />
-          <Navigation target={linkTarget} />
-          <Settings
-            setLinkTarget={this.setLinkTarget}
-            setSearchTarget={this.setSearchTarget}
-            hideAppsName={this.hideAppsName}
-            rememberBookmarksState={this.rememberBookmarksState}
-            searchPredict={this.searchPredict}
-            useHK={this.useHK}
-            useFahrenheit={this.useFahrenheit}
-            changeTheme={this.changeTheme}
-            darkMode={this.darkMode}
-            blockGeolocation={this.blockGeolocation}
-          />
+          <Header />
+          <Search />
+          <Navigation />
+          <Settings />
           {onboarding && (
             <Onboarding />
           )}
@@ -231,8 +154,8 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const { data } = state.settings
-  return { settings: data }
+  const { settings } = state
+  return { settings }
 }
 
 export default connect(mapStateToProps)(App)

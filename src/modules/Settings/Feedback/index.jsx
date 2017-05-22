@@ -188,7 +188,6 @@ class Feedback extends Component {
           message={snackbarMessage}
           autoHideDuration={2000}
           onRequestClose={this.closeSnackerbar}
-          bodyStyle={style.snackbar}
         />
       </div>
     )

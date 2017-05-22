@@ -87,12 +87,13 @@ class Search extends Component {
     e.preventDefault()
     const text = this.refs.text.value
     const { searchLink, searchClass } = this.state
-    const { useHK } = this.props
+    const { useHK, searchTarget } = this.props.settings
+    const target = searchTarget ? '_blank' : '_self'
     // 判断是否使用.hk
-    if (useHK && searchClass === 'google') {
-      window.open(searchLink.replace(/\.com/, '.com.hk').replace('%s', text), this.props.target)
+    if (searchClass === 'google' && useHK) {
+      window.open(searchLink.replace(/\.com/, '.com.hk').replace('%s', text), target)
     } else {
-      window.open(searchLink.replace('%s', text), this.props.target)
+      window.open(searchLink.replace('%s', text), target)
     }
   }
   changeEngine = index => {
@@ -120,7 +121,7 @@ class Search extends Component {
     this.predictionsIndex = -1
     const { searchName, searchPredict } = this.state
     // if user turn on search predict
-    if (this.props.searchPredict && searchPredict) {
+    if (this.props.settings.searchPredict && searchPredict) {
       // clearTimeout(this.delay)
 
       const text = event.target.value
@@ -210,7 +211,7 @@ class Search extends Component {
   }
   focus = () => {
     this.refs.text.classList.add('focus')
-    if (this.props.searchPredict) {
+    if (this.props.settings.searchPredict) {
       this.setState({
         showPredictions: true
       })
@@ -375,11 +376,10 @@ class Search extends Component {
 }
 
 const mapStateToProps = state => {
-  const { engines } = state.searchEngines
-  const { data } = state.settings
+  const { settings, searchEngines } = state
   return {
-    engines,
-    settings: data
+    engines: searchEngines.engines,
+    settings
   }
 }
 

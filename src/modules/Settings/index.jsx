@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as searchEngineActions from '../../actions/search-engines'
 import * as settingsPageActions from '../../actions/settings-page'
 import * as settingsActions from '../../actions/settings'
 
@@ -98,10 +97,8 @@ const style = {
 
 class Settings extends Component {
   static propTypes = {
-    status: PropTypes.bool.isRequired,
-    hideSettings: PropTypes.func.isRequired,
     saveSettings: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired
+    settings: PropTypes.object.isRequired
   }
   static contextTypes = {
     intl: PropTypes.object.isRequired
@@ -115,9 +112,9 @@ class Settings extends Component {
       snackbarMessage: ''
     }
   }
-  componentWillReceiveProps(next) {
+  componentWillReceiveProps(nextProps) {
     // show or hide the settings page
-    if (next.status) {
+    if (nextProps.open) {
       this.setState({
         display: 'block'
       })
@@ -128,51 +125,6 @@ class Settings extends Component {
         })
       }, 200)
     }
-  }
-  toggleLinkTarget = (event, bool) => {
-    const { saveSettings, setLinkTarget } = this.props
-    saveSettings('linkTarget', bool)
-    setLinkTarget(bool)
-  }
-  toggleSearchTarget = (event, bool) => {
-    const { saveSettings, setSearchTarget } = this.props
-    saveSettings('searchTarget', bool)
-    setSearchTarget(bool)
-  }
-  toggleHideAppsName = (event, bool) => {
-    const { saveSettings, hideAppsName } = this.props
-    saveSettings('hideAppsName', bool)
-    hideAppsName(bool)
-  }
-  toggleRememberBookmarksState = (event, bool) => {
-    const { saveSettings, rememberBookmarksState } = this.props
-    saveSettings('rememberBookmarksState', bool)
-    rememberBookmarksState(bool)
-  }
-  toggleSearchPredict = (event, bool) => {
-    const { saveSettings, searchPredict } = this.props
-    saveSettings('searchPredict', bool)
-    searchPredict(bool)
-  }
-  toggleUseHK = (event, bool) => {
-    const { saveSettings, useHK } = this.props
-    saveSettings('useHK', bool)
-    useHK(bool)
-  }
-  toggleFahrenheit = (event, bool) => {
-    const { saveSettings, useFahrenheit } = this.props
-    saveSettings('useFahrenheit', bool)
-    useFahrenheit(bool)
-  }
-  toggleDarkMode = (event, bool) => {
-    const { saveSettings, darkMode } = this.props
-    saveSettings('darkMode', bool)
-    darkMode(bool)
-  }
-  toggleGeolocation = (event, bool) => {
-    const { saveSettings, blockGeolocation } = this.props
-    saveSettings('blockGeolocation', bool)
-    blockGeolocation(bool)
   }
   createBackups = async () => {
     const sync = await new Promise((resolve, reject) => {
@@ -256,7 +208,7 @@ class Settings extends Component {
     })
   }
   render() {
-    const { status, data, hideSettings, changeTheme, muiTheme } = this.props
+    const { open, settings, muiTheme, hideSettings, saveSettings } = this.props
     const { display, currentTheme, snackbarOpen, snackbarMessage } = this.state
     const { intl } = this.context
     const resetActions = [
@@ -272,7 +224,8 @@ class Settings extends Component {
       />
     ]
     return (
-      <div className={classNames('settings-page', { 'show-settings-page': status, 'hide-settings-page': !status })}
+      <div
+        className={classNames('settings-page', { 'show-settings-page': open, 'hide-settings-page': !open })}
         style={{ display }}
       >
         <Paper className="header-bar settings-header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
@@ -294,8 +247,8 @@ class Settings extends Component {
                   <Toggle
                     className="toggle"
                     label={intl.formatMessage({ id: 'settings.website.open.label' })}
-                    defaultToggled={data.linkTarget}
-                    onToggle={this.toggleLinkTarget}
+                    defaultToggled={settings.linkTarget}
+                    onToggle={(event, bool) => { saveSettings({ linkTarget: bool }) }}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -306,8 +259,8 @@ class Settings extends Component {
                   <Toggle
                     className="toggle"
                     label={intl.formatMessage({ id: 'settings.apps.display.label' })}
-                    defaultToggled={data.hideAppsName}
-                    onToggle={this.toggleHideAppsName}
+                    defaultToggled={settings.hideAppsName}
+                    onToggle={(event, bool) => { saveSettings({ hideAppsName: bool }) }}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -318,8 +271,8 @@ class Settings extends Component {
                   <Toggle
                     className="toggle"
                     label={intl.formatMessage({ id: 'settings.bookmarks.position.label' })}
-                    defaultToggled={data.rememberBookmarksState}
-                    onToggle={this.toggleRememberBookmarksState}
+                    defaultToggled={settings.rememberBookmarksState}
+                    onToggle={(event, bool) => { saveSettings({ rememberBookmarksState: bool }) }}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -333,8 +286,8 @@ class Settings extends Component {
                   <Toggle
                     className="toggle"
                     label={intl.formatMessage({ id: 'settings.engine.search.label' })}
-                    defaultToggled={data.searchTarget}
-                    onToggle={this.toggleSearchTarget}
+                    defaultToggled={settings.searchTarget}
+                    onToggle={(event, bool) => { saveSettings({ searchTarget: bool }) }}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -345,8 +298,8 @@ class Settings extends Component {
                   <Toggle
                     className="toggle"
                     label={intl.formatMessage({ id: 'settings.search.predict.label' })}
-                    defaultToggled={data.searchPredict}
-                    onToggle={this.toggleSearchPredict}
+                    defaultToggled={settings.searchPredict}
+                    onToggle={(event, bool) => { saveSettings({ searchPredict: bool }) }}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -359,8 +312,8 @@ class Settings extends Component {
                     <Toggle
                       className="toggle"
                       label="Google 搜索使用 .hk"
-                      defaultToggled={data.useHK}
-                      onToggle={this.toggleUseHK}
+                      defaultToggled={settings.useHK}
+                      onToggle={(event, bool) => { saveSettings({ useHK: bool }) }}
                       labelStyle={style.toggleLabel}
                     />
                   </div>
@@ -368,18 +321,15 @@ class Settings extends Component {
               }
               {/*theme*/}
               <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
-              <Theme
-                changeTheme={changeTheme}
-                toggleDarkMode={this.toggleDarkMode}
-              />
+              <Theme />
               <div className="toggle-box">
                 <ImageBrightness style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                 <div className="toggle-wrapper">
                   <Toggle
                     className="toggle"
                     label={intl.formatMessage({ id: 'settings.theme.dark.label' })}
-                    defaultToggled={data.darkMode}
-                    onToggle={this.toggleDarkMode}
+                    defaultToggled={settings.darkMode}
+                    onToggle={(event, bool) => { saveSettings({ darkMode: bool }) }}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -392,8 +342,8 @@ class Settings extends Component {
                   <Toggle
                     className="toggle"
                     label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
-                    defaultToggled={data.useFahrenheit}
-                    onToggle={this.toggleFahrenheit}
+                    defaultToggled={settings.useFahrenheit}
+                    onToggle={(event, bool) => { saveSettings({ useFahrenheit: bool }) }}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -404,8 +354,8 @@ class Settings extends Component {
                   <Toggle
                     className="toggle"
                     label={intl.formatMessage({ id: 'settings.weather.gps.off.label' })}
-                    defaultToggled={data.blockGeolocation}
-                    onToggle={this.toggleGeolocation}
+                    defaultToggled={settings.blockGeolocation}
+                    onToggle={(event, bool) => { saveSettings({ blockGeolocation: bool }) }}
                     labelStyle={style.toggleLabel}
                   />
                 </div>
@@ -503,12 +453,8 @@ class Settings extends Component {
 }
 
 const mapStateToProps = state => {
-  const { status } = state.settingsPage
-  const { data } = state.settings
-  return {
-    status,
-    data
-  }
+  const { settings, settingsPage } = state
+  return { settings, open: settingsPage }
 }
 
 const mapDispatchToProps = dispatch => {

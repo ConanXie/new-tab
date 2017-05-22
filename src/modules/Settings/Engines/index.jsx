@@ -180,6 +180,7 @@ class Engines extends Component {
     const actions = [
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
+        primary={true}
         onTouchTap={this.closeEditDialog}
       />,
       <FlatButton

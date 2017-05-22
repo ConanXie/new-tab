@@ -4,6 +4,8 @@ import classNames from 'classnames'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { connect } from 'react-redux'
+
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -45,7 +47,7 @@ class Apps extends Component {
   }
   render() {
     const { apps } = this.state
-    const { hideAppsName, muiTheme } = this.props
+    const { settings, muiTheme } = this.props
     const { intl } = this.context
     return (
       <div className="apps-component">
@@ -80,7 +82,7 @@ class Apps extends Component {
                     <dt>
                       <img src="chrome://extension-icon/ahfgeienlihckogmohjhadlkjgocpleb/128/0" alt="Chrome Web Store" />
                     </dt>
-                    <dd className={classNames({ 'hide': hideAppsName })}>Chrome Web Store</dd>
+                    <dd className={classNames({ 'hide': settings.hideAppsName })}>Chrome Web Store</dd>
                   </dl>
                 </a>
               </FlatButton>
@@ -99,7 +101,7 @@ class Apps extends Component {
                     <dt>
                       <img src={`${url}?grayscale=${!enabled}`} alt={shortName} />
                     </dt>
-                    <dd className={classNames({ 'hide': hideAppsName })}>{shortName}</dd>
+                    <dd className={classNames({ 'hide': settings.hideAppsName })}>{shortName}</dd>
                   </dl>
                 </FlatButton>
               </div>
@@ -111,4 +113,9 @@ class Apps extends Component {
   }
 }
 
-export default muiThemeable()(Apps)
+const mapStateToProps = state => {
+  const { settings } = state
+  return { settings }
+}
+
+export default muiThemeable()(connect(mapStateToProps)(Apps))

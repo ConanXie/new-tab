@@ -1,26 +1,19 @@
-const ls = window.localStorage
-
 export const SAVE_SETTINGS = 'SAVE_SETTINGS'
 
-export function saveSettings(key, value) {
+export function saveSettings(data) {
   return (dispatch, getState) => {
-    const { data } = getState().settings
-    data[key] = value
-    
-    const save = JSON.stringify(data)
-    ls.setItem('settings', save)
+    // const clone = JSON.parse(JSON.stringify(getState().settings))
+    // clone[key] = value
+    const clone = {
+      ...getState().settings,
+      ...data
+    }
+
+    window.localStorage.setItem('settings', JSON.stringify(clone))
     
     dispatch({
       type: SAVE_SETTINGS,
-      data: JSON.parse(save)
+      settings: clone
     })
-  }
-}
-
-export function saveTheme(index) {
-  return (dispatch, getState) => {
-    const data = getState().settings.data
-    data.currentTheme = index
-    ls.setItem('settings', JSON.stringify(data))
   }
 }

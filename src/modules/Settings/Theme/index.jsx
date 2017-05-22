@@ -105,9 +105,8 @@ class Theme extends Component {
   }
   constructor(props) {
     super(props)
-    const { currentTheme, customTheme } = props.data
+    const { currentTheme, customTheme } = props.settings
     this.state = {
-      currentTheme: currentTheme ? currentTheme : 0,
       themeOpen: false,
       customizationOpen: false,
       color: customTheme ? customTheme.color : '',
@@ -125,18 +124,12 @@ class Theme extends Component {
       themeOpen: false
     })
   }
-  switchTheme = (index) => {
-    const { currentTheme } = this.state
-    const { saveTheme, changeTheme, toggleDarkMode } = this.props
-    const { darkMode } = this.props.data
-    saveTheme(index)
-    changeTheme(index)
-    this.setState({
-      currentTheme: index
+  switchTheme = index => {
+    const { saveSettings, changeTheme, settings } = this.props
+    saveSettings({
+      currentTheme: index,
+      darkMode: false
     })
-    if (darkMode) {
-      toggleDarkMode(null, false)
-    }
     setTimeout(() => {
       this.hideTheme()
     }, 200)
@@ -147,9 +140,9 @@ class Theme extends Component {
     })
   }
   hideCustomization = () => {
-    const customTheme = this.props.data.customTheme
+    const { customTheme } = this.props.settings
     if (customTheme) {
-      const { color, hue } = this.props.data.customTheme
+      const { color, hue } = customTheme
       this.setState({
         customizationOpen: false,
         color,
@@ -167,7 +160,7 @@ class Theme extends Component {
     const color = newValue.toUpperCase()
 
     this.setState({
-      color: color
+      color
     })
 
     if (this.checkColor.test(color)) {
@@ -185,28 +178,26 @@ class Theme extends Component {
   }
   setCustomizedColor = () => {
     const { color, hue } = this.state
-    const { saveSettings, saveTheme, changeTheme, toggleDarkMode } = this.props
-    const { darkMode } = this.props.data
-    if (this.checkColor.test(color)) {
-      // console.log(color, hue)
-      const custom = { color, hue }
-      this.setState({
-        currentTheme: -1
-      })
-      saveTheme(-1)
-      changeTheme(custom)
-      if (darkMode) {
-        toggleDarkMode(null, false)
-      }
-      saveSettings('customTheme', custom)
-      this.hideTheme()
-    }
+    const { saveSettings, toggleDarkMode, settings } = this.props
     this.hideCustomization()
+    if (this.checkColor.test(color)) {
+      saveSettings({
+        currentTheme: -1,
+        darkMode: false,
+        customTheme: { color, hue }
+      })
+      this.hideTheme()
+      this.setState({
+        color,
+        hue
+      })
+    }
   }
   render() {
     const { intl } = this.context
-    const { muiTheme } = this.props
-    const { currentTheme, color, hue, customizationOpen } = this.state
+    const { muiTheme, settings } = this.props
+    const current = settings.currentTheme ? settings.currentTheme : 0
+    const { customizationOpen, color, hue } = this.state
 
     const customizeActions = [
       <FlatButton
@@ -244,8 +235,8 @@ class Theme extends Component {
                 key={index}
                 primaryText={name}
                 leftIcon={<ImageLens color={color} />}
-                rightIcon={<ActionDone color={color} style={{ display: currentTheme !== index ? 'none' : '' }} />}
-                style={{ color: color }}
+                rightIcon={<ActionDone color={color} style={{ display: current !== index ? 'none' : '' }} />}
+                style={{ color }}
                 onTouchTap={e => { this.switchTheme(index) }}
               />
             )
@@ -253,8 +244,8 @@ class Theme extends Component {
           <ListItem
             primaryText={intl.formatMessage({ id: 'theme.custom.label' })}
             leftIcon={<ImageColorize color={color} />}
-            rightIcon={<ActionDone  color={color} style={{ display: currentTheme !== -1 ? 'none' : '' }} />}
-            style={{ color: color }}
+            rightIcon={<ActionDone  color={color} style={{ display: current !== -1 ? 'none' : '' }} />}
+            style={{ color }}
             onTouchTap={this.openCustomization}
           />
         </Dialog>
@@ -297,8 +288,8 @@ class Theme extends Component {
 }
 
 const mapStateToProps = state => {
-  const { data } = state.settings
-  return { data }
+  const { settings } = state
+  return { settings }
 }
 
 const mapDispatchToProps = dispatch => {

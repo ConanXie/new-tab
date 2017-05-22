@@ -7,6 +7,8 @@ import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
 import PropTypes from 'prop-types'
 
+import { connect } from 'react-redux'
+
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
 import { Tabs, Tab } from 'material-ui/Tabs'
@@ -297,7 +299,7 @@ class Bookmark extends Component {
     this.opens = []
   }
   componentWillReceiveProps(nextProps, nextState) {
-    const { rememberBookmarksState } = nextProps
+    const { rememberBookmarksState } = nextProps.settings
 
     // if cancel remember state then set scrollTop and opens to default
     if (!rememberBookmarksState) {
@@ -318,7 +320,7 @@ class Bookmark extends Component {
   componentDidMount() {
 
     // get data from localStorage
-    if (this.props.rememberBookmarksState) {
+    if (this.props.settings.rememberBookmarksState) {
       this.opens = JSON.parse(localStorage.getItem('bookmarksOpens')) || []
       this.scrollTop = Number(localStorage.getItem('bookmarksScrollTop'))
     }
@@ -366,7 +368,7 @@ class Bookmark extends Component {
   }
   listenScroll = (event) => {
     // if user need to remember bookmarks state
-    if (this.props.rememberBookmarksState) {
+    if (this.props.settings.rememberBookmarksState) {
       localStorage.setItem('bookmarksScrollTop', event.target.scrollTop)
     }
   }
@@ -377,7 +379,7 @@ class Bookmark extends Component {
     } else {
       this.opens.push(id)
     }
-    if (this.props.rememberBookmarksState) {
+    if (this.props.settings.rememberBookmarksState) {
       localStorage.setItem('bookmarksOpens', JSON.stringify(this.opens))
     }
   }
@@ -461,4 +463,9 @@ class Bookmark extends Component {
   }
 }
 
-export default muiThemeable()(Bookmark)
+const mapStateToProps = state => {
+  const { settings } = state
+  return { settings }
+}
+
+export default muiThemeable()(connect(mapStateToProps)(Bookmark))
