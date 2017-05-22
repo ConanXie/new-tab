@@ -66,7 +66,7 @@ class Region extends Component {
     this.region = value
   }
   handleSubmit = () => {
-    this.props.saveSettings('region', this.region.trim())
+    this.props.saveSettings({ region: this.region.trim() })
     this.hideDialog()
   }
   render() {
@@ -114,7 +114,7 @@ class Region extends Component {
         </Dialog>
         <Snackbar
           open={snackbarOpen}
-          message="当前使用定位"
+          message={intl.formatMessage({ id: 'region.tip.geolocation' })}
           autoHideDuration={2000}
           onRequestClose={this.closeSnackerbar}
         />
@@ -124,8 +124,8 @@ class Region extends Component {
 }
 
 const mapStateToProps = state => {
-  const { data } = state.settings
-  return { settings: data }
+  const { settings } = state
+  return { settings }
 }
 
 const mapDispatchToProps = dispatch => {

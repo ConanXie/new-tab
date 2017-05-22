@@ -55,12 +55,18 @@ class Weather extends Component {
       emptyText: ''
     }
   }
+  setParams(bool) {
+    this.setState({
+      times: bool ? 1.8 : 1,
+      base: bool ? 32 : 0
+    })
+  }
   componentWillMount() {
     const { intl } = this.context
     
-    this.setState({
-      region: this.props.settings.region
-    })
+    const { useFahrenheit } = this.props.settings
+    
+    this.setParams(useFahrenheit)
     
     const local = JSON.parse(localStorage.getItem('weather'))
     if (local) {
@@ -81,30 +87,40 @@ class Weather extends Component {
           })
         }
       } else {
-        this.getData()
+        this.howToGet()
+      }
+    } else {
+      this.howToGet()
+    }
+  }
+  howToGet() {
+    const { intl } = this.context
+    const { region, blockGeolocation } = this.props.settings
+    if (blockGeolocation) {
+      if (region) {
+        this.getData(region)
+      } else {
+        this.setState({
+          loading: false,
+          data: [],
+          empty: true,
+          emptyText: intl.formatMessage({ id: 'weather.empty.region' })
+        })
       }
     } else {
       this.getData()
     }
   }
   componentWillReceiveProps(nextProps) {
-    const { useFahrenheit, settings } = nextProps
-    if (useFahrenheit) {
-      this.setState({
-        times: 1.8,
-        base: 32
-      })
-    } else if (!useFahrenheit) {
-      this.setState({
-        times: 1,
-        base: 0
-      })
+    const { useFahrenheit, region, blockGeolocation } = nextProps.settings
+    // console.log(region, this.props.settings.region)
+    if (useFahrenheit !== this.props.settings.useFahrenheit) {
+      this.setParams(useFahrenheit)
     }
-    if (settings.region !== this.state.region) {
-      this.setState({
-        region: settings.region
-      })
-      console.log('fetch data')
+    if (region !== this.props.settings.region) {
+      setTimeout(() => {
+        this.howToGet()
+      }, 0)
     }
   }
   responseHandler = res => {
@@ -118,13 +134,17 @@ class Weather extends Component {
           result.basic.update = Date.now()
           this.setState({
             loading: false,
-            data: result
+            data: result,
+            empty: false
           })
           localStorage.setItem('weather', JSON.stringify(result))
-          saveSettings('region', result.basic.city)
+          if (!settings.blockGeolocation) {
+            saveSettings({ region: result.basic.city })
+          }
         } else {
           this.setState({
             loading: false,
+            data: [],
             empty: true,
             emptyText: intl.formatMessage({ id: 'weather.empty.noData' })
           })
@@ -141,6 +161,7 @@ class Weather extends Component {
       console.error(`Response wasn't perfect, got status ${res.status}`)
       this.setState({
         loading: false,
+        data: [],
         empty: true,
         emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
       })
@@ -153,45 +174,51 @@ class Weather extends Component {
 
     this.setState({
       loading: false,
+      data: [],
       empty: true,
       emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
     })
   }
-  getData = () => {
+  getData = region => {
     const { intl } = this.context
+    const lang = navigator.language
 
-    navigator.geolocation.getCurrentPosition(pos => {
-      const lat = pos.coords.latitude.toFixed(6)
-      const lng = pos.coords.longitude.toFixed(6)
-      fetch(`https://tab.xiejie.co/api/weather/v4/${lat},${lng}`).then(this.responseHandler, this.responseError)
-      // fetch(`http://localhost:5300/api/weather/v4/${lat},${lng}`).then(this.responseHandler, this.responseError)
-    }, error => {
-      let emptyText
-      switch (error.code) {
-        case 0:
-          emptyText = intl.formatMessage({ id: 'weather.empty.geolocationError' }) + error.message
-          break
-        case 1:
-          emptyText = intl.formatMessage({ id: 'weather.empty.geolocationClosed' })
-          break
-        case 2:
-          emptyText = intl.formatMessage({ id: 'weather.empty.geolocationEmpty' })
-          break
-        case 3:
-          emptyText = intl.formatMessage({ id: 'weather.empty.geolocationTimeout' })
-          break
-      }
-      if (navigator.language === 'zh-CN') {
-        fetch(`https://tab.xiejie.co/api/weather/v4`).then(this.responseHandler, this.responseError)
-        // fetch(`http://localhost:5300/api/weather/v4`).then(this.responseHandler, this.responseError)
-      } else {
-        this.setState({
-          loading: false,
-          empty: true,
-          emptyText
-        })
-      }
-    }, { maximumAge: 60000, timeout: 6000 })
+    if (region) {
+      fetch(`https://tab.xiejie.co/api/weather/v5/${region}?lang=${lang}`).then(this.responseHandler, this.responseError)
+    } else  {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude.toFixed(6)
+        const lng = pos.coords.longitude.toFixed(6)
+        fetch(`https://tab.xiejie.co/api/weather/v4/${lat},${lng}?lang=${lang}`).then(this.responseHandler, this.responseError)
+        // fetch(`http://localhost:5300/api/weather/v4/${lat},${lng}`).then(this.responseHandler, this.responseError)
+      }, error => {
+        let emptyText
+        switch (error.code) {
+          case 0:
+            emptyText = intl.formatMessage({ id: 'weather.empty.geolocationError' }) + error.message
+            break
+          case 1:
+            emptyText = intl.formatMessage({ id: 'weather.empty.geolocationClosed' })
+            break
+          case 2:
+            emptyText = intl.formatMessage({ id: 'weather.empty.geolocationEmpty' })
+            break
+          case 3:
+            emptyText = intl.formatMessage({ id: 'weather.empty.geolocationTimeout' })
+            break
+        }
+        if (lang === 'zh-CN') {
+          fetch(`https://tab.xiejie.co/api/weather/v4?lang=${lang}`).then(this.responseHandler, this.responseError)
+          // fetch(`http://localhost:5300/api/weather/v4`).then(this.responseHandler, this.responseError)
+        } else {
+          this.setState({
+            loading: false,
+            empty: true,
+            emptyText
+          })
+        }
+      }, { maximumAge: 60000, timeout: 6000 })
+    }
   }
   calcWeek = (date) => {
     const { intl } = this.context
@@ -289,8 +316,8 @@ class Weather extends Component {
 }
 
 const mapStateToProps = state => {
-  const { data } = state.settings
-  return { settings: data }
+  const { settings } = state
+  return { settings }
 }
 
 const mapDispatchToProps = dispatch => {
