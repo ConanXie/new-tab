@@ -35,7 +35,6 @@ class App extends Component {
       muiTheme = this.createTheme(customTheme.color, customTheme.hue)
     }
     this.state = {
-      settingsPageOpen: false,
       darkMode,
       muiTheme
     }
@@ -133,8 +132,7 @@ class App extends Component {
   render() {
     const {
       muiTheme,
-      onboarding,
-      settingsPageOpen
+      onboarding
     } = this.state
 
     return (
