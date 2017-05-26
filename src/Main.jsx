@@ -20,23 +20,21 @@ import App from './modules/App'
 
 import { messages } from './configs'
 
-const renderApp = (Component = App) => {
-  render((
-    <IntlProvider
-      locale={'en-US'}
-      messages={messages}
-    >
-      <Provider store={store}>
-        <AppContainer>
-          <Component />
-        </AppContainer>
-      </Provider>
-    </IntlProvider>
-  ), document.querySelector('#app'))
-}
+const renderApp = (Component = App) => render((
+  <IntlProvider
+    locale={'en-US'}
+    messages={messages}
+  >
+    <Provider store={store}>
+      <AppContainer>
+        <Component />
+      </AppContainer>
+    </Provider>
+  </IntlProvider>
+), document.querySelector('#app'))
 
 renderApp()
 
 if (module.hot) {
-  module.hot.accept('./modules/App', () => { renderApp() })
+  module.hot.accept('./modules/App', () => renderApp())
 }
