@@ -16,15 +16,19 @@ import FileFolder from 'material-ui/svg-icons/file/folder'
 import ActionBookmark from 'material-ui/svg-icons/action/bookmark-border'
 import ActionSettings from 'material-ui/svg-icons/action/settings'
 import ActionRoom from 'material-ui/svg-icons/action/room'
+import DeviceWallpaper from 'material-ui/svg-icons/device/wallpaper'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 
 import Weather from './Weather'
 import Apps from './Apps'
 import Bookmark from './Bookmark'
+import Wallpaper from './Wallpaper'
 
 const style = {
-  
+  rightIcon: {
+    marginLeft: '4px'
+  }
 }
 
 class Header extends Component {
@@ -35,61 +39,56 @@ class Header extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      drawerOpen: false,
-      bookmarkOpen: false
+      weatherOpen: false,
+      bookmarkOpen: false,
+      wallpaperOpen: false
     }
   }
   componentDidMount() {
     document.onkeydown = () => {
-      const { drawerOpen, bookmarkOpen } = this.state
+      const { weatherOpen, bookmarkOpen } = this.state
       const { settingsPage, showSettings, hideSettings } = this.props
-      const code = window.event.keyCode
+      const { keyCode, altKey } = window.event
       // console.log(window.event)
       // listen Alt + B
-      if (code === 66 && window.event.altKey) {
+      if (keyCode === 66 && altKey) {
         this.setState({
           bookmarkOpen: !bookmarkOpen
         })
       }
       // listen Alt + A
-      if (code === 65 && window.event.altKey) {
+      if (keyCode === 65 && altKey) {
         this.setState({
-          drawerOpen: !drawerOpen
+          weatherOpen: !weatherOpen
         })
       }
       // listen Alt + S
-      if (code === 83 && window.event.altKey) {
+      if (keyCode === 83 && altKey) {
         settingsPage ? hideSettings() : showSettings()
       }
     }
   }
-  openDrawer = () => {
-    this.setState({
-      drawerOpen: true
-    })
-  }
-  openBookmark = () => {
-    this.setState({
-      bookmarkOpen: true
-    })
-  }
   render() {
     const { showSettings, muiTheme } = this.props
+    const { weatherOpen, bookmarkOpen, wallpaperOpen } = this.state
     return (
       <Paper className="header-bar" rounded={false} zDepth={0}>
         <div className="tool-bar">
           <div className="bar-left">
             <IconButton
-              onTouchTap={this.openDrawer}
+              onTouchTap={() => this.setState({ weatherOpen: true })}
             >
               <NavigationMenu color={muiTheme.palette.textColor} />
             </IconButton>
           </div>
           <div className="bar-right">
-            <IconButton onTouchTap={this.openBookmark}>
+            <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ bookmarkOpen: true })}>
               <ActionBookmark color={muiTheme.palette.textColor} />
             </IconButton>
-            <IconButton onTouchTap={showSettings}>
+            <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ wallpaperOpen: true })}>
+              <DeviceWallpaper color={muiTheme.palette.textColor} />
+            </IconButton>
+            <IconButton style={style.rightIcon} onTouchTap={showSettings}>
               <ActionSettings color={muiTheme.palette.textColor} />
             </IconButton>
           </div>
@@ -97,8 +96,8 @@ class Header extends Component {
         <Drawer
           docked={false}
           width={600}
-          open={this.state.drawerOpen}
-          onRequestChange={drawerOpen => this.setState({ drawerOpen })}
+          open={weatherOpen}
+          onRequestChange={state => this.setState({ weatherOpen: state })}
         >
           <Weather />
           <Apps />
@@ -107,8 +106,17 @@ class Header extends Component {
           docked={false}
           width={480}
           openSecondary={true}
-          open={this.state.bookmarkOpen}
-          onRequestChange={bookmarkOpen => this.setState({ bookmarkOpen })}
+          open={wallpaperOpen}
+          onRequestChange={state => this.setState({ wallpaperOpen: state })}
+        >
+          <Wallpaper />
+        </Drawer>
+        <Drawer
+          docked={false}
+          width={480}
+          openSecondary={true}
+          open={bookmarkOpen}
+          onRequestChange={state => this.setState({ bookmarkOpen: state })}
         >
           <Bookmark />
         </Drawer>
