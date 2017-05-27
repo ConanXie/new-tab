@@ -59,7 +59,7 @@ class App extends Component {
   }
   createTheme = (color, hue) => {
     const theme = {
-      fontFamily: 'Roboto, Arial, 微软雅黑',
+      fontFamily: 'Roboto, Microsoft Yahei',
       palette: {
         primary1Color: color,
         settingsBackgroundColor: 'hsla(0, 0%, 95%, 1)'
@@ -74,7 +74,7 @@ class App extends Component {
     return getMuiTheme(theme)
   }
   createDarkTheme = () => {
-    darkBaseTheme.fontFamily = 'Roboto, Arial, 微软雅黑'
+    darkBaseTheme.fontFamily = 'Roboto, Microsoft Yahei'
     darkBaseTheme.palette = {
       ...darkBaseTheme.palette,
       primary1Color: '#546e7a',
@@ -130,17 +130,17 @@ class App extends Component {
     }
   }
   render() {
-    const {
-      muiTheme,
-      onboarding
-    } = this.state
+    const { muiTheme, onboarding } = this.state
+    const { hideWebsites } = this.props.settings
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <Header />
           <Search />
-          <Navigation />
+          {!hideWebsites && (
+            <Navigation />
+          )}
           <Settings />
           {onboarding && (
             <Onboarding />
