@@ -1,5 +1,6 @@
 import './style.less'
 
+import classNames from 'classnames'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
@@ -26,6 +27,9 @@ import Bookmark from './Bookmark'
 import Wallpaper from './Wallpaper'
 
 const style = {
+  headerBar: {
+    background: 'none'
+  },
   rightIcon: {
     marginLeft: '4px'
   }
@@ -69,27 +73,35 @@ class Header extends Component {
     }
   }
   render() {
-    const { showSettings, muiTheme } = this.props
+    const { showSettings, settings, muiTheme } = this.props
     const { weatherOpen, bookmarkOpen, wallpaperOpen } = this.state
+    
+    const iconColor = (settings.topShadow && !settings.darkMode) ? '#fff' : muiTheme.palette.textColor
+    
     return (
-      <Paper className="header-bar" rounded={false} zDepth={0}>
+      <Paper
+        className={classNames('header-bar', { 'has-shadow': settings.topShadow })}
+        rounded={false}
+        zDepth={0}
+        style={style.headerBar}
+      >
         <div className="tool-bar">
           <div className="bar-left">
             <IconButton
               onTouchTap={() => this.setState({ weatherOpen: true })}
             >
-              <NavigationMenu color={muiTheme.palette.textColor} />
+              <NavigationMenu color={iconColor} />
             </IconButton>
           </div>
           <div className="bar-right">
             <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ bookmarkOpen: true })}>
-              <ActionBookmark color={muiTheme.palette.textColor} />
+              <ActionBookmark color={iconColor} />
             </IconButton>
             <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ wallpaperOpen: true })}>
-              <DeviceWallpaper color={muiTheme.palette.textColor} />
+              <DeviceWallpaper color={iconColor} />
             </IconButton>
             <IconButton style={style.rightIcon} onTouchTap={showSettings}>
-              <ActionSettings color={muiTheme.palette.textColor} />
+              <ActionSettings color={iconColor} />
             </IconButton>
           </div>
         </div>
@@ -126,8 +138,8 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-  const { settingsPage } = state
-  return { settingsPage }
+  const { settingsPage, settings } = state
+  return { settingsPage, settings }
 }
 
 const mapDispatchToProps = dispatch => {
