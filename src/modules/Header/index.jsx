@@ -116,12 +116,12 @@ class Header extends Component {
         </Drawer>
         <Drawer
           docked={false}
-          width={480}
+          width={360}
           openSecondary={true}
           open={wallpaperOpen}
           onRequestChange={state => this.setState({ wallpaperOpen: state })}
         >
-          <Wallpaper />
+          <Wallpaper close={() => this.setState({ wallpaperOpen: false })} />
         </Drawer>
         <Drawer
           docked={false}

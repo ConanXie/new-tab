@@ -1,0 +1,63 @@
+.wallpaper-settings {
+  height: 100vh;
+  overflow: hidden;
+  .header-bar {
+    width: 100%;
+  }
+  .bar-left {
+    display: flex;
+    .bar-label {
+      display: flex;
+      align-items: center;
+      margin-left: 12px;
+      height: 48px;
+      font-size: 18px;
+    }
+  }
+  & > section {
+    height: calc(~"100vh - 56px");
+    margin-top: 56px;
+    overflow-y: auto;
+  }
+  .area {
+    h2, .column, .border {
+      padding: 0 14px;
+    }
+    h2 {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 48px;
+    }
+    .column {
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      &.no-padding-right {
+        padding-right: 0;
+      }
+      & > div {
+        flex: 1;
+      }
+    }
+    .column, .border {
+      &:not(:last-child) {
+        border-bottom: 1px solid #eee;
+      }
+    }
+    .border {
+      padding: 20px 14px 0;
+    }
+    h3 {
+      font-size: 14px;
+      font-weight: normal;
+    }
+    .opacity-wrap {
+      display: flex;
+      align-items: center;
+      height: 72px;
+      & > div {
+        flex: 1;
+      }
+    }
+  }
+}
