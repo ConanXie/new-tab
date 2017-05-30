@@ -48,6 +48,8 @@ class App extends Component {
     }
     const { darkMode, muiTheme } = this.state
 
+    this.changeBackground()
+    
     this.darkTheme = this.createDarkTheme()
     // console.log(this.darkTheme)
     if (darkMode) {
@@ -95,7 +97,7 @@ class App extends Component {
   }
   componentWillReceiveProps(nextProps) {
     // console.log(this.props, nextProps)
-    const { currentTheme, darkMode, customTheme } = nextProps.settings
+    const { currentTheme, darkMode, customTheme, background, backgroundSource, backgroundColor } = nextProps.settings
     if (currentTheme !== this.props.settings.currentTheme || (currentTheme === -1 && (customTheme.color !== this.props.settings.customTheme.color || customTheme.hue !== this.props.settings.customTheme.hue))) {
       setTimeout(() => {
         this.changeTheme(currentTheme)
@@ -103,6 +105,11 @@ class App extends Component {
     }
     if (darkMode !== this.props.settings.darkMode) {
       this.darkMode(darkMode)
+    }
+    if ((background !== this.props.settings.background) || (backgroundSource !== this.props.settings.backgroundSource) || (backgroundColor !== this.props.settings.backgroundColor)) {
+      setTimeout(() => {
+        this.changeBackground()
+      }, 0)
     }
   }
   changeTheme = (index = 0) => {
@@ -116,7 +123,18 @@ class App extends Component {
     this.setState({
       muiTheme: theme
     })
-    document.querySelector('#app').style.background = theme.paper.backgroundColor
+    this.changeBackground()
+  }
+  changeBackground() {
+    const { background, backgroundSource, backgroundColor } = this.props.settings
+
+    if (background && backgroundSource === 3 && backgroundColor) {
+      // Set background with solid color
+      document.querySelector('#app').style.background = backgroundColor
+    } else {
+      document.querySelector('#app').style.background = '#fff'
+    }
+
   }
   darkMode = bool => {
     const { currentTheme, customTheme } = this.props.settings
