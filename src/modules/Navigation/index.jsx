@@ -35,6 +35,9 @@ import {blue500, red500, red300, grey600, grey500, greenA200} from 'material-ui/
 import { classificationMax, websiteMax } from '../../configs'
 
 const style = {
+  box: {
+    backgroundColor: 'transparent'
+  },
   website: {
     width: '150px',
     textAlign: 'left',
@@ -662,7 +665,11 @@ class Navigation extends Component {
     const { intl } = this.context
     const { store, classifiedStore, isEmpty, muiTheme, settings } = this.props
     const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, deleteOpen, deleteMessage, name, link, cIndex, isClassified} = this.state
-    const target = settings.linkTarget ? '_blank' : '_self'
+    const { linkTarget, darkMode, background, backgroundShade } = settings
+    
+    const target = linkTarget ? '_blank' : '_self'
+    const labelColor = !darkMode && background && backgroundShade === 2 ? 'rgba(255, 255, 255, 0.87)' : muiTheme.palette.textColor
+    
     const actions = [
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
@@ -700,13 +707,14 @@ class Navigation extends Component {
       />
     ]
     return (
-      <Paper zDepth={0} className="navigation-box">
+      <Paper zDepth={0} className="navigation-box" style={style.box}>
         <div className="tool-bar">
           <div className={classNames('tool-area', { 'hide': !edit })}>
             {isClassified && (classifiedStore.length < classificationMax) && (
               <FlatButton
                 label={intl.formatMessage({ id: 'nav.increase.classification.btn' })}
-                icon={<ContentAdd />}
+                labelStyle={{ color: labelColor }}
+                icon={<ContentAdd color={labelColor} />}
                 onTouchTap={this.openClassifyDialog}
               />
             )}
@@ -716,7 +724,7 @@ class Navigation extends Component {
               labelStyle={style.classifyCheckboxLabel}
               defaultChecked={isClassified}
               onCheck={this.isClassified}
-              labelStyle={{ width: 'auto' }}
+              labelStyle={{ width: 'auto', color: labelColor }}
             />
           </div>
         </div>
@@ -750,6 +758,7 @@ class Navigation extends Component {
                       icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
                       className="website-link"
                       style={style.website}
+                      labelStyle={{ color: labelColor }}
                       onClick={this.checkClick}
                     />
                     <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
@@ -814,6 +823,7 @@ class Navigation extends Component {
                           icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
                           className="website-link"
                           style={style.website}
+                          labelStyle={{ color: labelColor }}
                           onClick={this.checkClick}
                         />
                         <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, cIndex)}}>
