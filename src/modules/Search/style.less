@@ -12,21 +12,35 @@
   .logo {
     width: 100%;
     height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
     &.google {
-      background: url(images/Google.svg) center no-repeat;
       background-size: 100% auto;
+      background-image: url(images/Google.svg);
+      &.white {
+        background-image: url(images/Google-white.svg);
+      }
     }
     &.baidu {
-      background: url(images/Baidu.svg) center no-repeat;
       background-size: 100% auto;
+      background-image: url(images/Baidu.svg);
+      &.white {
+        background-image: url(images/Baidu-white.svg);
+      }
     }
     &.bing {
-      background: url(images/Bing.svg) center no-repeat;
       background-size: auto 100%;
+      background-image: url(images/Bing.svg);
+      &.white {
+        background-image: url(images/Bing-white.svg);
+      }
     }
     &.sogou {
-      background: url(images/Sogou.svg) center no-repeat;
       background-size: 100% auto;
+      background-image: url(images/Sogou.svg);
+      &.white {
+        background-image: url(images/Sogou-white.svg);
+      }
     }
   }
   .default-logo {
@@ -69,12 +83,14 @@
     line-height: 44px;
     padding: 0 38px 0 16px;
     font-size: 16px;
-    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
     transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
     &.hover, &.focus {
       box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    }
+    &.night {
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
   .predictions-box {

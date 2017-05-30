@@ -294,12 +294,24 @@ class Search extends Component {
   }
   render() {
     const { searchName, searchClass, showPredictions, predictions } = this.state
-    const { muiTheme, engines } = this.props
+    const { muiTheme, engines, settings } = this.props
+    const { background, backgroundShade, darkMode } = settings
+
+    let iconColor
+    let logo
+    if (!darkMode && background && backgroundShade === 2) {
+      iconColor = 'rgba(255, 255, 255, 0.87)'
+      logo = 'white'
+    } else {
+      iconColor =  muiTheme.palette.textColor
+      logo = ''
+    }
+
     return (
       <div className="search-wrapper">
         <div className="logo-area">
           {!!searchClass && searchName && (
-            <div className={`logo ${searchClass}`} onTouchTap={this.toTheNext}></div>
+            <div className={`logo ${searchClass} ${logo}`} onTouchTap={this.toTheNext}></div>
           )}
           {!searchClass && searchName && (
             <div className="default-logo" onTouchTap={this.toTheNext}>
@@ -312,7 +324,7 @@ class Search extends Component {
             iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            iconStyle={{ color: muiTheme.palette.textColor }}
+            iconStyle={{ color: iconColor }}
             maxHeight={280}
           >
             {engines.map((engine, index) => {
@@ -334,6 +346,7 @@ class Search extends Component {
               <input
                 type="text"
                 id="search-input"
+                className={classNames({ 'night': darkMode })}
                 ref="text"
                 onInput={this.watchInput}
                 onMouseEnter={this.mouseEnter}
@@ -346,7 +359,7 @@ class Search extends Component {
               <IconButton
                 type="submit"
                 style={style.searchBtn}
-                iconStyle={{ color: '#666' }}
+                iconStyle={{ color: muiTheme.palette.textColor }}
               >
                 <SearchIcon />
               </IconButton>
