@@ -21,6 +21,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import { List, ListItem } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
 import ActionOpacity from 'material-ui/svg-icons/action/opacity'
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 
@@ -36,17 +38,26 @@ const styles = {
     opacity: 0,
   },
   radio: {
-    margin: '16px 0',
+    margin: '24px 0',
+  },
+  radioLabel: {
+    flex: 1
   },
   listItem: {
-    paddingLeft: '14px',
-    borderBottom: '1px solid #eee'
+    paddingLeft: '16px',
+    borderBottom: '1px solid rgba(200, 200, 200, 0.3)'
   },
   slider: {
     margin: '0'
   },
   opacityIcon: {
     marginRight: '18px'
+  },
+  dialogContent: {
+    width: '380px'
+  },
+  dialogBody: {
+    padding: '16px 0'
   },
 }
 
@@ -56,9 +67,14 @@ class Wallpaper extends Component {
   }
   constructor(props) {
     super(props)
+    const { backgroundSource, backgroundColor, backgroundShade } = props.settings
     this.state = {
-      source: 1
+      source: backgroundSource ? backgroundSource : 1,
+      color: backgroundColor,
+      shade: backgroundShade ? backgroundShade : 1,
+      colorDialogOpen: false
     }
+    this.checkColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
   }
   handleOpacity = (event, value) => {
     this.setState({
@@ -69,11 +85,74 @@ class Wallpaper extends Component {
     this.setState({
       source: value
     })
+    this.props.saveSettings({
+      backgroundSource: value
+    })
+  }
+  showColorDialog = () => {
+    const { backgroundColor } = this.props.settings
+    
+    this.setState({
+      color: backgroundColor,
+      colorDialogOpen: true
+    })
+  }
+  hideColorDialog = () => {
+    this.setState({
+      colorDialogOpen: false
+    })
+  }
+  handleColorInput = (e, value) => {
+    this.setState({
+      color: value
+    })
+
+    if (this.checkColor.test(value)) {
+      this.refs.color.value = value
+    }
+  }
+  getColor = e => {
+    const value = e.target.value.toUpperCase()
+    this.setState({ color: value })
+  }
+  setBackgroundColor = () => {
+    const color = this.state.color.toUpperCase()
+    const { saveSettings, settings } = this.props
+    this.hideColorDialog()
+
+    if (this.checkColor.test(color) && color !== settings.backgroundColor) {
+      saveSettings({
+        backgroundColor: color
+      })
+    }
+  }
+  handleShadeChange = (event, value) => {
+    this.setState({
+      shade: value
+    })
+    this.props.saveSettings({
+      backgroundShade: value
+    })
   }
   render() {
     const { intl } = this.context
     const { settings, saveSettings, muiTheme, close } = this.props
-    const { source } = this.state
+    const { source, color, shade, colorDialogOpen } = this.state
+    const { darkMode, topShadow, background, hideWebsites } = settings
+
+    const colorActions = [
+      <FlatButton
+        label={intl.formatMessage({ id: 'button.cancel' })}
+        primary={true}
+        onTouchTap={this.hideColorDialog}
+      />,
+      <FlatButton
+        label={intl.formatMessage({ id: 'button.confirm' })}
+        primary={true}
+        onTouchTap={this.setBackgroundColor}
+      />
+    ]
+    
     return (
       <div className="wallpaper-settings">
         <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
@@ -98,8 +177,9 @@ class Wallpaper extends Component {
             </div>
             <div className="column">
               <Toggle
-                label="使用背景壁纸"
+                label="使用壁纸"
                 defaultToggled={settings.background}
+                disabled={darkMode}
                 onToggle={(event, bool) => { saveSettings({ background: bool }) }}
               />
             </div>
@@ -107,7 +187,7 @@ class Wallpaper extends Component {
               <SelectField
                 floatingLabelText="Choose wallpaper source"
                 value={source}
-                disabled={!settings.background}
+                disabled={darkMode || !background}
                 fullWidth={true}
                 underlineStyle={{ display: 'none' }}
                 onChange={this.handleSourceChange}
@@ -122,37 +202,43 @@ class Wallpaper extends Component {
                 <ListItem
                   primaryText="Choose an image"
                   secondaryText="Set wallpaper with local image file"
+                  disabled={darkMode || !background}
                   innerDivStyle={styles.listItem}
                 >
-                  <input type="file" style={styles.inputImage} accept="image/*" onChange={this.restoreBackups} />
+                  <input type="file" style={styles.inputImage} accept="image/png, image/jpeg, image/gif, image/jpg" onChange={this.restoreBackups} />
                 </ListItem>
               )}
               {source === 3 && (
                 <ListItem
                   primaryText="Pick a color"
                   secondaryText="Set background with custom color"
+                  disabled={darkMode || !background}
                   innerDivStyle={styles.listItem}
+                  onTouchTap={this.showColorDialog}
                 />
               )}
             </div>
             <div className="border">
-              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>背景明度</h3>
+              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>壁纸颜色深浅</h3>
               <RadioButtonGroup
                 name="hue"
-                defaultSelected={1}
-                onChange={this.handleHue}
+                defaultSelected={shade}
+                labelPosition="left"
+                onChange={this.handleShadeChange}
               >
                 <RadioButton
                   value={1}
-                  label="浅色背景"
-                  disabled={!settings.background}
+                  label="浅色壁纸"
+                  disabled={darkMode || !background}
                   style={styles.radio}
+                  labelStyle={styles.radioLabel}
                 />
                 <RadioButton
                   value={2}
-                  label="深色背景"
-                  disabled={!settings.background}
+                  label="深色壁纸"
+                  disabled={darkMode || !background}
                   style={styles.radio}
+                  labelStyle={styles.radioLabel}
                 />
               </RadioButtonGroup>
             </div>
@@ -180,6 +266,22 @@ class Wallpaper extends Component {
             </div>
           </div>
         </section>
+        <Dialog
+          open={colorDialogOpen}
+          actions={colorActions}
+          onRequestClose={this.hideColorDialog}
+          contentStyle={styles.dialogContent}
+        >
+          <div className="color-circle">
+            <input type="color" id="color" hidden onInput={this.getColor} value={color} ref="color" onChange={() => {}} />
+            <label htmlFor="color" style={{ backgroundColor: color }}></label>
+            <TextField
+              floatingLabelText={intl.formatMessage({ id: 'theme.input.placeholder' })}
+              value={color}
+              onChange={this.handleColorInput}
+            />
+          </div>
+        </Dialog>
       </div>
     )
   }
