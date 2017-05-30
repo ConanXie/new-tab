@@ -28,7 +28,7 @@ import Wallpaper from './Wallpaper'
 
 const style = {
   headerBar: {
-    background: 'none'
+    backgroundColor: 'transparent'
   },
   rightIcon: {
     marginLeft: '4px'
@@ -75,8 +75,15 @@ class Header extends Component {
   render() {
     const { showSettings, settings, muiTheme } = this.props
     const { weatherOpen, bookmarkOpen, wallpaperOpen } = this.state
+    const { topShadow, darkMode, background, backgroundShade } = settings
     
-    const iconColor = (settings.topShadow && !settings.darkMode) ? '#fff' : muiTheme.palette.textColor
+    let iconColor
+    if ((topShadow && !darkMode) || (background && backgroundShade === 2)) {
+      iconColor = 'rgba(255, 255, 255, 0.87)'
+    } else {
+      iconColor = muiTheme.palette.textColor
+    }
+    // const iconColor = (settings.topShadow && !settings.darkMode) ? '#fff' : muiTheme.palette.textColor
     
     return (
       <Paper
