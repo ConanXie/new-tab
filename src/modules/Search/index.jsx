@@ -320,7 +320,7 @@ class Search extends Component {
             </div>
           )}
           <IconMenu
-            className="more-engine"
+            className="engines-menu"
             iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
