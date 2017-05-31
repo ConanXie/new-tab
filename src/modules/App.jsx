@@ -127,14 +127,18 @@ class App extends Component {
   }
   changeBackground() {
     const { background, backgroundSource, backgroundColor } = this.props.settings
-
-    if (background && backgroundSource === 3 && backgroundColor) {
-      // Set background with solid color
-      document.querySelector('#app').style.background = backgroundColor
-    } else {
-      document.querySelector('#app').style.background = '#fff'
+    const app = document.querySelector('#app')
+    if (background) {
+      if (backgroundSource === 1) {
+        app.style.backgroundImage = `url(http://bing.ioliu.cn/v1?w=1920&h=1080)`
+      }
+      if (backgroundSource === 3 && backgroundColor) {
+        app.style.backgroundImage = 'none'
+        app.style.backgroundColor = backgroundColor
+      }
+      return
     }
-
+    app.style.background = '#fff'
   }
   darkMode = bool => {
     const { currentTheme, customTheme } = this.props.settings
