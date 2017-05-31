@@ -90,6 +90,7 @@ class Header extends Component {
         className={classNames('header-bar', { 'has-shadow': settings.topShadow })}
         rounded={false}
         zDepth={0}
+        transitionEnabled={false}
         style={style.headerBar}
       >
         <div className="tool-bar">
@@ -127,8 +128,9 @@ class Header extends Component {
           openSecondary={true}
           open={wallpaperOpen}
           onRequestChange={state => this.setState({ wallpaperOpen: state })}
+          overlayStyle={{ opacity: 0 }}
         >
-          <Wallpaper close={() => this.setState({ wallpaperOpen: false })} />
+          <Wallpaper closeDrawer={() => this.setState({ wallpaperOpen: false })} />
         </Drawer>
         <Drawer
           docked={false}

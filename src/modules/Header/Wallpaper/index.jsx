@@ -24,7 +24,7 @@ import Subheader from 'material-ui/Subheader'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import ActionOpacity from 'material-ui/svg-icons/action/opacity'
-import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
+import NavigationClose from 'material-ui/svg-icons/navigation/close'
 
 const styles = {
   inputImage: {
@@ -136,7 +136,7 @@ class Wallpaper extends Component {
   }
   render() {
     const { intl } = this.context
-    const { settings, saveSettings, muiTheme, close } = this.props
+    const { settings, saveSettings, muiTheme, closeDrawer } = this.props
     const { source, color, shade, colorDialogOpen } = this.state
     const { darkMode, topShadow, background, hideWebsites } = settings
 
@@ -158,10 +158,12 @@ class Wallpaper extends Component {
         <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
           <div className="tool-bar">
             <div className="bar-left">
-              <IconButton onTouchTap={() => close()}>
-                <ArrowBack color={muiTheme.palette.alternateTextColor} />
-              </IconButton>
               <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>Desktop</div>
+            </div>
+            <div className="bar-right">
+              <IconButton onTouchTap={closeDrawer}>
+                <NavigationClose color={muiTheme.palette.alternateTextColor} />
+              </IconButton>
             </div>
           </div>
         </Paper>

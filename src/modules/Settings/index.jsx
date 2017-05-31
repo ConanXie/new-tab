@@ -228,7 +228,13 @@ class Settings extends Component {
         className={classNames('settings-page', { 'show-settings-page': open, 'hide-settings-page': !open })}
         style={{ display }}
       >
-        <Paper className="header-bar settings-header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
+        <Paper
+          className="header-bar settings-header-bar"
+          style={{ backgroundColor: muiTheme.palette.primary1Color }}
+          rounded={false}
+          transitionEnabled={false}
+          zDepth={1}
+          >
           <div className="tool-bar">
             <div className="bar-left">
               <IconButton onTouchTap={hideSettings}>
