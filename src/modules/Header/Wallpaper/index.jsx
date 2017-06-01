@@ -89,9 +89,46 @@ class Wallpaper extends Component {
       backgroundSource: value
     })
   }
+  errorHandler(e) {
+    console.error(e)
+  }
+  base64ToBinary(imgUrl) {
+    const BASE64_MARKER = ';base64,'
+    const base64Index = imgUrl.indexOf(BASE64_MARKER) + BASE64_MARKER.length
+    const base64 = imgUrl.substring(base64Index)
+    const raw = window.atob(base64)
+    const rawLength = raw.length
+    const array = new Uint8Array(new ArrayBuffer(rawLength))
+
+    for (let i = 0; i < rawLength; ++i) {
+      array[i] = raw.charCodeAt(i)
+    }
+    return array
+  }
+  readImage = event => {
+    const file = event.target.files[0]
+    const fr = new FileReader()
+
+    fr.onloadend = e => {
+      const result = e.target.result
+      document.querySelector('#app').style.backgroundImage = `url(${result})`
+      webkitRequestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, fs => {
+        fs.root.getFile('wallpaper.jpg', { create: true }, fileEntry => {
+          fileEntry.createWriter(fileWriter => {
+            fileWriter.onerror = e => console.error(e)
+            const buffer = this.base64ToBinary(result)
+            const image = new Blob([buffer], { type: 'image/jpg' })
+            fileWriter.write(image)
+          })
+        })
+      }, this.errorHandler)
+    }
+
+    fr.readAsDataURL(file)
+  }
   showColorDialog = () => {
     const { backgroundColor } = this.props.settings
-    
+
     this.setState({
       color: backgroundColor,
       colorDialogOpen: true
@@ -152,7 +189,7 @@ class Wallpaper extends Component {
         onTouchTap={this.setBackgroundColor}
       />
     ]
-    
+
     return (
       <div className="wallpaper-settings">
         <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
@@ -207,7 +244,7 @@ class Wallpaper extends Component {
                   disabled={darkMode || !background}
                   innerDivStyle={styles.listItem}
                 >
-                  <input type="file" style={styles.inputImage} accept="image/png, image/jpeg, image/gif, image/jpg" onChange={this.restoreBackups} />
+                  <input type="file" style={styles.inputImage} accept="image/png, image/jpeg, image/gif, image/jpg" onChange={this.readImage} />
                 </ListItem>
               )}
               {source === 3 && (
