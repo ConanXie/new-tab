@@ -131,22 +131,25 @@ class App extends Component {
     if (background) {
       if (backgroundSource === 1) {
         app.style.backgroundImage = `url(http://bing.ioliu.cn/v1?w=1920&h=1080)`
-      }
-      if (backgroundSource === 3 && backgroundColor) {
+      } else if (backgroundSource === 2) {
+        app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper.jpg)`
+      } else if (backgroundSource === 3 && backgroundColor) {
         app.style.backgroundImage = 'none'
         app.style.backgroundColor = backgroundColor
       }
       return
     }
-    app.style.background = '#fff'
+    app.style.backgroundColor = '#fff'
   }
   darkMode = bool => {
     const { currentTheme, customTheme } = this.props.settings
+    const app = document.querySelector('#app')
     if (bool) {
       this.setState({
         muiTheme: this.darkTheme
       })
-      document.querySelector('#app').style.background = this.darkTheme.paper.backgroundColor
+      app.style.backgroundImage = 'none'
+      app.style.backgroundColor = this.darkTheme.paper.backgroundColor
     } else {
       this.changeTheme(currentTheme)
     }
