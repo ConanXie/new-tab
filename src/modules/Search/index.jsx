@@ -359,7 +359,7 @@ class Search extends Component {
               <IconButton
                 type="submit"
                 style={style.searchBtn}
-                iconStyle={{ color: muiTheme.palette.textColor }}
+                iconStyle={{ color: muiTheme.palette.primary1Color }}
               >
                 <SearchIcon />
               </IconButton>
