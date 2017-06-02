@@ -1,5 +1,6 @@
 import './style.less'
 
+import { canvasRGB } from 'stackblur-canvas'
 import classNames from 'classnames'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -25,6 +26,7 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import ActionOpacity from 'material-ui/svg-icons/action/opacity'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
+import BlurOn from 'material-ui/svg-icons/image/blur-on'
 
 const styles = {
   inputImage: {
@@ -48,10 +50,11 @@ const styles = {
     borderBottom: '1px solid rgba(200, 200, 200, 0.3)'
   },
   slider: {
-    margin: '0'
+    margin: '0 auto',
+    width: 'calc(100% - 12px)'
   },
-  opacityIcon: {
-    marginRight: '18px'
+  sliderIcon: {
+    margin: '0 22px 0 -2px'
   },
   dialogContent: {
     width: '380px'
@@ -75,6 +78,55 @@ class Wallpaper extends Component {
       colorDialogOpen: false
     }
     this.checkColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
+    this.spaceSize = 50 * 1024 * 1024
+    this.canvasWidth = 570
+  }
+  componentDidMount() {
+    const errorHandler = this.errorHandler
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    // canvas.width = this.canvasWidth
+    window.webkitRequestFileSystem(window.TEMPORARY, this.spaceSize, fs => {
+      fs.root.getFile('wallpaper.jpg', { create: false }, fileEntry => {
+        fileEntry.file(file => {
+          const fr = new FileReader()
+
+          fr.onloadend = () => {
+            this.originImage = fr.result
+            const img = new Image()
+            img.src = this.originImage
+            img.onload = () => {
+              // const width = this.canvasWidth
+              // const height = Math.round(this.canvasWidth * img.height / img.width)
+              const { width, height } = img
+              // const { width, height } = window.screen
+              canvas.width = width
+              canvas.height = height
+              console.log(width, height)
+              ctx.drawImage(img, 0, 0, width, height)
+              console.time('blur')
+              canvasRGB(canvas, 0, 0, width, height, 80)
+              console.timeEnd('blur')
+              document.body.appendChild(canvas)
+              canvas.toBlob(blob => {
+                fs.root.getFile('wallpaper-blur.jpg', { create: true }, fileEntry => {
+                  fileEntry.createWriter(fileWriter => {
+                    fileWriter.onerror = e => console.error(e)
+                    fileWriter.onwriteend = function () {
+                      this.truncate(this.position)
+                      document.querySelector('#app').style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper-blur.jpg)`
+                    }
+                    fileWriter.write(blob)
+                  }, errorHandler)
+                }, errorHandler)
+              }, 'image/jpg')
+            }
+          }
+          
+          fr.readAsDataURL(file)
+        })
+      }, errorHandler)
+    }, errorHandler)
   }
   handleOpacity = (event, value) => {
     this.setState({
@@ -108,23 +160,35 @@ class Wallpaper extends Component {
   readImage = event => {
     const file = event.target.files[0]
     const fr = new FileReader()
-
+    
     fr.onloadend = e => {
       const result = e.target.result
+      // console.log(result)
       document.querySelector('#app').style.backgroundImage = `url(${result})`
-      webkitRequestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, fs => {
+
+      const buffer = this.base64ToBinary(result)
+      window.webkitRequestFileSystem(window.TEMPORARY, 50 * 1024 * 1024, fs => {
         fs.root.getFile('wallpaper.jpg', { create: true }, fileEntry => {
           fileEntry.createWriter(fileWriter => {
             fileWriter.onerror = e => console.error(e)
-            const buffer = this.base64ToBinary(result)
-            const image = new Blob([buffer], { type: 'image/jpg' })
-            fileWriter.write(image)
+            fileWriter.onwriteend = function () {
+              this.truncate(this.position)
+            }
+            fileWriter.write(new Blob([buffer], { type: 'image/jpg' }))
           })
-        })
+        }, this.errorHandler)
+        /*fs.root.getFile('wallpaper.jpg', { create: false }, fileEntry => {
+          fileEntry.remove(() => {
+            console.log('File removed')
+          }, this.errorHandler)
+        }, this.errorHandler)*/
       }, this.errorHandler)
     }
 
     fr.readAsDataURL(file)
+  }
+  handleBlur = (event, value) => {
+    console.log(value)
   }
   showColorDialog = () => {
     const { backgroundColor } = this.props.settings
@@ -174,7 +238,7 @@ class Wallpaper extends Component {
   render() {
     const { intl } = this.context
     const { settings, saveSettings, muiTheme, closeDrawer } = this.props
-    const { source, color, shade, colorDialogOpen } = this.state
+    const { source, color, shade, colorDialogOpen, blur, opacity} = this.state
     const { darkMode, topShadow, background, hideWebsites } = settings
 
     const colorActions = [
@@ -257,6 +321,23 @@ class Wallpaper extends Component {
                 />
               )}
             </div>
+            {source !== 3 && (
+              <div className="border">
+                <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>壁纸模糊半径</h3>
+                <div className="slider-wrap">
+                  <BlurOn color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
+                  <Slider
+                    disabled={darkMode || !background}
+                    value={blur}
+                    step={1}
+                    min={0}
+                    max={100}
+                    onChange={this.handleBlur}
+                    sliderStyle={styles.slider}
+                  />
+                </div>
+              </div>
+            )}
             <div className="border">
               <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>壁纸颜色深浅</h3>
               <RadioButtonGroup
@@ -293,11 +374,11 @@ class Wallpaper extends Component {
             </div>
             <div className="border">
               <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>背景透明度</h3>
-              <div className="opacity-wrap">
-                <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.opacityIcon} />
+              <div className="slider-wrap">
+                <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                 <Slider
                   disabled={settings.hideWebsites}
-                  value={this.state.opacity}
+                  value={opacity}
                   onChange={this.handleOpacity}
                   sliderStyle={styles.slider}
                 />
