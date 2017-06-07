@@ -669,6 +669,14 @@ class Navigation extends Component {
     
     const target = linkTarget ? '_blank' : '_self'
     const labelColor = !darkMode && background && backgroundShade === 2 ? 'rgba(255, 255, 255, 0.87)' : muiTheme.palette.textColor
+    let classificationColor = muiTheme.palette.primary1Color
+    if (!darkMode && background) {
+      if (backgroundShade === 1) {
+        classificationColor = 'rgba(0, 0, 0, 0.5)'
+      } else if (backgroundShade === 2) {
+        classificationColor = 'rgba(255, 255, 255, 0.5)'
+      }
+    }
     
     const actions = [
       <FlatButton
@@ -787,7 +795,7 @@ class Navigation extends Component {
                 className={classNames('classification', { 'empty': !item.set.length, 'editing': edit })}
                 style={{ minHeight: this.margin + this.websiteHeight, height: Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}
               >
-                <div className="classification-name" style={{ color: muiTheme.palette.primary1Color }}>
+                <div className="classification-name" style={{ color: classificationColor }}>
                   {edit && item.name !== 'unclassified' && (
                     <TextField
                       hintText={intl.formatMessage({ id: 'nav.edit.input.website' })}
