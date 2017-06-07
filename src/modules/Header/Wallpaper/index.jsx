@@ -1,6 +1,7 @@
 import './style.less'
 
 import { canvasRGB } from 'stackblur-canvas'
+import shortid from 'shortid'
 import classNames from 'classnames'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -24,6 +25,8 @@ import { List, ListItem } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
+import Snackbar from 'material-ui/Snackbar'
+import LinearProgress from 'material-ui/LinearProgress'
 import ActionOpacity from 'material-ui/svg-icons/action/opacity'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import BlurOn from 'material-ui/svg-icons/image/blur-on'
@@ -62,6 +65,10 @@ const styles = {
   dialogBody: {
     padding: '16px 0'
   },
+  progress: {
+    position: 'absolute',
+    bottom: '0'
+  },
 }
 
 class Wallpaper extends Component {
@@ -75,10 +82,13 @@ class Wallpaper extends Component {
       source: backgroundSource ? backgroundSource : 1,
       color: backgroundColor,
       shade: backgroundShade ? backgroundShade : 1,
-      colorDialogOpen: false
+      colorDialogOpen: false,
+      snackbarOpen: false,
+      snackbarMessage: '',
+      fetching: false
     }
     this.checkColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
-    this.spaceSize = 50 * 1024 * 1024
+    this.spaceSize = 10 * 1024 * 1024
     this.canvasWidth = 570
   }
   componentDidMount() {
@@ -93,7 +103,7 @@ class Wallpaper extends Component {
 
           fr.onloadend = () => {
             this.originImage = fr.result
-            const img = new Image()
+            /*const img = new Image()
             img.src = this.originImage
             img.onload = () => {
               // const width = this.canvasWidth
@@ -105,9 +115,9 @@ class Wallpaper extends Component {
               console.log(width, height)
               ctx.drawImage(img, 0, 0, width, height)
               console.time('blur')
-              canvasRGB(canvas, 0, 0, width, height, 80)
+              canvasRGB(canvas, 0, 0, width, height, 0)
               console.timeEnd('blur')
-              document.body.appendChild(canvas)
+              // document.body.appendChild(canvas)
               canvas.toBlob(blob => {
                 fs.root.getFile('wallpaper-blur.jpg', { create: true }, fileEntry => {
                   fileEntry.createWriter(fileWriter => {
@@ -120,7 +130,7 @@ class Wallpaper extends Component {
                   }, errorHandler)
                 }, errorHandler)
               }, 'image/jpg')
-            }
+            }*/
           }
           
           fr.readAsDataURL(file)
@@ -132,14 +142,93 @@ class Wallpaper extends Component {
     this.setState({
       opacity: value
     })
+    document.querySelector('.logo-area').style.opacity = value
   }
   handleSourceChange = (event, index, value) => {
     this.setState({
       source: value
     })
-    this.props.saveSettings({
-      backgroundSource: value
+    const saveSource = () => {
+      this.props.saveSettings({
+        backgroundSource: value
+      })
+    }
+    if (value === 1) {
+      /*// const url = `https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=${navigator.language}`
+      const url = `http://localhost:5300/api/wallpaper/${window.screen.width}x${window.screen.height}`
+      fetch(url).then(res => {
+        if (res.ok) {
+          return res.json()
+        }
+      }).then(data => {
+        // const imageUrl = 'https://www.bing.com' + data.images[0].url
+        const imageUrl = data.result[0].url
+        // console.log(imageUrl)
+        fetch(imageUrl).then(res => {
+          if (res.ok) {
+            return res.blob()
+          }
+        }).then(data => {
+          const fr = new FileReader()
+          fr.onloadend = () => {
+            this.originImage = fr.result
+            const radius = this.props.settings.blurRadius
+            if (radius) {
+              this.saveImage(data, () => this.saveBlurImage(radius, saveSource))
+            } else {
+              this.saveImage(data, saveSource)
+            }
+          }
+          fr.readAsDataURL(data)
+        }).catch(e => console.error(e))
+      }).catch(e => console.error(e))*/
+      this.fetchWallpaper()
+      // return
+    }
+    saveSource()
+  }
+  fetchWallpaper = async () => {
+    if (this.state.fetching) {
+      this.setState({
+        snackbarOpen: true,
+        snackbarMessage: 'A new wallpaper is fetching'
+      })
+      return
+    }
+    this.setState({
+      fetching: true
     })
+    const { width, height } = window.screen
+    const url = `http://localhost:5300/api/wallpaper/${width}x${height}`
+    try {
+      const res = await fetch(url)
+      const msg = await res.json()
+      const image = await fetch(msg.result[0].url)
+      if (!image.ok) {
+        this.setState({
+          snackbarOpen: true,
+          snackbarMessage: 'Fetch failed',
+          fetching: false
+        })
+        return
+      }
+      const data = await image.blob()
+      const { blurRadius } = this.props.settings
+      if (blurRadius) {
+        this.saveImage(data, () => this.saveBlurImage(blurRadius, () => this.updateBackgroundImageUrl(1)))
+      } else {
+        this.saveImage(data, this.updateBackgroundImageUrl)
+      }
+      this.setState({
+        fetching: false
+      })
+      const fr = new FileReader()
+      fr.onloadend = () => this.originImage = fr.result
+      fr.readAsDataURL(data)
+    } catch (e) {
+      this.errorHandler(e)
+    }
+    
   }
   errorHandler(e) {
     console.error(e)
@@ -158,37 +247,131 @@ class Wallpaper extends Component {
     return array
   }
   readImage = event => {
+    const { blurRadius } = this.props.settings
     const file = event.target.files[0]
-    const fr = new FileReader()
-    
-    fr.onloadend = e => {
-      const result = e.target.result
-      // console.log(result)
-      document.querySelector('#app').style.backgroundImage = `url(${result})`
-
-      const buffer = this.base64ToBinary(result)
-      window.webkitRequestFileSystem(window.TEMPORARY, 50 * 1024 * 1024, fs => {
-        fs.root.getFile('wallpaper.jpg', { create: true }, fileEntry => {
-          fileEntry.createWriter(fileWriter => {
-            fileWriter.onerror = e => console.error(e)
-            fileWriter.onwriteend = function () {
-              this.truncate(this.position)
-            }
-            fileWriter.write(new Blob([buffer], { type: 'image/jpg' }))
-          })
-        }, this.errorHandler)
-        /*fs.root.getFile('wallpaper.jpg', { create: false }, fileEntry => {
-          fileEntry.remove(() => {
-            console.log('File removed')
-          }, this.errorHandler)
-        }, this.errorHandler)*/
-      }, this.errorHandler)
+    const { type, size } = file
+    // console.log(type, size)
+    if (!/image\/(jpg|jpeg|png|gif)/.test(type)) {
+      this.setState({
+        snackbarOpen: true,
+        snackbarMessage: 'This file is not supported'
+      })
+      return
+    }
+    if (size > this.spaceSize) {
+      this.setState({
+        snackbarOpen: true,
+        snackbarMessage: 'This image is too large'
+      })
+      return
     }
 
+    const fr = new FileReader()
+    fr.onloadend = () => {
+      this.originImage = fr.result
+      const buffer = this.base64ToBinary(this.originImage)
+      const { blurRadius } = this.props.settings
+      const blob = new Blob([buffer], { type: 'image/jpg' })
+      if (blurRadius) {
+        this.saveImage(blob)
+        this.saveBlurImage(blurRadius, () => this.updateBackgroundImageUrl(1))
+      } else {
+        this.saveImage(blob, this.updateBackgroundImageUrl)
+      }
+    }
     fr.readAsDataURL(file)
   }
+  updateBackgroundImageUrl(blur) {
+    document.querySelector('#app').style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blur ? '-blur' : ''}.jpg?r=${Date.now()})`
+  }
   handleBlur = (event, value) => {
-    console.log(value)
+    // console.log(value)
+  }
+  applyBlur = event => {
+    const { saveSettings } = this.props
+    const radius = document.querySelector('[name=radius]').value * 1
+    const saveRadius = () => {
+      saveSettings({ blurRadius: radius })
+    }
+    if (!radius) {
+      saveRadius()
+      return
+    }
+    this.saveBlurImage(radius, saveRadius)
+    
+  }
+  saveImage(blob, callback) {
+    const errorHandler = this.errorHandler
+    window.webkitRequestFileSystem(window.TEMPORARY, this.spaceSize, fs => {
+      fs.root.getFile('wallpaper.jpg', { create: true }, fileEntry => {
+        fileEntry.createWriter(fileWriter => {
+          let truncated = false
+          fileWriter.onerror = e => console.error(e)
+          fileWriter.onwriteend = function () {
+            if (!truncated) {
+              truncated = true
+              this.truncate(this.position)
+              return
+            }
+            if (typeof callback === 'function') {
+              callback()
+            }
+          }
+          fileWriter.write(blob)
+        }, errorHandler)
+      }, errorHandler)
+    }, errorHandler)
+  }
+  saveBlurImage(radius, callback) {
+    const errorHandler = this.errorHandler
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    const image = new Image()
+    image.src = this.originImage
+    image.onload = () => {
+      const { width, height } = image
+      canvas.width = width
+      canvas.height = height
+      ctx.drawImage(image, 0, 0, width, height)
+      console.time('blur')
+      canvasRGB(canvas, 0, 0, width, height, radius)
+      console.timeEnd('blur')
+      canvas.toBlob(blob => {
+        window.webkitRequestFileSystem(window.TEMPORARY, this.spaceSize, fs => {
+          fs.root.getFile('wallpaper-blur.jpg', { create: true }, fileEntry => {
+            fileEntry.createWriter(fileWriter => {
+              let truncated = false
+              fileWriter.onerror = e => console.error(e)
+              fileWriter.onwriteend = function () {
+                if (!truncated) {
+                  truncated = true
+                  this.truncate(this.position)
+                  return
+                }
+                console.log(Date.now())
+                // saveSettings({ blurRadius: radius })
+                if (typeof callback === 'function') {
+                  callback()
+                }
+              }
+              fileWriter.write(blob)
+            }, errorHandler)
+          }, errorHandler)
+        }, errorHandler)
+      }, 'image/jpg')
+    }
+  }
+  saveToLocal = async () => {
+    try {
+      const res = await fetch(this.originImage)
+      const data = await res.blob()
+      const a = document.createElement('a')
+      a.href = window.URL.createObjectURL(data)
+      a.download = shortid.generate() + '.jpg'
+      a.click()
+    } catch (err) {
+      this.errorHandler(err)
+    }
   }
   showColorDialog = () => {
     const { backgroundColor } = this.props.settings
@@ -238,8 +421,8 @@ class Wallpaper extends Component {
   render() {
     const { intl } = this.context
     const { settings, saveSettings, muiTheme, closeDrawer } = this.props
-    const { source, color, shade, colorDialogOpen, blur, opacity} = this.state
-    const { darkMode, topShadow, background, hideWebsites } = settings
+    const { source, color, shade, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching } = this.state
+    const { darkMode, topShadow, background, blurRadius, hideWebsites } = settings
 
     const colorActions = [
       <FlatButton
@@ -295,12 +478,35 @@ class Wallpaper extends Component {
                 underlineStyle={{ display: 'none' }}
                 onChange={this.handleSourceChange}
               >
-                <MenuItem value={1} primaryText="Bing Wallpaper" />
+                <MenuItem value={1} primaryText="Internet Wallpaper" />
                 <MenuItem value={2} primaryText="Local Wallpaper" />
                 <MenuItem value={3} primaryText="Solid Color" />
               </SelectField>
             </div>
             <div>
+              {source === 1 && (
+                <div>
+                  <div className="fetch-new">
+                    <ListItem
+                      primaryText="New one"
+                      secondaryText="Click to fetch a new wallpaper"
+                      disabled={darkMode || !background}
+                      innerDivStyle={styles.listItem}
+                      onTouchTap={this.fetchWallpaper}
+                    />
+                    {fetching && (
+                      <LinearProgress style={styles.progress} />
+                    )}
+                  </div>
+                  <ListItem
+                    primaryText="Download it"
+                    secondaryText="Save the current wallpaper to local"
+                    disabled={darkMode || !background}
+                    innerDivStyle={styles.listItem}
+                    onTouchTap={this.saveToLocal}
+                  />
+                </div>
+              )}
               {source === 2 && (
                 <ListItem
                   primaryText="Choose an image"
@@ -328,11 +534,13 @@ class Wallpaper extends Component {
                   <BlurOn color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                   <Slider
                     disabled={darkMode || !background}
-                    value={blur}
+                    value={blurRadius}
                     step={1}
                     min={0}
                     max={100}
+                    name="radius"
                     onChange={this.handleBlur}
+                    onDragStop={this.applyBlur}
                     sliderStyle={styles.slider}
                   />
                 </div>
@@ -364,6 +572,35 @@ class Wallpaper extends Component {
             </div>
           </div>
           <div className="area">
+            <h2 style={{ color: muiTheme.palette.primary1Color }}>Search</h2>
+            <div className="column">
+              <Toggle
+                label="隐藏搜索"
+                defaultToggled={settings.hideSearch}
+                onToggle={(event, bool) => saveSettings({ hideSearch: bool })}
+              />
+            </div>
+            <div className="column">
+              <Checkbox
+                label="输入框透明"
+                labelPosition="left"
+                labelStyle={styles.radioLabel}
+              />
+            </div>
+            <div className="border">
+              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>Logo透明度</h3>
+              <div className="slider-wrap">
+                <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
+                <Slider
+                  disabled={settings.hideSearch}
+                  value={opacity}
+                  onChange={this.handleOpacity}
+                  sliderStyle={styles.slider}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="area">
             <h2 style={{ color: muiTheme.palette.primary1Color }}>Websites</h2>
             <div className="column">
               <Toggle
@@ -372,17 +609,12 @@ class Wallpaper extends Component {
                 onToggle={(event, bool) => saveSettings({ hideWebsites: bool })}
               />
             </div>
-            <div className="border">
-              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>背景透明度</h3>
-              <div className="slider-wrap">
-                <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
-                <Slider
-                  disabled={settings.hideWebsites}
-                  value={opacity}
-                  onChange={this.handleOpacity}
-                  sliderStyle={styles.slider}
-                />
-              </div>
+            <div className="column">
+              <Checkbox
+                label="文字阴影"
+                labelPosition="left"
+                labelStyle={styles.radioLabel}
+              />
             </div>
           </div>
         </section>
@@ -402,6 +634,12 @@ class Wallpaper extends Component {
             />
           </div>
         </Dialog>
+        <Snackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          autoHideDuration={2000}
+          onRequestClose={() => this.setState({ snackbarOpen: false })}
+        />
       </div>
     )
   }
