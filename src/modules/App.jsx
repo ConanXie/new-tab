@@ -97,7 +97,7 @@ class App extends Component {
   }
   componentWillReceiveProps(nextProps) {
     // console.log(this.props, nextProps)
-    const { currentTheme, darkMode, customTheme, background, backgroundSource, backgroundColor } = nextProps.settings
+    const { currentTheme, darkMode, customTheme, background, backgroundSource, backgroundColor, blurRadius } = nextProps.settings
     if (currentTheme !== this.props.settings.currentTheme || (currentTheme === -1 && (customTheme.color !== this.props.settings.customTheme.color || customTheme.hue !== this.props.settings.customTheme.hue))) {
       setTimeout(() => {
         this.changeTheme(currentTheme)
@@ -106,7 +106,7 @@ class App extends Component {
     if (darkMode !== this.props.settings.darkMode) {
       this.darkMode(darkMode)
     }
-    if ((background !== this.props.settings.background) || (backgroundSource !== this.props.settings.backgroundSource) || (backgroundColor !== this.props.settings.backgroundColor)) {
+    if ((background !== this.props.settings.background) || (backgroundSource !== this.props.settings.backgroundSource) || (backgroundColor !== this.props.settings.backgroundColor) || (blurRadius !== this.props.settings.blurRadius)) {
       setTimeout(() => {
         this.changeBackground()
       }, 0)
@@ -126,13 +126,15 @@ class App extends Component {
     this.changeBackground()
   }
   changeBackground() {
-    const { background, backgroundSource, backgroundColor } = this.props.settings
+    const { background, backgroundSource, backgroundColor, blurRadius } = this.props.settings
     const app = document.querySelector('#app')
     if (background) {
-      if (backgroundSource === 1) {
-        app.style.backgroundImage = `url(http://bing.ioliu.cn/v1?w=1920&h=1080)`
-      } else if (backgroundSource === 2) {
-        app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper.jpg)`
+      if (backgroundSource === 1 || backgroundSource === 2) {
+        if (!blurRadius) {
+          app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper.jpg?r=${Date.now()})`
+        } else {
+          app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper-blur.jpg?r=${Date.now()})`
+        }
       } else if (backgroundSource === 3 && backgroundColor) {
         app.style.backgroundImage = 'none'
         app.style.backgroundColor = backgroundColor
@@ -140,6 +142,7 @@ class App extends Component {
       return
     }
     app.style.backgroundColor = '#fff'
+    app.style.backgroundImage = 'none'
   }
   darkMode = bool => {
     const { currentTheme, customTheme } = this.props.settings
