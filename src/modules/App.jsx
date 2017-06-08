@@ -159,13 +159,15 @@ class App extends Component {
   }
   render() {
     const { muiTheme, onboarding } = this.state
-    const { hideWebsites } = this.props.settings
+    const { hideWebsites, hideSearch } = this.props.settings
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <Header />
-          <Search />
+          {!hideSearch && (
+            <Search />
+          )}
           {!hideWebsites && (
             <Navigation />
           )}

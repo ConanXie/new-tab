@@ -138,11 +138,15 @@ class Wallpaper extends Component {
       }, errorHandler)
     }, errorHandler)
   }
-  handleOpacity = (event, value) => {
-    this.setState({
+  handleTransparency = (event, value) => {
+    /*this.setState({
       opacity: value
-    })
-    document.querySelector('.logo-area').style.opacity = value
+    })*/
+    document.querySelector('.logo-area').style.opacity = 1 - value
+  }
+  applyTransparency = () => {
+    const { saveSettings } = this.props
+    const radius = document.querySelector('[name=radius]').value * 1
   }
   handleSourceChange = (event, index, value) => {
     this.setState({
@@ -582,8 +586,11 @@ class Wallpaper extends Component {
             </div>
             <div className="column">
               <Checkbox
+                disabled={settings.hideSearch}
                 label="输入框透明"
                 labelPosition="left"
+                defaultChecked={settings.transparentSearchInput}
+                onCheck={(event, bool) => saveSettings({ transparentSearchInput: bool })}
                 labelStyle={styles.radioLabel}
               />
             </div>
@@ -593,8 +600,10 @@ class Wallpaper extends Component {
                 <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                 <Slider
                   disabled={settings.hideSearch}
-                  value={opacity}
-                  onChange={this.handleOpacity}
+                  value={settings.logoTransparency}
+                  name="transparency"
+                  onChange={this.handleTransparency}
+                  onDragStop={this.applyTransparency}
                   sliderStyle={styles.slider}
                 />
               </div>
