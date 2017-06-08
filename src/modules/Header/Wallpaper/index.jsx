@@ -142,7 +142,7 @@ class Wallpaper extends Component {
     /*this.setState({
       opacity: value
     })*/
-    document.querySelector('.logo-area').style.opacity = 1 - value
+    document.querySelector('.logo').style.opacity = 1 - value
   }
   applyTransparency = () => {
     const { saveSettings } = this.props
@@ -459,10 +459,12 @@ class Wallpaper extends Component {
           <div className="area">
             <h2 style={{ color: muiTheme.palette.primary1Color }}>Wallpaper</h2>
             <div className="column">
-              <Toggle
-                label="显示顶部阴影"
-                defaultToggled={settings.topShadow}
-                onToggle={(event, bool) => saveSettings({ topShadow: bool })}
+              <Checkbox
+                label="顶部阴影"
+                labelPosition="left"
+                defaultChecked={settings.topShadow}
+                onCheck={(event, bool) => saveSettings({ topShadow: bool })}
+                labelStyle={styles.radioLabel}
               />
             </div>
             <div className="column">
