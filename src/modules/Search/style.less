@@ -14,49 +14,61 @@
     height: 100%;
     background-repeat: no-repeat;
     background-position: center;
-    &.google {
+    // background-image: url(images/normal.svg);
+    background-color: red;
+    -webkit-mask: url(images/normal.svg) center no-repeat;
+    &[data-host*="www.google.com"] {
+      .hide-name();
       background-size: 100% auto;
-      background-image: url(images/Google.svg);
+      background-image: url(images/google.svg);
       &.white {
-        background-image: url(images/Google-white.svg);
+        background-image: url(images/google-white.svg);
       }
     }
-    &.baidu {
-      background-size: 100% auto;
-      background-image: url(images/Baidu.svg);
+    &[data-host*="www.baidu.com"] {
+      .hide-name();
+      background-size: 95% auto;
+      background-image: url(images/baidu.svg);
       &.white {
-        background-image: url(images/Baidu-white.svg);
+        background-image: url(images/baidu-white.svg);
       }
     }
-    &.bing {
+    &[data-host*="www.bing.com"] {
+      .hide-name();
       background-size: auto 100%;
-      background-image: url(images/Bing.svg);
+      background-image: url(images/bing.svg);
       &.white {
-        background-image: url(images/Bing-white.svg);
+        background-image: url(images/bing-white.svg);
       }
     }
-    &.sogou {
+    &[data-host*="www.sogou.com"] {
+      .hide-name();
       background-size: 100% auto;
-      background-image: url(images/Sogou.svg);
+      background-image: url(images/sogou.svg);
       &.white {
-        background-image: url(images/Sogou-white.svg);
+        background-image: url(images/sogou-white.svg);
       }
     }
   }
-  .default-logo {
-    text-align: center;
-    height: 100%;
-    span {
-      position: absolute;
-      bottom: 0;
-      max-width: 100px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 14px;
-      color: #bbb;
-      line-height: 1;
-      user-select: none;
+  span.engine-name {
+    position: absolute;
+    bottom: 0;
+    left: 180px;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: #bbb;
+    line-height: 1;
+    user-select: none;
+    opacity: 0.8;
+  }
+  .hide-name {
+    -webkit-mask: none;
+    background-color: transparent !important;
+    & + .engine-name {
+      display: none;
     }
   }
   .engines-menu {

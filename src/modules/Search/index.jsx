@@ -53,6 +53,9 @@ class Search extends Component {
     // record current engine index
     this.engineIndex = 0
   }
+  componentWillMount() {
+    this.props.initialData()
+  }
   componentWillReceiveProps(props) {
     if (!this.isDone) {
       const { engines } = props
@@ -62,12 +65,10 @@ class Search extends Component {
         }
         return engine.isDefault
       })
-      const { link, predict, name, className } = theDefault[0]
+      const { link, name } = theDefault[0]
       this.setState({
-        searchLink: link,
-        searchPredict: predict,
-        searchName: name,
-        searchClass: className
+        link,
+        name
       })
       this.isDone = true
     }
@@ -99,10 +100,8 @@ class Search extends Component {
   changeEngine = index => {
     const { name, link, predict, className } = this.props.engines[index]
     this.setState({
-      searchLink: link,
-      searchPredict: predict,
-      searchName: name,
-      searchClass: className
+      link,
+      name
     })
     this.engineIndex = index
   }
@@ -293,7 +292,7 @@ class Search extends Component {
     this.search(event)
   }
   render() {
-    const { searchName, searchClass, showPredictions, predictions } = this.state
+    const { name, link, showPredictions, predictions } = this.state
     const { muiTheme, engines, settings } = this.props
     const { background, backgroundShade, darkMode } = settings
 
@@ -307,10 +306,13 @@ class Search extends Component {
       logo = ''
     }
 
+    const pattern = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
+    const host = pattern.exec(link)[3]
+
     return (
       <div className="search-wrapper">
         <div className="logo-area">
-          {!!searchClass && searchName && (
+          {/*{!!searchClass && searchName && (
             <div className={`logo ${searchClass} ${logo}`} onTouchTap={this.toTheNext}></div>
           )}
           {!searchClass && searchName && (
@@ -318,7 +320,14 @@ class Search extends Component {
               <WebIcon viewBox="0 0 20 20" style={{ width: 92, height: 92 }} color={muiTheme.palette.primary1Color} />
               <span>{searchName}</span>
             </div>
-          )}
+          )}*/}
+          <div
+            className={`logo ${logo}`}
+            data-host={host}
+            onTouchTap={this.toTheNext}
+            style={{ backgroundColor: iconColor }}
+          ></div>
+          <span className="engine-name" style={{ color: iconColor }}>{name}</span>
           <IconMenu
             className="engines-menu"
             iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
