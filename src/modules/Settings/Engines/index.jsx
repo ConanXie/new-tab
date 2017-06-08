@@ -83,9 +83,9 @@ class Engines extends Component {
       predict: ''
     }
   }
-  componentDidMount() {
+  /*componentDidMount() {
     this.props.initialData()
-  }
+  }*/
   componentWillReceiveProps(next) {
     // console.log(next)
   }
