@@ -14,40 +14,50 @@
     height: 100%;
     background-repeat: no-repeat;
     background-position: center;
-    // background-image: url(images/normal.svg);
-    background-color: red;
     -webkit-mask: url(images/normal.svg) center no-repeat;
-    &[data-host*="www.google.com"] {
-      .hide-name();
+    &[data-host="www.google.com"] {
       background-size: 100% auto;
       background-image: url(images/google.svg);
       &.white {
         background-image: url(images/google-white.svg);
       }
+      .hide-name();
+    }
+    &[data-host*="www.google.com."] {
+      background-size: 100% auto;
+      background-image: url(images/google.svg);
+      &.white {
+        background-image: url(images/google-white.svg);
+      }
+      .hide-name();
+      & + .engine-name {
+        display: block;
+        left: 215px;
+      }
     }
     &[data-host*="www.baidu.com"] {
-      .hide-name();
       background-size: 95% auto;
       background-image: url(images/baidu.svg);
       &.white {
         background-image: url(images/baidu-white.svg);
       }
+      .hide-name();
     }
     &[data-host*="www.bing.com"] {
-      .hide-name();
       background-size: auto 100%;
       background-image: url(images/bing.svg);
       &.white {
         background-image: url(images/bing-white.svg);
       }
+      .hide-name();
     }
     &[data-host*="www.sogou.com"] {
-      .hide-name();
       background-size: 100% auto;
       background-image: url(images/sogou.svg);
       &.white {
         background-image: url(images/sogou-white.svg);
       }
+      .hide-name();
     }
   }
   span.engine-name {

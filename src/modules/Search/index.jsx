@@ -18,7 +18,7 @@ import SearchIcon from 'material-ui/svg-icons/action/search'
 import Paper from 'material-ui/Paper'
 import SvgIcon from 'material-ui/SvgIcon'
 
-import defaultEngines from './search-engines'
+import predict from './predict'
 
 const WebIcon = props => {
   return (
@@ -52,6 +52,8 @@ class Search extends Component {
     this.predictionsIndex = -1
     // record current engine index
     this.engineIndex = 0
+    // exec the host of engine's url
+    this.pattern = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
   }
   componentWillMount() {
     this.props.initialData()
@@ -66,8 +68,10 @@ class Search extends Component {
         return engine.isDefault
       })
       const { link, name } = theDefault[0]
+      const host = this.pattern.exec(link)[3]
       this.setState({
         link,
+        host,
         name
       })
       this.isDone = true
@@ -87,20 +91,15 @@ class Search extends Component {
   search = e => {
     e.preventDefault()
     const text = this.refs.text.value
-    const { searchLink, searchClass } = this.state
-    const { useHK, searchTarget } = this.props.settings
-    const target = searchTarget ? '_blank' : '_self'
-    // 判断是否使用.hk
-    if (searchClass === 'google' && useHK) {
-      window.open(searchLink.replace(/\.com/, '.com.hk').replace('%s', text), target)
-    } else {
-      window.open(searchLink.replace('%s', text), target)
-    }
+    const target = this.props.settings.searchTarget ? '_blank' : '_self'
+    window.open(this.state.link.replace('%s', text), target)
   }
   changeEngine = index => {
-    const { name, link, predict, className } = this.props.engines[index]
+    const { name, link } = this.props.engines[index]
+    const host = this.pattern.exec(link)[3]
     this.setState({
       link,
+      host,
       name
     })
     this.engineIndex = index
@@ -114,15 +113,13 @@ class Search extends Component {
     }
     this.changeEngine(index)
   }
-  watchInput = event => {
+  watchInput = async event => {
     const _this = this
     // if input then set predictionsIndex to default
     this.predictionsIndex = -1
-    const { searchName, searchPredict } = this.state
+    const { host } = this.state
     // if user turn on search predict
-    if (this.props.settings.searchPredict && searchPredict) {
-      // clearTimeout(this.delay)
-
+    if (this.props.settings.searchPredict) {
       const text = event.target.value
       // record the input value as user type
       this.inputText = text
@@ -132,62 +129,19 @@ class Search extends Component {
         })
         return
       }
-        
-      fetch(searchPredict.replace('%l', navigator.language).replace('%s', text) + `&r=${Date.now()}`).then(res => {
-        if (res.ok) {
-          // extract the encoding of response headers, e.g. UTF-8
-          const encoding = /[\w\-]+$/.exec(res.headers.get('Content-Type'))[0]
-          // analysis response body as blob and read as file with the current encoding
-          res.blob().then(blob => {
-            const reader = new FileReader()
-
-            reader.onload = e => {
-              const text = reader.result
-              const results = this.analysisData(searchName, text)
-              // remove predictions 'active' class
-              _this.clearPredictionsClassName()
-              this.setState({
-                predictions: results
-              })
-            }
-
-            reader.readAsText(blob, encoding)
+      if (predict[host]) {
+        try {
+          const predictions = await predict[host](text)
+          // remove predictions 'active' class
+          this.clearPredictionsClassName()
+          this.setState({
+            predictions
           })
+        } catch (err) {
+          console.error(err)
         }
-      })
+      }
     }
-  }
-  /**
-   * return the results of predicting
-   */
-  analysisData = (engine, data) => {
-    const results = []
-    let formatted
-    switch (engine) {
-      // Google and Bing
-      case defaultEngines[0].name:
-      case defaultEngines[3].name:
-        formatted = JSON.parse(data)
-        formatted[1].forEach((v, i) => {
-          results.push(v[0])
-        })
-        break
-      // Baidu
-      case defaultEngines[1].name:
-        formatted = JSON.parse(data.replace(/^window\.baidu\.sug\(/, '').replace(/\);$/, ''))
-        formatted.s.forEach((v, i) => {
-          results.push(v)
-        })
-        break
-      // Sogou
-      case defaultEngines[2].name:
-        formatted = JSON.parse(data.replace(/^window\.sogou\.sug\(/, '').replace(/\,\-1\);$/, ''))
-        formatted[1].forEach((v, i) => {
-          results.push(v)
-        })
-        break
-    }
-    return results
   }
   // hover style
   mouseEnter = () => {
@@ -292,42 +246,48 @@ class Search extends Component {
     this.search(event)
   }
   render() {
-    const { name, link, showPredictions, predictions } = this.state
+    const { name, link, host, showPredictions, predictions } = this.state
     const { muiTheme, engines, settings } = this.props
-    const { background, backgroundShade, darkMode } = settings
+    const { background, backgroundShade, darkMode, logoTransparency, transparentSearchInput } = settings
 
-    let iconColor
-    let logo
+    let iconColor // menu icon color
+    let logo // logo class
+    let logoColor // logo background-color for mask
+    let textColor = muiTheme.palette.textColor // input text color
+    let searchBtnColor = muiTheme.palette.primary1Color
     if (!darkMode && background && backgroundShade === 2) {
       iconColor = 'rgba(255, 255, 255, 0.87)'
       logo = 'white'
+      if (transparentSearchInput) {
+        textColor = iconColor
+      }
     } else {
       iconColor =  muiTheme.palette.textColor
       logo = ''
     }
-
-    const pattern = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
-    const host = pattern.exec(link)[3]
+    if (!darkMode && background) {
+      logoColor = iconColor
+      if (transparentSearchInput) {
+        if (backgroundShade === 1) {
+          searchBtnColor = textColor
+        } else {
+          searchBtnColor = iconColor
+        }
+      }
+    } else {
+      logoColor = muiTheme.palette.primary1Color
+    }
 
     return (
       <div className="search-wrapper">
         <div className="logo-area">
-          {/*{!!searchClass && searchName && (
-            <div className={`logo ${searchClass} ${logo}`} onTouchTap={this.toTheNext}></div>
-          )}
-          {!searchClass && searchName && (
-            <div className="default-logo" onTouchTap={this.toTheNext}>
-              <WebIcon viewBox="0 0 20 20" style={{ width: 92, height: 92 }} color={muiTheme.palette.primary1Color} />
-              <span>{searchName}</span>
-            </div>
-          )}*/}
           <div
             className={`logo ${logo}`}
             data-host={host}
             onTouchTap={this.toTheNext}
-            style={{ backgroundColor: iconColor }}
+            style={{ backgroundColor: logoColor, opacity: logoTransparency }}
           ></div>
-          <span className="engine-name" style={{ color: iconColor }}>{name}</span>
+          <span className="engine-name" style={{ color: logoColor, opacity: logoTransparency }}>{name}</span>
           <IconMenu
             className="engines-menu"
             iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
@@ -363,12 +323,12 @@ class Search extends Component {
                 onFocus={this.focus}
                 onBlur={this.blur}
                 onKeyUp={this.selectPredictions}
-                style={{ color: muiTheme.palette.textColor }}
+                style={{ color: textColor, backgroundColor: transparentSearchInput ? 'transparent' : '#fff' }}
               />
               <IconButton
                 type="submit"
                 style={style.searchBtn}
-                iconStyle={{ color: muiTheme.palette.primary1Color }}
+                iconStyle={{ color: searchBtnColor }}
               >
                 <SearchIcon />
               </IconButton>
