@@ -665,16 +665,20 @@ class Navigation extends Component {
     const { intl } = this.context
     const { store, classifiedStore, isEmpty, muiTheme, settings } = this.props
     const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, deleteOpen, deleteMessage, name, link, cIndex, isClassified} = this.state
-    const { linkTarget, darkMode, background, backgroundShade } = settings
+    const { linkTarget, darkMode, background, backgroundShade, websiteLabelShadow } = settings
     
     const target = linkTarget ? '_blank' : '_self'
     const labelColor = !darkMode && background && backgroundShade === 2 ? 'rgba(255, 255, 255, 0.87)' : muiTheme.palette.textColor
     let classificationColor = muiTheme.palette.primary1Color
+    let textShadow
     if (!darkMode && background) {
       if (backgroundShade === 1) {
         classificationColor = 'rgba(0, 0, 0, 0.5)'
       } else if (backgroundShade === 2) {
         classificationColor = 'rgba(255, 255, 255, 0.5)'
+        if (websiteLabelShadow) {
+          textShadow = '0 1px 2px #000'
+        }
       }
     }
     
@@ -766,7 +770,7 @@ class Navigation extends Component {
                       icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
                       className="website-link"
                       style={style.website}
-                      labelStyle={{ color: labelColor }}
+                      labelStyle={{ color: labelColor, textShadow }}
                       onClick={this.checkClick}
                     />
                     <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
@@ -831,7 +835,7 @@ class Navigation extends Component {
                           icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
                           className="website-link"
                           style={style.website}
-                          labelStyle={{ color: labelColor }}
+                          labelStyle={{ color: labelColor, textShadow }}
                           onClick={this.checkClick}
                         />
                         <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, cIndex)}}>
