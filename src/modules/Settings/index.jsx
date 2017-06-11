@@ -310,21 +310,6 @@ class Settings extends Component {
                   />
                 </div>
               </div>
-              {/*仅对中文用户展示*/}
-              {navigator.language === 'zh-CN' &&
-                <div className="toggle-box">
-                  <CallSplit style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                  <div className="toggle-wrapper">
-                    <Toggle
-                      className="toggle"
-                      label="Google 搜索使用 .hk"
-                      defaultToggled={settings.useHK}
-                      onToggle={(event, bool) => { saveSettings({ useHK: bool }) }}
-                      labelStyle={style.toggleLabel}
-                    />
-                  </div>
-                </div>
-              }
               {/*theme*/}
               <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
               <Theme />
