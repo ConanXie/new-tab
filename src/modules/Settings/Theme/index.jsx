@@ -280,6 +280,7 @@ class Theme extends Component {
             label="Material Palette Link"
             href="https://material.io/color/#!/?view.left=0&view.right=0"
             target="_blank"
+            style={{ marginLeft: '-16px' }}
           />
         </Dialog>
       </div>
