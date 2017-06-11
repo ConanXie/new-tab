@@ -79,8 +79,7 @@ class Engines extends Component {
     }
     this.form = {
       name: '',
-      link: '',
-      predict: ''
+      link: ''
     }
   }
   /*componentDidMount() {
@@ -100,15 +99,11 @@ class Engines extends Component {
     })
   }
   edit = index => {
-    const { name, link, predict } = this.props.engines[index]
+    const { name, link } = this.props.engines[index]
     this.form.name = name
     this.form.link = link
-    this.form.predict = predict
     this.form.index = index
     this.openFormDialog(EDIT)
-  }
-  remove = index => {
-    this.props.deleteEngine(index)
   }
   openFormDialog = (status = ADD) => {
     this.setState({
@@ -125,7 +120,6 @@ class Engines extends Component {
     // restore edit form
     this.form.name = ''
     this.form.link = ''
-    this.form.predict = ''
   }
   nameChange = (event, value) => {
     this.form.name = value
@@ -173,9 +167,9 @@ class Engines extends Component {
   }
   render() {
     const { intl } = this.context
-    const { muiTheme, engines, makeDefault } = this.props
+    const { muiTheme, engines, makeDefault, deleteEngine, moveDown, moveUp } = this.props
     const { status, tableOpen, formOpen, nameError, linkError } = this.state
-    const { name, link, predict } = this.form
+    const { name, link } = this.form
 
     const actions = [
       <FlatButton
@@ -234,7 +228,7 @@ class Engines extends Component {
               displayRowCheckbox={false}
             >
               {engines.map((row, index) => {
-                const { id, name, predict, link, isDefault } = row
+                const { id, name, link, isDefault } = row
                 return (
                   <TableRow key={id}>
                     <TableRowColumn>{name} {isDefault ? intl.formatMessage({ id: 'engines.table.default' }) : ''}</TableRowColumn>
@@ -246,13 +240,20 @@ class Engines extends Component {
                         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
                         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                         targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                        menuStyle={{ minWidth: 168 }}
                       >
                         {!isDefault && (
                           <MenuItem onTouchTap={e => { makeDefault(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.default' })} />
                         )}
                         <MenuItem onTouchTap={e => { this.edit(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.edit' })} />
-                        {!predict && !isDefault && (
-                          <MenuItem onTouchTap={e => { this.remove(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.remove' })} />
+                        {!isDefault && (
+                          <MenuItem onTouchTap={e => { deleteEngine(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.remove' })} />
+                        )}
+                        {index && (
+                          <MenuItem onTouchTap={e => { moveUp(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.move.up' })} />
+                        )}
+                        {(index < engines.length - 1) && (
+                          <MenuItem onTouchTap={e => { moveDown(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.move.down' })} />
                         )}
                       </IconMenu>
                     </TableRowColumn>
@@ -279,19 +280,16 @@ class Engines extends Component {
             errorText={nameError}
           /><br />
           <TextField
-            disabled={!!predict}
             floatingLabelText={intl.formatMessage({ id: 'engines.custom.URL.placeholder' })}
             defaultValue={link}
             style={style.textField}
             onChange={this.linkChange}
             errorText={linkError}
           />
-          {!predict && (
-            <p className="custom-engines-tip">
-              <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
-              <span>{intl.formatMessage({ id: 'engines.custom.tip' })}</span>
-            </p>
-          )}
+          <p className="custom-engines-tip">
+            <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
+            <span>{intl.formatMessage({ id: 'engines.custom.tip' })}</span>
+          </p>
         </Dialog>
       </div>
     )
