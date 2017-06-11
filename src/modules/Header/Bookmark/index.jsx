@@ -310,22 +310,7 @@ class Bookmark extends Component {
       localStorage.setItem('bookmarksScrollTop', this.refs.wrapper.scrollTop)
       localStorage.setItem('bookmarksOpens', JSON.stringify(this.opens))
     }
-  }
-  handleChange = value => {
-    this.setState({
-      slideIndex: value
-    })
-  }
-  // load bookmarks
-  componentDidMount() {
-
-    // get data from localStorage
-    if (this.props.settings.rememberBookmarksState) {
-      this.opens = JSON.parse(localStorage.getItem('bookmarksOpens')) || []
-      this.scrollTop = Number(localStorage.getItem('bookmarksScrollTop'))
-    }
-
-    setTimeout(() => {
+    if (nextProps.load && !this.props.load) {
       chrome.bookmarks.getTree(tree => {
         const data = tree[0].children
         let bookmarks
@@ -364,7 +349,21 @@ class Bookmark extends Component {
           recent: results
         })
       })
-    }, 500)
+    }
+  }
+  handleChange = value => {
+    this.setState({
+      slideIndex: value
+    })
+  }
+  // load bookmarks
+  componentDidMount() {
+
+    // get data from localStorage
+    if (this.props.settings.rememberBookmarksState) {
+      this.opens = JSON.parse(localStorage.getItem('bookmarksOpens')) || []
+      this.scrollTop = Number(localStorage.getItem('bookmarksScrollTop'))
+    }
   }
   listenScroll = (event) => {
     // if user need to remember bookmarks state

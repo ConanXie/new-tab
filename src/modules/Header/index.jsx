@@ -45,7 +45,9 @@ class Header extends Component {
     this.state = {
       weatherOpen: false,
       bookmarkOpen: false,
-      wallpaperOpen: false
+      wallpaperOpen: false,
+      loadApps: false,
+      loadBookmarks: false
     }
   }
   componentDidMount() {
@@ -57,13 +59,15 @@ class Header extends Component {
       // listen Alt + B
       if (keyCode === 66 && altKey) {
         this.setState({
-          bookmarkOpen: !bookmarkOpen
+          bookmarkOpen: !bookmarkOpen,
+          loadBookmarks: true
         })
       }
       // listen Alt + A
       if (keyCode === 65 && altKey) {
         this.setState({
-          weatherOpen: !weatherOpen
+          weatherOpen: !weatherOpen,
+          loadApps: true
         })
       }
       // listen Alt + S
@@ -74,7 +78,7 @@ class Header extends Component {
   }
   render() {
     const { showSettings, settings, muiTheme } = this.props
-    const { weatherOpen, bookmarkOpen, wallpaperOpen } = this.state
+    const { weatherOpen, bookmarkOpen, wallpaperOpen, loadApps, loadBookmarks } = this.state
     const { topShadow, darkMode, background, backgroundShade } = settings
     
     let iconColor
@@ -96,13 +100,13 @@ class Header extends Component {
         <div className="tool-bar">
           <div className="bar-left">
             <IconButton
-              onTouchTap={() => this.setState({ weatherOpen: true })}
+              onTouchTap={() => this.setState({ weatherOpen: true, loadApps: true })}
             >
               <NavigationMenu color={iconColor} />
             </IconButton>
           </div>
           <div className="bar-right">
-            <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ bookmarkOpen: true })}>
+            <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ bookmarkOpen: true, loadBookmarks: true })}>
               <ActionBookmark color={iconColor} />
             </IconButton>
             <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ wallpaperOpen: true })}>
@@ -120,7 +124,7 @@ class Header extends Component {
           onRequestChange={state => this.setState({ weatherOpen: state })}
         >
           <Weather />
-          <Apps />
+          <Apps load={loadApps} />
         </Drawer>
         <Drawer
           docked={false}
@@ -139,7 +143,7 @@ class Header extends Component {
           open={bookmarkOpen}
           onRequestChange={state => this.setState({ bookmarkOpen: state })}
         >
-          <Bookmark />
+          <Bookmark load={loadBookmarks} />
         </Drawer>
       </Paper>
     )

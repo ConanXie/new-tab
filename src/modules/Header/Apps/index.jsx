@@ -40,10 +40,14 @@ class Apps extends Component {
     /**
      * Get all installed Chrome Apps
      */
-    chrome.management.getAll(exInfoArray => {
-      const apps = exInfoArray.filter(ex => ex.isApp)
-      this.setState({ apps })
-    })
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.load) {
+      chrome.management.getAll(exInfoArray => {
+        const apps = exInfoArray.filter(ex => ex.isApp)
+        this.setState({ apps })
+      })
+    }
   }
   render() {
     const { apps } = this.state
