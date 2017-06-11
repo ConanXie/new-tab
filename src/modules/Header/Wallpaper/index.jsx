@@ -69,6 +69,12 @@ const styles = {
     position: 'absolute',
     bottom: '0'
   },
+  frequencyDialogContent: {
+    width: '310px'
+  },
+  radioLeft: {
+    marginBottom: '24px'
+  },
 }
 
 class Wallpaper extends Component {
@@ -77,125 +83,84 @@ class Wallpaper extends Component {
   }
   constructor(props) {
     super(props)
-    const { backgroundSource, backgroundColor, backgroundShade } = props.settings
+    const { backgroundSource, backgroundColor, backgroundShade, updateFrequency } = props.settings
     this.state = {
       source: backgroundSource ? backgroundSource : 1,
+      frequency: updateFrequency ? updateFrequency : 0,
       color: backgroundColor,
       shade: backgroundShade ? backgroundShade : 1,
+      frequencyDialogOpen: false,
       colorDialogOpen: false,
       snackbarOpen: false,
       snackbarMessage: '',
       fetching: false
     }
-    this.checkColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
+    this.colorPattern = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
     this.spaceSize = 10 * 1024 * 1024
     this.canvasWidth = 570
   }
   componentDidMount() {
-    const errorHandler = this.errorHandler
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    // canvas.width = this.canvasWidth
-    window.webkitRequestFileSystem(window.TEMPORARY, this.spaceSize, fs => {
-      fs.root.getFile('wallpaper.jpg', { create: false }, fileEntry => {
-        fileEntry.file(file => {
-          const fr = new FileReader()
+    /**
+     * Automatically fetch wallpaper base on frequency
+     */
+    const { darkMode, background, backgroundSource, updateFrequency } = this.props.settings
+    const record = window.localStorage.wallpaperUpdateTime * 1
+    // check the time format
+    if (!/^\d{13}$/.test(record)) return
+    // the conditions not met of fetch wallpaper automatically
+    if (!record || darkMode || !background || backgroundSource !== 1 || !updateFrequency) return
 
-          fr.onloadend = () => {
-            this.originImage = fr.result
-            /*const img = new Image()
-            img.src = this.originImage
-            img.onload = () => {
-              // const width = this.canvasWidth
-              // const height = Math.round(this.canvasWidth * img.height / img.width)
-              const { width, height } = img
-              // const { width, height } = window.screen
-              canvas.width = width
-              canvas.height = height
-              console.log(width, height)
-              ctx.drawImage(img, 0, 0, width, height)
-              console.time('blur')
-              canvasRGB(canvas, 0, 0, width, height, 0)
-              console.timeEnd('blur')
-              // document.body.appendChild(canvas)
-              canvas.toBlob(blob => {
-                fs.root.getFile('wallpaper-blur.jpg', { create: true }, fileEntry => {
-                  fileEntry.createWriter(fileWriter => {
-                    fileWriter.onerror = e => console.error(e)
-                    fileWriter.onwriteend = function () {
-                      this.truncate(this.position)
-                      document.querySelector('#app').style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper-blur.jpg)`
-                    }
-                    fileWriter.write(blob)
-                  }, errorHandler)
-                }, errorHandler)
-              }, 'image/jpg')
-            }*/
-          }
-          
-          fr.readAsDataURL(file)
-        })
-      }, errorHandler)
-    }, errorHandler)
+    const date = new Date()
+    const diff = date.getTime() - record
+    // console.log(record, diff, new Date(record).getDate(), date.getDate())
+    let shouldFetch = false
+    switch (updateFrequency) {
+      // ten minutes
+      case 1:
+        if (diff > 600000) shouldFetch = true
+        break
+      // an hour
+      case 2:
+        if (diff > 3600000) shouldFetch = true
+        break
+      // a day
+      case 3:
+        if (new Date(record).getDate() !== date.getDate()) shouldFetch = true
+        break
+      default:
+        break
+    }
+    if (shouldFetch) {
+      this.fetchWallpaper()
+    }
   }
-  handleTransparency = (event, value) => {
-    const transparency = 1 - value
-    document.querySelector('.logo').style.opacity = transparency
-    document.querySelector('.engine-name').style.opacity = transparency
+  useWallpaper = (event, bool) => {
+    const { settings, saveSettings } = this.props
+    const saved = { background: bool }
+    // If user choose using wallpaper in the first time, save the source with internet wallpaper
+    if (!settings.backgroundSource) {
+      saved.backgroundSource = 1
+    }
+    saveSettings(saved)
   }
-  applyTransparency = () => {
-    const { saveSettings } = this.props
-    const transparency = 1 - document.querySelector('[name=transparency]').value
-    saveSettings({ logoTransparency: transparency })
-  }
+  /**
+   * Wallpaper source
+   */
   handleSourceChange = (event, index, value) => {
     this.setState({
       source: value
     })
-    const saveSource = () => {
-      this.props.saveSettings({
-        backgroundSource: value
-      })
-    }
-    if (value === 1) {
-      /*// const url = `https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=${navigator.language}`
-      const url = `http://localhost:5300/api/wallpaper/${window.screen.width}x${window.screen.height}`
-      fetch(url).then(res => {
-        if (res.ok) {
-          return res.json()
-        }
-      }).then(data => {
-        // const imageUrl = 'https://www.bing.com' + data.images[0].url
-        const imageUrl = data.result[0].url
-        // console.log(imageUrl)
-        fetch(imageUrl).then(res => {
-          if (res.ok) {
-            return res.blob()
-          }
-        }).then(data => {
-          const fr = new FileReader()
-          fr.onloadend = () => {
-            this.originImage = fr.result
-            const radius = this.props.settings.blurRadius
-            if (radius) {
-              this.saveImage(data, () => this.saveBlurImage(radius, saveSource))
-            } else {
-              this.saveImage(data, saveSource)
-            }
-          }
-          fr.readAsDataURL(data)
-        }).catch(e => console.error(e))
-      }).catch(e => console.error(e))*/
-      this.fetchWallpaper()
-      // return
-    }
-    saveSource()
+    this.props.saveSettings({
+      backgroundSource: value
+    })
   }
-  fetchWallpaper = async () => {
+  fetchWallpaper = async event => {
+    const { intl } = this.context
+    // Block multiple requests
     if (this.state.fetching) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: 'A new wallpaper is fetching'
+        snackbarMessage: intl.formatMessage({ id: 'desktop.msg.fetching' })
       })
       return
     }
@@ -203,32 +168,43 @@ class Wallpaper extends Component {
       fetching: true
     })
     const { width, height } = window.screen
-    const url = `http://localhost:5300/api/wallpaper/${width}x${height}`
+    // const url = `http://localhost:5300/api/wallpaper/${width}x${height}`
+    const url = `https://tab.xiejie.co/api/wallpaper/${width}x${height}`
     try {
       const res = await fetch(url)
       const msg = await res.json()
-      const image = await fetch(msg.result[0].url)
+      const image = await fetch(msg.result[0].url, { credentials: 'include' })
       if (!image.ok) {
         this.setState({
           snackbarOpen: true,
-          snackbarMessage: 'Fetch failed',
+          snackbarMessage: intl.formatMessage({ id: 'desktop.msg.fetch.failed' }),
           fetching: false
         })
         return
       }
       const data = await image.blob()
       const { blurRadius } = this.props.settings
-      if (blurRadius) {
-        this.saveImage(data, () => this.saveBlurImage(blurRadius, () => this.updateBackgroundImageUrl(1)))
-      } else {
-        this.saveImage(data, this.updateBackgroundImageUrl)
+      const fr = new FileReader()
+      fr.onloadend = () => {
+        let callback
+        // if fetch a new wallpaper via user click
+        if (event) {
+          this.originImage = fr.result
+          // if use choose blur then save blur wallpaper to temporary and update backgrand-image url
+          callback = blurRadius ? () => this.saveBlurImage(blurRadius, () => this.updateBackgroundImageUrl(1)) : this.updateBackgroundImageUrl
+        } else {
+          // fetch wallpaper automatically
+          // just save to temporary
+          callback = blurRadius ? () => this.saveBlurImage(blurRadius, undefined, fr.result) : undefined
+        }
+        this.saveImage(data, callback)
       }
+      fr.readAsDataURL(data)
+      // Restore status
       this.setState({
         fetching: false
       })
-      const fr = new FileReader()
-      fr.onloadend = () => this.originImage = fr.result
-      fr.readAsDataURL(data)
+      window.localStorage.setItem('wallpaperUpdateTime', Date.now())
     } catch (e) {
       this.errorHandler(e)
     }
@@ -250,7 +226,11 @@ class Wallpaper extends Component {
     }
     return array
   }
+  /**
+   * Read image from local disk
+   */
   readImage = event => {
+    const { intl } = this.context
     const { blurRadius } = this.props.settings
     const file = event.target.files[0]
     const { type, size } = file
@@ -258,14 +238,14 @@ class Wallpaper extends Component {
     if (!/image\/(jpg|jpeg|png|gif)/.test(type)) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: 'This file is not supported'
+        snackbarMessage: intl.formatMessage({ id: 'desktop.msg.not.supported' })
       })
       return
     }
     if (size > this.spaceSize) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: 'This image is too large'
+        snackbarMessage: intl.formatMessage({ id: 'desktop.msg.too.large' })
       })
       return
     }
@@ -275,31 +255,51 @@ class Wallpaper extends Component {
       this.originImage = fr.result
       const buffer = this.base64ToBinary(this.originImage)
       const { blurRadius } = this.props.settings
-      const blob = new Blob([buffer], { type: 'image/jpg' })
-      if (blurRadius) {
-        this.saveImage(blob)
-        this.saveBlurImage(blurRadius, () => this.updateBackgroundImageUrl(1))
-      } else {
-        this.saveImage(blob, this.updateBackgroundImageUrl)
-      }
+      const blob = new Blob([buffer], { type })
+      // if blur then save blur image
+      // update background-image url
+      const callback = blurRadius ? () => this.saveBlurImage(blurRadius, () => this.updateBackgroundImageUrl(1)) : this.updateBackgroundImageUrl
+      this.saveImage(blob, callback)
     }
     fr.readAsDataURL(file)
   }
   updateBackgroundImageUrl(blur) {
     document.querySelector('#app').style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blur ? '-blur' : ''}.jpg?r=${Date.now()})`
   }
-  handleBlur = (event, value) => {
-    // console.log(value)
+  /**
+   * Read the origin image from temporary file system
+   */
+  readTemporary() {
+    return new Promise((resolve, reject) => {
+      const errorHandle = e => reject(e)
+      window.webkitRequestFileSystem(window.TEMPORARY, this.spaceSize, fs => {
+        fs.root.getFile('wallpaper.jpg', { create: false }, fileEntry => {
+          fileEntry.file(file => {
+            const fr = new FileReader()
+            fr.onloadend = () => resolve(fr.result)
+            fr.readAsDataURL(file)
+          })
+        }, errorHandle)
+      }, errorHandle)
+    })
   }
-  applyBlur = event => {
+  applyBlur = async event => {
     const { saveSettings } = this.props
     const radius = document.querySelector('[name=radius]').value * 1
     const saveRadius = () => {
       saveSettings({ blurRadius: radius })
     }
+    // if blur radius is 0 then just save radius
     if (!radius) {
       saveRadius()
       return
+    }
+    if (!this.originImage) {
+      try {
+        this.originImage = await this.readTemporary()
+      } catch (err) {
+        this.errorHandler(err)
+      }
     }
     this.saveBlurImage(radius, saveRadius)
     
@@ -326,20 +326,20 @@ class Wallpaper extends Component {
       }, errorHandler)
     }, errorHandler)
   }
-  saveBlurImage(radius, callback) {
+  saveBlurImage(radius, callback, originImage = this.originImage) {
     const errorHandler = this.errorHandler
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     const image = new Image()
-    image.src = this.originImage
+    image.src = originImage
     image.onload = () => {
       const { width, height } = image
       canvas.width = width
       canvas.height = height
       ctx.drawImage(image, 0, 0, width, height)
-      console.time('blur')
+      // console.time('blur')
       canvasRGB(canvas, 0, 0, width, height, radius)
-      console.timeEnd('blur')
+      // console.timeEnd('blur')
       canvas.toBlob(blob => {
         window.webkitRequestFileSystem(window.TEMPORARY, this.spaceSize, fs => {
           fs.root.getFile('wallpaper-blur.jpg', { create: true }, fileEntry => {
@@ -365,8 +365,14 @@ class Wallpaper extends Component {
       }, 'image/jpg')
     }
   }
+  /**
+   * Download current image
+   */
   saveToLocal = async () => {
     try {
+      if (!this.originImage) {
+        this.originImage = await this.readTemporary()
+      }
       const res = await fetch(this.originImage)
       const data = await res.blob()
       const a = document.createElement('a')
@@ -377,11 +383,30 @@ class Wallpaper extends Component {
       this.errorHandler(err)
     }
   }
-  showColorDialog = () => {
-    const { backgroundColor } = this.props.settings
-
+  showFrequencyDialog = () => {
     this.setState({
-      color: backgroundColor,
+      frequencyDialogOpen: true
+    })
+  }
+  hideFrequencyDialog = () => {
+    this.setState({
+      frequencyDialogOpen: false
+    })
+  }
+  handleFrequencyChange = (event, value) => {
+    this.setState({
+      frequency: value
+    })
+    this.props.saveSettings({
+      updateFrequency: value
+    })
+    setTimeout(() => {
+      this.hideFrequencyDialog()
+    }, 400)
+  }
+  showColorDialog = () => {
+    this.setState({
+      color: this.props.settings.backgroundColor,
       colorDialogOpen: true
     })
   }
@@ -395,7 +420,7 @@ class Wallpaper extends Component {
       color: value
     })
 
-    if (this.checkColor.test(value)) {
+    if (this.colorPattern.test(value)) {
       this.refs.color.value = value
     }
   }
@@ -408,7 +433,7 @@ class Wallpaper extends Component {
     const { saveSettings, settings } = this.props
     this.hideColorDialog()
 
-    if (this.checkColor.test(color) && color !== settings.backgroundColor) {
+    if (this.colorPattern.test(color) && color !== settings.backgroundColor) {
       saveSettings({
         backgroundColor: color
       })
@@ -422,10 +447,20 @@ class Wallpaper extends Component {
       backgroundShade: value
     })
   }
+  handleTransparency = (event, value) => {
+    const transparency = 1 - value
+    document.querySelector('.logo').style.opacity = transparency
+    document.querySelector('.engine-name').style.opacity = transparency
+  }
+  applyTransparency = () => {
+    const { saveSettings } = this.props
+    const transparency = 1 - document.querySelector('[name=transparency]').value
+    saveSettings({ logoTransparency: transparency })
+  }
   render() {
     const { intl } = this.context
     const { settings, saveSettings, muiTheme, closeDrawer } = this.props
-    const { source, color, shade, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching } = this.state
+    const { source, frequency, color, shade, frequencyDialogOpen, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching } = this.state
     const { darkMode, topShadow, background, blurRadius, hideWebsites } = settings
 
     const colorActions = [
@@ -440,13 +475,20 @@ class Wallpaper extends Component {
         onTouchTap={this.setBackgroundColor}
       />
     ]
+    const frequencyActions = [
+      <FlatButton
+        label={intl.formatMessage({ id: 'button.cancel' })}
+        primary={true}
+        onTouchTap={this.hideFrequencyDialog}
+      />
+    ]
 
     return (
       <div className="wallpaper-settings">
         <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
           <div className="tool-bar">
             <div className="bar-left">
-              <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>Desktop</div>
+              <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'desktop.header.title' })}</div>
             </div>
             <div className="bar-right">
               <IconButton onTouchTap={closeDrawer}>
@@ -457,10 +499,10 @@ class Wallpaper extends Component {
         </Paper>
         <section>
           <div className="area">
-            <h2 style={{ color: muiTheme.palette.primary1Color }}>Wallpaper</h2>
+            <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.wallpaper' })}</h2>
             <div className="column">
               <Checkbox
-                label="顶部阴影"
+                label={intl.formatMessage({ id: 'desktop.top.shadow.label' })}
                 labelPosition="left"
                 defaultChecked={settings.topShadow}
                 onCheck={(event, bool) => saveSettings({ topShadow: bool })}
@@ -469,33 +511,40 @@ class Wallpaper extends Component {
             </div>
             <div className="column">
               <Toggle
-                label="使用壁纸"
+                label={intl.formatMessage({ id: 'desktop.wallpaper.label' })}
                 defaultToggled={settings.background}
                 disabled={darkMode}
-                onToggle={(event, bool) => { saveSettings({ background: bool }) }}
+                onToggle={this.useWallpaper}
               />
             </div>
             <div className="column no-padding-right">
               <SelectField
-                floatingLabelText="Choose wallpaper source"
+                floatingLabelText={intl.formatMessage({ id: 'wallpaper.source.title' })}
                 value={source}
                 disabled={darkMode || !background}
                 fullWidth={true}
                 underlineStyle={{ display: 'none' }}
                 onChange={this.handleSourceChange}
               >
-                <MenuItem value={1} primaryText="Internet Wallpaper" />
-                <MenuItem value={2} primaryText="Local Wallpaper" />
-                <MenuItem value={3} primaryText="Solid Color" />
+                <MenuItem value={1} primaryText={intl.formatMessage({ id: 'wallpaper.source.internet' })} />
+                <MenuItem value={2} primaryText={intl.formatMessage({ id: 'wallpaper.source.local' })} />
+                <MenuItem value={3} primaryText={intl.formatMessage({ id: 'wallpaper.source.solid' })} />
               </SelectField>
             </div>
             <div>
               {source === 1 && (
                 <div>
+                  <ListItem
+                    primaryText={intl.formatMessage({ id: 'wallpaper.frequency.primary' })}
+                    secondaryText={intl.formatMessage({ id: 'wallpaper.frequency.secondary' })}
+                    disabled={darkMode || !background}
+                    innerDivStyle={styles.listItem}
+                    onTouchTap={this.showFrequencyDialog}
+                  />
                   <div className="fetch-new">
                     <ListItem
-                      primaryText="New one"
-                      secondaryText="Click to fetch a new wallpaper"
+                      primaryText={intl.formatMessage({ id: 'wallpaper.new.primary' })}
+                      secondaryText={intl.formatMessage({ id: 'wallpaper.new.secondary' })}
                       disabled={darkMode || !background}
                       innerDivStyle={styles.listItem}
                       onTouchTap={this.fetchWallpaper}
@@ -505,8 +554,8 @@ class Wallpaper extends Component {
                     )}
                   </div>
                   <ListItem
-                    primaryText="Download it"
-                    secondaryText="Save the current wallpaper to local"
+                    primaryText={intl.formatMessage({ id: 'wallpaper.download.primary' })}
+                    secondaryText={intl.formatMessage({ id: 'wallpaper.download.secondary' })}
                     disabled={darkMode || !background}
                     innerDivStyle={styles.listItem}
                     onTouchTap={this.saveToLocal}
@@ -515,18 +564,24 @@ class Wallpaper extends Component {
               )}
               {source === 2 && (
                 <ListItem
-                  primaryText="Choose an image"
-                  secondaryText="Set wallpaper with local image file"
+                  primaryText={intl.formatMessage({ id: 'wallpaper.local.primary' })}
+                  secondaryText={intl.formatMessage({ id: 'wallpaper.local.secondary' })}
                   disabled={darkMode || !background}
                   innerDivStyle={styles.listItem}
                 >
-                  <input type="file" style={styles.inputImage} accept="image/png, image/jpeg, image/gif, image/jpg" onChange={this.readImage} />
+                  <input
+                    type="file"
+                    disabled={darkMode || !background}
+                    style={styles.inputImage}
+                    accept="image/png, image/jpeg, image/gif, image/jpg"
+                    onChange={this.readImage}
+                  />
                 </ListItem>
               )}
               {source === 3 && (
                 <ListItem
-                  primaryText="Pick a color"
-                  secondaryText="Set background with custom color"
+                  primaryText={intl.formatMessage({ id: 'wallpaper.solid.color.primary' })}
+                  secondaryText={intl.formatMessage({ id: 'wallpaper.solid.color.secondary' })}
                   disabled={darkMode || !background}
                   innerDivStyle={styles.listItem}
                   onTouchTap={this.showColorDialog}
@@ -535,7 +590,7 @@ class Wallpaper extends Component {
             </div>
             {source !== 3 && (
               <div className="border">
-                <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>壁纸模糊半径</h3>
+                <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.blur.primary' })}</h3>
                 <div className="slider-wrap">
                   <BlurOn color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                   <Slider
@@ -553,23 +608,23 @@ class Wallpaper extends Component {
               </div>
             )}
             <div className="border">
-              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>壁纸颜色深浅</h3>
+              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.shade.primary' })}</h3>
               <RadioButtonGroup
-                name="hue"
+                name="shade"
                 defaultSelected={shade}
                 labelPosition="left"
                 onChange={this.handleShadeChange}
               >
                 <RadioButton
                   value={1}
-                  label="浅色壁纸"
+                  label={intl.formatMessage({ id: 'wallpaper.shade.light' })}
                   disabled={darkMode || !background}
                   style={styles.radio}
                   labelStyle={styles.radioLabel}
                 />
                 <RadioButton
                   value={2}
-                  label="深色壁纸"
+                  label={intl.formatMessage({ id: 'wallpaper.shade.dark' })}
                   disabled={darkMode || !background}
                   style={styles.radio}
                   labelStyle={styles.radioLabel}
@@ -578,10 +633,10 @@ class Wallpaper extends Component {
             </div>
           </div>
           <div className="area">
-            <h2 style={{ color: muiTheme.palette.primary1Color }}>Search</h2>
+            <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.search' })}</h2>
             <div className="column">
               <Toggle
-                label="隐藏搜索"
+                label={intl.formatMessage({ id: 'search.hide.label' })}
                 defaultToggled={settings.hideSearch}
                 onToggle={(event, bool) => saveSettings({ hideSearch: bool })}
               />
@@ -589,7 +644,7 @@ class Wallpaper extends Component {
             <div className="column">
               <Checkbox
                 disabled={settings.hideSearch}
-                label="输入框透明"
+                label={intl.formatMessage({ id: 'search.input.transparency.label' })}
                 labelPosition="left"
                 defaultChecked={settings.transparentSearchInput}
                 onCheck={(event, bool) => saveSettings({ transparentSearchInput: bool })}
@@ -597,7 +652,7 @@ class Wallpaper extends Component {
               />
             </div>
             <div className="border">
-              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>Logo透明度</h3>
+              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'search.logo.transparency.primary' })}</h3>
               <div className="slider-wrap">
                 <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                 <Slider
@@ -612,18 +667,18 @@ class Wallpaper extends Component {
             </div>
           </div>
           <div className="area">
-            <h2 style={{ color: muiTheme.palette.primary1Color }}>Websites</h2>
+            <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.webistes' })}</h2>
             <div className="column">
               <Toggle
-                label="隐藏网站"
+                label={intl.formatMessage({ id: 'webistes.hide.label' })}
                 defaultToggled={settings.hideWebsites}
                 onToggle={(event, bool) => saveSettings({ hideWebsites: bool })}
               />
             </div>
             <div className="column">
               <Checkbox
-                disabled={hideWebsites || !background || settings.backgroundShade !== 2}
-                label="文字阴影"
+                disabled={darkMode || hideWebsites || !background || settings.backgroundShade !== 2}
+                label={intl.formatMessage({ id: 'webistes.text.shadow.label' })}
                 labelPosition="left"
                 defaultChecked={settings.websiteLabelShadow}
                 onCheck={(event, bool) => saveSettings({ websiteLabelShadow: bool })}
@@ -632,6 +687,40 @@ class Wallpaper extends Component {
             </div>
           </div>
         </section>
+        <Dialog
+          title={intl.formatMessage({ id: 'wallpaper.frequency.dialog.title' })}
+          actions={frequencyActions}
+          contentStyle={styles.frequencyDialogContent}
+          bodyStyle={{ paddingBottom: 0, overflow: 'visible' }}
+          onRequestClose={this.hideFrequencyDialog}
+          open={frequencyDialogOpen}
+        >
+          <RadioButtonGroup
+            name="hue"
+            defaultSelected={frequency}
+            onChange={this.handleFrequencyChange}
+          >
+            <RadioButton
+              value={1}
+              label={intl.formatMessage({ id: 'wallpaper.frequency.minute' })}
+              style={styles.radioLeft}
+            />
+            <RadioButton
+              value={2}
+              label={intl.formatMessage({ id: 'wallpaper.frequency.hour' })}
+              style={styles.radioLeft}
+            />
+            <RadioButton
+              value={3}
+              label={intl.formatMessage({ id: 'wallpaper.frequency.day' })}
+              style={styles.radioLeft}
+            />
+            <RadioButton
+              value={0}
+              label={intl.formatMessage({ id: 'wallpaper.frequency.close' })}
+            />
+          </RadioButtonGroup>
+        </Dialog>
         <Dialog
           open={colorDialogOpen}
           actions={colorActions}
