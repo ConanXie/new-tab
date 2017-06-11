@@ -1,7 +1,21 @@
+.navigation {
+  @keyframes show {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opcity: 1;
+    }
+  }
+  animation: show 0.2s linear forwards;
+  &.no-search {
+    margin-top: 180px;
+  }
+}
 .navigation-box {
   width: 1000px;
   // margin: 68px auto 0;
-  margin: 40px auto;
+  margin: 20px auto;
   // padding-bottom: 30px;
   // border: 1px solid #eee;
   .tool-bar {
@@ -48,6 +62,11 @@
         text-align: center;
         p.empty-text {
           margin: 170px 0 20px;
+          color: #999;
+        }
+        span.or {
+          margin-left: 16px;
+          font-size: 14px;
           color: #999;
         }
       }

@@ -1,5 +1,5 @@
 .search-wrapper {
-  margin: 166px auto 0;
+  margin: 172px auto 0;
   .logo-area {
     position: relative;
     width: 272px;
@@ -9,12 +9,21 @@
       opacity: 1;
     }
   }
+  @keyframes show {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
   .logo {
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
     background-position: center;
     -webkit-mask: url(images/normal.svg) center no-repeat;
+    animation: show 0.2s linear forwards;
     &[data-host="www.google.com"] {
       background-size: 100% auto;
       background-image: url(images/google.svg);
@@ -32,10 +41,10 @@
       .hide-name();
       & + .engine-name {
         display: block;
-        left: 215px;
+        left: 217px;
       }
     }
-    &[data-host*="www.baidu.com"] {
+    &[data-host="www.baidu.com"] {
       background-size: 95% auto;
       background-image: url(images/baidu.svg);
       &.white {
@@ -43,19 +52,83 @@
       }
       .hide-name();
     }
-    &[data-host*="www.bing.com"] {
-      background-size: auto 100%;
+    &[data-host="www.bing.com"] {
+      background-size: auto 90%;
       background-image: url(images/bing.svg);
       &.white {
         background-image: url(images/bing-white.svg);
       }
       .hide-name();
     }
-    &[data-host*="www.sogou.com"] {
+    &[data-host="www.sogou.com"] {
       background-size: 100% auto;
       background-image: url(images/sogou.svg);
       &.white {
         background-image: url(images/sogou-white.svg);
+      }
+      .hide-name();
+    }
+    &[data-host*="github.com"] {
+      background-size: auto 100%;
+      background-image: url(images/github.svg);
+      &.white {
+        background-image: url(images/github-white.svg);
+      }
+      .hide-name();
+    }
+    &[data-host*="twitter.com"] {
+      background-size: auto 80%;
+      background-image: url(images/twitter.svg);
+      &.white {
+        background-image: url(images/twitter-white.svg);
+      }
+      .hide-name();
+    }
+    &[data-host="www.npmjs.com"] {
+      background-size: auto 80%;
+      background-image: url(images/npm.svg);
+      &.white {
+        background-image: url(images/npm-white.svg);
+      }
+      .hide-name();
+    }
+    &[data-host="www.youtube.com"] {
+      background-size: auto 80%;
+      background-image: url(images/youtube.svg);
+      &.white {
+        background-image: url(images/youtube-white.svg);
+      }
+      .hide-name();
+    }
+    &[data-host*="medium.com"] {
+      background-size: auto 80%;
+      background-image: url(images/medium.svg);
+      &.white {
+        background-image: url(images/medium-white.svg);
+      }
+      .hide-name();
+    }
+    &[data-host*="taobao.com"] {
+      background-size: auto 80%;
+      background-image: url(images/taobao.svg);
+      &.white {
+        background-image: url(images/taobao-white.svg);
+      }
+      .hide-name();
+    }
+    &[data-host="dribbble.com"] {
+      background-size: auto 90%;
+      background-image: url(images/dribbble.svg);
+      &.white {
+        background-image: url(images/dribbble-white.svg);
+      }
+      .hide-name();
+    }
+    &[data-host*="tmall.com"] {
+      background-size: 80% auto;
+      background-image: url(images/tmall.svg);
+      &.white {
+        background-image: url(images/tmall-white.svg);
       }
       .hide-name();
     }
@@ -107,7 +180,8 @@
     font-size: 16px;
     border-radius: 2px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-    transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1),
+                background-color 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
     &.hover, &.focus {
       box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
     }
