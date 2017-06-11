@@ -113,7 +113,6 @@ class Navigation extends Component {
   }
   constructor(props) {
     super(props)
-    this.props.initialData()
     this.state = {
       confirm: false,
       dialog: false,
@@ -140,6 +139,9 @@ class Navigation extends Component {
 
     // storage
     this.cache = {}
+  }
+  componentDidMount() {
+    setTimeout(() => this.props.initialData(), 150)
   }
   checkClick = (e) => {
     if (this.state.edit) {
@@ -663,19 +665,21 @@ class Navigation extends Component {
   }
   render() {
     const { intl } = this.context
-    const { store, classifiedStore, isEmpty, muiTheme, settings } = this.props
+    const { store, classifiedStore, isEmpty, muiTheme, settings, saveSettings } = this.props
     const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, deleteOpen, deleteMessage, name, link, cIndex, isClassified} = this.state
-    const { linkTarget, darkMode, background, backgroundShade, websiteLabelShadow } = settings
+    const { linkTarget, darkMode, background, backgroundShade, hideSearch, websiteLabelShadow } = settings
     
     const target = linkTarget ? '_blank' : '_self'
     const labelColor = !darkMode && background && backgroundShade === 2 ? 'rgba(255, 255, 255, 0.87)' : muiTheme.palette.textColor
     let classificationColor = muiTheme.palette.primary1Color
     let textShadow
     if (!darkMode && background) {
+      // Light background
       if (backgroundShade === 1) {
-        classificationColor = 'rgba(0, 0, 0, 0.5)'
+        classificationColor = 'rgba(0, 0, 0, 0.6)'
+        // Dark background
       } else if (backgroundShade === 2) {
-        classificationColor = 'rgba(255, 255, 255, 0.5)'
+        classificationColor = 'rgba(255, 255, 255, 0.6)'
         if (websiteLabelShadow) {
           textShadow = '0 1px 2px #000'
         }
@@ -719,184 +723,192 @@ class Navigation extends Component {
       />
     ]
     return (
-      <Paper zDepth={0} className="navigation-box" style={style.box}>
-        <div className="tool-bar">
-          <div className={classNames('tool-area', { 'hide': !edit })}>
-            {isClassified && (classifiedStore.length < classificationMax) && (
-              <FlatButton
-                label={intl.formatMessage({ id: 'nav.increase.classification.btn' })}
-                labelStyle={{ color: labelColor }}
-                icon={<ContentAdd color={labelColor} />}
-                onTouchTap={this.openClassifyDialog}
+      <div className={classNames('navigation', { 'no-search': hideSearch })}>
+        <Paper zDepth={0} className="navigation-box" style={style.box}>
+          <div className="tool-bar">
+            <div className={classNames('tool-area', { 'hide': !edit })}>
+              {isClassified && (classifiedStore.length < classificationMax) && (
+                <FlatButton
+                  label={intl.formatMessage({ id: 'nav.increase.classification.btn' })}
+                  labelStyle={{ color: labelColor }}
+                  icon={<ContentAdd color={labelColor} />}
+                  onTouchTap={this.openClassifyDialog}
+                />
+              )}
+              <Checkbox
+                label={intl.formatMessage({ id: 'nav.show.classification' })}
+                style={style.classifyCheckbox}
+                labelStyle={style.classifyCheckboxLabel}
+                defaultChecked={isClassified}
+                onCheck={this.isClassified}
+                labelStyle={{ width: 'auto', color: labelColor }}
               />
-            )}
-            <Checkbox
-              label={intl.formatMessage({ id: 'nav.show.classification' })}
-              style={style.classifyCheckbox}
-              labelStyle={style.classifyCheckboxLabel}
-              defaultChecked={isClassified}
-              onCheck={this.isClassified}
-              labelStyle={{ width: 'auto', color: labelColor }}
-            />
+            </div>
           </div>
-        </div>
-        <div className={classNames('websites-wrap', { 'empty': isEmpty })}>
-          {isEmpty && (
-            <div className="empty-box">
-              <p className="empty-text">{intl.formatMessage({ id: 'empty.text.navigation' })}</p>
-              <RaisedButton
-                label={intl.formatMessage({ id: 'empty.text.navigation.add' })}
-                primary={true}
-                onTouchTap={this.openDialog}
-              />
-            </div>
-          )}
-          {!isClassified && (
-            <div className="websites-area">
-              {store.map((value, index) => {
-                const { name, link } = value
-                return (
-                  <div
-                    className={classNames('website-box', { 'grabable': edit })}
-                    aria-grabbed="false"
-                    key={Math.random()}
-                    style={{ transform: `translate(${this.margin + (index % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(index / this.row) * (this.websiteHeight + this.spacingY)}px)` }}
-                    onMouseDown={this.beginGrab}
-                  >
-                    <FlatButton
-                      label={name}
-                      href={link}
-                      target={target}
-                      icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
-                      className="website-link"
-                      style={style.website}
-                      labelStyle={{ color: labelColor, textShadow }}
-                      onClick={this.checkClick}
-                    />
-                    <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
-                      <ModeEdit
-                        color={grey500}
-                        hoverColor={grey600}
-                        style={style.editHandleIcon}
-                      />
-                    </i>
-                    <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(name, index)}}>
-                      <ContentClear
-                        color="#fff"
-                        style={style.deleteHandleIcon}
-                      />
-                    </i>
-                    {/*<span style={{ display: 'block', width: 150, height: 36 }}>{value.name}</span>*/}
-                  </div>
-                )
-              })}
-            </div>
-          )}
-          {isClassified && classifiedStore.map((item, cIndex) => {
-            return (
-              <div
-                key={Math.random()}
-                className={classNames('classification', { 'empty': !item.set.length, 'editing': edit })}
-                style={{ minHeight: this.margin + this.websiteHeight, height: Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}
-              >
-                <div className="classification-name" style={{ color: classificationColor }}>
-                  {edit && item.name !== 'unclassified' && (
-                    <TextField
-                      hintText={intl.formatMessage({ id: 'nav.edit.input.website' })}
-                      defaultValue={item.name}
-                      fullWidth={true}
-                      style={style.classficationInput}
-                      hintStyle={style.classficationHintText}
-                      onBlur={e => { this.changeClassificationName(e, cIndex) }}
-                    />
-                  )}
-                  {(!edit && item.name !== 'unclassified') && (
-                    <p>{item.name}</p>
-                  )}
-                  {(item.name === 'unclassified') && (
-                    <p>{intl.formatMessage({ id: 'nav.classification.unclassified' })}</p>
-                  )}
-                </div>
-                <div className="classification-area" style={{ width: this.wrapperWidth }}>
-                  {item.set.map((value, index) => {
-                    const { name, link } = value
-                    return (
-                      <div
-                        className={classNames('website-box', { 'grabable': edit })}
-                        aria-grabbed="false"
-                        key={Math.random()}
-                        style={{ transform: `translate(${this.margin + (index % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(index / this.row) * (this.websiteHeight + this.spacingY)}px)` }}
-                        onMouseDown={this.beginGrab}
-                      >
-                        <FlatButton
-                          label={name}
-                          href={link}
-                          target={target}
-                          icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
-                          className="website-link"
-                          style={style.website}
-                          labelStyle={{ color: labelColor, textShadow }}
-                          onClick={this.checkClick}
-                        />
-                        <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, cIndex)}}>
-                          <ModeEdit
-                            color={grey500}
-                            hoverColor={grey600}
-                            style={style.editHandleIcon}
-                          />
-                        </i>
-                        <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(name, index, cIndex)}}>
-                          <ContentClear
-                            color="#fff"
-                            style={style.deleteHandleIcon}
-                          />
-                        </i>
-                      </div>
-                    )
-                  })}
-                </div>
-                {item.name !== 'unclassified' && (
-                  <FlatButton
-                    label={intl.formatMessage({ id: 'nav.delete.classification' })}
-                    icon={<ContentClear />}
-                    onTouchTap={e => { this.deleteClassification(cIndex) }}
-                    className="delete-classification"
-                  />
-                )}
+          <div className={classNames('websites-wrap', { 'empty': isEmpty })}>
+            {isEmpty && (
+              <div className="empty-box">
+                <p className="empty-text">{intl.formatMessage({ id: 'empty.text.navigation' })}</p>
+                <RaisedButton
+                  label={intl.formatMessage({ id: 'empty.text.navigation.add' })}
+                  primary={true}
+                  onTouchTap={this.openDialog}
+                />
+                <span className="or">{intl.formatMessage({ id: 'empty.text.navigation.or' })}</span>
+                <FlatButton
+                  label={intl.formatMessage({ id: 'empty.text.navigation.hide' })}
+                  primary={true}
+                  onTouchTap={() => saveSettings({ hideWebsites: true })}
+                />
               </div>
-            )
-          })}
-          {/*<FlatButton
-            key={Math.random()}
-            label="Andriod"
-            href="https://www.android.com/"
-            secondary={true}
-            icon={<ActionAndroid style={{ width: 18, height: 18 }} />}
-            className="website-link"
-            style={style.website}
-          />*/}
-        </div>
-        {!isEmpty && store.length !== 0 && (
-          <div className="float-actions" onMouseLeave={this.hideEditBtn}>
-            <div className="edit-float-btn" ref="editFloatBtn" style={style.editActionButton}>
+            )}
+            {!isClassified && (
+              <div className="websites-area">
+                {store.map((value, index) => {
+                  const { name, link } = value
+                  return (
+                    <div
+                      className={classNames('website-box', { 'grabable': edit })}
+                      aria-grabbed="false"
+                      key={Math.random()}
+                      style={{ transform: `translate(${this.margin + (index % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(index / this.row) * (this.websiteHeight + this.spacingY)}px)` }}
+                      onMouseDown={this.beginGrab}
+                    >
+                      <FlatButton
+                        label={name}
+                        href={link}
+                        target={target}
+                        icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
+                        className="website-link"
+                        style={style.website}
+                        labelStyle={{ color: labelColor, textShadow }}
+                        onClick={this.checkClick}
+                      />
+                      <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
+                        <ModeEdit
+                          color={grey500}
+                          hoverColor={grey600}
+                          style={style.editHandleIcon}
+                        />
+                      </i>
+                      <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(name, index)}}>
+                        <ContentClear
+                          color="#fff"
+                          style={style.deleteHandleIcon}
+                        />
+                      </i>
+                      {/*<span style={{ display: 'block', width: 150, height: 36 }}>{value.name}</span>*/}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+            {isClassified && classifiedStore.map((item, cIndex) => {
+              return (
+                <div
+                  key={Math.random()}
+                  className={classNames('classification', { 'empty': !item.set.length, 'editing': edit })}
+                  style={{ minHeight: this.margin + this.websiteHeight, height: Math.ceil(item.set.length / this.row) * (this.websiteHeight + this.spacingY) }}
+                >
+                  <div className="classification-name" style={{ color: classificationColor }}>
+                    {edit && item.name !== 'unclassified' && (
+                      <TextField
+                        hintText={intl.formatMessage({ id: 'nav.edit.input.website' })}
+                        defaultValue={item.name}
+                        fullWidth={true}
+                        style={style.classficationInput}
+                        hintStyle={style.classficationHintText}
+                        onBlur={e => { this.changeClassificationName(e, cIndex) }}
+                      />
+                    )}
+                    {(!edit && item.name !== 'unclassified') && (
+                      <p>{item.name}</p>
+                    )}
+                    {(item.name === 'unclassified') && (
+                      <p>{intl.formatMessage({ id: 'nav.classification.unclassified' })}</p>
+                    )}
+                  </div>
+                  <div className="classification-area" style={{ width: this.wrapperWidth }}>
+                    {item.set.map((value, index) => {
+                      const { name, link } = value
+                      return (
+                        <div
+                          className={classNames('website-box', { 'grabable': edit })}
+                          aria-grabbed="false"
+                          key={Math.random()}
+                          style={{ transform: `translate(${this.margin + (index % this.row) * (this.websiteWidth + this.spacingX)}px, ${Math.floor(index / this.row) * (this.websiteHeight + this.spacingY)}px)` }}
+                          onMouseDown={this.beginGrab}
+                        >
+                          <FlatButton
+                            label={name}
+                            href={link}
+                            target={target}
+                            icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
+                            className="website-link"
+                            style={style.website}
+                            labelStyle={{ color: labelColor, textShadow }}
+                            onClick={this.checkClick}
+                          />
+                          <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, cIndex)}}>
+                            <ModeEdit
+                              color={grey500}
+                              hoverColor={grey600}
+                              style={style.editHandleIcon}
+                            />
+                          </i>
+                          <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(name, index, cIndex)}}>
+                            <ContentClear
+                              color="#fff"
+                              style={style.deleteHandleIcon}
+                            />
+                          </i>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  {item.name !== 'unclassified' && (
+                    <FlatButton
+                      label={intl.formatMessage({ id: 'nav.delete.classification' })}
+                      icon={<ContentClear />}
+                      onTouchTap={e => { this.deleteClassification(cIndex) }}
+                      className="delete-classification"
+                    />
+                  )}
+                </div>
+              )
+            })}
+            {/*<FlatButton
+              key={Math.random()}
+              label="Andriod"
+              href="https://www.android.com/"
+              secondary={true}
+              icon={<ActionAndroid style={{ width: 18, height: 18 }} />}
+              className="website-link"
+              style={style.website}
+            />*/}
+          </div>
+          {!isEmpty && store.length !== 0 && (
+            <div className="float-actions" onMouseLeave={this.hideEditBtn}>
+              <div className="edit-float-btn" ref="editFloatBtn" style={style.editActionButton}>
+                <FloatingActionButton
+                  mini={true}
+                  onTouchTap={this.startEdit}
+                  backgroundColor={muiTheme.paper.backgroundColor}
+                  iconStyle={{ fill: muiTheme.palette.textColor }}
+                >
+                  <ModeEdit />
+                </FloatingActionButton>
+              </div>
               <FloatingActionButton
-                mini={true}
-                onTouchTap={this.startEdit}
-                backgroundColor={muiTheme.paper.backgroundColor}
-                iconStyle={{ fill: muiTheme.palette.textColor }}
+                style={style.floatingActionButton}
+                onTouchTap={this.handleMainFloatBtn}
+                onMouseEnter={this.showEditBtn}
               >
-                <ModeEdit />
+                { edit ? <ActionDone /> : <ContentAdd /> }
               </FloatingActionButton>
             </div>
-            <FloatingActionButton
-              style={style.floatingActionButton}
-              onTouchTap={this.handleMainFloatBtn}
-              onMouseEnter={this.showEditBtn}
-            >
-              { edit ? <ActionDone /> : <ContentAdd /> }
-            </FloatingActionButton>
-          </div>
-        )}
+          )}
+        </Paper>
         <Dialog
           title={edit ? intl.formatMessage({ id: 'nav.edit.title.edit' }) : intl.formatMessage({ id: 'nav.edit.title.add' })}
           actions={actions}
@@ -967,7 +979,7 @@ class Navigation extends Component {
           onRequestClose={this.closeDelete}
           onActionTouchTap={this.undoDelete}
         />
-      </Paper>
+      </div>
     )
   }
 }

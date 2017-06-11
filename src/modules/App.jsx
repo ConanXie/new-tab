@@ -48,7 +48,6 @@ class App extends Component {
     }
     const { darkMode, muiTheme } = this.state
 
-    this.changeBackground()
     
     this.darkTheme = this.createDarkTheme()
     // console.log(this.darkTheme)
@@ -57,7 +56,41 @@ class App extends Component {
     }
   }
   componentDidMount() {
+    this.changeBackground()
     chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT')
+    const errHandler = e => console.error(e)
+    // Save bing wallpaper to temporary file system when user installed the extension
+    window.webkitRequestFileSystem(window.TEMPORARY, 10 * 1024 * 1024, fs => {
+      fs.root.getFile('wallpaper.jpg', { create: false }, () => {}, err => {
+        fs.root.getFile('wallpaper.jpg', { create: true }, fileEntry => {
+          fetch(`https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=${navigator.language}`, { credentials: 'include' }).then(res => {
+            if (res.ok) {
+              return res.json()
+            }
+          }).then(data => {
+            const imageUrl = 'https://www.bing.com' + data.images[0].url
+            fetch(imageUrl).then(res => {
+              if (res.ok) {
+                return res.blob()
+              }
+            }).then(data => {
+              fileEntry.createWriter(fileWriter => {
+                let truncated = false
+                fileWriter.onerror = errHandler
+                fileWriter.onwriteend = function () {
+                  if (!truncated) {
+                    truncated = true
+                    this.truncate(this.position)
+                    return
+                  }
+                }
+                fileWriter.write(data)
+              }, errHandler)
+            }).catch(errHandler)
+          }).catch(errHandler)
+        }, errHandler)
+      })
+    }, errHandler)
   }
   createTheme = (color, hue) => {
     const theme = {
@@ -129,7 +162,7 @@ class App extends Component {
     const { background, backgroundSource, backgroundColor, blurRadius } = this.props.settings
     const app = document.querySelector('#app')
     if (background) {
-      if (backgroundSource === 1 || backgroundSource === 2) {
+      if (backgroundSource === undefined || backgroundSource === 1 || backgroundSource === 2) {
         if (!blurRadius) {
           app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper.jpg?r=${Date.now()})`
         } else {

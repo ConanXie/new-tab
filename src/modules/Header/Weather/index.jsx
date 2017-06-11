@@ -67,7 +67,7 @@ class Weather extends Component {
       base: bool ? 32 : 0
     })
   }
-  componentWillMount() {
+  componentDidMount() {
     const { intl } = this.context
     
     const { useFahrenheit, region, blockGeolocation } = this.props.settings

@@ -114,7 +114,6 @@ class Search extends Component {
     this.changeEngine(index)
   }
   watchInput = async event => {
-    const _this = this
     // if input then set predictionsIndex to default
     this.predictionsIndex = -1
     const { host } = this.state
@@ -233,7 +232,7 @@ class Search extends Component {
     event.target.classList.add('active')
     this.predictionsIndex = Number(event.target.dataset.index)
   }
-  predictionMouseLeave = (event) => {
+  predictionMouseLeave = event => {
     event.target.classList.remove('active')
     this.predictionsIndex = -1
   }
@@ -250,39 +249,26 @@ class Search extends Component {
     const { muiTheme, engines, settings } = this.props
     const { background, backgroundShade, darkMode, logoTransparency, transparentSearchInput } = settings
 
-    let iconColor // menu icon color
-    let logo // logo class
-    let logoColor // logo background-color for mask
-    let textColor = muiTheme.palette.textColor // input text color
-    let searchBtnColor = muiTheme.palette.primary1Color
-    if (!darkMode && background && backgroundShade === 2) {
-      iconColor = 'rgba(255, 255, 255, 0.87)'
-      logo = 'white'
+    let iconColor = muiTheme.palette.textColor // menu icon color
+    let logoColor = muiTheme.palette.primary1Color // logo background-color for -webkkit-mask
+    let textColor = iconColor // input text color
+    if (!darkMode && background) {
+      // Light background
+      if (backgroundShade === 2) {
+        iconColor = 'rgba(255, 255, 255, 0.87)'
+      }
+      // logo color equal with menu icon color when using wallpaper
+      logoColor = iconColor
       if (transparentSearchInput) {
         textColor = iconColor
       }
-    } else {
-      iconColor =  muiTheme.palette.textColor
-      logo = ''
-    }
-    if (!darkMode && background) {
-      logoColor = iconColor
-      if (transparentSearchInput) {
-        if (backgroundShade === 1) {
-          searchBtnColor = textColor
-        } else {
-          searchBtnColor = iconColor
-        }
-      }
-    } else {
-      logoColor = muiTheme.palette.primary1Color
     }
 
     return (
       <div className="search-wrapper">
         <div className="logo-area">
           <div
-            className={`logo ${logo}`}
+            className={classNames('logo',  { 'white': !darkMode && background && backgroundShade === 2 })}
             data-host={host}
             onTouchTap={this.toTheNext}
             style={{ backgroundColor: logoColor, opacity: logoTransparency }}
@@ -293,6 +279,7 @@ class Search extends Component {
             iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            value={this.engineIndex}
             iconStyle={{ color: iconColor }}
             maxHeight={280}
           >
@@ -301,9 +288,10 @@ class Search extends Component {
               return (
                 <MenuItem
                   key={id}
+                  value={index}
                   primaryText={name}
                   onTouchTap={e => this.changeEngine(index)}
-                  innerDivStyle={{minWidth: '100px'}}
+                  innerDivStyle={{ minWidth: '100px' }}
                 />
               )
             })}
@@ -323,12 +311,12 @@ class Search extends Component {
                 onFocus={this.focus}
                 onBlur={this.blur}
                 onKeyUp={this.selectPredictions}
-                style={{ color: textColor, backgroundColor: transparentSearchInput ? 'transparent' : '#fff' }}
+                style={{ color: textColor, backgroundColor: transparentSearchInput ? 'transparent' : '' }}
               />
               <IconButton
                 type="submit"
                 style={style.searchBtn}
-                iconStyle={{ color: searchBtnColor }}
+                iconStyle={{ color: muiTheme.palette.primary1Color, opacity: transparentSearchInput ? 0 : '' }}
               >
                 <SearchIcon />
               </IconButton>
