@@ -154,6 +154,14 @@ class Wallpaper extends Component {
       backgroundSource: value
     })
   }
+  fetchFailed() {
+    const { intl } = this.context
+    this.setState({
+      snackbarOpen: true,
+      snackbarMessage: intl.formatMessage({ id: 'desktop.msg.fetch.failed' }),
+      fetching: false
+    })
+  }
   fetchWallpaper = async event => {
     const { intl } = this.context
     // Block multiple requests
@@ -175,11 +183,7 @@ class Wallpaper extends Component {
       const msg = await res.json()
       const image = await fetch(msg.result[0].url, { credentials: 'include' })
       if (!image.ok) {
-        this.setState({
-          snackbarOpen: true,
-          snackbarMessage: intl.formatMessage({ id: 'desktop.msg.fetch.failed' }),
-          fetching: false
-        })
+        this.fetchFailed()
         return
       }
       const data = await image.blob()
@@ -206,9 +210,9 @@ class Wallpaper extends Component {
       })
       window.localStorage.setItem('wallpaperUpdateTime', Date.now())
     } catch (e) {
+      this.fetchFailed()
       this.errorHandler(e)
     }
-    
   }
   errorHandler(e) {
     console.error(e)
@@ -352,7 +356,7 @@ class Wallpaper extends Component {
                   this.truncate(this.position)
                   return
                 }
-                console.log(Date.now())
+                // console.log(Date.now())
                 // saveSettings({ blurRadius: radius })
                 if (typeof callback === 'function') {
                   callback()
