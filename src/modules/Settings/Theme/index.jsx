@@ -112,7 +112,7 @@ class Theme extends Component {
       color: customTheme ? customTheme.color : '',
       hue: customTheme ? customTheme.hue : DARK_THEME
     }
-    this.checkColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
+    this.colorPattern = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
   }
   openTheme = () => {
     this.setState({
@@ -156,15 +156,13 @@ class Theme extends Component {
       })
     }
   }
-  handleColorInput = (e, newValue) => {
-    const color = newValue.toUpperCase()
-
+  handleColorInput = (e, value) => {
     this.setState({
-      color
+      color: value
     })
 
-    if (this.checkColor.test(color)) {
-      this.refs.color.value = color
+    if (this.colorPattern.test(value)) {
+      this.refs.color.value = value
     }
   }
   getColor = e => {
@@ -177,10 +175,11 @@ class Theme extends Component {
     })
   }
   setCustomizedColor = () => {
-    const { color, hue } = this.state
+    const color = this.state.color.toUpperCase()
+    const hue = this.state.hue
     const { saveSettings, toggleDarkMode, settings } = this.props
     this.hideCustomization()
-    if (this.checkColor.test(color)) {
+    if (this.colorPattern.test(color)) {
       saveSettings({
         currentTheme: -1,
         darkMode: false,
@@ -189,7 +188,7 @@ class Theme extends Component {
       this.hideTheme()
       this.setState({
         color,
-        hue
+        hue: this.state.hue
       })
     }
   }

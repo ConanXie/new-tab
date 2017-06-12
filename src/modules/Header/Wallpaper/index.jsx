@@ -176,8 +176,8 @@ class Wallpaper extends Component {
       fetching: true
     })
     const { width, height } = window.screen
-    // const url = `http://localhost:5300/api/wallpaper/${width}x${height}`
-    const url = `https://tab.xiejie.co/api/wallpaper/${width}x${height}`
+    const url = `http://localhost:5300/api/wallpaper/${width}x${height}`
+    // const url = `https://tab.xiejie.co/api/wallpaper/${width}x${height}`
     try {
       const res = await fetch(url)
       const msg = await res.json()
@@ -208,11 +208,14 @@ class Wallpaper extends Component {
       this.setState({
         fetching: false
       })
-      window.localStorage.setItem('wallpaperUpdateTime', Date.now())
+      this.saveUpdateTime()
     } catch (e) {
       this.fetchFailed()
       this.errorHandler(e)
     }
+  }
+  saveUpdateTime() {
+    window.localStorage.setItem('wallpaperUpdateTime', Date.now())
   }
   errorHandler(e) {
     console.error(e)
@@ -398,15 +401,20 @@ class Wallpaper extends Component {
     })
   }
   handleFrequencyChange = (event, value) => {
-    this.setState({
-      frequency: value
-    })
-    this.props.saveSettings({
-      updateFrequency: value
-    })
+    if (value !== this.state.frequency || this.props.settings.updateFrequency === undefined) {
+      this.setState({
+        frequency: value
+      })
+      this.props.saveSettings({
+        updateFrequency: value
+      })
+    }
     setTimeout(() => {
       this.hideFrequencyDialog()
-    }, 400)
+    }, 300)
+    if (!window.localStorage.wallpaperUpdateTime) {
+      this.saveUpdateTime()
+    }
   }
   showColorDialog = () => {
     this.setState({

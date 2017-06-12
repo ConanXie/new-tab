@@ -82,11 +82,11 @@ class Engines extends Component {
       link: ''
     }
   }
-  /*componentDidMount() {
-    this.props.initialData()
-  }*/
-  componentWillReceiveProps(next) {
-    // console.log(next)
+  componentWillUpdate(nextProps, nextState) {
+    // If user hide the search, initial data if user open this component
+    if (!nextProps.engines.length) {
+      this.props.initialData()
+    }
   }
   openTableDialog = () => {
     this.setState({
