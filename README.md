@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="dist/icons/icon@128.png" width="128" alt="LOGO" />
+  <img src="dist/icons/icon@128.png" width="64" alt="LOGO" />
 </div>
 
 # [Material Design New Tab](https://tab.xiejie.co)
@@ -7,15 +7,16 @@
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.5.0-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 [![Powered by](https://img.shields.io/badge/Powered%20by-material--ui-green.svg)](http://www.material-ui.com)
 
-A new tab page extension for Chrome which uses Material Design.
+A new tab page extension for Chrome with **Material Design**.
 
-![Screenshot](https://lh3.googleusercontent.com/_kSehfzV-4cIRwP801jzOV3LGHB9tT-0hOe6IRn6Oyo32BSHMU95ZpibCjulizFi7I9jAddO=s640-h400-e365)
+![Screenshot](https://lh3.googleusercontent.com/dRLSi-ogFw-m1ACad6XPMG2wQC4Xqx6xdzC3Paj_5UD9KtiD6vCmKDbIH-tG0uNG-VtAulY9og=s640-h400-e365)
 
 ## [Install from the Chrome Web Store](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 
 ## Features
+- Switchable search engines
 - Manage your favorite websites
-- Switchable search engine
+- Personalized desktop
 - Weather information
 - Chrome apps and bookmarks
 - Customizable settings
