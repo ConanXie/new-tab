@@ -167,6 +167,8 @@ class App extends Component {
       } else if (backgroundSource === 3 && backgroundColor) {
         app.style.backgroundImage = 'none'
         app.style.backgroundColor = backgroundColor
+      } else {
+        app.style.backgroundColor = '#333'
       }
       return
     }
