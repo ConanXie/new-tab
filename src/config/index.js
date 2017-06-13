@@ -1,5 +1,5 @@
 /**
- * some configs
+ * Configure for the program
  */
 
 const version = '1.5.0'

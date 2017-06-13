@@ -32,7 +32,7 @@ import MenuItem from 'material-ui/MenuItem'
 import Snackbar from 'material-ui/Snackbar'
 import {blue500, red500, red300, grey600, grey500, greenA200} from 'material-ui/styles/colors'
 
-import { classificationMax, websiteMax } from '../../configs'
+import { classificationMax, websiteMax } from '../../config'
 
 const style = {
   box: {

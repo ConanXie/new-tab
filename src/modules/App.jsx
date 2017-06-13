@@ -7,7 +7,7 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import { code } from '../configs'
+import { code } from '../config'
 import { themes } from './Settings/Theme'
 
 import Header from './Header'

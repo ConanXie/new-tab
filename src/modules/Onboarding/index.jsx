@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 
-import { code } from '../../configs'
+import { code } from '../../config'
 
 import First from './First'
 import Second from './Second'

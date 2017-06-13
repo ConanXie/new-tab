@@ -49,7 +49,7 @@ const FahrenheitIcon = props => {
   )
 }
 
-import { version } from '../../configs'
+import { version } from '../../config'
 
 import Donate from './Donate'
 import Feedback from './Feedback'
