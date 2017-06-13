@@ -4,12 +4,12 @@
 
 # [Material Design New Tab](https://tab.xiejie.co)
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.5.0-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.6.0-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 [![Powered by](https://img.shields.io/badge/Powered%20by-material--ui-green.svg)](http://www.material-ui.com)
 
 A new tab page extension for Chrome with **Material Design**.
 
-![Screenshot](https://lh3.googleusercontent.com/dRLSi-ogFw-m1ACad6XPMG2wQC4Xqx6xdzC3Paj_5UD9KtiD6vCmKDbIH-tG0uNG-VtAulY9og=s640-h400-e365)
+![Screenshot](https://lh3.googleusercontent.com/gDaDhxRdfd39Etou9ry-X8Lm8KH9qi5hxea8yZs7Y_zCRjMrEMb1-qbXKqYtG4Bq3PGffxTF=s640-h400-e365)
 
 ## [Install from the Chrome Web Store](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 

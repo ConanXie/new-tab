@@ -1,5 +1,11 @@
 ## Changelog
 
+## 1.6.0
+###### _06 13, 2017_
+- Personalized desktop
+- More features in search engines management
+- Improved performance
+
 ## 1.5.0
 ###### _May 22, 2017_
 - You can choose to block the geolocation
