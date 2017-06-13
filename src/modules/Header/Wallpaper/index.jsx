@@ -134,6 +134,14 @@ class Wallpaper extends Component {
       this.fetchWallpaper()
     }
   }
+  componentWillReceiveProps(nextProps) {
+    // Lazy load
+    if (!this.state.load && nextProps.load) {
+      this.setState({
+        load: true
+      })
+    }
+  }
   useWallpaper = (event, bool) => {
     const { settings, saveSettings } = this.props
     const saved = { background: bool }
@@ -472,7 +480,7 @@ class Wallpaper extends Component {
   render() {
     const { intl } = this.context
     const { settings, saveSettings, muiTheme, closeDrawer } = this.props
-    const { source, frequency, color, shade, frequencyDialogOpen, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching } = this.state
+    const { source, frequency, color, shade, frequencyDialogOpen, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching, load } = this.state
     const { darkMode, topShadow, background, blurRadius, hideWebsites } = settings
 
     const colorActions = [
@@ -496,265 +504,269 @@ class Wallpaper extends Component {
     ]
 
     return (
-      <div className="wallpaper-settings">
-        <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
-          <div className="tool-bar">
-            <div className="bar-left">
-              <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'desktop.header.title' })}</div>
-            </div>
-            <div className="bar-right">
-              <IconButton onTouchTap={closeDrawer}>
-                <NavigationClose color={muiTheme.palette.alternateTextColor} />
-              </IconButton>
-            </div>
-          </div>
-        </Paper>
-        <section>
-          <div className="area">
-            <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.wallpaper' })}</h2>
-            <div className="column">
-              <Checkbox
-                label={intl.formatMessage({ id: 'desktop.top.shadow.label' })}
-                labelPosition="left"
-                defaultChecked={settings.topShadow}
-                onCheck={(event, bool) => saveSettings({ topShadow: bool })}
-                labelStyle={styles.radioLabel}
-              />
-            </div>
-            <div className="column">
-              <Toggle
-                label={intl.formatMessage({ id: 'desktop.wallpaper.label' })}
-                defaultToggled={settings.background}
-                disabled={darkMode}
-                onToggle={this.useWallpaper}
-              />
-            </div>
-            <div className="column no-padding-right">
-              <SelectField
-                floatingLabelText={intl.formatMessage({ id: 'wallpaper.source.title' })}
-                value={source}
-                disabled={darkMode || !background}
-                fullWidth={true}
-                underlineStyle={{ display: 'none' }}
-                onChange={this.handleSourceChange}
-              >
-                <MenuItem value={1} primaryText={intl.formatMessage({ id: 'wallpaper.source.internet' })} />
-                <MenuItem value={2} primaryText={intl.formatMessage({ id: 'wallpaper.source.local' })} />
-                <MenuItem value={3} primaryText={intl.formatMessage({ id: 'wallpaper.source.solid' })} />
-              </SelectField>
-            </div>
-            <div>
-              {source === 1 && (
-                <div>
-                  <ListItem
-                    primaryText={intl.formatMessage({ id: 'wallpaper.frequency.primary' })}
-                    secondaryText={intl.formatMessage({ id: 'wallpaper.frequency.secondary' })}
-                    disabled={darkMode || !background}
-                    innerDivStyle={styles.listItem}
-                    onTouchTap={this.showFrequencyDialog}
-                  />
-                  <div className="fetch-new">
-                    <ListItem
-                      primaryText={intl.formatMessage({ id: 'wallpaper.new.primary' })}
-                      secondaryText={intl.formatMessage({ id: 'wallpaper.new.secondary' })}
-                      disabled={darkMode || !background}
-                      innerDivStyle={styles.listItem}
-                      onTouchTap={this.fetchWallpaper}
-                    />
-                    {fetching && (
-                      <LinearProgress style={styles.progress} />
-                    )}
-                  </div>
-                  <ListItem
-                    primaryText={intl.formatMessage({ id: 'wallpaper.download.primary' })}
-                    secondaryText={intl.formatMessage({ id: 'wallpaper.download.secondary' })}
-                    disabled={darkMode || !background}
-                    innerDivStyle={styles.listItem}
-                    onTouchTap={this.saveToLocal}
+      <div>
+        {load && (
+          <div className="wallpaper-settings">
+            <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
+              <div className="tool-bar">
+                <div className="bar-left">
+                  <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'desktop.header.title' })}</div>
+                </div>
+                <div className="bar-right">
+                  <IconButton onTouchTap={closeDrawer}>
+                    <NavigationClose color={muiTheme.palette.alternateTextColor} />
+                  </IconButton>
+                </div>
+              </div>
+            </Paper>
+            <section>
+              <div className="area">
+                <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.wallpaper' })}</h2>
+                <div className="column">
+                  <Checkbox
+                    label={intl.formatMessage({ id: 'desktop.top.shadow.label' })}
+                    labelPosition="left"
+                    defaultChecked={settings.topShadow}
+                    onCheck={(event, bool) => saveSettings({ topShadow: bool })}
+                    labelStyle={styles.radioLabel}
                   />
                 </div>
-              )}
-              {source === 2 && (
-                <ListItem
-                  primaryText={intl.formatMessage({ id: 'wallpaper.local.primary' })}
-                  secondaryText={intl.formatMessage({ id: 'wallpaper.local.secondary' })}
-                  disabled={darkMode || !background}
-                  innerDivStyle={styles.listItem}
-                >
-                  <input
-                    type="file"
-                    disabled={darkMode || !background}
-                    style={styles.inputImage}
-                    accept="image/png, image/jpeg, image/gif, image/jpg"
-                    onChange={this.readImage}
+                <div className="column">
+                  <Toggle
+                    label={intl.formatMessage({ id: 'desktop.wallpaper.label' })}
+                    defaultToggled={settings.background}
+                    disabled={darkMode}
+                    onToggle={this.useWallpaper}
                   />
-                </ListItem>
-              )}
-              {source === 3 && (
-                <ListItem
-                  primaryText={intl.formatMessage({ id: 'wallpaper.solid.color.primary' })}
-                  secondaryText={intl.formatMessage({ id: 'wallpaper.solid.color.secondary' })}
-                  disabled={darkMode || !background}
-                  innerDivStyle={styles.listItem}
-                  onTouchTap={this.showColorDialog}
-                />
-              )}
-            </div>
-            {source !== 3 && (
-              <div className="border">
-                <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.blur.primary' })}</h3>
-                <div className="slider-wrap">
-                  <BlurOn color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
-                  <Slider
+                </div>
+                <div className="column no-padding-right">
+                  <SelectField
+                    floatingLabelText={intl.formatMessage({ id: 'wallpaper.source.title' })}
+                    value={source}
                     disabled={darkMode || !background}
-                    value={blurRadius}
-                    step={1}
-                    min={0}
-                    max={100}
-                    name="radius"
-                    onChange={this.handleBlur}
-                    onDragStop={this.applyBlur}
-                    sliderStyle={styles.slider}
+                    fullWidth={true}
+                    underlineStyle={{ display: 'none' }}
+                    onChange={this.handleSourceChange}
+                  >
+                    <MenuItem value={1} primaryText={intl.formatMessage({ id: 'wallpaper.source.internet' })} />
+                    <MenuItem value={2} primaryText={intl.formatMessage({ id: 'wallpaper.source.local' })} />
+                    <MenuItem value={3} primaryText={intl.formatMessage({ id: 'wallpaper.source.solid' })} />
+                  </SelectField>
+                </div>
+                <div>
+                  {source === 1 && (
+                    <div>
+                      <ListItem
+                        primaryText={intl.formatMessage({ id: 'wallpaper.frequency.primary' })}
+                        secondaryText={intl.formatMessage({ id: 'wallpaper.frequency.secondary' })}
+                        disabled={darkMode || !background}
+                        innerDivStyle={styles.listItem}
+                        onTouchTap={this.showFrequencyDialog}
+                      />
+                      <div className="fetch-new">
+                        <ListItem
+                          primaryText={intl.formatMessage({ id: 'wallpaper.new.primary' })}
+                          secondaryText={intl.formatMessage({ id: 'wallpaper.new.secondary' })}
+                          disabled={darkMode || !background}
+                          innerDivStyle={styles.listItem}
+                          onTouchTap={this.fetchWallpaper}
+                        />
+                        {fetching && (
+                          <LinearProgress style={styles.progress} />
+                        )}
+                      </div>
+                      <ListItem
+                        primaryText={intl.formatMessage({ id: 'wallpaper.download.primary' })}
+                        secondaryText={intl.formatMessage({ id: 'wallpaper.download.secondary' })}
+                        disabled={darkMode || !background}
+                        innerDivStyle={styles.listItem}
+                        onTouchTap={this.saveToLocal}
+                      />
+                    </div>
+                  )}
+                  {source === 2 && (
+                    <ListItem
+                      primaryText={intl.formatMessage({ id: 'wallpaper.local.primary' })}
+                      secondaryText={intl.formatMessage({ id: 'wallpaper.local.secondary' })}
+                      disabled={darkMode || !background}
+                      innerDivStyle={styles.listItem}
+                    >
+                      <input
+                        type="file"
+                        disabled={darkMode || !background}
+                        style={styles.inputImage}
+                        accept="image/png, image/jpeg, image/gif, image/jpg"
+                        onChange={this.readImage}
+                      />
+                    </ListItem>
+                  )}
+                  {source === 3 && (
+                    <ListItem
+                      primaryText={intl.formatMessage({ id: 'wallpaper.solid.color.primary' })}
+                      secondaryText={intl.formatMessage({ id: 'wallpaper.solid.color.secondary' })}
+                      disabled={darkMode || !background}
+                      innerDivStyle={styles.listItem}
+                      onTouchTap={this.showColorDialog}
+                    />
+                  )}
+                </div>
+                {source !== 3 && (
+                  <div className="border">
+                    <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.blur.primary' })}</h3>
+                    <div className="slider-wrap">
+                      <BlurOn color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
+                      <Slider
+                        disabled={darkMode || !background}
+                        value={blurRadius}
+                        step={1}
+                        min={0}
+                        max={100}
+                        name="radius"
+                        onChange={this.handleBlur}
+                        onDragStop={this.applyBlur}
+                        sliderStyle={styles.slider}
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className="border">
+                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.shade.primary' })}</h3>
+                  <RadioButtonGroup
+                    name="shade"
+                    defaultSelected={shade}
+                    labelPosition="left"
+                    onChange={this.handleShadeChange}
+                  >
+                    <RadioButton
+                      value={1}
+                      label={intl.formatMessage({ id: 'wallpaper.shade.light' })}
+                      disabled={darkMode || !background}
+                      style={styles.radio}
+                      labelStyle={styles.radioLabel}
+                    />
+                    <RadioButton
+                      value={2}
+                      label={intl.formatMessage({ id: 'wallpaper.shade.dark' })}
+                      disabled={darkMode || !background}
+                      style={styles.radio}
+                      labelStyle={styles.radioLabel}
+                    />
+                  </RadioButtonGroup>
+                </div>
+              </div>
+              <div className="area">
+                <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.search' })}</h2>
+                <div className="column">
+                  <Toggle
+                    label={intl.formatMessage({ id: 'search.hide.label' })}
+                    defaultToggled={settings.hideSearch}
+                    onToggle={(event, bool) => saveSettings({ hideSearch: bool })}
+                  />
+                </div>
+                <div className="column">
+                  <Checkbox
+                    disabled={settings.hideSearch}
+                    label={intl.formatMessage({ id: 'search.input.transparency.label' })}
+                    labelPosition="left"
+                    defaultChecked={settings.transparentSearchInput}
+                    onCheck={(event, bool) => saveSettings({ transparentSearchInput: bool })}
+                    labelStyle={styles.radioLabel}
+                  />
+                </div>
+                <div className="border">
+                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'search.logo.transparency.primary' })}</h3>
+                  <div className="slider-wrap">
+                    <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
+                    <Slider
+                      disabled={settings.hideSearch}
+                      value={1 - settings.logoTransparency}
+                      name="transparency"
+                      onChange={this.handleTransparency}
+                      onDragStop={this.applyTransparency}
+                      sliderStyle={styles.slider}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="area">
+                <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.webistes' })}</h2>
+                <div className="column">
+                  <Toggle
+                    label={intl.formatMessage({ id: 'webistes.hide.label' })}
+                    defaultToggled={settings.hideWebsites}
+                    onToggle={(event, bool) => saveSettings({ hideWebsites: bool })}
+                  />
+                </div>
+                <div className="column">
+                  <Checkbox
+                    disabled={darkMode || hideWebsites || !background || settings.backgroundShade !== 2}
+                    label={intl.formatMessage({ id: 'webistes.text.shadow.label' })}
+                    labelPosition="left"
+                    defaultChecked={settings.websiteLabelShadow}
+                    onCheck={(event, bool) => saveSettings({ websiteLabelShadow: bool })}
+                    labelStyle={styles.radioLabel}
                   />
                 </div>
               </div>
-            )}
-            <div className="border">
-              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.shade.primary' })}</h3>
+            </section>
+            <Dialog
+              title={intl.formatMessage({ id: 'wallpaper.frequency.dialog.title' })}
+              actions={frequencyActions}
+              contentStyle={styles.frequencyDialogContent}
+              bodyStyle={{ paddingBottom: 0, overflow: 'visible' }}
+              onRequestClose={this.hideFrequencyDialog}
+              open={frequencyDialogOpen}
+            >
               <RadioButtonGroup
-                name="shade"
-                defaultSelected={shade}
-                labelPosition="left"
-                onChange={this.handleShadeChange}
+                name="hue"
+                defaultSelected={frequency}
+                onChange={this.handleFrequencyChange}
               >
                 <RadioButton
                   value={1}
-                  label={intl.formatMessage({ id: 'wallpaper.shade.light' })}
-                  disabled={darkMode || !background}
-                  style={styles.radio}
-                  labelStyle={styles.radioLabel}
+                  label={intl.formatMessage({ id: 'wallpaper.frequency.minute' })}
+                  style={styles.radioLeft}
                 />
                 <RadioButton
                   value={2}
-                  label={intl.formatMessage({ id: 'wallpaper.shade.dark' })}
-                  disabled={darkMode || !background}
-                  style={styles.radio}
-                  labelStyle={styles.radioLabel}
+                  label={intl.formatMessage({ id: 'wallpaper.frequency.hour' })}
+                  style={styles.radioLeft}
+                />
+                <RadioButton
+                  value={3}
+                  label={intl.formatMessage({ id: 'wallpaper.frequency.day' })}
+                  style={styles.radioLeft}
+                />
+                <RadioButton
+                  value={0}
+                  label={intl.formatMessage({ id: 'wallpaper.frequency.close' })}
                 />
               </RadioButtonGroup>
-            </div>
-          </div>
-          <div className="area">
-            <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.search' })}</h2>
-            <div className="column">
-              <Toggle
-                label={intl.formatMessage({ id: 'search.hide.label' })}
-                defaultToggled={settings.hideSearch}
-                onToggle={(event, bool) => saveSettings({ hideSearch: bool })}
-              />
-            </div>
-            <div className="column">
-              <Checkbox
-                disabled={settings.hideSearch}
-                label={intl.formatMessage({ id: 'search.input.transparency.label' })}
-                labelPosition="left"
-                defaultChecked={settings.transparentSearchInput}
-                onCheck={(event, bool) => saveSettings({ transparentSearchInput: bool })}
-                labelStyle={styles.radioLabel}
-              />
-            </div>
-            <div className="border">
-              <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'search.logo.transparency.primary' })}</h3>
-              <div className="slider-wrap">
-                <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
-                <Slider
-                  disabled={settings.hideSearch}
-                  value={1 - settings.logoTransparency}
-                  name="transparency"
-                  onChange={this.handleTransparency}
-                  onDragStop={this.applyTransparency}
-                  sliderStyle={styles.slider}
+            </Dialog>
+            <Dialog
+              open={colorDialogOpen}
+              actions={colorActions}
+              onRequestClose={this.hideColorDialog}
+              contentStyle={styles.dialogContent}
+            >
+              <div className="color-circle">
+                <input type="color" id="color" hidden onInput={this.getColor} value={color} ref="color" onChange={() => {}} />
+                <label htmlFor="color" style={{ backgroundColor: color }}></label>
+                <TextField
+                  floatingLabelText={intl.formatMessage({ id: 'theme.input.placeholder' })}
+                  value={color}
+                  onChange={this.handleColorInput}
                 />
               </div>
-            </div>
-          </div>
-          <div className="area">
-            <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.webistes' })}</h2>
-            <div className="column">
-              <Toggle
-                label={intl.formatMessage({ id: 'webistes.hide.label' })}
-                defaultToggled={settings.hideWebsites}
-                onToggle={(event, bool) => saveSettings({ hideWebsites: bool })}
-              />
-            </div>
-            <div className="column">
-              <Checkbox
-                disabled={darkMode || hideWebsites || !background || settings.backgroundShade !== 2}
-                label={intl.formatMessage({ id: 'webistes.text.shadow.label' })}
-                labelPosition="left"
-                defaultChecked={settings.websiteLabelShadow}
-                onCheck={(event, bool) => saveSettings({ websiteLabelShadow: bool })}
-                labelStyle={styles.radioLabel}
-              />
-            </div>
-          </div>
-        </section>
-        <Dialog
-          title={intl.formatMessage({ id: 'wallpaper.frequency.dialog.title' })}
-          actions={frequencyActions}
-          contentStyle={styles.frequencyDialogContent}
-          bodyStyle={{ paddingBottom: 0, overflow: 'visible' }}
-          onRequestClose={this.hideFrequencyDialog}
-          open={frequencyDialogOpen}
-        >
-          <RadioButtonGroup
-            name="hue"
-            defaultSelected={frequency}
-            onChange={this.handleFrequencyChange}
-          >
-            <RadioButton
-              value={1}
-              label={intl.formatMessage({ id: 'wallpaper.frequency.minute' })}
-              style={styles.radioLeft}
-            />
-            <RadioButton
-              value={2}
-              label={intl.formatMessage({ id: 'wallpaper.frequency.hour' })}
-              style={styles.radioLeft}
-            />
-            <RadioButton
-              value={3}
-              label={intl.formatMessage({ id: 'wallpaper.frequency.day' })}
-              style={styles.radioLeft}
-            />
-            <RadioButton
-              value={0}
-              label={intl.formatMessage({ id: 'wallpaper.frequency.close' })}
-            />
-          </RadioButtonGroup>
-        </Dialog>
-        <Dialog
-          open={colorDialogOpen}
-          actions={colorActions}
-          onRequestClose={this.hideColorDialog}
-          contentStyle={styles.dialogContent}
-        >
-          <div className="color-circle">
-            <input type="color" id="color" hidden onInput={this.getColor} value={color} ref="color" onChange={() => {}} />
-            <label htmlFor="color" style={{ backgroundColor: color }}></label>
-            <TextField
-              floatingLabelText={intl.formatMessage({ id: 'theme.input.placeholder' })}
-              value={color}
-              onChange={this.handleColorInput}
+            </Dialog>
+            <Snackbar
+              open={snackbarOpen}
+              message={snackbarMessage}
+              autoHideDuration={2000}
+              onRequestClose={() => this.setState({ snackbarOpen: false })}
             />
           </div>
-        </Dialog>
-        <Snackbar
-          open={snackbarOpen}
-          message={snackbarMessage}
-          autoHideDuration={2000}
-          onRequestClose={() => this.setState({ snackbarOpen: false })}
-        />
+        )}
       </div>
     )
   }
