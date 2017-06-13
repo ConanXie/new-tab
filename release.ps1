@@ -1,9 +1,9 @@
 Write-Output "---------- Release $args ----------"
 
 # config.js
-$config = Get-Content src/configs/index.js
+$config = Get-Content src/config/index.js
 $config = $config -replace "(\d+\.){2}\d+", $args
-Set-Content src/configs/index.js -Value $config
+Set-Content src/config/index.js -Value $config
 
 npm run build
 
