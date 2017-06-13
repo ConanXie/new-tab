@@ -1,7 +1,7 @@
 ## Changelog
 
 ## 1.6.0
-###### _06 13, 2017_
+###### _Jun 13, 2017_
 - Personalized desktop
 - More features in search engines management
 - Improved performance
