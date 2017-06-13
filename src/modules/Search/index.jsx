@@ -55,7 +55,7 @@ class Search extends Component {
     // exec the host of engine's url
     this.pattern = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
   }
-  componentWillMount() {
+  componentDidMount() {
     this.props.initialData()
   }
   componentWillReceiveProps(props) {

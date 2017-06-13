@@ -14,10 +14,10 @@
     height: 100%;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 0;
+    visibility: hidden;
     -webkit-mask: url(images/normal.svg) center no-repeat;
     &[data-host*="."] {
-      opacity: 1;
+      visibility: visible;
     }
     &[data-host="www.google.com"] {
       background-size: 100% auto;
