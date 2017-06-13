@@ -78,16 +78,13 @@ class Header extends Component {
   }
   render() {
     const { showSettings, settings, muiTheme } = this.props
-    const { weatherOpen, bookmarkOpen, wallpaperOpen, loadApps, loadBookmarks } = this.state
+    const { weatherOpen, bookmarkOpen, wallpaperOpen, loadApps, loadBookmarks, loadWallpaper } = this.state
     const { topShadow, darkMode, background, backgroundShade } = settings
     
-    let iconColor
+    let iconColor = muiTheme.palette.textColor
     if ((topShadow && !darkMode) || (background && backgroundShade === 2)) {
       iconColor = 'rgba(255, 255, 255, 0.87)'
-    } else {
-      iconColor = muiTheme.palette.textColor
     }
-    // const iconColor = (settings.topShadow && !settings.darkMode) ? '#fff' : muiTheme.palette.textColor
     
     return (
       <Paper
@@ -109,7 +106,7 @@ class Header extends Component {
             <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ bookmarkOpen: true, loadBookmarks: true })}>
               <ActionBookmark color={iconColor} />
             </IconButton>
-            <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ wallpaperOpen: true })}>
+            <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ wallpaperOpen: true, loadWallpaper: true })}>
               <DeviceWallpaper color={iconColor} />
             </IconButton>
             <IconButton style={style.rightIcon} onTouchTap={showSettings}>
@@ -123,8 +120,12 @@ class Header extends Component {
           open={weatherOpen}
           onRequestChange={state => this.setState({ weatherOpen: state })}
         >
-          <Weather />
-          <Apps load={loadApps} />
+          {loadApps && (
+            <div>
+              <Weather />
+              <Apps />
+            </div>
+          )}
         </Drawer>
         <Drawer
           docked={false}
@@ -134,7 +135,9 @@ class Header extends Component {
           onRequestChange={state => this.setState({ wallpaperOpen: state })}
           overlayStyle={{ opacity: 0 }}
         >
-          <Wallpaper closeDrawer={() => this.setState({ wallpaperOpen: false })} />
+          {loadWallpaper && (
+            <Wallpaper closeDrawer={() => this.setState({ wallpaperOpen: false })} />
+          )}
         </Drawer>
         <Drawer
           docked={false}
@@ -143,7 +146,9 @@ class Header extends Component {
           open={bookmarkOpen}
           onRequestChange={state => this.setState({ bookmarkOpen: state })}
         >
-          <Bookmark load={loadBookmarks} />
+          {loadBookmarks && (
+            <Bookmark />
+          )}
         </Drawer>
       </Paper>
     )

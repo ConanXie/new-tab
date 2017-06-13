@@ -141,7 +141,11 @@ class Navigation extends Component {
     this.cache = {}
   }
   componentDidMount() {
-    setTimeout(() => this.props.initialData(), 150)
+    if (this.props.settings.background) {
+      setTimeout(() => this.props.initialData(), 150)
+    } else {
+      this.props.initialData()
+    }
   }
   checkClick = (e) => {
     if (this.state.edit) {
@@ -681,7 +685,7 @@ class Navigation extends Component {
       } else if (backgroundShade === 2) {
         classificationColor = 'rgba(255, 255, 255, 0.6)'
         if (websiteLabelShadow) {
-          textShadow = '0 1px 2px #000'
+          textShadow = '0 1px 1px #000'
         }
       }
     }

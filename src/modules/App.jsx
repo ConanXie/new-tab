@@ -26,7 +26,7 @@ class App extends Component {
       darkMode,
       customTheme
     } = props.settings
-
+    
     const index = currentTheme ? currentTheme : 0
     let muiTheme
     if (index !== -1) {
@@ -39,7 +39,9 @@ class App extends Component {
       muiTheme
     }
   }
-  componentWillMount() {
+  componentDidMount() {
+    this.changeBackground()
+
     const _code = localStorage.getItem('code')
     if (_code !== code) {
       this.setState({
@@ -47,16 +49,13 @@ class App extends Component {
       })
     }
     const { darkMode, muiTheme } = this.state
-
     
     this.darkTheme = this.createDarkTheme()
     // console.log(this.darkTheme)
     if (darkMode) {
       this.darkMode(true)
     }
-  }
-  componentDidMount() {
-    this.changeBackground()
+    
     chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT')
     const errHandler = e => console.error(e)
     // Save bing wallpaper to temporary file system when user installed the extension
@@ -163,11 +162,8 @@ class App extends Component {
     const app = document.querySelector('#app')
     if (background) {
       if (backgroundSource === undefined || backgroundSource === 1 || backgroundSource === 2) {
-        if (!blurRadius) {
-          app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper.jpg?r=${Date.now()})`
-        } else {
-          app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper-blur.jpg?r=${Date.now()})`
-        }
+        app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blurRadius ? '-blur' : ''}.jpg?r=${Date.now()})`
+        app.style.backgroundColor = '#fff'
       } else if (backgroundSource === 3 && backgroundColor) {
         app.style.backgroundImage = 'none'
         app.style.backgroundColor = backgroundColor

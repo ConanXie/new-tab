@@ -36,17 +36,14 @@ class Apps extends Component {
       apps: []
     }
   }
-  componentWillReceiveProps(nextProps) {
-    // Lazy load
-    if (nextProps.load) {
-      /**
-       * Get all installed Chrome Apps
-       */
-      chrome.management.getAll(exInfoArray => {
-        const apps = exInfoArray.filter(ex => ex.isApp)
-        this.setState({ apps })
-      })
-    }
+  componentDidMount() {
+    /**
+     * Get all installed Chrome Apps
+     */
+    chrome.management.getAll(exInfoArray => {
+      const apps = exInfoArray.filter(ex => ex.isApp)
+      this.setState({ apps })
+    })
   }
   render() {
     const { apps } = this.state

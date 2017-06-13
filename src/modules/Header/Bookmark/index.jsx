@@ -310,47 +310,6 @@ class Bookmark extends Component {
       localStorage.setItem('bookmarksScrollTop', this.refs.wrapper.scrollTop)
       localStorage.setItem('bookmarksOpens', JSON.stringify(this.opens))
     }
-    // Lazy load
-    if (nextProps.load && !this.props.load) {
-      chrome.bookmarks.getTree(tree => {
-        const data = tree[0].children
-        let bookmarks
-        if (data) {
-          const results = data.map(i => {
-            const title = i.title
-            const id = i.id
-            const level = 0
-            const isOpen = this.opens.indexOf(id) !== -1
-            
-            return (
-              <Folder
-                key={id}
-                id={id}
-                title={title}
-                level={level}
-                isOpen={isOpen}
-                opens={this.opens}
-                recordFolders={this.recordFolders}
-              />
-            )
-          })
-          bookmarks = <List>{results}</List>
-        }
-        this.setState({
-          bookmarks
-        })
-        setTimeout(() => {
-          this.refs.wrapper.scrollTop = this.scrollTop
-        }, 300)
-      })
-      // recent added bookmarks
-      chrome.bookmarks.getRecent(30, results => {
-        // console.log(results)
-        this.setState({
-          recent: results
-        })
-      })
-    }
   }
   handleChange = value => {
     this.setState({
@@ -359,12 +318,49 @@ class Bookmark extends Component {
   }
   // load bookmarks
   componentDidMount() {
-
     // get data from localStorage
     if (this.props.settings.rememberBookmarksState) {
       this.opens = JSON.parse(localStorage.getItem('bookmarksOpens')) || []
       this.scrollTop = Number(localStorage.getItem('bookmarksScrollTop'))
     }
+    chrome.bookmarks.getTree(tree => {
+      const data = tree[0].children
+      let bookmarks
+      if (data) {
+        const results = data.map(i => {
+          const title = i.title
+          const id = i.id
+          const level = 0
+          const isOpen = this.opens.indexOf(id) !== -1
+          
+          return (
+            <Folder
+              key={id}
+              id={id}
+              title={title}
+              level={level}
+              isOpen={isOpen}
+              opens={this.opens}
+              recordFolders={this.recordFolders}
+            />
+          )
+        })
+        bookmarks = <List>{results}</List>
+      }
+      this.setState({
+        bookmarks
+      })
+      setTimeout(() => {
+        this.refs.wrapper.scrollTop = this.scrollTop
+      }, 300)
+    })
+    // recent added bookmarks
+    chrome.bookmarks.getRecent(30, results => {
+      // console.log(results)
+      this.setState({
+        recent: results
+      })
+    })
   }
   listenScroll = event => {
     // if user need to remember bookmarks state

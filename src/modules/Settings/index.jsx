@@ -115,9 +115,13 @@ class Settings extends Component {
   componentWillReceiveProps(nextProps) {
     // show or hide the settings page
     if (nextProps.open) {
-      this.setState({
+      const state = {
         display: 'block'
-      })
+      }
+      if (!this.state.load) {
+        state.load = true
+      }
+      this.setState(state)
     } else {
       setTimeout(() => {
         this.setState({
@@ -209,7 +213,7 @@ class Settings extends Component {
   }
   render() {
     const { open, settings, muiTheme, hideSettings, saveSettings } = this.props
-    const { display, currentTheme, snackbarOpen, snackbarMessage } = this.state
+    const { display, load, currentTheme, snackbarOpen, snackbarMessage } = this.state
     const { intl } = this.context
     const resetActions = [
       <FlatButton
@@ -225,219 +229,222 @@ class Settings extends Component {
     ]
     return (
       <div
-        className={classNames('settings-page', { 'show-settings-page': open, 'hide-settings-page': !open })}
         style={{ display }}
       >
-        <Paper
-          className="header-bar settings-header-bar"
-          style={{ backgroundColor: muiTheme.palette.primary1Color }}
-          rounded={false}
-          transitionEnabled={false}
-          zDepth={1}
-          >
-          <div className="tool-bar">
-            <div className="bar-left">
-              <IconButton onTouchTap={hideSettings}>
-                <ArrowBack color={muiTheme.palette.alternateTextColor} />
-              </IconButton>
-              <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'settings.toolbar.title' })}</div>
-            </div>
-          </div>
-        </Paper>
-        <section style={{ backgroundColor: muiTheme.palette.settingsBackgroundColor }}>
-          <div className="settings-section">
-            <Paper className="settings-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
-              <div className="toggle-box">
-                <ContentLink style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.website.open.label' })}
-                    defaultToggled={settings.linkTarget}
-                    onToggle={(event, bool) => { saveSettings({ linkTarget: bool }) }}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              <div className="toggle-box">
-                <TextFormat style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.apps.display.label' })}
-                    defaultToggled={settings.hideAppsName}
-                    onToggle={(event, bool) => { saveSettings({ hideAppsName: bool }) }}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              <div className="toggle-box">
-                <BookmarkBorder style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.bookmarks.position.label' })}
-                    defaultToggled={settings.rememberBookmarksState}
-                    onToggle={(event, bool) => { saveSettings({ rememberBookmarksState: bool }) }}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              {/*search*/}
-              <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.search.title' })}</h2>
-              <Engines />
-              <div className="toggle-box">
-                <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.engine.search.label' })}
-                    defaultToggled={settings.searchTarget}
-                    onToggle={(event, bool) => { saveSettings({ searchTarget: bool }) }}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              <div className="toggle-box">
-                <LightbulbOutline style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.search.predict.label' })}
-                    defaultToggled={settings.searchPredict}
-                    onToggle={(event, bool) => { saveSettings({ searchPredict: bool }) }}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              {/*theme*/}
-              <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
-              <Theme />
-              <div className="toggle-box">
-                <ImageBrightness style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.theme.dark.label' })}
-                    defaultToggled={settings.darkMode}
-                    onToggle={(event, bool) => { saveSettings({ darkMode: bool }) }}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              {/*Weather*/}
-              <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.weather.title' })}</h2>
-              <div className="toggle-box">
-                <FahrenheitIcon style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
-                    defaultToggled={settings.useFahrenheit}
-                    onToggle={(event, bool) => { saveSettings({ useFahrenheit: bool }) }}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              <div className="toggle-box">
-                <GPSOff style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
-                <div className="toggle-wrapper">
-                  <Toggle
-                    className="toggle"
-                    label={intl.formatMessage({ id: 'settings.weather.gps.off.label' })}
-                    defaultToggled={settings.blockGeolocation}
-                    onToggle={(event, bool) => { saveSettings({ blockGeolocation: bool }) }}
-                    labelStyle={style.toggleLabel}
-                  />
-                </div>
-              </div>
-              <Region />
-              {/*backup and restore*/}
-              <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
-              <ListItem
-                leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                primaryText={intl.formatMessage({ id: 'settings.br.backup.label' })}
-                innerDivStyle={{ paddingLeft: '58px' }}
-                onTouchTap={this.createBackups}
-              />
-              <ListItem
-                leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                primaryText={intl.formatMessage({ id: 'settings.br.restore.label' })}
-                innerDivStyle={{ paddingLeft: '58px' }}
+        {load && (
+          <div className={classNames('settings-page', { 'show-settings-page': open, 'hide-settings-page': !open })}>
+            <Paper
+              className="header-bar settings-header-bar"
+              style={{ backgroundColor: muiTheme.palette.primary1Color }}
+              rounded={false}
+              transitionEnabled={false}
+              zDepth={1}
               >
-                <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
-              </ListItem>
-              <ListItem
-                leftIcon={<SettingsRestore style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                primaryText={intl.formatMessage({ id: 'settings.br.reset.label' })}
-                innerDivStyle={{ paddingLeft: '58px' }}
-                onTouchTap={this.openReset}
-              />
+              <div className="tool-bar">
+                <div className="bar-left">
+                  <IconButton onTouchTap={hideSettings}>
+                    <ArrowBack color={muiTheme.palette.alternateTextColor} />
+                  </IconButton>
+                  <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'settings.toolbar.title' })}</div>
+                </div>
+              </div>
             </Paper>
-            <Dialog
-              title={intl.formatMessage({ id: 'settings.reset.title' })}
-              open={this.state.resetOpen}
-              actions={resetActions}
-              onRequestClose={this.hideReset}
-              contentStyle={style.dialogContent}
-            >
-              {intl.formatMessage({ id: 'settings.reset.warning' })}
-            </Dialog>
+            <section style={{ backgroundColor: muiTheme.palette.settingsBackgroundColor }}>
+              <div className="settings-section">
+                <Paper className="settings-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
+                  <div className="toggle-box">
+                    <ContentLink style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label={intl.formatMessage({ id: 'settings.website.open.label' })}
+                        defaultToggled={settings.linkTarget}
+                        onToggle={(event, bool) => { saveSettings({ linkTarget: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  <div className="toggle-box">
+                    <TextFormat style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label={intl.formatMessage({ id: 'settings.apps.display.label' })}
+                        defaultToggled={settings.hideAppsName}
+                        onToggle={(event, bool) => { saveSettings({ hideAppsName: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  <div className="toggle-box">
+                    <BookmarkBorder style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label={intl.formatMessage({ id: 'settings.bookmarks.position.label' })}
+                        defaultToggled={settings.rememberBookmarksState}
+                        onToggle={(event, bool) => { saveSettings({ rememberBookmarksState: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  {/*search*/}
+                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.search.title' })}</h2>
+                  <Engines />
+                  <div className="toggle-box">
+                    <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label={intl.formatMessage({ id: 'settings.engine.search.label' })}
+                        defaultToggled={settings.searchTarget}
+                        onToggle={(event, bool) => { saveSettings({ searchTarget: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  <div className="toggle-box">
+                    <LightbulbOutline style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label={intl.formatMessage({ id: 'settings.search.predict.label' })}
+                        defaultToggled={settings.searchPredict}
+                        onToggle={(event, bool) => { saveSettings({ searchPredict: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  {/*theme*/}
+                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
+                  <Theme />
+                  <div className="toggle-box">
+                    <ImageBrightness style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label={intl.formatMessage({ id: 'settings.theme.dark.label' })}
+                        defaultToggled={settings.darkMode}
+                        onToggle={(event, bool) => { saveSettings({ darkMode: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  {/*Weather*/}
+                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.weather.title' })}</h2>
+                  <div className="toggle-box">
+                    <FahrenheitIcon style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
+                        defaultToggled={settings.useFahrenheit}
+                        onToggle={(event, bool) => { saveSettings({ useFahrenheit: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  <div className="toggle-box">
+                    <GPSOff style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label={intl.formatMessage({ id: 'settings.weather.gps.off.label' })}
+                        defaultToggled={settings.blockGeolocation}
+                        onToggle={(event, bool) => { saveSettings({ blockGeolocation: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  <Region />
+                  {/*backup and restore*/}
+                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
+                  <ListItem
+                    leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                    primaryText={intl.formatMessage({ id: 'settings.br.backup.label' })}
+                    innerDivStyle={{ paddingLeft: '58px' }}
+                    onTouchTap={this.createBackups}
+                  />
+                  <ListItem
+                    leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                    primaryText={intl.formatMessage({ id: 'settings.br.restore.label' })}
+                    innerDivStyle={{ paddingLeft: '58px' }}
+                  >
+                    <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
+                  </ListItem>
+                  <ListItem
+                    leftIcon={<SettingsRestore style={style.listIcon} color={muiTheme.palette.primary1Color} />}
+                    primaryText={intl.formatMessage({ id: 'settings.br.reset.label' })}
+                    innerDivStyle={{ paddingLeft: '58px' }}
+                    onTouchTap={this.openReset}
+                  />
+                </Paper>
+                <Dialog
+                  title={intl.formatMessage({ id: 'settings.reset.title' })}
+                  open={this.state.resetOpen}
+                  actions={resetActions}
+                  onRequestClose={this.hideReset}
+                  contentStyle={style.dialogContent}
+                >
+                  {intl.formatMessage({ id: 'settings.reset.warning' })}
+                </Dialog>
+              </div>
+              <div className="settings-section">
+                <Paper className="settings-content about" zDepth={1}>
+                  <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
+                  <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label={version} /></a></p>
+                  <div className="donate-feedback">
+                    <Donate />
+                    <Feedback />
+                  </div>
+                  {/*仅对中文用户展示*/}
+                  {navigator.language === 'zh-CN' &&
+                    <p className="tip">
+                      <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
+                      <span>翻墙使用体验更佳</span>
+                    </p>
+                  }
+                  <div className="hot-key-box">
+                    <div className="tip">
+                      <HardwareKeyboard style={{ width: 18, height: 18 }} color="#999" />
+                      <span>{intl.formatMessage({ id: 'hotkey.title' })}</span>
+                    </div>
+                    <div className="hot-key-list">
+                      <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.apps' })}</span>
+                      <span className="hot-key">Alt + A</span>
+                    </div>
+                    <div className="hot-key-list">
+                      <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.bookmarks' })}</span>
+                      <span className="hot-key">Alt + B</span>
+                    </div>
+                    <div className="hot-key-list">
+                      <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.settings' })}</span>
+                      <span className="hot-key">Alt + S</span>
+                    </div>
+                  </div>
+                  <div className="tip">
+                    <FileCloud style={{ width: 18, height: 18 }} color="#999" />
+                    <span>{intl.formatMessage({ id: 'settings.about.weather.sources' })}: YAHOO! & HeWeather</span>
+                  </div>
+                  {navigator.language !== 'zh-CN' && (
+                    <div className="tip">
+                      <SocialMood style={{ width: 18, height: 18 }} color="#999" />
+                      <span>Forgive me for my poor English. You can also give me some advice on translation to add or improve the language you are using. Thank you.</span>
+                    </div>
+                  )}
+                  {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
+                </Paper>
+              </div>
+            </section>
+            <Snackbar
+              open={snackbarOpen}
+              message={snackbarMessage}
+              autoHideDuration={2000}
+              onRequestClose={this.closeSnackerbar}
+              bodyStyle={style.snackbar}
+            />
           </div>
-          <div className="settings-section">
-            <Paper className="settings-content about" zDepth={1}>
-              <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
-              <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label={version} /></a></p>
-              <div className="donate-feedback">
-                <Donate />
-                <Feedback />
-              </div>
-              {/*仅对中文用户展示*/}
-              {navigator.language === 'zh-CN' &&
-                <p className="tip">
-                  <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
-                  <span>翻墙使用体验更佳</span>
-                </p>
-              }
-              <div className="hot-key-box">
-                <div className="tip">
-                  <HardwareKeyboard style={{ width: 18, height: 18 }} color="#999" />
-                  <span>{intl.formatMessage({ id: 'hotkey.title' })}</span>
-                </div>
-                <div className="hot-key-list">
-                  <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.apps' })}</span>
-                  <span className="hot-key">Alt + A</span>
-                </div>
-                <div className="hot-key-list">
-                  <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.bookmarks' })}</span>
-                  <span className="hot-key">Alt + B</span>
-                </div>
-                <div className="hot-key-list">
-                  <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.settings' })}</span>
-                  <span className="hot-key">Alt + S</span>
-                </div>
-              </div>
-              <div className="tip">
-                <FileCloud style={{ width: 18, height: 18 }} color="#999" />
-                <span>{intl.formatMessage({ id: 'settings.about.weather.sources' })}: YAHOO! & HeWeather</span>
-              </div>
-              {navigator.language !== 'zh-CN' && (
-                <div className="tip">
-                  <SocialMood style={{ width: 18, height: 18 }} color="#999" />
-                  <span>Forgive me for my poor English. You can also give me some advice on translation to add or improve the language you are using. Thank you.</span>
-                </div>
-              )}
-              {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
-            </Paper>
-          </div>
-        </section>
-        <Snackbar
-          open={snackbarOpen}
-          message={snackbarMessage}
-          autoHideDuration={2000}
-          onRequestClose={this.closeSnackerbar}
-          bodyStyle={style.snackbar}
-        />
+        )}
       </div>
     )
   }
