@@ -67,7 +67,8 @@ const styles = {
   },
   progress: {
     position: 'absolute',
-    bottom: '0'
+    bottom: '0',
+    borderRadius: '0'
   },
   frequencyDialogContent: {
     width: '310px'
