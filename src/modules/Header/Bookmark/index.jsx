@@ -352,7 +352,7 @@ class Bookmark extends Component {
       })
       setTimeout(() => {
         this.refs.wrapper.scrollTop = this.scrollTop
-      }, 300)
+      }, 150)
     })
     // recent added bookmarks
     chrome.bookmarks.getRecent(30, results => {
