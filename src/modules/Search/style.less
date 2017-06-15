@@ -1,3 +1,5 @@
+@import 'logo.less';
+
 .search-wrapper {
   margin: 172px auto 0;
   .logo-area {
@@ -7,125 +9,6 @@
     margin: 0 auto;
     &:hover .engines-menu {
       opacity: 1;
-    }
-  }
-  .logo {
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    visibility: hidden;
-    -webkit-mask: url(images/normal.svg) center no-repeat;
-    &[data-host*="."] {
-      visibility: visible;
-    }
-    &[data-host="www.google.com"] {
-      background-size: 100% auto;
-      background-image: url(images/google.svg);
-      &.white {
-        background-image: url(images/google-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host*="www.google.com."] {
-      background-size: 100% auto;
-      background-image: url(images/google.svg);
-      &.white {
-        background-image: url(images/google-white.svg);
-      }
-      .hide-name();
-      & + .engine-name {
-        display: block;
-        left: 217px;
-      }
-    }
-    &[data-host="www.baidu.com"] {
-      background-size: 95% auto;
-      background-image: url(images/baidu.svg);
-      &.white {
-        background-image: url(images/baidu-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host="www.bing.com"] {
-      background-size: auto 90%;
-      background-image: url(images/bing.svg);
-      &.white {
-        background-image: url(images/bing-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host="www.sogou.com"] {
-      background-size: 100% auto;
-      background-image: url(images/sogou.svg);
-      &.white {
-        background-image: url(images/sogou-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host*="github.com"] {
-      background-size: auto 100%;
-      background-image: url(images/github.svg);
-      &.white {
-        background-image: url(images/github-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host*="twitter.com"] {
-      background-size: auto 80%;
-      background-image: url(images/twitter.svg);
-      &.white {
-        background-image: url(images/twitter-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host="www.npmjs.com"] {
-      background-size: auto 80%;
-      background-image: url(images/npm.svg);
-      &.white {
-        background-image: url(images/npm-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host="www.youtube.com"] {
-      background-size: auto 80%;
-      background-image: url(images/youtube.svg);
-      &.white {
-        background-image: url(images/youtube-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host*="medium.com"] {
-      background-size: auto 80%;
-      background-image: url(images/medium.svg);
-      &.white {
-        background-image: url(images/medium-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host*="taobao.com"] {
-      background-size: auto 80%;
-      background-image: url(images/taobao.svg);
-      &.white {
-        background-image: url(images/taobao-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host="dribbble.com"] {
-      background-size: auto 90%;
-      background-image: url(images/dribbble.svg);
-      &.white {
-        background-image: url(images/dribbble-white.svg);
-      }
-      .hide-name();
-    }
-    &[data-host*="tmall.com"] {
-      background-size: 80% auto;
-      background-image: url(images/tmall.svg);
-      &.white {
-        background-image: url(images/tmall-white.svg);
-      }
-      .hide-name();
     }
   }
   span.engine-name {
@@ -141,13 +24,6 @@
     line-height: 1;
     user-select: none;
     opacity: 0.8;
-  }
-  .hide-name {
-    -webkit-mask: none;
-    background-color: transparent !important;
-    & + .engine-name {
-      display: none;
-    }
   }
   .engines-menu {
     opacity: 0;
@@ -206,5 +82,53 @@
         background: rgba(200, 200, 200, 0.4);
       }
     }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .search-wrapper {
+    margin: 80px auto 0!important;
+  }
+}
+
+@media screen and (min-width: 901px) and (max-width: 1200px) {
+  .search-wrapper {
+    margin: 90px auto 0!important;
+  }
+}
+
+@media screen and (min-width: 1001px) and (max-width: 1200px) {
+  .search-wrapper {
+    margin: 100px auto 0!important;
+  }
+}
+
+@media screen and (min-width: 1201px) and (max-width: 1366px) {
+  .search-wrapper {
+    margin: 120px auto 0!important;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .search-wrapper {
+    input {
+      width: 484px;
+    }
+    .logo-area {
+      width: 238px;
+      height: 80px;
+      span.engine-name {
+        left: 158px;
+      }
+      .logo[data-host*="www.google.com."] + .engine-name {
+        left: 190px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1367px) and (max-width: 1800px) {
+  .search-wrapper {
+    margin: 140px auto 0!important;
   }
 }

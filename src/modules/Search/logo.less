@@ -1,0 +1,57 @@
+.hide-name {
+  -webkit-mask: none;
+  background-color: transparent !important;
+  & + .engine-name {
+    display: none;
+  }
+}
+.search-wrapper .logo {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  visibility: hidden;
+  -webkit-mask: url(images/normal.svg) center no-repeat;
+  &[data-host*="."] {
+    visibility: visible;
+  }
+  .logo-factory();
+}
+.logo-creator(@pattern, @host, @size, @name) {
+  @attr: ~"data-host@{pattern}";
+  &[@{attr}="@{host}"] {
+    background-size: @size;
+    background-image: url(~"images/@{name}.svg");
+    &.white {
+      background-image: url(~"images/@{name}-white.svg");
+    }
+    .hide-name();
+  }
+}
+.logo-factory {
+  /*&[data-host="www.google.com"] {
+    background-size: 100% auto;
+    background-image: url(images/google.svg);
+    &.white {
+      background-image: url(images/google-white.svg);
+    }
+    .hide-name();
+  }*/
+  .logo-creator('', 'www.google.com', 100% auto, google);
+  .logo-creator('*', 'www.google.com.', 100% auto, google);
+  &[data-host*="www.google.com."] + .engine-name {
+    display: block;
+    left: 217px;
+  }
+  .logo-creator('', 'www.baidu.com', 100% auto, baidu);
+  .logo-creator('', 'www.sogou.com', 100% auto, sogou);
+  .logo-creator('', 'www.bing.com', auto 95%, bing);
+  .logo-creator('*', 'github.com', auto 100%, github);
+  .logo-creator('*', 'twitter.com', auto 80%, twitter);
+  .logo-creator('', 'www.npmjs.com', auto 80%, npm);
+  .logo-creator('', 'www.youtube.com', auto 80%, youtube);
+  .logo-creator('*', 'medium.com', auto 80%, medium);
+  .logo-creator('*', 'taobao.com', auto 80%, taobao);
+  .logo-creator('', 'dribbble.com', auto 90%, dribbble);
+  .logo-creator('*', 'tmall.com', 80% auto, tmall);
+}

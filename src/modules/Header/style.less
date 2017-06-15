@@ -3,6 +3,14 @@
   top: 0;
   left: 0;
   width: 100vw;
+  @keyframes shadow {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
   &.has-shadow:before {
     content: '';
     position: absolute;
@@ -13,6 +21,7 @@
     height: 100%;
     transform: translateY(-100%);
     box-shadow: 0 0 70px 28px rgba(0, 0, 0, 0.28);
+    animation: shadow 0.2s ease-in-out forwards;
   }
   .tool-bar {
     display: flex;
