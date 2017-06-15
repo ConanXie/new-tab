@@ -9,6 +9,9 @@
     "48": "icons/icon@48.png",
     "128": "icons/icon@128.png"
   },
+  "background": {
+    "page": "index.html"
+  },
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
@@ -16,6 +19,7 @@
     "storage",
     "management",
     "bookmarks",
+    "background",
     "geolocation",
     "<all_urls>"
   ],
