@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.6.1
+###### _Jun 15, 2017_
+- Optimize the display on a small window
+
 ## 1.6.0
 ###### _Jun 13, 2017_
 - Personalized desktop
