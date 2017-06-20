@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as settingsPageActions from '../../actions/settings-page'
+import { showSettings, hideSettings } from '../../actions/settings-page'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
@@ -158,8 +158,4 @@ const mapStateToProps = state => {
   return { settingsPage, settings }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(settingsPageActions, dispatch)
-}
-
-export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Header))
+export default muiThemeable()(connect(mapStateToProps, { showSettings, hideSettings })(Header))

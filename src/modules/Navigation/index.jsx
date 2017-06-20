@@ -6,8 +6,18 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as websitesActions from '../../actions/websites'
-import * as settingsActions from '../../actions/settings'
+import {
+  initialData,
+  addWebsite,
+  deleteWebsite,
+  undoDeletedWebsite,
+  editWebsite,
+  addEmptyClassification,
+  deleteClassification,
+  updatePosition,
+  changeClassificationName
+} from '../../actions/websites'
+import { saveSettings } from '../../actions/settings'
 
 import { FormattedMessage } from 'react-intl'
 
@@ -999,11 +1009,15 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    ...websitesActions,
-    ...settingsActions,
-  }, dispatch)
-}
-
-export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Navigation))
+export default muiThemeable()(connect(mapStateToProps, {
+  saveSettings,
+  initialData,
+  addWebsite,
+  deleteWebsite,
+  undoDeletedWebsite,
+  editWebsite,
+  addEmptyClassification,
+  deleteClassification,
+  updatePosition,
+  changeClassificationName
+})(Navigation))

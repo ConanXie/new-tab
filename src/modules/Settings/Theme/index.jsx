@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as settingsActions from '../../../actions/settings'
+import { saveSettings } from '../../../actions/settings'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
@@ -292,8 +292,4 @@ const mapStateToProps = state => {
   return { settings }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(settingsActions, dispatch)
-}
-
-export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Theme))
+export default muiThemeable()(connect(mapStateToProps, { saveSettings })(Theme))

@@ -5,7 +5,15 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as searchEnginesActions from '../../../actions/search-engines'
+import {
+  initialData,
+  addEngine,
+  deleteEngine,
+  updateEngine,
+  makeDefault,
+  moveDown,
+  moveUp
+} from '../../../actions/search-engines'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import Dialog from 'material-ui/Dialog'
@@ -301,8 +309,12 @@ const mapStateToProps = state => {
   return { engines }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(searchEnginesActions, dispatch)
-}
-
-export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Engines))
+export default muiThemeable()(connect(mapStateToProps, {
+  initialData,
+  addEngine,
+  deleteEngine,
+  updateEngine,
+  makeDefault,
+  moveDown,
+  moveUp
+})(Engines))

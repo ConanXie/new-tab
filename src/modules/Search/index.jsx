@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as searchEnginesActions from '../../actions/search-engines'
+import { initialData } from '../../actions/search-engines'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -353,8 +353,4 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(searchEnginesActions, dispatch)
-}
-
-export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Search))
+export default muiThemeable()(connect(mapStateToProps, { initialData })(Search))

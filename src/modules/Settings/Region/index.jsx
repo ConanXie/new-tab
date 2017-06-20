@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as settingsActions from '../../../actions/settings'
+import { saveSettings } from '../../../actions/settings'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import { List, ListItem } from 'material-ui/List'
@@ -128,8 +128,4 @@ const mapStateToProps = state => {
   return { settings }
 }
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(settingsActions, dispatch)
-}
-
-export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(Region))
+export default muiThemeable()(connect(mapStateToProps, { saveSettings })(Region))
