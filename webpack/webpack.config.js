@@ -60,6 +60,7 @@ module.exports = {
     hot: true,
     https: true,
     overlay: true,
+    compress: true,
     stats: {
       assets: false,
       chunks: false,
