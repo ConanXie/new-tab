@@ -79,7 +79,7 @@ export default {
   'weather.today': 'Today',
   'weather.empty.noData': 'Sorry, unable to get weather data for the time being',
   'weather.empty.requestError': 'Sorry, the data request has made an error',
-  'weather.empty.geolocationError': 'An error occurred while trying to get your location, ',
+  'weather.empty.geolocationError': 'Something went wrong while trying to get your location, ',
   'weather.empty.geolocationClosed': 'You have rejected a request to get location information',
   'weather.empty.geolocationEmpty': 'The browser can not get your location information',
   'weather.empty.geolocationTimeout': 'Get location information timeout',
@@ -156,6 +156,6 @@ export default {
   'webistes.text.shadow.label': 'Text shadow',
   'desktop.msg.not.supported': 'This file is not supported',
   'desktop.msg.too.large': 'This image is too large',
-  'desktop.msg.fetching': 'Fetching a new wallpaper',
-  'desktop.msg.fetch.failed': 'Fetch failed',
+  'desktop.msg.fetching': 'In the fetch, please be patient',
+  'desktop.msg.fetch.failed': 'Oops, something went wrong',
 }

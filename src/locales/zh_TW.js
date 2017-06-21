@@ -156,6 +156,6 @@ export default {
   'webistes.text.shadow.label': '文字陰影',
   'desktop.msg.not.supported': '此檔案不受支援',
   'desktop.msg.too.large': '這張圖像太大',
-  'desktop.msg.fetching': '正在獲取圖像',
+  'desktop.msg.fetching': '獲取中，請耐心等待',
   'desktop.msg.fetch.failed': '圖像獲取失敗',
 }
