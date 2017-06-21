@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.6.2
+###### _Jun 21, 2017_
+- Fix some text
+
 ## 1.6.1
 ###### _Jun 15, 2017_
 - Optimize the display on a small window
