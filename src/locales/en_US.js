@@ -135,7 +135,7 @@ export default {
   'wallpaper.frequency.hour': 'An hour',
   'wallpaper.frequency.day': 'A day',
   'wallpaper.frequency.close': 'Turn off',
-  'wallpaper.new.primary': 'New ones',
+  'wallpaper.new.primary': 'New one',
   'wallpaper.new.secondary': 'Click to fetch a new wallpaper',
   'wallpaper.download.primary': 'Download it',
   'wallpaper.download.secondary': 'Save the current wallpaper to local',
