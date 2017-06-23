@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.6.3
+###### _Jun 23, 2017_
+- There is a determinate progress now when fetching a wallpaper
+
 ## 1.6.2
 ###### _Jun 21, 2017_
 - Fix some text
