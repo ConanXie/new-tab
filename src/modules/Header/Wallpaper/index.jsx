@@ -94,7 +94,8 @@ class Wallpaper extends Component {
       colorDialogOpen: false,
       snackbarOpen: false,
       snackbarMessage: '',
-      fetching: false
+      fetching: false,
+      completed: 0
     }
     this.colorPattern = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
     this.spaceSize = 10 * 1024 * 1024
@@ -168,7 +169,8 @@ class Wallpaper extends Component {
     this.setState({
       snackbarOpen: true,
       snackbarMessage: intl.formatMessage({ id: 'desktop.msg.fetch.failed' }),
-      fetching: false
+      fetching: false,
+      completed: 0
     })
   }
   fetchWallpaper = async event => {
@@ -182,7 +184,8 @@ class Wallpaper extends Component {
       return
     }
     this.setState({
-      fetching: true
+      fetching: true,
+      completed: 0
     })
     const { width, height } = window.screen
     // const url = `http://localhost:5300/api/wallpaper/${width}x${height}`
@@ -190,12 +193,27 @@ class Wallpaper extends Component {
     try {
       const res = await fetch(url)
       const msg = await res.json()
-      const image = await fetch(msg.result[0].url, { credentials: 'include' })
-      if (!image.ok) {
-        this.fetchFailed()
-        return
-      }
-      const data = await image.blob()
+      // Got the wallpaper's url
+      this.setState({ completed: 1 })
+      // Get wallpaper via XHR and implement progress
+      const data = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.open('get', msg.result[0].url, true)
+        xhr.responseType = 'blob'
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            resolve(xhr.response)
+          } else {
+            reject('error')
+          }
+        }
+        xhr.onerror = () => reject('error')
+        xhr.onprogress = e => {
+          const completed = Math.round(e.loaded / e.total * 100)
+          this.setState({ completed: completed < 1 ? 1 : completed })
+        }
+        xhr.send()
+      })
       const { blurRadius } = this.props.settings
       const fr = new FileReader()
       fr.onloadend = () => {
@@ -214,9 +232,11 @@ class Wallpaper extends Component {
       }
       fr.readAsDataURL(data)
       // Restore status
-      this.setState({
-        fetching: false
-      })
+      setTimeout(() => {
+        this.setState({
+          fetching: false
+        })
+      }, 300)
       this.saveUpdateTime()
     } catch (e) {
       this.fetchFailed()
@@ -481,7 +501,7 @@ class Wallpaper extends Component {
   render() {
     const { intl } = this.context
     const { settings, saveSettings, muiTheme, closeDrawer } = this.props
-    const { source, frequency, color, shade, frequencyDialogOpen, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching, load } = this.state
+    const { source, frequency, color, shade, frequencyDialogOpen, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching, load, completed } = this.state
     const { darkMode, topShadow, background, blurRadius, hideWebsites } = settings
 
     const colorActions = [
@@ -573,7 +593,7 @@ class Wallpaper extends Component {
                           onTouchTap={this.fetchWallpaper}
                         />
                         {fetching && (
-                          <LinearProgress style={styles.progress} />
+                          <LinearProgress mode="determinate" value={completed} style={styles.progress} />
                         )}
                       </div>
                       <ListItem
