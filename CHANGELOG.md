@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.6.4
+###### _Jun 26, 2017_
+- Fixed position of the app's label
+
 ## 1.6.3
 ###### _Jun 23, 2017_
 - There is a determinate progress now when fetching a wallpaper
