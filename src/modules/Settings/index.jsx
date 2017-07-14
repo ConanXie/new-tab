@@ -392,7 +392,15 @@ class Settings extends Component {
               <div className="settings-section">
                 <Paper className="settings-content about" zDepth={1}>
                   <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
-                  <p className="name">Material Design New Tab <a href="https://tab.xiejie.co/logs" target="_blank"><FlatButton label={version} /></a></p>
+                  <p className="name">
+                    <span>Material Design New Tab </span>
+                    <a
+                      href={navigator.language === 'zh-CN' ? 'https://tab.xiejie.co/logs' : 'https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md'}
+                      target="_blank"
+                    >
+                      <FlatButton label={version} />
+                    </a>
+                  </p>
                   <div className="donate-feedback">
                     <Donate />
                     <Feedback />
