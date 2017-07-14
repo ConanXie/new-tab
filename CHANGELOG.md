@@ -1,5 +1,10 @@
 ## Changelog
 
+## 1.7.0
+###### _Jul 14, 2017_
+- Optimized progress bar while fetching wallpaper
+- Added changelog in English on version button
+
 ## 1.6.4
 ###### _Jun 26, 2017_
 - Fixed position of the app's label
