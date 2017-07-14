@@ -202,7 +202,9 @@ class Wallpaper extends Component {
         xhr.responseType = 'blob'
         xhr.onload = () => {
           if (xhr.status === 200) {
-            resolve(xhr.response)
+            setTimeout(() => {
+              resolve(xhr.response)
+            }, 300)
           } else {
             reject('error')
           }
@@ -232,11 +234,9 @@ class Wallpaper extends Component {
       }
       fr.readAsDataURL(data)
       // Restore status
-      setTimeout(() => {
-        this.setState({
-          fetching: false
-        })
-      }, 300)
+      this.setState({
+        fetching: false
+      })
       this.saveUpdateTime()
     } catch (e) {
       this.fetchFailed()
