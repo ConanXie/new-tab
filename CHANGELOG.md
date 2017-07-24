@@ -1,5 +1,9 @@
 ## Changelog
 
+## 1.7.1
+###### _Jul 24, 2017_
+- Fix that night mode display is incorrect after reload page
+
 ## 1.7.0
 ###### _Jul 14, 2017_
 - Optimized progress bar while fetching wallpaper
