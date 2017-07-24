@@ -16,7 +16,6 @@ import Navigation from './Navigation'
 import Settings from './Settings'
 import Onboarding from './Onboarding'
 
-
 class App extends Component {
   constructor(props) {
     super(props)
@@ -27,12 +26,21 @@ class App extends Component {
       customTheme
     } = props.settings
     
-    const index = currentTheme ? currentTheme : 0
+    // Create dark theme at first
+    this.darkTheme = this.createDarkTheme()
     let muiTheme
-    if (index !== -1) {
-      muiTheme = this.createTheme(themes[index].color)
+    const index = currentTheme ? currentTheme : 0
+    // Night mode
+    if (darkMode) {
+      muiTheme = this.darkTheme
     } else {
-      muiTheme = this.createTheme(customTheme.color, customTheme.hue)
+      // Use default themes
+      if (index !== -1) {
+        muiTheme = this.createTheme(themes[index].color)
+      } else {
+        // Use custom theme
+        muiTheme = this.createTheme(customTheme.color, customTheme.hue)
+      }
     }
     this.state = {
       darkMode,
@@ -40,7 +48,11 @@ class App extends Component {
     }
   }
   componentDidMount() {
-    this.changeBackground()
+    if (!this.state.darkMode) {
+      this.changeBackground()
+    } else {
+      this.setRootEleStyle(this.darkTheme.paper.backgroundColor)
+    }
 
     const _code = localStorage.getItem('code')
     if (_code !== code) {
@@ -48,15 +60,9 @@ class App extends Component {
         onboarding: true
       })
     }
-    const { darkMode, muiTheme } = this.state
-    
-    this.darkTheme = this.createDarkTheme()
-    // console.log(this.darkTheme)
-    if (darkMode) {
-      this.darkMode(true)
-    }
     
     chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT')
+    
     const errHandler = e => console.error(e)
     // Save bing wallpaper to temporary file system when user installed the extension
     window.webkitRequestFileSystem(window.TEMPORARY, 10 * 1024 * 1024, fs => {
@@ -159,31 +165,30 @@ class App extends Component {
   }
   changeBackground() {
     const { background, backgroundSource, backgroundColor, blurRadius } = this.props.settings
-    const app = document.querySelector('#app')
+    let color
+    let image
     if (background) {
       if (backgroundSource === undefined || backgroundSource === 1 || backgroundSource === 2) {
-        app.style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blurRadius ? '-blur' : ''}.jpg?r=${Date.now()})`
-        app.style.backgroundColor = '#fff'
+        image = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blurRadius ? '-blur' : ''}.jpg?r=${Date.now()})`
       } else if (backgroundSource === 3 && backgroundColor) {
-        app.style.backgroundImage = 'none'
-        app.style.backgroundColor = backgroundColor
+        color = backgroundColor
       } else {
-        app.style.backgroundColor = '#333'
+        color = '#333'
       }
-      return
     }
-    app.style.backgroundColor = '#fff'
-    app.style.backgroundImage = 'none'
+    this.setRootEleStyle(color, image)
+  }
+  setRootEleStyle(color = '#fff', image = 'none') {
+    app.style.backgroundColor = color
+    app.style.backgroundImage = image
   }
   darkMode = bool => {
     const { currentTheme, customTheme } = this.props.settings
-    const app = document.querySelector('#app')
     if (bool) {
       this.setState({
         muiTheme: this.darkTheme
       })
-      app.style.backgroundImage = 'none'
-      app.style.backgroundColor = this.darkTheme.paper.backgroundColor
+      this.setRootEleStyle(this.darkTheme.paper.backgroundColor)
     } else {
       this.changeTheme(currentTheme)
     }
