@@ -164,9 +164,10 @@ class App extends Component {
     this.changeBackground()
   }
   changeBackground() {
-    const { background, backgroundSource, backgroundColor, blurRadius } = this.props.settings
+    const { background, backgroundSource, backgroundColor, blurRadius, maskStrength } = this.props.settings
     let color
     let image
+    let mask
     if (background) {
       if (backgroundSource === undefined || backgroundSource === 1 || backgroundSource === 2) {
         image = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blurRadius ? '-blur' : ''}.jpg?r=${Date.now()})`
@@ -175,12 +176,14 @@ class App extends Component {
       } else {
         color = '#333'
       }
+      mask = maskStrength
     }
-    this.setRootEleStyle(color, image)
+    this.setRootEleStyle(color, image, mask)
   }
-  setRootEleStyle(color = '#fff', image = 'none') {
+  setRootEleStyle(color = '#fff', image = 'none', mask = 0) {
     app.style.backgroundColor = color
     app.style.backgroundImage = image
+    document.querySelector('#mask').style.backgroundColor = `rgba(0, 0, 0, ${mask})`
   }
   darkMode = bool => {
     const { currentTheme, customTheme } = this.props.settings
@@ -211,6 +214,7 @@ class App extends Component {
           {onboarding && (
             <Onboarding />
           )}
+          <div id="mask"></div>
         </div>
       </MuiThemeProvider>
     )
