@@ -9,6 +9,7 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
+    `webpack-dev-server/client?https://127.0.0.1:${port}`,
     'webpack/hot/only-dev-server',
     './Main.jsx'
   ],
