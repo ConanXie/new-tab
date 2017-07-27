@@ -51,7 +51,7 @@ const style = {
   website: {
     width: '150px',
     textAlign: 'left',
-    // color: '#333',
+    fontSize: 15,
     transition: 'background-color 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   dialogContent: {
@@ -699,6 +699,7 @@ class Navigation extends Component {
         }
       }
     }
+    const labelStyle = { fontSize: 15, color: labelColor, textShadow }
     
     const actions = [
       <FlatButton
@@ -795,7 +796,7 @@ class Navigation extends Component {
                         icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
                         className="website-link"
                         style={style.website}
-                        labelStyle={{ color: labelColor, textShadow }}
+                        labelStyle={labelStyle}
                         onClick={this.checkClick}
                       />
                       <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
@@ -860,7 +861,7 @@ class Navigation extends Component {
                             icon={<img className="favicon" src={`https://www.google.com/s2/favicons?domain=${link.replace(/http(s)?:\/\//, '')}`} alt={name} onError={this.imgError} />}
                             className="website-link"
                             style={style.website}
-                            labelStyle={{ color: labelColor, textShadow }}
+                            labelStyle={labelStyle}
                             onClick={this.checkClick}
                           />
                           <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, cIndex)}}>
