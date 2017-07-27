@@ -30,6 +30,7 @@ import LinearProgress from 'material-ui/LinearProgress'
 import ActionOpacity from 'material-ui/svg-icons/action/opacity'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import BlurOn from 'material-ui/svg-icons/image/blur-on'
+import BrightnessMedium from 'material-ui/svg-icons/device/brightness-medium'
 
 const styles = {
   inputImage: {
@@ -488,21 +489,27 @@ class Wallpaper extends Component {
       backgroundShade: value
     })
   }
+  handleMask = (event, value) => {
+    document.querySelector('#mask').style.backgroundColor = `rgba(0, 0, 0, ${value})`
+  }
+  applyMask = () => {
+    const strength = document.querySelector('[name=mask]').value * 1
+    this.props.saveSettings({ maskStrength: strength })
+  }
   handleTransparency = (event, value) => {
     const transparency = 1 - value
     document.querySelector('.logo').style.opacity = transparency
     document.querySelector('.engine-name').style.opacity = transparency
   }
   applyTransparency = () => {
-    const { saveSettings } = this.props
     const transparency = 1 - document.querySelector('[name=transparency]').value
-    saveSettings({ logoTransparency: transparency })
+    this.props.saveSettings({ logoTransparency: transparency })
   }
   render() {
     const { intl } = this.context
     const { settings, saveSettings, muiTheme, closeDrawer } = this.props
     const { source, frequency, color, shade, frequencyDialogOpen, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching, load, completed } = this.state
-    const { darkMode, topShadow, background, blurRadius, hideWebsites } = settings
+    const { darkMode, topShadow, background, blurRadius, maskStrength, hideWebsites } = settings
 
     const colorActions = [
       <FlatButton
@@ -650,6 +657,21 @@ class Wallpaper extends Component {
                     </div>
                   </div>
                 )}
+                <div className="border">
+                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.mask.primary' })}</h3>
+                  <div className="slider-wrap">
+                    <BrightnessMedium color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
+                    <Slider
+                      disabled={darkMode || !background}
+                      value={maskStrength}
+                      max={0.8}
+                      name="mask"
+                      onChange={this.handleMask}
+                      onDragStop={this.applyMask}
+                      sliderStyle={styles.slider}
+                    />
+                  </div>
+                </div>
                 <div className="border">
                   <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.shade.primary' })}</h3>
                   <RadioButtonGroup
