@@ -51,7 +51,7 @@ class App extends Component {
     if (!this.state.darkMode) {
       this.changeBackground()
     } else {
-      this.setRootEleStyle(this.darkTheme.paper.backgroundColor)
+      this.setBackground(this.darkTheme.paper.backgroundColor)
     }
 
     const _code = localStorage.getItem('code')
@@ -178,12 +178,13 @@ class App extends Component {
       }
       mask = maskStrength
     }
-    this.setRootEleStyle(color, image, mask)
+    this.setBackground(color, image, mask)
   }
-  setRootEleStyle(color = '#fff', image = 'none', mask = 0) {
-    app.style.backgroundColor = color
-    app.style.backgroundImage = image
-    document.querySelector('#mask').style.backgroundColor = `rgba(0, 0, 0, ${mask})`
+  setBackground(color = '#fff', image = 'none', strength = 0) {
+    const bg = document.querySelector('#bg')
+    bg.style.backgroundColor = color
+    bg.style.backgroundImage = image
+    document.querySelector('#mask').style.backgroundColor = `rgba(0, 0, 0, ${strength})`
   }
   darkMode = bool => {
     const { currentTheme, customTheme } = this.props.settings
@@ -191,7 +192,7 @@ class App extends Component {
       this.setState({
         muiTheme: this.darkTheme
       })
-      this.setRootEleStyle(this.darkTheme.paper.backgroundColor)
+      this.setBackground(this.darkTheme.paper.backgroundColor)
     } else {
       this.changeTheme(currentTheme)
     }
@@ -203,6 +204,8 @@ class App extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
+          <div id="bg"></div>
+          <div id="mask"></div>
           <Header />
           {!hideSearch && (
             <Search />

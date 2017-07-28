@@ -33,23 +33,22 @@ input {
   font-family: inherit;
 }
 #app {
-  position: relative;
-  z-index: 0;
   width: 100vw;
   height: 100vh;
   overflow: auto;
-  background-size: cover;
-  background-position: center;
-  transition: background-image 0.3s cubic-bezier(0.215, 0.610, 0.355, 1);
 }
-#mask {
+#bg, #mask {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: -1;
-  background: rgba(0, 0, 0, 0);
+}
+#bg {
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.3s cubic-bezier(0.215, 0.610, 0.355, 1);
 }
 ::-webkit-scrollbar {
   width: 0;
