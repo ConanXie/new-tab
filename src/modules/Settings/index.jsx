@@ -124,6 +124,7 @@ class Settings extends Component {
       this.setState(state)
     } else {
       setTimeout(() => {
+        document.querySelector('.settings-page > section').scrollTop = 0
         this.setState({
           display: 'none'
         })
