@@ -132,7 +132,8 @@ class Weather extends Component {
     if (useFahrenheit !== this.props.settings.useFahrenheit) {
       this.setParams(useFahrenheit)
     }
-    if (region !== this.props.settings.region) {
+    // Block multiple requests
+    if (region !== this.props.settings.region && localStorage.weather) {
       setTimeout(() => {
         this.howToGet()
       }, 0)
