@@ -301,7 +301,7 @@ class Wallpaper extends Component {
     fr.readAsDataURL(file)
   }
   updateBackgroundImageUrl(blur) {
-    document.querySelector('#app').style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blur ? '-blur' : ''}.jpg?r=${Date.now()})`
+    document.querySelector('#bg').style.backgroundImage = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blur ? '-blur' : ''}.jpg?r=${Date.now()})`
   }
   /**
    * Read the origin image from temporary file system
