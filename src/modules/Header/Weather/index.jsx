@@ -133,7 +133,7 @@ class Weather extends Component {
       this.setParams(useFahrenheit)
     }
     // Block multiple requests
-    if (region !== this.props.settings.region && localStorage.weather) {
+    if (region !== this.props.settings.region && region !== this.region) {
       setTimeout(() => {
         this.howToGet()
       }, 0)
@@ -154,6 +154,8 @@ class Weather extends Component {
             empty: false
           })
           localStorage.setItem('weather', JSON.stringify(result))
+          // save template region
+          this.region = result.basic.city
           if (!settings.blockGeolocation) {
             saveSettings({ region: result.basic.city })
           }
