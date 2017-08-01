@@ -32,6 +32,7 @@ import HardwareKeyboard from 'material-ui/svg-icons/hardware/keyboard'
 import FileCloud from 'material-ui/svg-icons/file/cloud'
 import SocialMood from 'material-ui/svg-icons/social/mood'
 import GPSOff from 'material-ui/svg-icons/device/gps-off'
+import LowPriority from 'material-ui/svg-icons/content/low-priority'
 import Checkbox from 'material-ui/Checkbox'
 import Toggle from 'material-ui/Toggle'
 import { List, ListItem } from 'material-ui/List'
@@ -312,6 +313,18 @@ class Settings extends Component {
                         label={intl.formatMessage({ id: 'settings.search.predict.label' })}
                         defaultToggled={settings.searchPredict}
                         onToggle={(event, bool) => { saveSettings({ searchPredict: bool }) }}
+                        labelStyle={style.toggleLabel}
+                      />
+                    </div>
+                  </div>
+                  <div className="toggle-box">
+                    <LowPriority style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
+                    <div className="toggle-wrapper">
+                      <Toggle
+                        className="toggle"
+                        label="Show the remaining search engines"
+                        defaultToggled={settings.remaining}
+                        onToggle={(event, bool) => { saveSettings({ remaining: bool }) }}
                         labelStyle={style.toggleLabel}
                       />
                     </div>
