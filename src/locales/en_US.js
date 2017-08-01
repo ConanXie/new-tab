@@ -160,4 +160,6 @@ export default {
   'desktop.msg.too.large': 'This image is too large',
   'desktop.msg.fetching': 'In the fetch, please be patient',
   'desktop.msg.fetch.failed': 'Oops, something went wrong',
+  /* search */
+  'search.from': 'Search from',
 }

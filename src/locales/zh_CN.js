@@ -160,4 +160,6 @@ export default {
   'desktop.msg.too.large': '这张图片太大',
   'desktop.msg.fetching': '获取中，请耐心等待',
   'desktop.msg.fetch.failed': '图片获取失败',
+  /* search */
+  'search.from': '搜索自',
 }
