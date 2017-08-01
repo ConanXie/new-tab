@@ -322,7 +322,7 @@ class Settings extends Component {
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label="Show the remaining search engines"
+                        label={intl.formatMessage({ id: 'settings.search.remaining.label' })}
                         defaultToggled={settings.remaining}
                         onToggle={(event, bool) => { saveSettings({ remaining: bool }) }}
                         labelStyle={style.toggleLabel}
