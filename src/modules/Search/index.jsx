@@ -15,6 +15,7 @@ import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton/IconButton'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import SearchIcon from 'material-ui/svg-icons/action/search'
+import ExpandMore from 'material-ui/svg-icons/navigation/expand-more'
 import Paper from 'material-ui/Paper'
 import SvgIcon from 'material-ui/SvgIcon'
 
@@ -36,6 +37,9 @@ const style = {
     position: 'absolute',
     right: '3px',
     top: '3px'
+  },
+  menuItem: {
+    minWidth: '100px'
   }
 }
 
@@ -43,9 +47,15 @@ class Search extends Component {
   static propsType = {
     settings: PropTypes.object.isRequired
   }
+  static contextTypes = {
+    intl: PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      predictions: [],
+      empty: true
+    }
     // the default engine has rendered
     this.isDone = false
     // record the index of predictions, default value is -1
@@ -90,9 +100,12 @@ class Search extends Component {
    */
   search = e => {
     e.preventDefault()
+    this.openSearch(this.state.link)
+  }
+  openSearch(link) {
     const text = this.refs.text.value
     const target = this.props.settings.searchTarget ? '_blank' : '_self'
-    window.open(this.state.link.replace('%s', text), target)
+    window.open(link.replace('%s', text).replace(/\#/g, '%23'), target)
   }
   changeEngine = index => {
     const { name, link } = this.props.engines[index]
@@ -124,9 +137,13 @@ class Search extends Component {
       this.inputText = text
       if (text === '') {
         this.setState({
-          predictions: []
+          predictions: [],
+          empty: true
         })
-        return
+      } else {
+        this.setState({
+          empty: false
+        })
       }
       if (predict[host]) {
         try {
@@ -150,8 +167,9 @@ class Search extends Component {
     this.refs.text.classList.remove('hover')
   }
   documentMouseDown = e => {
-    // if the mousedown target is predictions then preventDefault
-    if (e.target.dataset.name === 'prediction' || e.target.parentNode.dataset.name === 'prediction') {
+    const wrapper = document.querySelector('.list-wrapper')
+    // target area in the list wrapper then prevent default
+    if (e.path.indexOf(wrapper) > 0) {
       e.preventDefault()
     }
   }
@@ -161,12 +179,13 @@ class Search extends Component {
       e.preventDefault()
     }
   }
-  focus = () => {
+  focus = event => {
     this.refs.text.classList.add('focus')
     if (this.props.settings.searchPredict) {
       this.setState({
-        showPredictions: true
+        focus: true
       })
+      this.watchInput(event)
       document.addEventListener('mousedown', this.documentMouseDown, false)
       document.addEventListener('keydown', this.documentKeyDown, false)
     }
@@ -175,10 +194,14 @@ class Search extends Component {
     // console.log('blur')
     this.refs.text.classList.remove('focus')
     this.setState({
-      showPredictions: false
+      focus: false
     })
     document.removeEventListener('mousedown', this.documentMouseDown, false)
     document.removeEventListener('keydown', this.documentKeyDown, false)
+    // restore remaining engines status
+    if (this.props.settings.remaining && this.props.engines.length > 4 && this.refs.engines && this.refs.engines.dataset.expanded === '1') {
+      this.toggleExpand()
+    }
   }
   // select prediction via up or down arrow key
   selectPredictions = event => {
@@ -239,15 +262,29 @@ class Search extends Component {
   // search by click prediction
   searchPrediction = event => {
     this.setState({
-      showPredictions: false
+      focus: false
     })
     this.refs.text.value = this.refs.predictions.childNodes[this.predictionsIndex].innerText
     this.search(event)
   }
+  toggleExpand = event => {
+    const ele = this.refs.engines
+    const height = 24
+    if (ele.dataset.expanded === '1') {
+      ele.style.height = 3 * height + 'px'
+      ele.dataset.expanded = 0
+    } else {
+      ele.style.height = (this.props.engines.length - 1) * height + 'px'
+      ele.dataset.expanded = 1
+    }
+  }
+  searchFrom(index) {
+    this.openSearch(this.props.engines[index].link)
+  }
   render() {
-    const { name, link, host, showPredictions, predictions } = this.state
+    const { name, link, host, focus, predictions, empty } = this.state
     const { muiTheme, engines, settings } = this.props
-    const { background, backgroundShade, darkMode, logoTransparency, transparentSearchInput } = settings
+    const { background, backgroundShade, darkMode, logoTransparency, transparentSearchInput, remaining } = settings
 
     let iconColor = muiTheme.palette.textColor // menu icon color
     let logoColor = muiTheme.palette.primary1Color // logo background-color for -webkkit-mask
@@ -291,7 +328,7 @@ class Search extends Component {
                   value={index}
                   primaryText={name}
                   onTouchTap={e => this.changeEngine(index)}
-                  innerDivStyle={{ minWidth: '100px' }}
+                  innerDivStyle={style.menuItem}
                 />
               )
             })}
@@ -320,23 +357,53 @@ class Search extends Component {
               >
                 <SearchIcon />
               </IconButton>
-              <Paper className={classNames('predictions-box', { 'show': showPredictions })} zDepth={1} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
-                <ul ref="predictions">
-                  {predictions && predictions.map((v, i) => {
-                    return (
-                      <li
-                        key={Math.random()}
-                        data-name="prediction"
-                        data-index={i}
-                        onMouseEnter={this.predictionMouseEnter}
-                        onMouseLeave={this.predictionMouseLeave}
-                        onClick={this.searchPrediction}
-                        dangerouslySetInnerHTML={{ __html: v }}
-                      ></li>
-                    )
-                  })}
-                </ul>
-              </Paper>
+              <div className="list-wrapper">
+                {remaining && !empty && (
+                  <Paper className={classNames('list-box', { 'show': focus })}  zDepth={1} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
+                    <ul ref="engines" className="engines-list" data-expanded="0" style={{ height: (engines.length < 4 ? engines.length - 1 : 3) * 24 }}>
+                      {engines.map((engine, index) => {
+                        const { id, name } = engine
+                        if (index !== this.engineIndex) {
+                          return (
+                            <li
+                              key={id}
+                              onClick={() => { this.searchFrom(index) }}
+                            >
+                              {this.context.intl.formatMessage({ id: 'search.from' })} <span style={{ color: muiTheme.palette.primary1Color }}>{name}</span>
+                            </li>
+                          )
+                        }
+                      })}
+                    </ul>
+                    {engines.length > 4 && (
+                      <div className="expand-more" onTouchTap={this.toggleExpand}>
+                        <IconButton
+                          style={{ padding: 0, width: 'auto', height: 'auto' }}
+                          iconStyle={{ color: muiTheme.palette.primary1Color, opacity: transparentSearchInput ? 0 : '' }}
+                          >
+                          <ExpandMore />
+                        </IconButton>
+                      </div>
+                    )}
+                  </Paper>
+                )}
+                <Paper className={classNames('list-box', { 'show': focus })} zDepth={1} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
+                  <ul ref="predictions">
+                    {predictions && predictions.map((v, i) => {
+                      return (
+                        <li
+                          key={Math.random()}
+                          data-index={i}
+                          onMouseEnter={this.predictionMouseEnter}
+                          onMouseLeave={this.predictionMouseLeave}
+                          onClick={this.searchPrediction}
+                          dangerouslySetInnerHTML={{ __html: v }}
+                        ></li>
+                      )
+                    })}
+                  </ul>
+                </Paper>
+              </div>
             </div>
           </form>
         </div>
