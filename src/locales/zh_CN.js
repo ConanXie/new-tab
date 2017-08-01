@@ -26,6 +26,7 @@ export default {
   'settings.apps.display.label': '隐藏应用的标签',
   'settings.bookmarks.position.label': '记住书签的状态',
   'settings.search.predict.label': '输入内容时显示搜索预测',
+  'settings.search.remaining.label': '显示其余搜索引擎列表',
   'settings.search.title': '搜索',
   'settings.theme.title': '主题',
   'settings.theme.switch.label': '主题颜色',

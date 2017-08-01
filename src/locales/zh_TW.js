@@ -26,6 +26,7 @@ export default {
   'settings.apps.display.label': '隱藏應用程式的標籤',
   'settings.bookmarks.position.label': '記住書籤的狀態',
   'settings.search.predict.label': '輸入內容時顯示搜尋預測',
+  'settings.search.remaining.label': '顯示其餘搜尋引擎清單',
   'settings.search.title': '搜尋',
   'settings.theme.title': '主題',
   'settings.theme.switch.label': '主題顏色',

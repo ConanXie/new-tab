@@ -26,6 +26,7 @@ export default {
   'settings.apps.display.label': 'Hide the label of application',
   'settings.bookmarks.position.label': 'Remember previous state of the bookmark',
   'settings.search.predict.label': 'Show instant predictions as you type',
+  'settings.search.remaining.label': 'Show the remaining search engines',
   'settings.search.title': 'Search',
   'settings.theme.title': 'Theme',
   'settings.theme.switch.label': 'Theme colors',
