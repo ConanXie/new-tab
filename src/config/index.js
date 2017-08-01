@@ -2,7 +2,7 @@
  * Configure for the program
  */
 
-const version = '1.7.1'
+const version = '1.8.0'
 
 const code = 'Apricot'
 

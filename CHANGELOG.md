@@ -1,5 +1,12 @@
 ## Changelog
 
+## 1.8.0
+###### _Aug 01, 2017_
+- Add the remaining search engines when typing
+- Add a mask on wallpaper, you can regulate the strength
+- Fix `#` can't be searched
+- Increase the font size of the website's label
+
 ## 1.7.1
 ###### _Jul 24, 2017_
 - Fix that night mode display is incorrect after reload page
