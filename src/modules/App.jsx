@@ -217,7 +217,6 @@ class App extends Component {
           {onboarding && (
             <Onboarding />
           )}
-          <div id="mask"></div>
         </div>
       </MuiThemeProvider>
     )
