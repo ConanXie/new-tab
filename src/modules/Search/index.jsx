@@ -67,11 +67,13 @@ class Search extends Component {
   }
   componentDidMount() {
     this.props.initialData()
+    // disable spell check on search input
+    this.refs.text.setAttribute('spellcheck', 'false')
   }
-  componentWillReceiveProps(props) {
+  componentWillReceiveProps(nextProps) {
     if (!this.isDone) {
-      const { engines } = props
-      const theDefault = props.engines.filter((engine, index) => {
+      const { engines } = nextProps
+      const theDefault = nextProps.engines.filter((engine, index) => {
         if (engine.isDefault) {
           this.engineIndex = index
         }
@@ -85,6 +87,11 @@ class Search extends Component {
         name
       })
       this.isDone = true
+    }
+    if (this.props.settings.searchPredict !== nextProps.settings.searchPredict && !nextProps.settings.searchPredict) {
+      this.setState({
+        predictions: []
+      })
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -116,6 +123,11 @@ class Search extends Component {
       name
     })
     this.engineIndex = index
+    if (this.props.settings.searchPredict && !predict[host]) {
+      this.setState({
+        predictions: []
+      })
+    }
   }
   toTheNext = event => {
     let index = this.engineIndex
@@ -130,8 +142,9 @@ class Search extends Component {
     // if input then set predictionsIndex to default
     this.predictionsIndex = -1
     const { host } = this.state
+    const { searchPredict, remaining } = this.props.settings
     // if user turn on search predict
-    if (this.props.settings.searchPredict) {
+    if (searchPredict || remaining) {
       const text = event.target.value
       // record the input value as user type
       this.inputText = text
@@ -145,17 +158,17 @@ class Search extends Component {
           empty: false
         })
       }
-      if (predict[host]) {
-        try {
-          const predictions = await predict[host](text)
-          // remove predictions 'active' class
-          this.clearPredictionsClassName()
-          this.setState({
-            predictions
-          })
-        } catch (err) {
-          console.error(err)
-        }
+    }
+    if (searchPredict && predict[host]) {
+      try {
+        const predictions = await predict[host](this.inputText)
+        // remove predictions 'active' class
+        this.clearPredictionsClassName()
+        this.setState({
+          predictions
+        })
+      } catch (err) {
+        console.error(err)
       }
     }
   }
@@ -181,7 +194,8 @@ class Search extends Component {
   }
   focus = event => {
     this.refs.text.classList.add('focus')
-    if (this.props.settings.searchPredict) {
+    const { searchPredict, remaining } = this.props.settings
+    if (searchPredict || remaining) {
       this.setState({
         focus: true
       })
@@ -268,10 +282,11 @@ class Search extends Component {
     this.search(event)
   }
   toggleExpand = event => {
+    const remainder = this.calcRemainder()
     const ele = this.refs.engines
     const height = 24
     if (ele.dataset.expanded === '1') {
-      ele.style.height = 3 * height + 'px'
+      ele.style.height = remainder * height + 'px'
       ele.dataset.expanded = 0
     } else {
       ele.style.height = (this.props.engines.length - 1) * height + 'px'
@@ -280,6 +295,14 @@ class Search extends Component {
   }
   searchFrom(index) {
     this.openSearch(this.props.engines[index].link)
+  }
+  calcRemainder() {
+    const {searchPredict, remaining } = this.props.settings
+    if ((!searchPredict && remaining) || !predict[this.state.host]) {
+      return 6
+    } else {
+      return 3
+    }
   }
   render() {
     const { name, link, host, focus, predictions, empty } = this.state
@@ -300,6 +323,7 @@ class Search extends Component {
         textColor = iconColor
       }
     }
+    const remainder = this.calcRemainder()
 
     return (
       <div className="search-wrapper">
@@ -360,7 +384,7 @@ class Search extends Component {
               <div className="list-wrapper">
                 {remaining && !empty && (
                   <Paper className={classNames('list-box', { 'show': focus })}  zDepth={1} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
-                    <ul ref="engines" className="engines-list" data-expanded="0" style={{ height: (engines.length < 4 ? engines.length - 1 : 3) * 24 }}>
+                    <ul ref="engines" className="engines-list" data-expanded="0" style={{ height: (engines.length < remainder + 1 ? engines.length - 1 : remainder) * 24 }}>
                       {engines.map((engine, index) => {
                         const { id, name } = engine
                         if (index !== this.engineIndex) {
