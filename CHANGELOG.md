@@ -1,4 +1,8 @@
-## Changelog
+# Changelog
+
+## 1.8.1
+###### _Aug 02, 2017_
+- Fix the remaining search engines doesn't show when disabled search predict
 
 ## 1.8.0
 ###### _Aug 01, 2017_
