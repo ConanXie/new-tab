@@ -115,21 +115,23 @@ class Settings extends Component {
   }
   componentWillReceiveProps(nextProps) {
     // show or hide the settings page
-    if (nextProps.open) {
-      const state = {
-        display: 'block'
+    if (nextProps.open !== this.props.open) {
+      if (nextProps.open) {
+        const state = {
+          display: 'block'
+        }
+        if (!this.state.load) {
+          state.load = true
+        }
+        this.setState(state)
+      } else {
+        setTimeout(() => {
+          document.querySelector('.settings-page > section').scrollTop = 0
+          this.setState({
+            display: 'none'
+          })
+        }, 200)
       }
-      if (!this.state.load) {
-        state.load = true
-      }
-      this.setState(state)
-    } else {
-      setTimeout(() => {
-        document.querySelector('.settings-page > section').scrollTop = 0
-        this.setState({
-          display: 'none'
-        })
-      }, 200)
     }
   }
   createBackups = async () => {
