@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.2
+###### _Aug 19, 2017_
+- Fix classification input color on dark background
+
 ## 1.8.1
 ###### _Aug 02, 2017_
 - Fix the remaining search engines doesn't show when disabled search predict
