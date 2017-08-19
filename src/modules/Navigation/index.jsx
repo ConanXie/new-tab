@@ -705,36 +705,36 @@ class Navigation extends Component {
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideDialog}
+        onClick={this.hideDialog}
       />,
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.handleSubmit}
+        onClick={this.handleSubmit}
       />
     ]
     const confirmActions = [
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideConfirm}
+        onClick={this.hideConfirm}
       />,
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.handleConfirm}
+        onClick={this.handleConfirm}
       />
     ]
     const addClassifyActions = [
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideClassifyDialog}
+        onClick={this.hideClassifyDialog}
       />,
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.addClassify}
+        onClick={this.addClassify}
       />
     ]
     return (
@@ -747,7 +747,7 @@ class Navigation extends Component {
                   label={intl.formatMessage({ id: 'nav.increase.classification.btn' })}
                   labelStyle={{ color: labelColor }}
                   icon={<ContentAdd color={labelColor} />}
-                  onTouchTap={this.openClassifyDialog}
+                  onClick={this.openClassifyDialog}
                 />
               )}
               <Checkbox
@@ -767,13 +767,13 @@ class Navigation extends Component {
                 <RaisedButton
                   label={intl.formatMessage({ id: 'empty.text.navigation.add' })}
                   primary={true}
-                  onTouchTap={this.openDialog}
+                  onClick={this.openDialog}
                 />
                 <span className="or">{intl.formatMessage({ id: 'empty.text.navigation.or' })}</span>
                 <FlatButton
                   label={intl.formatMessage({ id: 'empty.text.navigation.hide' })}
                   primary={true}
-                  onTouchTap={() => saveSettings({ hideWebsites: true })}
+                  onClick={() => saveSettings({ hideWebsites: true })}
                 />
               </div>
             )}
@@ -799,14 +799,14 @@ class Navigation extends Component {
                         labelStyle={labelStyle}
                         onClick={this.checkClick}
                       />
-                      <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link)}}>
+                      <i className={classNames('handle-btn edit-btn', { 'show': edit })} onClick={e => {this.handleEdit(index, name, link)}}>
                         <ModeEdit
                           color={grey500}
                           hoverColor={grey600}
                           style={style.editHandleIcon}
                         />
                       </i>
-                      <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(name, index)}}>
+                      <i className={classNames('handle-btn delete-btn', { 'show': edit })} onClick={e => {this.handleDelete(name, index)}}>
                         <ContentClear
                           color="#fff"
                           style={style.deleteHandleIcon}
@@ -864,14 +864,14 @@ class Navigation extends Component {
                             labelStyle={labelStyle}
                             onClick={this.checkClick}
                           />
-                          <i className={classNames('handle-btn edit-btn', { 'show': edit })} onTouchTap={e => {this.handleEdit(index, name, link, cIndex)}}>
+                          <i className={classNames('handle-btn edit-btn', { 'show': edit })} onClick={e => {this.handleEdit(index, name, link, cIndex)}}>
                             <ModeEdit
                               color={grey500}
                               hoverColor={grey600}
                               style={style.editHandleIcon}
                             />
                           </i>
-                          <i className={classNames('handle-btn delete-btn', { 'show': edit })} onTouchTap={e => {this.handleDelete(name, index, cIndex)}}>
+                          <i className={classNames('handle-btn delete-btn', { 'show': edit })} onClick={e => {this.handleDelete(name, index, cIndex)}}>
                             <ContentClear
                               color="#fff"
                               style={style.deleteHandleIcon}
@@ -885,7 +885,7 @@ class Navigation extends Component {
                     <FlatButton
                       label={intl.formatMessage({ id: 'nav.delete.classification' })}
                       icon={<ContentClear />}
-                      onTouchTap={e => { this.deleteClassification(cIndex) }}
+                      onClick={e => { this.deleteClassification(cIndex) }}
                       className="delete-classification"
                     />
                   )}
@@ -907,7 +907,7 @@ class Navigation extends Component {
               <div className="edit-float-btn" ref="editFloatBtn" style={style.editActionButton}>
                 <FloatingActionButton
                   mini={true}
-                  onTouchTap={this.startEdit}
+                  onClick={this.startEdit}
                   backgroundColor={muiTheme.paper.backgroundColor}
                   iconStyle={{ fill: muiTheme.palette.textColor }}
                 >
@@ -916,7 +916,7 @@ class Navigation extends Component {
               </div>
               <FloatingActionButton
                 style={style.floatingActionButton}
-                onTouchTap={this.handleMainFloatBtn}
+                onClick={this.handleMainFloatBtn}
                 onMouseEnter={this.showEditBtn}
               >
                 { edit ? <ActionDone /> : <ContentAdd /> }

@@ -117,7 +117,7 @@ class Search extends Component {
             <Paper zDepth={1} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
               <div className="search-box">
                 <div className="util-btn back-btn">
-                  <IconButton onTouchTap={this.closeSearch}>
+                  <IconButton onClick={this.closeSearch}>
                     <ArrowBack color="#767676" />
                   </IconButton>
                 </div>
@@ -131,7 +131,7 @@ class Search extends Component {
                   />
                 </div>
                 <div className={classNames('util-btn clear-btn', { 'show': this.state.clear })}>
-                  <IconButton onTouchTap={this.clearSearch}>
+                  <IconButton onClick={this.clearSearch}>
                     <ContentClear color="#767676" />
                   </IconButton>
                 </div>
@@ -274,7 +274,7 @@ class Folder extends Component {
           innerDivStyle={style.bookmark}
           style={{ paddingLeft: level * padding }}
           leftIcon={Icon}
-          onTouchTap={e => { this.changeStatus() }}
+          onClick={e => { this.changeStatus() }}
         />
         <div className={classNames('children-wrap', { 'opened': folderStatus === 'opened' })}>
           {ChildrenLists}
@@ -397,7 +397,7 @@ class Bookmark extends Component {
       <div className="bookmark-component">
         <Paper zDepth={2} style={style.header}>
           <header style={{ backgroundColor: muiTheme.palette.primary1Color }}>
-            <div className="search-box" onTouchTap={this.openSearch}>
+            <div className="search-box" onClick={this.openSearch}>
               <div className="search-icon">
                 <ActionSearch color={muiTheme.palette.alternateTextColor} />
               </div>
@@ -408,7 +408,7 @@ class Bookmark extends Component {
               tooltipPosition="bottom-left"
               tooltipStyles={style.tooltip}
               style={style.managerButton}
-              onTouchTap={e => { chrome.tabs.update({ url: 'chrome://bookmarks/' }) }}
+              onClick={e => { chrome.tabs.update({ url: 'chrome://bookmarks/' }) }}
             >
               <ToggleStar color={muiTheme.palette.alternateTextColor} />
             </IconButton>

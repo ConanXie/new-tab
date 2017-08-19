@@ -515,19 +515,19 @@ class Wallpaper extends Component {
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideColorDialog}
+        onClick={this.hideColorDialog}
       />,
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.setBackgroundColor}
+        onClick={this.setBackgroundColor}
       />
     ]
     const frequencyActions = [
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideFrequencyDialog}
+        onClick={this.hideFrequencyDialog}
       />
     ]
 
@@ -541,7 +541,7 @@ class Wallpaper extends Component {
                   <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'desktop.header.title' })}</div>
                 </div>
                 <div className="bar-right">
-                  <IconButton onTouchTap={closeDrawer}>
+                  <IconButton onClick={closeDrawer}>
                     <NavigationClose color={muiTheme.palette.alternateTextColor} />
                   </IconButton>
                 </div>
@@ -589,7 +589,7 @@ class Wallpaper extends Component {
                         secondaryText={intl.formatMessage({ id: 'wallpaper.frequency.secondary' })}
                         disabled={darkMode || !background}
                         innerDivStyle={styles.listItem}
-                        onTouchTap={this.showFrequencyDialog}
+                        onClick={this.showFrequencyDialog}
                       />
                       <div className="fetch-new">
                         <ListItem
@@ -597,7 +597,7 @@ class Wallpaper extends Component {
                           secondaryText={intl.formatMessage({ id: 'wallpaper.new.secondary' })}
                           disabled={darkMode || !background}
                           innerDivStyle={styles.listItem}
-                          onTouchTap={this.fetchWallpaper}
+                          onClick={this.fetchWallpaper}
                         />
                         {fetching && (
                           <LinearProgress mode="determinate" value={completed} style={styles.progress} />
@@ -608,7 +608,7 @@ class Wallpaper extends Component {
                         secondaryText={intl.formatMessage({ id: 'wallpaper.download.secondary' })}
                         disabled={darkMode || !background}
                         innerDivStyle={styles.listItem}
-                        onTouchTap={this.saveToLocal}
+                        onClick={this.saveToLocal}
                       />
                     </div>
                   )}
@@ -634,7 +634,7 @@ class Wallpaper extends Component {
                       secondaryText={intl.formatMessage({ id: 'wallpaper.solid.color.secondary' })}
                       disabled={darkMode || !background}
                       innerDivStyle={styles.listItem}
-                      onTouchTap={this.showColorDialog}
+                      onClick={this.showColorDialog}
                     />
                   )}
                 </div>

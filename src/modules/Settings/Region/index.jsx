@@ -78,12 +78,12 @@ class Region extends Component {
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideDialog}
+        onClick={this.hideDialog}
       />,
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.handleSubmit}
+        onClick={this.handleSubmit}
       />
     ]
 
@@ -94,7 +94,7 @@ class Region extends Component {
           primaryText={intl.formatMessage({ id: 'settings.weather.location.label' })}
           secondaryText={settings.region ? settings.region : 'N/A'}
           innerDivStyle={{ paddingLeft: '58px' }}
-          onTouchTap={this.openDialog}
+          onClick={this.openDialog}
         />
         <Dialog
           title={intl.formatMessage({ id: 'region.edit.title' })}

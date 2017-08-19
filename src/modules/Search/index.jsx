@@ -331,7 +331,7 @@ class Search extends Component {
           <div
             className={classNames('logo',  { 'white': !darkMode && background && backgroundShade === 2 })}
             data-host={host}
-            onTouchTap={this.toTheNext}
+            onClick={this.toTheNext}
             style={{ backgroundColor: logoColor, opacity: logoTransparency }}
           ></div>
           <span className="engine-name" style={{ color: logoColor, opacity: logoTransparency }}>{name}</span>
@@ -351,7 +351,7 @@ class Search extends Component {
                   key={id}
                   value={index}
                   primaryText={name}
-                  onTouchTap={e => this.changeEngine(index)}
+                  onClick={e => this.changeEngine(index)}
                   innerDivStyle={style.menuItem}
                 />
               )
@@ -400,7 +400,7 @@ class Search extends Component {
                       })}
                     </ul>
                     {engines.length > 4 && (
-                      <div className="expand-more" onTouchTap={this.toggleExpand}>
+                      <div className="expand-more" onClick={this.toggleExpand}>
                         <IconButton
                           style={{ padding: 0, width: 'auto', height: 'auto' }}
                           iconStyle={{ color: muiTheme.palette.primary1Color, opacity: transparentSearchInput ? 0 : '' }}

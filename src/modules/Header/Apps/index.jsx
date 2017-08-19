@@ -56,7 +56,7 @@ class Apps extends Component {
             tooltip={intl.formatMessage({ id: 'apps.manage.tip' })}
             tooltipPosition="bottom-right"
             tooltipStyles={style.tooltip}
-            onTouchTap={e => chrome.tabs.update({ url: 'chrome://apps' })}
+            onClick={e => chrome.tabs.update({ url: 'chrome://apps' })}
           >
             <NavigationApps color={muiTheme.palette.primary1Color} />
           </IconButton>

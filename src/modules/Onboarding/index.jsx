@@ -58,7 +58,7 @@ class Welcome extends Component {
           <FlatButton
             label={chrome.i18n.getMessage('skipBtn')}
             primary={true}
-            onTouchTap={this.skip}
+            onClick={this.skip}
           />
         </header>
         <div className="content-wrap">
@@ -68,11 +68,11 @@ class Welcome extends Component {
               label={chrome.i18n.getMessage('previousBtn')}
               disabled={step == 1}
               style={{ marginRight: 48 }}
-              onTouchTap={this.previousStep}
+              onClick={this.previousStep}
             />
             <RaisedButton
               label={step === total ? chrome.i18n.getMessage('tryIt') : chrome.i18n.getMessage('nextBtn')}
-              onTouchTap={this.nextStep}
+              onClick={this.nextStep}
             />
           </div>
         </div>

@@ -63,7 +63,7 @@ class Donate extends Component {
         <RaisedButton
           label={intl.formatMessage({ id: 'settings.donate' })}
           primary={true}
-          onTouchTap={this.openDonation}
+          onClick={this.openDonation}
         />
         <Dialog
           open={dialogOpen}

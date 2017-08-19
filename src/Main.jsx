@@ -3,9 +3,6 @@ import './less/style.less'
 
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import injectTapEventPlugin from 'react-tap-event-plugin'
-//Needed for onTouchTap
-injectTapEventPlugin()
 
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'

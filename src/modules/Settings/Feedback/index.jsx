@@ -140,7 +140,7 @@ class Feedback extends Component {
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.handleSubmit}
+        onClick={this.handleSubmit}
       />
     )
 
@@ -148,7 +148,7 @@ class Feedback extends Component {
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideDialog}
+        onClick={this.hideDialog}
       />,
       loading ? Loading : Confirm
     ]
@@ -158,7 +158,7 @@ class Feedback extends Component {
         <FlatButton
           className="feedback"
           label={intl.formatMessage({ id: 'settings.feedback' })}
-          onTouchTap={this.openDialog}
+          onClick={this.openDialog}
         />
         <Dialog
           title={intl.formatMessage({ id: 'settings.feedback' })}

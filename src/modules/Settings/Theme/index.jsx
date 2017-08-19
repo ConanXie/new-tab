@@ -202,12 +202,12 @@ class Theme extends Component {
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideCustomization}
+        onClick={this.hideCustomization}
       />,
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.setCustomizedColor}
+        onClick={this.setCustomizedColor}
       />
     ]
 
@@ -217,7 +217,7 @@ class Theme extends Component {
           leftIcon={<ColorLens style={{ marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
           primaryText={intl.formatMessage({ id: 'settings.theme.switch.label' })}
           innerDivStyle={{ paddingLeft: '58px' }}
-          onTouchTap={this.openTheme}
+          onClick={this.openTheme}
         />
         <Dialog
           open={this.state.themeOpen}
@@ -236,7 +236,7 @@ class Theme extends Component {
                 leftIcon={<ImageLens color={color} />}
                 rightIcon={<ActionDone color={color} style={{ display: current !== index ? 'none' : '' }} />}
                 style={{ color }}
-                onTouchTap={e => { this.switchTheme(index) }}
+                onClick={e => { this.switchTheme(index) }}
               />
             )
           })}
@@ -245,7 +245,7 @@ class Theme extends Component {
             leftIcon={<ImageColorize color={color} />}
             rightIcon={<ActionDone  color={color} style={{ display: current !== -1 ? 'none' : '' }} />}
             style={{ color }}
-            onTouchTap={this.openCustomization}
+            onClick={this.openCustomization}
           />
         </Dialog>
         <Dialog

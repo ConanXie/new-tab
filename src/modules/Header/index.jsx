@@ -97,19 +97,19 @@ class Header extends Component {
         <div className="tool-bar">
           <div className="bar-left">
             <IconButton
-              onTouchTap={() => this.setState({ weatherOpen: true, loadApps: true })}
+              onClick={() => this.setState({ weatherOpen: true, loadApps: true })}
             >
               <NavigationMenu color={iconColor} />
             </IconButton>
           </div>
           <div className="bar-right">
-            <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ bookmarkOpen: true, loadBookmarks: true })}>
+            <IconButton style={style.rightIcon} onClick={() => this.setState({ bookmarkOpen: true, loadBookmarks: true })}>
               <ActionBookmark color={iconColor} />
             </IconButton>
-            <IconButton style={style.rightIcon} onTouchTap={() => this.setState({ wallpaperOpen: true, loadWallpaper: true })}>
+            <IconButton style={style.rightIcon} onClick={() => this.setState({ wallpaperOpen: true, loadWallpaper: true })}>
               <DeviceWallpaper color={iconColor} />
             </IconButton>
-            <IconButton style={style.rightIcon} onTouchTap={showSettings}>
+            <IconButton style={style.rightIcon} onClick={showSettings}>
               <ActionSettings color={iconColor} />
             </IconButton>
           </div>

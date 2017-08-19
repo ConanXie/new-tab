@@ -223,12 +223,12 @@ class Settings extends Component {
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.hideReset}
+        onClick={this.hideReset}
       />,
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.resetSettings}
+        onClick={this.resetSettings}
       />
     ]
     return (
@@ -246,7 +246,7 @@ class Settings extends Component {
               >
               <div className="tool-bar">
                 <div className="bar-left">
-                  <IconButton onTouchTap={hideSettings}>
+                  <IconButton onClick={hideSettings}>
                     <ArrowBack color={muiTheme.palette.alternateTextColor} />
                   </IconButton>
                   <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'settings.toolbar.title' })}</div>
@@ -379,7 +379,7 @@ class Settings extends Component {
                     leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
                     primaryText={intl.formatMessage({ id: 'settings.br.backup.label' })}
                     innerDivStyle={{ paddingLeft: '58px' }}
-                    onTouchTap={this.createBackups}
+                    onClick={this.createBackups}
                   />
                   <ListItem
                     leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
@@ -392,7 +392,7 @@ class Settings extends Component {
                     leftIcon={<SettingsRestore style={style.listIcon} color={muiTheme.palette.primary1Color} />}
                     primaryText={intl.formatMessage({ id: 'settings.br.reset.label' })}
                     innerDivStyle={{ paddingLeft: '58px' }}
-                    onTouchTap={this.openReset}
+                    onClick={this.openReset}
                   />
                 </Paper>
                 <Dialog

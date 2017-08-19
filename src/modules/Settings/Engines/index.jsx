@@ -183,16 +183,16 @@ class Engines extends Component {
       <FlatButton
         label={intl.formatMessage({ id: 'button.cancel' })}
         primary={true}
-        onTouchTap={this.closeEditDialog}
+        onClick={this.closeEditDialog}
       />,
       <FlatButton
         label={intl.formatMessage({ id: 'button.confirm' })}
         primary={true}
-        onTouchTap={this.handleSubmit}
+        onClick={this.handleSubmit}
       />
     ]
     // amount limit
-    const AddBtn = engines.length < searchEnginesMax ? <IconButton onTouchTap={e => this.openFormDialog()}><ContentAdd /></IconButton> : null
+    const AddBtn = engines.length < searchEnginesMax ? <IconButton onClick={e => this.openFormDialog()}><ContentAdd /></IconButton> : null
     
     return (
       <div>
@@ -200,7 +200,7 @@ class Engines extends Component {
           leftIcon={<ViewList style={{ marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
           primaryText={intl.formatMessage({ id: 'engines.settings.management' })}
           innerDivStyle={{ paddingLeft: '58px' }}
-          onTouchTap={this.openTableDialog}
+          onClick={this.openTableDialog}
         />
         <Dialog
           open={tableOpen}
@@ -251,17 +251,17 @@ class Engines extends Component {
                         menuStyle={{ minWidth: 168 }}
                       >
                         {!isDefault && (
-                          <MenuItem onTouchTap={e => { makeDefault(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.default' })} />
+                          <MenuItem onClick={e => { makeDefault(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.default' })} />
                         )}
-                        <MenuItem onTouchTap={e => { this.edit(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.edit' })} />
+                        <MenuItem onClick={e => { this.edit(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.edit' })} />
                         {!isDefault && (
-                          <MenuItem onTouchTap={e => { deleteEngine(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.remove' })} />
+                          <MenuItem onClick={e => { deleteEngine(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.remove' })} />
                         )}
                         {index && (
-                          <MenuItem onTouchTap={e => { moveUp(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.move.up' })} />
+                          <MenuItem onClick={e => { moveUp(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.move.up' })} />
                         )}
                         {(index < engines.length - 1) && (
-                          <MenuItem onTouchTap={e => { moveDown(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.move.down' })} />
+                          <MenuItem onClick={e => { moveDown(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.move.down' })} />
                         )}
                       </IconMenu>
                     </TableRowColumn>
