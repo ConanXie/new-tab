@@ -832,6 +832,7 @@ class Navigation extends Component {
                         defaultValue={item.name}
                         fullWidth={true}
                         style={style.classficationInput}
+                        inputStyle={{ color: classificationColor }}
                         hintStyle={style.classficationHintText}
                         onBlur={e => { this.changeClassificationName(e, cIndex) }}
                       />
