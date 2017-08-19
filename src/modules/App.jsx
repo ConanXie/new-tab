@@ -117,7 +117,7 @@ class App extends Component {
     darkBaseTheme.fontFamily = 'Roboto, Microsoft Yahei'
     darkBaseTheme.palette = {
       ...darkBaseTheme.palette,
-      primary1Color: '#546e7a',
+      primary1Color: '#607d8b',
       textColor: '#e2e4e4',
       alternateTextColor: '#e2e4e4',
       settingsBackgroundColor: 'rgba(42, 42, 42, 1)'
