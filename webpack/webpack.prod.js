@@ -13,7 +13,6 @@ module.exports = {
     vendors: [
       'react',
       'react-dom',
-      'react-tap-event-plugin',
       'react-redux',
       'redux',
       'redux-thunk',
