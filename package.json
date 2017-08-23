@@ -1,20 +1,27 @@
 {
-  "name": "md-tab",
-  "version": "1.8.0",
-  "description": "A new tab for Chrome",
+  "name": "material-design-new-tab",
+  "version": "2.0.0",
+  "description": "A new tab page extension for Chrome",
   "homepage": "https://tab.xiejie.co",
   "keywords": [
-    "chrome"
+    "chrome",
+    "new tab page",
+    "extension",
+    "material design"
   ],
   "author": {
     "name": "ConanXie",
     "email": "xjj416@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ConanXie/new-tab.git"
+  },
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --progress --config webpack/webpack.config.js",
-    "build": "webpack -p --config webpack/webpack.prod.js"
+    "start": "webpack-dev-server --progress --config webpack/webpack.dev.conf.js",
+    "build": "webpack -p --config webpack/webpack.prod.conf.js"
   },
   "dependencies": {
     "classnames": "^2.2.5",
