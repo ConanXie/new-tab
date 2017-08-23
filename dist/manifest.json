@@ -23,5 +23,5 @@
     "geolocation",
     "<all_urls>"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://localhost:5001; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' http://localhost:5001; object-src 'self'"
 }

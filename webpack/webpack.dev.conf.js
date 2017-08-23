@@ -9,7 +9,6 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
-    `webpack-dev-server/client?https://127.0.0.1:${port}`,
     'webpack/hot/only-dev-server',
     './Main.jsx'
   ],
@@ -18,7 +17,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    publicPath: `https://localhost:${port}/`,
+    publicPath: `http://localhost:${port}/`,
     filename: 'bundle.js'
   },
   module: {
@@ -59,7 +58,6 @@ module.exports = {
   devServer: {
     port,
     hot: true,
-    https: true,
     overlay: true,
     compress: true,
     stats: {
