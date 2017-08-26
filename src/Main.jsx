@@ -1,4 +1,3 @@
-// less
 import './styles'
 
 import React, { Component } from 'react'
