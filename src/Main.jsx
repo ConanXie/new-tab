@@ -1,5 +1,5 @@
 // less
-import './less/style.less'
+import './styles'
 
 import React, { Component } from 'react'
 import { render } from 'react-dom'
