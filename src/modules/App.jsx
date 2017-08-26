@@ -10,11 +10,12 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { code } from '../config'
 import { themes } from './Settings/Theme'
 
-import Header from './Header'
+import LazilyLoad, { importLazy } from '@/scripts/LazilyLoad'
+/* import Header from './Header'
 import Search from './Search'
 import Navigation from './Navigation'
 import Settings from './Settings'
-import Onboarding from './Onboarding'
+import Onboarding from './Onboarding' */
 
 class App extends Component {
   constructor(props) {
@@ -206,7 +207,14 @@ class App extends Component {
         <div>
           <div id="bg"></div>
           <div id="mask"></div>
-          <Header />
+          <LazilyLoad modules={{
+            Header: () => importLazy(import('./Header'))
+          }}>
+            {({ Header }) => {
+              return <Header />
+            }}
+          </LazilyLoad>
+          {/* <Header />
           {!hideSearch && (
             <Search />
           )}
@@ -216,7 +224,7 @@ class App extends Component {
           <Settings />
           {onboarding && (
             <Onboarding />
-          )}
+          )} */}
         </div>
       </MuiThemeProvider>
     )
