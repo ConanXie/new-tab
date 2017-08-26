@@ -21,7 +21,10 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.less', '.css', '.jpg', '.png', '.svg', '.woff2', '.gif']
+    extensions: ['.js', '.jsx', '.less', '.css', '.jpg', '.png', '.svg', '.woff2', '.gif'],
+    alias: {
+      '@': path.join(__dirname, '../src')
+    }
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
