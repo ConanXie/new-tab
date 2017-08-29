@@ -1,6 +1,6 @@
 import './style.less'
 
-import moment from 'moment'
+// import moment from 'moment'
 
 import classNames from 'classnames'
 import React, { Component } from 'react'
@@ -18,6 +18,8 @@ import ActionOpacity from 'material-ui/svg-icons/action/opacity'
 import MapsNavigation from 'material-ui/svg-icons/maps/navigation'
 import RefreshIndicator from 'material-ui/RefreshIndicator'
 import SvgIcon from 'material-ui/SvgIcon'
+
+import { LazilyLoadFactory } from '@/scripts/LazilyLoad'
 
 const LeafIcon = props => (
   <SvgIcon {...props}>
@@ -296,7 +298,7 @@ class Weather extends Component {
                 </p>
                 <p className="update-time">
                   <NavigationRefresh color={alternateTextColor} style={style.icon} />
-                  <span>{moment(data.basic.update).format('HH:mm')}</span>
+                  <span>{this.props.moment(data.basic.update).format('HH:mm')}</span>
                 </p>
               </div>
             </header>
@@ -338,4 +340,6 @@ const mapStateToProps = state => {
   return { settings }
 }
 
-export default muiThemeable()(connect(mapStateToProps, { saveSettings })(Weather))
+export default LazilyLoadFactory(muiThemeable()(connect(mapStateToProps, { saveSettings })(Weather)), {
+  moment: () => import('moment')
+})

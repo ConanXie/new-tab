@@ -533,7 +533,6 @@ class Wallpaper extends Component {
 
     return (
       <div>
-        {load && (
           <div className="wallpaper-settings">
             <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
               <div className="tool-bar">
@@ -809,7 +808,6 @@ class Wallpaper extends Component {
               onRequestClose={() => this.setState({ snackbarOpen: false })}
             />
           </div>
-        )}
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import './style.less'
 
-import moment from 'moment'
+// import moment from 'moment'
+import { LazilyLoadFactory } from '@/scripts/LazilyLoad'
 
 import classNames from 'classnames'
 import React, { Component } from 'react'
@@ -318,6 +319,7 @@ class Bookmark extends Component {
   }
   // load bookmarks
   componentDidMount() {
+    this.props.moment.locale(navigator.language)
     // get data from localStorage
     if (this.props.settings.rememberBookmarksState) {
       this.opens = JSON.parse(localStorage.getItem('bookmarksOpens')) || []
@@ -442,7 +444,7 @@ class Bookmark extends Component {
                   <a className="bookmark-link" href={value.url} key={index} title={value.title}>
                     <ListItem
                       primaryText={value.title}
-                      secondaryText={moment(value.dateAdded).fromNow()}
+                      secondaryText={this.props.moment(value.dateAdded).fromNow()}
                       leftIcon={<div style={{ width: 16, height: 16, margin: 8, content: `-webkit-image-set(url("chrome://favicon/size/16@1x/${value.url}") 1x, url("chrome://favicon/size/16@2x/${value.url}") 2x)` }}></div>}
                       className="bookmark"
                       innerDivStyle={style.bookmark}
@@ -464,4 +466,6 @@ const mapStateToProps = state => {
   return { settings }
 }
 
-export default muiThemeable()(connect(mapStateToProps)(Bookmark))
+export default LazilyLoadFactory(muiThemeable()(connect(mapStateToProps)(Bookmark)), {
+  moment: () => import('moment')
+})

@@ -5,14 +5,13 @@ import { connect } from 'react-redux'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import RaisedButton from 'material-ui/RaisedButton'
 
 import { code } from '../config'
-import { themes } from './Settings/Theme'
+import colors from './Settings/Theme/colors'
 
 import LazilyLoad, { importLazy } from '@/scripts/LazilyLoad'
-/* import Header from './Header'
-import Search from './Search'
+import Header from './Header'
+/* import Search from './Search'
 import Navigation from './Navigation'
 import Settings from './Settings'
 import Onboarding from './Onboarding' */
@@ -37,7 +36,7 @@ class App extends Component {
     } else {
       // Use default themes
       if (index !== -1) {
-        muiTheme = this.createTheme(themes[index].color)
+        muiTheme = this.createTheme(colors[index].color)
       } else {
         // Use custom theme
         muiTheme = this.createTheme(customTheme.color, customTheme.hue)
@@ -157,7 +156,7 @@ class App extends Component {
       const { color, hue } = this.props.settings.customTheme
       theme = this.createTheme(color, hue)
     } else {
-      theme = this.createTheme(themes[index].color)
+      theme = this.createTheme(colors[index].color)
     }
     this.setState({
       muiTheme: theme
@@ -207,18 +206,24 @@ class App extends Component {
         <div>
           <div id="bg"></div>
           <div id="mask"></div>
-          <LazilyLoad modules={{
+          {/* <LazilyLoad modules={{
             Header: () => importLazy(import('./Header'))
           }}>
             {({ Header }) => {
               return <Header />
             }}
-          </LazilyLoad>
-          {/* <Header />
+          </LazilyLoad> */}
+          <Header />
           {!hideSearch && (
-            <Search />
+            <LazilyLoad modules={{
+              Search: () => importLazy(import('./Search'))
+            }}>
+              {({ Search }) => {
+                return <Search />
+              }}
+            </LazilyLoad>
           )}
-          {!hideWebsites && (
+          {/* {!hideWebsites && (
             <Navigation />
           )}
           <Settings />

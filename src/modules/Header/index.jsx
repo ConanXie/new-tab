@@ -6,25 +6,23 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { showSettings, hideSettings } from '../../actions/settings-page'
+import * as settingsPageActions from '../../actions/settings-page'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
 import IconButton from 'material-ui/IconButton'
-import RaisedButton from 'material-ui/RaisedButton'
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
-import FileFolder from 'material-ui/svg-icons/file/folder'
 import ActionBookmark from 'material-ui/svg-icons/action/bookmark-border'
 import ActionSettings from 'material-ui/svg-icons/action/settings'
-import ActionRoom from 'material-ui/svg-icons/action/room'
 import DeviceWallpaper from 'material-ui/svg-icons/device/wallpaper'
 import Drawer from 'material-ui/Drawer'
-import MenuItem from 'material-ui/MenuItem'
 
-import Weather from './Weather'
+/* import Weather from './Weather'
 import Apps from './Apps'
 import Bookmark from './Bookmark'
-import Wallpaper from './Wallpaper'
+import Wallpaper from './Wallpaper' */
+// import Wallpaper from './Wallpaper'
+import LazilyLoad, { importLazy } from '@/scripts/LazilyLoad'
 
 const style = {
   headerBar: {
@@ -47,7 +45,8 @@ class Header extends Component {
       bookmarkOpen: false,
       wallpaperOpen: false,
       loadApps: false,
-      loadBookmarks: false
+      loadBookmarks: false,
+      loadWallpaper: false
     }
   }
   componentDidMount() {
@@ -121,10 +120,19 @@ class Header extends Component {
           onRequestChange={state => this.setState({ weatherOpen: state })}
         >
           {loadApps && (
-            <div>
-              <Weather />
-              <Apps />
-            </div>
+            <LazilyLoad modules={{
+              Weather: () => importLazy(import('./Weather')),
+              Apps: () => importLazy(import('./Apps'))
+            }}>
+              {({ Weather, Apps }) => {
+                return (
+                  <div>
+                    <Weather />
+                    <Apps />
+                  </div>
+                )
+              }}
+            </LazilyLoad>
           )}
         </Drawer>
         <Drawer
@@ -135,7 +143,13 @@ class Header extends Component {
           onRequestChange={state => this.setState({ wallpaperOpen: state })}
           overlayStyle={{ opacity: 0 }}
         >
-          <Wallpaper load={loadWallpaper} closeDrawer={() => this.setState({ wallpaperOpen: false })} />
+          {loadWallpaper && (
+            <LazilyLoad modules={{
+              Wallpaper: () => importLazy(import('./Wallpaper'))
+            }}>
+              {({ Wallpaper }) => <Wallpaper closeDrawer={() => this.setState({ wallpaperOpen: false })} />}
+            </LazilyLoad>
+          )}
         </Drawer>
         <Drawer
           docked={false}
@@ -145,7 +159,11 @@ class Header extends Component {
           onRequestChange={state => this.setState({ bookmarkOpen: state })}
         >
           {loadBookmarks && (
-            <Bookmark />
+            <LazilyLoad modules={{
+              Bookmark: () => importLazy(import('./Bookmark'))
+            }}>
+              {({ Bookmark }) => <Bookmark />}
+            </LazilyLoad>
           )}
         </Drawer>
       </Paper>
@@ -158,4 +176,4 @@ const mapStateToProps = state => {
   return { settingsPage, settings }
 }
 
-export default muiThemeable()(connect(mapStateToProps, { showSettings, hideSettings })(Header))
+export default muiThemeable()(connect(mapStateToProps, settingsPageActions)(Header))
