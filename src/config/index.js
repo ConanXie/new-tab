@@ -15,7 +15,7 @@ const searchEnginesMax = 30
 /**
  * i18n
  */
-import moment from 'moment'
+// import moment from 'moment'
 
 import {
   zh_CN,
@@ -27,12 +27,12 @@ let messages
 switch (navigator.language) {
   case 'zh-CN':
     messages = zh_CN
-    moment.locale('zh-CN')
+    // moment.locale('zh-CN')
     break
   case 'zh-TW':
   case 'zh-HK':
     messages = zh_TW
-    moment.locale('zh-TW')
+    // moment.locale('zh-TW')
     break
   default:
     messages = en_US
