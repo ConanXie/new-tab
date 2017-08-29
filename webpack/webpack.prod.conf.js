@@ -45,7 +45,7 @@ module.exports = {
       })
     }, {
       test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
-      use: ['url-loader?limit=2048&name=assets/[name].[ext]']
+      use: ['url-loader?limit=10240&name=assets/[name].[ext]']
     }]
   },
   plugins: [
@@ -55,6 +55,7 @@ module.exports = {
       }
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(en|zh-cn|zh-tw)$/),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendors',
       filename: 'vendors.min.js'
