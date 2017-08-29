@@ -17,12 +17,12 @@ import ActionSettings from 'material-ui/svg-icons/action/settings'
 import DeviceWallpaper from 'material-ui/svg-icons/device/wallpaper'
 import Drawer from 'material-ui/Drawer'
 
-/* import Weather from './Weather'
+import Weather from './Weather'
 import Apps from './Apps'
 import Bookmark from './Bookmark'
-import Wallpaper from './Wallpaper' */
+import Wallpaper from './Wallpaper'
 // import Wallpaper from './Wallpaper'
-import LazilyLoad, { importLazy } from '@/scripts/LazilyLoad'
+// import LazilyLoad, { importLazy } from '@/scripts/LazilyLoad'
 
 const style = {
   headerBar: {
@@ -120,19 +120,10 @@ class Header extends Component {
           onRequestChange={state => this.setState({ weatherOpen: state })}
         >
           {loadApps && (
-            <LazilyLoad modules={{
-              Weather: () => importLazy(import('./Weather')),
-              Apps: () => importLazy(import('./Apps'))
-            }}>
-              {({ Weather, Apps }) => {
-                return (
-                  <div>
-                    <Weather />
-                    <Apps />
-                  </div>
-                )
-              }}
-            </LazilyLoad>
+            <div>
+              <Weather />
+              <Apps />
+            </div>
           )}
         </Drawer>
         <Drawer
@@ -144,11 +135,7 @@ class Header extends Component {
           overlayStyle={{ opacity: 0 }}
         >
           {loadWallpaper && (
-            <LazilyLoad modules={{
-              Wallpaper: () => importLazy(import('./Wallpaper'))
-            }}>
-              {({ Wallpaper }) => <Wallpaper closeDrawer={() => this.setState({ wallpaperOpen: false })} />}
-            </LazilyLoad>
+            <Wallpaper closeDrawer={() => this.setState({ wallpaperOpen: false })} />
           )}
         </Drawer>
         <Drawer
@@ -159,11 +146,7 @@ class Header extends Component {
           onRequestChange={state => this.setState({ bookmarkOpen: state })}
         >
           {loadBookmarks && (
-            <LazilyLoad modules={{
-              Bookmark: () => importLazy(import('./Bookmark'))
-            }}>
-              {({ Bookmark }) => <Bookmark />}
-            </LazilyLoad>
+            <Bookmark />
           )}
         </Drawer>
       </Paper>

@@ -11,10 +11,10 @@ import colors from './Settings/Theme/colors'
 
 import LazilyLoad, { importLazy } from '@/scripts/LazilyLoad'
 import Header from './Header'
-/* import Search from './Search'
+import Search from './Search'
 import Navigation from './Navigation'
 import Settings from './Settings'
-import Onboarding from './Onboarding' */
+import Onboarding from './Onboarding'
 
 class App extends Component {
   constructor(props) {
@@ -215,21 +215,15 @@ class App extends Component {
           </LazilyLoad> */}
           <Header />
           {!hideSearch && (
-            <LazilyLoad modules={{
-              Search: () => importLazy(import('./Search'))
-            }}>
-              {({ Search }) => {
-                return <Search />
-              }}
-            </LazilyLoad>
+            <Search />
           )}
-          {/* {!hideWebsites && (
+          {!hideWebsites && (
             <Navigation />
           )}
           <Settings />
           {onboarding && (
             <Onboarding />
-          )} */}
+          )}
         </div>
       </MuiThemeProvider>
     )
