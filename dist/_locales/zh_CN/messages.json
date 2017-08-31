@@ -82,5 +82,466 @@
   },
   "themeDeepPurple": {
     "message": "深紫"
+  },
+  /*general*/
+  "button_cancel": {
+    "message": "取消"
+  },
+  "button_confirm": {
+    "message": "确认"
+  },
+  /*Nav*/
+  "nav_edit_title_edit": {
+    "message": "编辑网站"
+  },
+  "nav_edit_title_add": {
+    "message": "增加网站"
+  },
+  "nav_edit_input_website": {
+    "message": "名称"
+  },
+  "nav_edit_input_URL": {
+    "message": "链接"
+  },
+  "nav_edit_input_forget_name": {
+    "message": "别忘了网站的名字🙂"
+  },
+  "nav_edit_input_forget_URL": {
+    "message": "别忘了网址🙂"
+  },
+  "nav_delete_status": {
+    "message": "已删除"
+  },
+  "nav_delete_undo": {
+    "message": "撤消"
+  },
+  "nav_classification_unclassified": {
+    "message": "未分类"
+  },
+  "nav_add_choose_classification": {
+    "message": "选择分类"
+  },
+  "nav_increase_classification_title": {
+    "message": "增加分类"
+  },
+  "nav_increase_classification_label": {
+    "message": "分类名"
+  },
+  "nav_delete_classification": {
+    "message": "删除分类"
+  },
+  "nav_increase_classification_btn": {
+    "message": "增加分类"
+  },
+  "nav_show_classification": {
+    "message": "显示分类"
+  },
+  "nav_websites_max_tip": {
+    "message": "网站数量上限是"
+  },
+  /*settings*/
+  "settings_toolbar_title": {
+    "message": "设置"
+  },
+  "settings_engine_search_label": {
+    "message": "在新标签页中打开搜索"
+  },
+  "settings_website_open_label": {
+    "message": "在新标签页中打开网站"
+  },
+  "settings_apps_display_label": {
+    "message": "隐藏应用的标签"
+  },
+  "settings_bookmarks_position_label": {
+    "message": "记住书签的状态"
+  },
+  "settings_search_predict_label": {
+    "message": "输入内容时显示搜索预测"
+  },
+  "settings_search_remaining_label": {
+    "message": "显示其余搜索引擎列表"
+  },
+  "settings_search_title": {
+    "message": "搜索"
+  },
+  "settings_theme_title": {
+    "message": "主题"
+  },
+  "settings_theme_switch_label": {
+    "message": "主题颜色"
+  },
+  "settings_theme_dark_label": {
+    "message": "夜间模式"
+  },
+  "settings_weather_title": {
+    "message": "天气"
+  },
+  "settings_weather_fahrenheit_label": {
+    "message": "天气使用华氏度"
+  },
+  "settings_weather_gps_off_label": {
+    "message": "禁止使用地理位置"
+  },
+  "settings_weather_location_label": {
+    "message": "当前地区"
+  },
+  "settings_br_title": {
+    "message": "备份与重置"
+  },
+  "settings_br_backup_label": {
+    "message": "生成备份文件"
+  },
+  "settings_br_restore_label": {
+    "message": "从备份中恢复"
+  },
+  "settings_br_restore_message": {
+    "message": "已从备份文件恢复, 刷新后生效"
+  },
+  "settings_br_restore_not_supported": {
+    "message": "对不起，该备份文件已不受支持"
+  },
+  "settings_br_reset_label": {
+    "message": "重置为默认设置"
+  },
+  "settings_br_reset_message": {
+    "message": "已重置设置，刷新后生效"
+  },
+  "settings_reset_title": {
+    "message": "确认重置设置？"
+  },
+  "settings_reset_warning": {
+    "message": "将会重置为初始化设置"
+  },
+  "settings_about_title": {
+    "message": "关于"
+  },
+  "settings_donate": {
+    "message": "捐助"
+  },
+  "settings_feedback": {
+    "message": "反馈"
+  },
+  "settings_about_weather_sources": {
+    "message": "天气数据来源"
+  },
+  /*bookmarks*/
+  "bookmarks_search_placeholder": {
+    "message": "搜索书签"
+  },
+  "bookmarks_bookmarks_manager": {
+    "message": "书签管理器"
+  },
+  "bookmarks_tabs_all": {
+    "message": "全部"
+  },
+  "bookmarks_tabs_recent": {
+    "message": "最近添加"
+  },
+  /*empty text*/
+  "empty_text_apps": {
+    "message": "你没有任何应用"
+  },
+  "empty_text_bookmarks": {
+    "message": "你没有任何书签"
+  },
+  "empty_text_bookmarks_search": {
+    "message": "没有找到符合条件的书签"
+  },
+  "empty_text_bookmarks_recent": {
+    "message": "你最近没有添加新的书签"
+  },
+  "empty_text_navigation": {
+    "message": "你没有任何常用的网站"
+  },
+  "empty_text_navigation_add": {
+    "message": "立即添加"
+  },
+  "empty_text_navigation_or": {
+    "message": "或"
+  },
+  "empty_text_navigation_hide": {
+    "message": "隐藏"
+  },
+  /*hot key*/
+  "hotkey_title": {
+    "message": "快捷键"
+  },
+  "hotkey_apps": {
+    "message": "应用"
+  },
+  "hotkey_bookmarks": {
+    "message": "书签"
+  },
+  "hotkey_settings": {
+    "message": "设置"
+  },
+  /*weather*/
+  "weather_air": {
+    "message": "空气"
+  },
+  "weather_humidity": {
+    "message": "湿度"
+  },
+  "weather_week_Sunday": {
+    "message": "周日"
+  },
+  "weather_week_Monday": {
+    "message": "周一"
+  },
+  "weather_week_Tuesday": {
+    "message": "周二"
+  },
+  "weather_week_Wednesday": {
+    "message": "周三"
+  },
+  "weather_week_Thurday": {
+    "message": "周四"
+  },
+  "weather_week_Friday": {
+    "message": "周五"
+  },
+  "weather_week_Saturday": {
+    "message": "周六"
+  },
+  "weather_today": {
+    "message": "今天"
+  },
+  "weather_empty_noData": {
+    "message": "很抱歉，暂时获取不到天气数据"
+  },
+  "weather_empty_requestError": {
+    "message": "很抱歉，数据请求发生了错误"
+  },
+  "weather_empty_geolocationError": {
+    "message": "尝试获取你的位置时发生错误，"
+  },
+  "weather_empty_geolocationClosed": {
+    "message": "你拒绝了获取位置信息的请求"
+  },
+  "weather_empty_geolocationEmpty": {
+    "message": "浏览器无法获取你的位置信息"
+  },
+  "weather_empty_geolocationTimeout": {
+    "message": "获取位置信息超时"
+  },
+  "weather_empty_region": {
+    "message": "当前地区不可用"
+  },
+  /*weather region*/
+  "region_edit_title": {
+    "message": "编辑地区"
+  },
+  "region_input_placeholder": {
+    "message": "地区"
+  },
+  "region_tip_geolocation": {
+    "message": "当前使用地理位置"
+  },
+  /*theme*/
+  "theme_custom_label": {
+    "message": "自定义"
+  },
+  "theme_input_placeholder": {
+    "message": "颜色代码，例如 #009688"
+  },
+  "theme_radio_dark": {
+    "message": "暗色主题"
+  },
+  "theme_radio_bright": {
+    "message": "亮色主题"
+  },
+  /*search engines*/
+  "engines_settings_management": {
+    "message": "管理搜索引擎"
+  },
+  "engines_text": {
+    "message": "搜索引擎"
+  },
+  "engines_URL": {
+    "message": "网址"
+  },
+  "engines_table_default": {
+    "message": "（默认）"
+  },
+  "engines_menu_default": {
+    "message": "设为默认搜索引擎"
+  },
+  "engines_menu_edit": {
+    "message": "修改"
+  },
+  "engines_menu_remove": {
+    "message": "从列表中移除"
+  },
+  "engines_menu_move_up": {
+    "message": "上移"
+  },
+  "engines_menu_move_down": {
+    "message": "下移"
+  },
+  "engines_add": {
+    "message": "增加搜索引擎"
+  },
+  "engines_edit": {
+    "message": "修改搜索引擎"
+  },
+  "engines_custom_name_placeholder": {
+    "message": "搜索引擎"
+  },
+  "engines_custom_URL_placeholder": {
+    "message": "网址（用 %s 代替搜索字词）"
+  },
+  "engines_custom_tip": {
+    "message": "自定义搜索引擎可能没有输入预测"
+  },
+  "engines_custom_name_error": {
+    "message": "别忘了搜索引擎名字"
+  },
+  "engines_custom_URL_error": {
+    "message": "网址格式不正确"
+  },
+  /*feedback*/
+  "feedback_email_placeholder": {
+    "message": "你的邮箱"
+  },
+  "feedback_message_placeholder": {
+    "message": "有什么想对我说的"
+  },
+  "feedback_email_error": {
+    "message": "邮箱格式不正确"
+  },
+  "feedback_message_error": {
+    "message": "说点什么吧🙂"
+  },
+  "feedback_success": {
+    "message": "反馈成功，十分感谢"
+  },
+  /*Apps*/
+  "apps_title": {
+    "message": "应用"
+  },
+  "apps_manage_tip": {
+    "message": "管理应用"
+  },
+  /*Desktop*/
+  "desktop_header_title": {
+    "message": "主屏幕"
+  },
+  "desktop_area_title_wallpaper": {
+    "message": "壁纸"
+  },
+  "desktop_top_shadow_label": {
+    "message": "顶部阴影"
+  },
+  "desktop_wallpaper_label": {
+    "message": "使用壁纸"
+  },
+  "wallpaper_source_title": {
+    "message": "选择壁纸来源"
+  },
+  "wallpaper_source_internet": {
+    "message": "网络"
+  },
+  "wallpaper_source_local": {
+    "message": "本地"
+  },
+  "wallpaper_source_solid": {
+    "message": "纯色"
+  },
+  "wallpaper_frequency_primary": {
+    "message": "更新频率"
+  },
+  "wallpaper_frequency_secondary": {
+    "message": "选择壁纸自动更新的时间间隔"
+  },
+  "wallpaper_frequency_dialog_title": {
+    "message": "选择频率"
+  },
+  "wallpaper_frequency_minute": {
+    "message": "10分钟"
+  },
+  "wallpaper_frequency_hour": {
+    "message": "1小时"
+  },
+  "wallpaper_frequency_day": {
+    "message": "1天"
+  },
+  "wallpaper_frequency_close": {
+    "message": "不更新"
+  },
+  "wallpaper_new_primary": {
+    "message": "换一张"
+  },
+  "wallpaper_new_secondary": {
+    "message": "点击更新壁纸"
+  },
+  "wallpaper_download_primary": {
+    "message": "下载"
+  },
+  "wallpaper_download_secondary": {
+    "message": "保存当前壁纸"
+  },
+  "wallpaper_local_primary": {
+    "message": "选择一张图片"
+  },
+  "wallpaper_local_secondary": {
+    "message": "用本地的图片设置壁纸"
+  },
+  "wallpaper_solid_color_primary": {
+    "message": "选择颜色"
+  },
+  "wallpaper_solid_color_secondary": {
+    "message": "用自定义颜色设置背景"
+  },
+  "wallpaper_blur_primary": {
+    "message": "壁纸模糊半径"
+  },
+  "wallpaper_shade_primary": {
+    "message": "背景明暗"
+  },
+  "wallpaper_shade_light": {
+    "message": "浅色背景"
+  },
+  "wallpaper_shade_dark": {
+    "message": "深色背景"
+  },
+  "wallpaper_mask_primary": {
+    "message": "遮罩强度"
+  },
+  "desktop_area_title_search": {
+    "message": "搜索"
+  },
+  "search_hide_label": {
+    "message": "隐藏搜索"
+  },
+  "search_input_transparency_label": {
+    "message": "输入框透明"
+  },
+  "search_logo_transparency_primary": {
+    "message": "Logo 透明度"
+  },
+  "desktop_area_title_webistes": {
+    "message": "网站"
+  },
+  "webistes_hide_label": {
+    "message": "隐藏网站"
+  },
+  "webistes_text_shadow_label": {
+    "message": "文字阴影"
+  },
+  "desktop_msg_not_supported": {
+    "message": "此文件不受支持"
+  },
+  "desktop_msg_too_large": {
+    "message": "这张图片太大"
+  },
+  "desktop_msg_fetching": {
+    "message": "获取中，请耐心等待"
+  },
+  "desktop_msg_fetch_failed": {
+    "message": "图片获取失败"
+  },
+  /* search */
+  "search_from": {
+    "message": "搜索自"
   }
 }

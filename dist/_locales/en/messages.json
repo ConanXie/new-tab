@@ -82,5 +82,466 @@
   },
   "themeDeepPurple": {
     "message": "Deep Purple"
+  },
+  /*general*/
+  "button_cancel": {
+    "message": "CANCEL"
+  },
+  "button_confirm": {
+    "message": "OK"
+  },
+  /*Nav*/
+  "nav_edit_title_edit": {
+    "message": "Edit website"
+  },
+  "nav_edit_title_add": {
+    "message": "Add website"
+  },
+  "nav_edit_input_website": {
+    "message": "Name"
+  },
+  "nav_edit_input_URL": {
+    "message": "URL"
+  },
+  "nav_edit_input_forget_name": {
+    "message": "Don\"t forget website name 🙂"
+  },
+  "nav_edit_input_forget_URL": {
+    "message": "Don\"t forget website URL 🙂"
+  },
+  "nav_delete_status": {
+    "message": "Deleted"
+  },
+  "nav_delete_undo": {
+    "message": "Undo"
+  },
+  "nav_classification_unclassified": {
+    "message": "Unclassified"
+  },
+  "nav_add_choose_classification": {
+    "message": "Choose classification"
+  },
+  "nav_increase_classification_title": {
+    "message": "Increase classification"
+  },
+  "nav_increase_classification_label": {
+    "message": "Classification name"
+  },
+  "nav_delete_classification": {
+    "message": "Delete"
+  },
+  "nav_increase_classification_btn": {
+    "message": "Increase"
+  },
+  "nav_show_classification": {
+    "message": "Show classification"
+  },
+  "nav_websites_max_tip": {
+    "message": "The maximum number of websites is"
+  },
+  /*settings*/
+  "settings_toolbar_title": {
+    "message": "Settings"
+  },
+  "settings_engine_search_label": {
+    "message": "Open search results in new tab"
+  },
+  "settings_website_open_label": {
+    "message": "Open website in new tab"
+  },
+  "settings_apps_display_label": {
+    "message": "Hide the label of application"
+  },
+  "settings_bookmarks_position_label": {
+    "message": "Remember previous state of the bookmark"
+  },
+  "settings_search_predict_label": {
+    "message": "Show instant predictions as you type"
+  },
+  "settings_search_remaining_label": {
+    "message": "Show the remaining search engines"
+  },
+  "settings_search_title": {
+    "message": "Search"
+  },
+  "settings_theme_title": {
+    "message": "Theme"
+  },
+  "settings_theme_switch_label": {
+    "message": "Theme colors"
+  },
+  "settings_theme_dark_label": {
+    "message": "Night mode"
+  },
+  "settings_weather_title": {
+    "message": "Weather"
+  },
+  "settings_weather_fahrenheit_label": {
+    "message": "Use fahrenheit in the weather"
+  },
+  "settings_weather_gps_off_label": {
+    "message": "Block the geolocation"
+  },
+  "settings_weather_location_label": {
+    "message": "Current region"
+  },
+  "settings_br_title": {
+    "message": "Backup & Reset"
+  },
+  "settings_br_backup_label": {
+    "message": "Create backup file"
+  },
+  "settings_br_restore_label": {
+    "message": "Restore from backup"
+  },
+  "settings_br_restore_message": {
+    "message": "Success, please refresh window"
+  },
+  "settings_br_restore_not_supported": {
+    "message": "Sorry, the backup is no longer supported"
+  },
+  "settings_br_reset_label": {
+    "message": "Reset to defaults"
+  },
+  "settings_br_reset_message": {
+    "message": "Success, please refresh window"
+  },
+  "settings_reset_title": {
+    "message": "Confirm reset settings"
+  },
+  "settings_reset_warning": {
+    "message": "It will reset to the default"
+  },
+  "settings_about_title": {
+    "message": "About"
+  },
+  "settings_donate": {
+    "message": "Donate"
+  },
+  "settings_feedback": {
+    "message": "Feedback"
+  },
+  "settings_about_weather_sources": {
+    "message": "Weather data sources"
+  },
+  /*bookmarks*/
+  "bookmarks_search_placeholder": {
+    "message": "Search bookmarks"
+  },
+  "bookmarks_bookmarks_manager": {
+    "message": "Bookmark manager"
+  },
+  "bookmarks_tabs_all": {
+    "message": "All"
+  },
+  "bookmarks_tabs_recent": {
+    "message": "Recently added"
+  },
+  /*empty text*/
+  "empty_text_apps": {
+    "message": "There aren\"t any applications here"
+  },
+  "empty_text_bookmarks": {
+    "message": "Without any bookmarks"
+  },
+  "empty_text_bookmarks_search": {
+    "message": "No bookmarks found"
+  },
+  "empty_text_bookmarks_recent": {
+    "message": "No new bookmarks"
+  },
+  "empty_text_navigation": {
+    "message": "There aren\"t any websites here"
+  },
+  "empty_text_navigation_add": {
+    "message": "Add now"
+  },
+  "empty_text_navigation_or": {
+    "message": "or"
+  },
+  "empty_text_navigation_hide": {
+    "message": "Hide it"
+  },
+  /*hot key*/
+  "hotkey_title": {
+    "message": "Hotkey"
+  },
+  "hotkey_apps": {
+    "message": "Apps"
+  },
+  "hotkey_bookmarks": {
+    "message": "Bookmarks"
+  },
+  "hotkey_settings": {
+    "message": "Settings"
+  },
+  /*weather*/
+  "weather_air": {
+    "message": "Air"
+  },
+  "weather_humidity": {
+    "message": "Humidity"
+  },
+  "weather_week_Sunday": {
+    "message": "Sun"
+  },
+  "weather_week_Monday": {
+    "message": "Mon"
+  },
+  "weather_week_Tuesday": {
+    "message": "Tue"
+  },
+  "weather_week_Wednesday": {
+    "message": "Wed"
+  },
+  "weather_week_Thurday": {
+    "message": "Thu"
+  },
+  "weather_week_Friday": {
+    "message": "Fri"
+  },
+  "weather_week_Saturday": {
+    "message": "Sat"
+  },
+  "weather_today": {
+    "message": "Today"
+  },
+  "weather_empty_noData": {
+    "message": "Sorry, unable to get weather data for the time being"
+  },
+  "weather_empty_requestError": {
+    "message": "Sorry, the data request has made an error"
+  },
+  "weather_empty_geolocationError": {
+    "message": "Something went wrong while trying to get your location, "
+  },
+  "weather_empty_geolocationClosed": {
+    "message": "You have rejected a request to get location information"
+  },
+  "weather_empty_geolocationEmpty": {
+    "message": "The browser can not get your location information"
+  },
+  "weather_empty_geolocationTimeout": {
+    "message": "Get location information timeout"
+  },
+  "weather_empty_region": {
+    "message": "Region is not available"
+  },
+  /*weather region*/
+  "region_edit_title": {
+    "message": "Edit region"
+  },
+  "region_input_placeholder": {
+    "message": "Region"
+  },
+  "region_tip_geolocation": {
+    "message": "Currently using geolocation"
+  },
+  /*theme*/
+  "theme_custom_label": {
+    "message": "Custom"
+  },
+  "theme_input_placeholder": {
+    "message": "Color code, e.g., #009688"
+  },
+  "theme_radio_dark": {
+    "message": "Dark Theme"
+  },
+  "theme_radio_bright": {
+    "message": "Bright Theme"
+  },
+  /*search engines*/
+  "engines_settings_management": {
+    "message": "Manage search engines"
+  },
+  "engines_text": {
+    "message": "Search Engine"
+  },
+  "engines_URL": {
+    "message": "Query URL"
+  },
+  "engines_table_default": {
+    "message": "(Default)"
+  },
+  "engines_menu_default": {
+    "message": "Make default"
+  },
+  "engines_menu_edit": {
+    "message": "Edit"
+  },
+  "engines_menu_remove": {
+    "message": "Remove from list"
+  },
+  "engines_menu_move_up": {
+    "message": "Move up"
+  },
+  "engines_menu_move_down": {
+    "message": "Move down"
+  },
+  "engines_add": {
+    "message": "Add search engine"
+  },
+  "engines_edit": {
+    "message": "Edit search engine"
+  },
+  "engines_custom_name_placeholder": {
+    "message": "Search engine"
+  },
+  "engines_custom_URL_placeholder": {
+    "message": "URL with %s in place of query"
+  },
+  "engines_custom_tip": {
+    "message": "Custom search engines may not have input predictions"
+  },
+  "engines_custom_name_error": {
+    "message": "Do not forget the search engine name"
+  },
+  "engines_custom_URL_error": {
+    "message": "The URL format is incorrect"
+  },
+  /*feedback*/
+  "feedback_email_placeholder": {
+    "message": "Your email"
+  },
+  "feedback_message_placeholder": {
+    "message": "Give me some suggestions"
+  },
+  "feedback_email_error": {
+    "message": "The email format is incorrect"
+  },
+  "feedback_message_error": {
+    "message": "Write something"
+  },
+  "feedback_success": {
+    "message": "I received your feedback, thank you"
+  },
+  /*Apps*/
+  "apps_title": {
+    "message": "Apps"
+  },
+  "apps_manage_tip": {
+    "message": "Manage apps"
+  },
+  /*Desktop*/
+  "desktop_header_title": {
+    "message": "Desktop"
+  },
+  "desktop_area_title_wallpaper": {
+    "message": "Wallpaper"
+  },
+  "desktop_top_shadow_label": {
+    "message": "Top shadow"
+  },
+  "desktop_wallpaper_label": {
+    "message": "Use wallpaper"
+  },
+  "wallpaper_source_title": {
+    "message": "Choose wallpaper source"
+  },
+  "wallpaper_source_internet": {
+    "message": "Internet"
+  },
+  "wallpaper_source_local": {
+    "message": "Local"
+  },
+  "wallpaper_source_solid": {
+    "message": "Solid color"
+  },
+  "wallpaper_frequency_primary": {
+    "message": "Update frequency"
+  },
+  "wallpaper_frequency_secondary": {
+    "message": "Select the interval for wallpaper updates automatically"
+  },
+  "wallpaper_frequency_dialog_title": {
+    "message": "Choose frequency"
+  },
+  "wallpaper_frequency_minute": {
+    "message": "10 minutes"
+  },
+  "wallpaper_frequency_hour": {
+    "message": "An hour"
+  },
+  "wallpaper_frequency_day": {
+    "message": "A day"
+  },
+  "wallpaper_frequency_close": {
+    "message": "Turn off"
+  },
+  "wallpaper_new_primary": {
+    "message": "New one"
+  },
+  "wallpaper_new_secondary": {
+    "message": "Click to fetch a new wallpaper"
+  },
+  "wallpaper_download_primary": {
+    "message": "Download it"
+  },
+  "wallpaper_download_secondary": {
+    "message": "Save the current wallpaper to local"
+  },
+  "wallpaper_local_primary": {
+    "message": "Choose an image"
+  },
+  "wallpaper_local_secondary": {
+    "message": "Set wallpaper with local image file"
+  },
+  "wallpaper_solid_color_primary": {
+    "message": "Pick a color"
+  },
+  "wallpaper_solid_color_secondary": {
+    "message": "Set background with custom color"
+  },
+  "wallpaper_blur_primary": {
+    "message": "Blur radius"
+  },
+  "wallpaper_shade_primary": {
+    "message": "Background brightness"
+  },
+  "wallpaper_shade_light": {
+    "message": "Light"
+  },
+  "wallpaper_shade_dark": {
+    "message": "Dark"
+  },
+  "wallpaper_mask_primary": {
+    "message": "Mask strength"
+  },
+  "desktop_area_title_search": {
+    "message": "Search"
+  },
+  "search_hide_label": {
+    "message": "Hide search"
+  },
+  "search_input_transparency_label": {
+    "message": "Transparent input box"
+  },
+  "search_logo_transparency_primary": {
+    "message": "Logo transparency"
+  },
+  "desktop_area_title_webistes": {
+    "message": "Websites"
+  },
+  "webistes_hide_label": {
+    "message": "Hide websites"
+  },
+  "webistes_text_shadow_label": {
+    "message": "Text shadow"
+  },
+  "desktop_msg_not_supported": {
+    "message": "This file is not supported"
+  },
+  "desktop_msg_too_large": {
+    "message": "This image is too large"
+  },
+  "desktop_msg_fetching": {
+    "message": "In the fetch, please be patient"
+  },
+  "desktop_msg_fetch_failed": {
+    "message": "Oops, something went wrong"
+  },
+  /* search */
+  "search_from": {
+    "message": "Search from"
   }
 }

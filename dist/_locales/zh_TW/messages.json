@@ -82,5 +82,466 @@
   },
   "themeDeepPurple": {
     "message": "深紫"
+  },
+  /*general*/
+  "button_cancel": {
+    "message": "取消"
+  },
+  "button_confirm": {
+    "message": "確定"
+  },
+  /*Nav*/
+  "nav_edit_title_edit": {
+    "message": "編輯網站"
+  },
+  "nav_edit_title_add": {
+    "message": "新增網站"
+  },
+  "nav_edit_input_website": {
+    "message": "名稱"
+  },
+  "nav_edit_input_URL": {
+    "message": "連結"
+  },
+  "nav_edit_input_forget_name": {
+    "message": "別忘了網站的名字🙂"
+  },
+  "nav_edit_input_forget_URL": {
+    "message": "別忘了網址🙂"
+  },
+  "nav_delete_status": {
+    "message": "已删除"
+  },
+  "nav_delete_undo": {
+    "message": "復原"
+  },
+  "nav_classification_unclassified": {
+    "message": "未分類"
+  },
+  "nav_add_choose_classification": {
+    "message": "選擇分類"
+  },
+  "nav_increase_classification_title": {
+    "message": "新增分類"
+  },
+  "nav_increase_classification_label": {
+    "message": "分類名"
+  },
+  "nav_delete_classification": {
+    "message": "删除分類"
+  },
+  "nav_increase_classification_btn": {
+    "message": "新增分類"
+  },
+  "nav_show_classification": {
+    "message": "顯示分類"
+  },
+  "nav_websites_max_tip": {
+    "message": "網站數量上限是"
+  },
+  /*settings*/
+  "settings_toolbar_title": {
+    "message": "設定"
+  },
+  "settings_engine_search_label": {
+    "message": "在新分頁中開啓搜尋"
+  },
+  "settings_website_open_label": {
+    "message": "在新分頁中開啓網站"
+  },
+  "settings_apps_display_label": {
+    "message": "隱藏應用程式的標籤"
+  },
+  "settings_bookmarks_position_label": {
+    "message": "記住書籤的狀態"
+  },
+  "settings_search_predict_label": {
+    "message": "輸入內容時顯示搜尋預測"
+  },
+  "settings_search_remaining_label": {
+    "message": "顯示其餘搜尋引擎清單"
+  },
+  "settings_search_title": {
+    "message": "搜尋"
+  },
+  "settings_theme_title": {
+    "message": "主題"
+  },
+  "settings_theme_switch_label": {
+    "message": "主題顏色"
+  },
+  "settings_theme_dark_label": {
+    "message": "夜間模式"
+  },
+  "settings_weather_title": {
+    "message": "天氣"
+  },
+  "settings_weather_fahrenheit_label": {
+    "message": "天氣使用華氏溫標"
+  },
+  "settings_weather_gps_off_label": {
+    "message": "禁止使用地理位置"
+  },
+  "settings_weather_location_label": {
+    "message": "當前地區"
+  },
+  "settings_br_title": {
+    "message": "備份與重設"
+  },
+  "settings_br_backup_label": {
+    "message": "建立備份檔案"
+  },
+  "settings_br_restore_label": {
+    "message": "從備份中恢復"
+  },
+  "settings_br_restore_message": {
+    "message": "已從備份檔案修復，重新載入後生效"
+  },
+  "settings_br_restore_not_supported": {
+    "message": "對不起，該備份檔案已不受支援"
+  },
+  "settings_br_reset_label": {
+    "message": "設定為原始預設值"
+  },
+  "settings_br_reset_message": {
+    "message": "已設定為原始預設值，重新载入後生效"
+  },
+  "settings_reset_title": {
+    "message": "確認設定為原始預設值？"
+  },
+  "settings_reset_warning": {
+    "message": "將會設定為原始預設值"
+  },
+  "settings_about_title": {
+    "message": "關於"
+  },
+  "settings_donate": {
+    "message": "捐助"
+  },
+  "settings_feedback": {
+    "message": "回馈"
+  },
+  "settings_about_weather_sources": {
+    "message": "氣象資料來自"
+  },
+  /*bookmarks*/
+  "bookmarks_search_placeholder": {
+    "message": "搜尋書籤"
+  },
+  "bookmarks_bookmarks_manager": {
+    "message": "書籤管理員"
+  },
+  "bookmarks_tabs_all": {
+    "message": "所有"
+  },
+  "bookmarks_tabs_recent": {
+    "message": "最近新增"
+  },
+  /*empty text*/
+  "empty_text_apps": {
+    "message": "你沒有任何應用程式"
+  },
+  "empty_text_bookmarks": {
+    "message": "你沒有任何書籤"
+  },
+  "empty_text_bookmarks_search": {
+    "message": "沒有找到符合條件的書籤"
+  },
+  "empty_text_bookmarks_recent": {
+    "message": "你最近沒有添加新的書籤"
+  },
+  "empty_text_navigation": {
+    "message": "這裡沒有網站"
+  },
+  "empty_text_navigation_add": {
+    "message": "立即添加"
+  },
+  "empty_text_navigation_or": {
+    "message": "或"
+  },
+  "empty_text_navigation_hide": {
+    "message": "隐藏"
+  },
+  /*hot key*/
+  "hotkey_title": {
+    "message": "快速鍵"
+  },
+  "hotkey_apps": {
+    "message": "應用程式"
+  },
+  "hotkey_bookmarks": {
+    "message": "書籤"
+  },
+  "hotkey_settings": {
+    "message": "設定"
+  },
+  /*weather*/
+  "weather_air": {
+    "message": "空氣"
+  },
+  "weather_humidity": {
+    "message": "濕度"
+  },
+  "weather_week_Sunday": {
+    "message": "週日"
+  },
+  "weather_week_Monday": {
+    "message": "週一"
+  },
+  "weather_week_Tuesday": {
+    "message": "週二"
+  },
+  "weather_week_Wednesday": {
+    "message": "週三"
+  },
+  "weather_week_Thurday": {
+    "message": "週四"
+  },
+  "weather_week_Friday": {
+    "message": "週五"
+  },
+  "weather_week_Saturday": {
+    "message": "週六"
+  },
+  "weather_today": {
+    "message": "今天"
+  },
+  "weather_empty_noData": {
+    "message": "很抱歉，暫時獲取不到氣象資料"
+  },
+  "weather_empty_requestError": {
+    "message": "很抱歉，資料請求發生了錯誤"
+  },
+  "weather_empty_geolocationError": {
+    "message": "嘗試獲取你的位置時發生錯誤，"
+  },
+  "weather_empty_geolocationClosed": {
+    "message": "你拒絕了獲取位置資訊的請求"
+  },
+  "weather_empty_geolocationEmpty": {
+    "message": "瀏覽器無法獲取你的位置資訊"
+  },
+  "weather_empty_geolocationTimeout": {
+    "message": "獲取位置資訊超時"
+  },
+  "weather_empty_region": {
+    "message": "當前地區不可用"
+  },
+  /*weather region*/
+  "region_edit_title": {
+    "message": "編輯地區"
+  },
+  "region_input_placeholder": {
+    "message": "地區"
+  },
+  "region_tip_geolocation": {
+    "message": "當前使用地理位置"
+  },
+  /*theme*/
+  "theme_custom_label": {
+    "message": "自訂"
+  },
+  "theme_input_placeholder": {
+    "message": "顏色程式碼，例如 #009688"
+  },
+  "theme_radio_dark": {
+    "message": "暗色主題"
+  },
+  "theme_radio_bright": {
+    "message": "亮色主題"
+  },
+  /*search engines*/
+  "engines_settings_management": {
+    "message": "管理搜尋引擎"
+  },
+  "engines_text": {
+    "message": "搜尋引擎"
+  },
+  "engines_URL": {
+    "message": "網址"
+  },
+  "engines_table_default": {
+    "message": "（預設）"
+  },
+  "engines_menu_default": {
+    "message": "設定為預設"
+  },
+  "engines_menu_edit": {
+    "message": "編輯"
+  },
+  "engines_menu_remove": {
+    "message": "從清單中移除"
+  },
+  "engines_menu_move_up": {
+    "message": "上移"
+  },
+  "engines_menu_move_down": {
+    "message": "下移"
+  },
+  "engines_add": {
+    "message": "新增搜尋引擎"
+  },
+  "engines_edit": {
+    "message": "編輯搜尋引擎"
+  },
+  "engines_custom_name_placeholder": {
+    "message": "搜尋引擎"
+  },
+  "engines_custom_URL_placeholder": {
+    "message": "網址（用 %s 取代査詢）"
+  },
+  "engines_custom_tip": {
+    "message": "自訂搜尋引擎可能沒有輸入預測"
+  },
+  "engines_custom_name_error": {
+    "message": "別忘了搜尋引擎名字"
+  },
+  "engines_custom_URL_error": {
+    "message": "網址格式不正確"
+  },
+  /*feedback*/
+  "feedback_email_placeholder": {
+    "message": "你的邮箱"
+  },
+  "feedback_message_placeholder": {
+    "message": "有什麼想對我說的"
+  },
+  "feedback_email_error": {
+    "message": "邮箱格式不正確"
+  },
+  "feedback_message_error": {
+    "message": "說點什麼吧🙂"
+  },
+  "feedback_success": {
+    "message": "回馈成功，十分感謝"
+  },
+  /*Apps*/
+  "apps_title": {
+    "message": "應用程式"
+  },
+  "apps_manage_tip": {
+    "message": "管理應用程式"
+  },
+  /*Desktop*/
+  "desktop_header_title": {
+    "message": "主荧幕"
+  },
+  "desktop_area_title_wallpaper": {
+    "message": "桌面"
+  },
+  "desktop_top_shadow_label": {
+    "message": "頂部陰影"
+  },
+  "desktop_wallpaper_label": {
+    "message": "使用桌面"
+  },
+  "wallpaper_source_title": {
+    "message": "選擇桌面來源"
+  },
+  "wallpaper_source_internet": {
+    "message": "網路"
+  },
+  "wallpaper_source_local": {
+    "message": "磁片"
+  },
+  "wallpaper_source_solid": {
+    "message": "純色"
+  },
+  "wallpaper_frequency_primary": {
+    "message": "更新頻率"
+  },
+  "wallpaper_frequency_secondary": {
+    "message": "選擇桌面自動更新的時間間隔"
+  },
+  "wallpaper_frequency_dialog_title": {
+    "message": "選擇頻率"
+  },
+  "wallpaper_frequency_minute": {
+    "message": "10分鐘"
+  },
+  "wallpaper_frequency_hour": {
+    "message": "1小時"
+  },
+  "wallpaper_frequency_day": {
+    "message": "1天"
+  },
+  "wallpaper_frequency_close": {
+    "message": "不更新"
+  },
+  "wallpaper_new_primary": {
+    "message": "換一張"
+  },
+  "wallpaper_new_secondary": {
+    "message": "點擊更新桌面"
+  },
+  "wallpaper_download_primary": {
+    "message": "下載"
+  },
+  "wallpaper_download_secondary": {
+    "message": "保存當前桌面"
+  },
+  "wallpaper_local_primary": {
+    "message": "選擇一張圖像"
+  },
+  "wallpaper_local_secondary": {
+    "message": "用自己的圖像設定桌面"
+  },
+  "wallpaper_solid_color_primary": {
+    "message": "選擇顏色"
+  },
+  "wallpaper_solid_color_secondary": {
+    "message": "用自定義顏色設定背景"
+  },
+  "wallpaper_blur_primary": {
+    "message": "桌面模糊半徑"
+  },
+  "wallpaper_shade_primary": {
+    "message": "背景明暗"
+  },
+  "wallpaper_shade_light": {
+    "message": "淺色背景"
+  },
+  "wallpaper_shade_dark": {
+    "message": "深色背景"
+  },
+  "wallpaper_mask_primary": {
+    "message": "遮罩强度"
+  },
+  "desktop_area_title_search": {
+    "message": "搜尋"
+  },
+  "search_hide_label": {
+    "message": "隱藏搜尋"
+  },
+  "search_input_transparency_label": {
+    "message": "輸入框透明"
+  },
+  "search_logo_transparency_primary": {
+    "message": "Logo 透明度"
+  },
+  "desktop_area_title_webistes": {
+    "message": "網站"
+  },
+  "webistes_hide_label": {
+    "message": "隱藏網站"
+  },
+  "webistes_text_shadow_label": {
+    "message": "文字陰影"
+  },
+  "desktop_msg_not_supported": {
+    "message": "此檔案不受支援"
+  },
+  "desktop_msg_too_large": {
+    "message": "這張圖像太大"
+  },
+  "desktop_msg_fetching": {
+    "message": "獲取中，請耐心等待"
+  },
+  "desktop_msg_fetch_failed": {
+    "message": "圖像獲取失敗"
+  },
+  /* search */
+  "search_from": {
+    "message": "搜尋自"
   }
 }
