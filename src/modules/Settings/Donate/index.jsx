@@ -23,9 +23,6 @@ const style = {
 }
 
 class Donate extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -57,11 +54,10 @@ class Donate extends Component {
   render() {
     const { dialogOpen, slideIndex } = this.state
     const { muiTheme } = this.props
-    const { intl } = this.context
     return (
       <div className="donor">
         <RaisedButton
-          label={intl.formatMessage({ id: 'settings.donate' })}
+          label={chrome.i18n.getMessage('settings_donate')}
           primary={true}
           onClick={this.openDonation}
         />
@@ -77,7 +73,6 @@ class Donate extends Component {
               value={slideIndex}
               inkBarStyle={{ backgroundColor: muiTheme.palette.alternateTextColor }}
             >
-              {/*<Tab label={intl.formatMessage({ id: 'bookmarks.tabs.all' })} value={0} />*/}
               <Tab label="微信" value={0} />
               <Tab label="支付宝" value={1} />
             </Tabs>

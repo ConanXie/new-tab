@@ -16,7 +16,6 @@ module.exports = {
       'react-redux',
       'redux',
       'redux-thunk',
-      'react-intl',
       'classnames'
     ]
   },
@@ -45,7 +44,7 @@ module.exports = {
       })
     }, {
       test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
-      use: ['url-loader?limit=10240&name=assets/[name].[ext]']
+      use: ['url-loader?limit=1&name=assets/[name].[ext]']
     }]
   },
   plugins: [

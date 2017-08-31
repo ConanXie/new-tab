@@ -33,9 +33,6 @@ const style = {
 }
 
 class Feedback extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -84,7 +81,6 @@ class Feedback extends Component {
    * submit feedback
    */
   handleSubmit = () => {
-    const { intl } = this.context
     const { email, content, loading } = this.state
 
     // prevent multipul submit
@@ -93,14 +89,14 @@ class Feedback extends Component {
     if (email && !this.emailPattern.test(email)) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: intl.formatMessage({ id: 'feedback.email.error' })
+        snackbarMessage: chrome.i18n.getMessage('feedback_email_error')
       })
       return
     }
     if (!content) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: intl.formatMessage({ id: 'feedback.message.error' })
+        snackbarMessage: chrome.i18n.getMessage('feedback_message_error')
       })
       return
     }
@@ -118,7 +114,7 @@ class Feedback extends Component {
         res.json().then(data => {
           this.setState({
             snackbarOpen: true,
-            snackbarMessage: data.code ? data.msg : intl.formatMessage({ id: 'feedback.success' })
+            snackbarMessage: data.code ? data.msg : chrome.i18n.getMessage('feedback_success')
           })
           this.setState({
             loading: false
@@ -133,12 +129,11 @@ class Feedback extends Component {
   render() {
     const { dialogOpen, snackbarOpen, snackbarMessage, loading } = this.state
     const { muiTheme } = this.props
-    const { intl } = this.context
 
     const Loading = <CircularProgress style={style.loading} size={24} thickness={2} />
     const Confirm = (
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.handleSubmit}
       />
@@ -146,7 +141,7 @@ class Feedback extends Component {
 
     const actions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideDialog}
       />,
@@ -157,11 +152,11 @@ class Feedback extends Component {
       <div>
         <FlatButton
           className="feedback"
-          label={intl.formatMessage({ id: 'settings.feedback' })}
+          label={chrome.i18n.getMessage('settings_feedback')}
           onClick={this.openDialog}
         />
         <Dialog
-          title={intl.formatMessage({ id: 'settings.feedback' })}
+          title={chrome.i18n.getMessage('settings_feedback')}
           actions={actions}
           modal={false}
           open={dialogOpen}
@@ -170,13 +165,13 @@ class Feedback extends Component {
           titleStyle={style.dialogTitle}
         >
           <TextField
-            floatingLabelText={intl.formatMessage({ id: 'feedback.email.placeholder' })}
+            floatingLabelText={chrome.i18n.getMessage('feedback_email_placeholder')}
             style={style.textField}
             onChange={this.emailChange}
           /><br />
           <TextField
             multiLine={true}
-            floatingLabelText={intl.formatMessage({ id: 'feedback.message.placeholder' })}
+            floatingLabelText={chrome.i18n.getMessage('feedback_message_placeholder')}
             rows={2}
             rowsMax={4}
             style={style.textField}

@@ -27,9 +27,6 @@ const style = {
 }
 
 class Apps extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -48,24 +45,24 @@ class Apps extends Component {
   render() {
     const { apps } = this.state
     const { settings, muiTheme } = this.props
-    const { intl } = this.context
+
     return (
       <div className="apps-component">
         <div className="tool">
           <IconButton
-            tooltip={intl.formatMessage({ id: 'apps.manage.tip' })}
+            tooltip={chrome.i18n.getMessage('apps_manage_tip')}
             tooltipPosition="bottom-right"
             tooltipStyles={style.tooltip}
             onClick={e => chrome.tabs.update({ url: 'chrome://apps' })}
           >
             <NavigationApps color={muiTheme.palette.primary1Color} />
           </IconButton>
-          <h1 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'apps.title' })}</h1>
+          <h1 style={{ color: muiTheme.palette.primary1Color }}>{chrome.i18n.getMessage('apps_title')}</h1>
         </div>
         <div className={classNames('apps-collection', { 'empty': !apps.length })}>
           {!apps.length && (
             <div>
-              <p className="empty-text">{intl.formatMessage({ id: 'empty.text.apps' })}</p>
+              <p className="empty-text">{chrome.i18n.getMessage('empty_text_apps')}</p>
               <RaisedButton
                 label="Web Store"
                 primary={true}

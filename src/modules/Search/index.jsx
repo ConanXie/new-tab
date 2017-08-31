@@ -47,9 +47,6 @@ class Search extends Component {
   static propsType = {
     settings: PropTypes.object.isRequired
   }
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -393,7 +390,7 @@ class Search extends Component {
                               key={id}
                               onClick={() => { this.searchFrom(index) }}
                             >
-                              {this.context.intl.formatMessage({ id: 'search.from' })} <span style={{ color: muiTheme.palette.primary1Color }}>{name}</span>
+                              {chrome.i18n.getMessage('search.from')} <span style={{ color: muiTheme.palette.primary1Color }}>{name}</span>
                             </li>
                           )
                         }

@@ -37,9 +37,6 @@ const style = {
 }
 
 class Theme extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     const { currentTheme, customTheme } = props.settings
@@ -130,19 +127,18 @@ class Theme extends Component {
     }
   }
   render() {
-    const { intl } = this.context
     const { muiTheme, settings } = this.props
     const current = settings.currentTheme ? settings.currentTheme : 0
     const { customizationOpen, color, hue } = this.state
 
     const customizeActions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideCustomization}
       />,
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.setCustomizedColor}
       />
@@ -152,7 +148,7 @@ class Theme extends Component {
       <div>
         <ListItem
           leftIcon={<ColorLens style={{ marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
-          primaryText={intl.formatMessage({ id: 'settings.theme.switch.label' })}
+          primaryText={chrome.i18n.getMessage('settings_theme_switch_label')}
           innerDivStyle={{ paddingLeft: '58px' }}
           onClick={this.openTheme}
         />
@@ -178,7 +174,7 @@ class Theme extends Component {
             )
           })}
           <ListItem
-            primaryText={intl.formatMessage({ id: 'theme.custom.label' })}
+            primaryText={chrome.i18n.getMessage('theme_custom_label')}
             leftIcon={<ImageColorize color={color} />}
             rightIcon={<ActionDone  color={color} style={{ display: current !== -1 ? 'none' : '' }} />}
             style={{ color }}
@@ -195,7 +191,7 @@ class Theme extends Component {
             <input type="color" id="color" hidden onInput={this.getColor} value={color} ref="color" onChange={() => {}} />
             <label htmlFor="color" style={{ backgroundColor: color }}></label>
             <TextField
-              floatingLabelText={intl.formatMessage({ id: 'theme.input.placeholder' })}
+              floatingLabelText={chrome.i18n.getMessage('theme_input_placeholder')}
               value={color}
               onChange={this.handleColorInput}
             />
@@ -203,12 +199,12 @@ class Theme extends Component {
           <RadioButtonGroup name="hue" defaultSelected={hue} onChange={this.handleHue}>
             <RadioButton
               value={DARK_THEME}
-              label={intl.formatMessage({ id: 'theme.radio.dark' })}
+              label={chrome.i18n.getMessage('theme_radio_dark')}
               style={style.radio}
             />
             <RadioButton
               value={BRIGHT_THEME}
-              label={intl.formatMessage({ id: 'theme.radio.bright' })}
+              label={chrome.i18n.getMessage('theme_radio_bright')}
               style={style.radio}
             />
           </RadioButtonGroup>

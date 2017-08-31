@@ -1,14 +1,12 @@
 import './style.less'
 
-// import moment from 'moment'
-
 import classNames from 'classnames'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { saveSettings } from '../../../actions/settings'
+import * as settingsActions from '@/actions/settings'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -49,9 +47,6 @@ const style = {
 }
 
 class Weather extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -70,8 +65,6 @@ class Weather extends Component {
     })
   }
   componentDidMount() {
-    const { intl } = this.context
-    
     const { useFahrenheit, region, blockGeolocation } = this.props.settings
     
     this.setParams(useFahrenheit)
@@ -80,7 +73,7 @@ class Weather extends Component {
       this.setState({
         loading: false,
         empty: true,
-        emptyText: intl.formatMessage({ id: 'weather.empty.region' })
+        emptyText: chrome.i18n.getMessage('weather_empty_region')
       })
       return
     }
@@ -100,7 +93,7 @@ class Weather extends Component {
           this.setState({
             loading: false,
             empty: true,
-            emptyText: intl.formatMessage({ id: 'weather.empty.noData' })
+            emptyText: chrome.i18n.getMessage('weather_empty_noData')
           })
         }
       } else {
@@ -111,7 +104,6 @@ class Weather extends Component {
     }
   }
   howToGet() {
-    const { intl } = this.context
     const { region, blockGeolocation } = this.props.settings
     if (blockGeolocation) {
       if (region) {
@@ -121,7 +113,7 @@ class Weather extends Component {
           loading: false,
           data: [],
           empty: true,
-          emptyText: intl.formatMessage({ id: 'weather.empty.region' })
+          emptyText: chrome.i18n.getMessage('weather_empty_region')
         })
       }
     } else {
@@ -142,7 +134,6 @@ class Weather extends Component {
     }
   }
   responseHandler = res => {
-    const { intl } = this.context
     const { saveSettings, settings } = this.props
     if (res.ok) {
       res.json().then(data => {
@@ -166,7 +157,7 @@ class Weather extends Component {
             loading: false,
             data: [],
             empty: true,
-            emptyText: intl.formatMessage({ id: 'weather.empty.noData' })
+            emptyText: chrome.i18n.getMessage('weather_empty_noData')
           })
           // 防止请求不到数据而过度请求
           const temp = {
@@ -183,12 +174,11 @@ class Weather extends Component {
         loading: false,
         data: [],
         empty: true,
-        emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
+        emptyText: chrome.i18n.getMessage('weather_empty_requestError')
       })
     }
   }
   responseError = err => {
-    const { intl } = this.context
 
     console.error('Fetch failed!')
 
@@ -196,11 +186,10 @@ class Weather extends Component {
       loading: false,
       data: [],
       empty: true,
-      emptyText: intl.formatMessage({ id: 'weather.empty.requestError' })
+      emptyText: chrome.i18n.getMessage('weather_empty_requestError')
     })
   }
   getData = region => {
-    const { intl } = this.context
     const lang = navigator.language
 
     if (region) {
@@ -215,16 +204,16 @@ class Weather extends Component {
         let emptyText
         switch (error.code) {
           case 0:
-            emptyText = intl.formatMessage({ id: 'weather.empty.geolocationError' }) + error.message
+            emptyText = chrome.i18n.getMessage('weather_empty_geolocationError') + error.message
             break
           case 1:
-            emptyText = intl.formatMessage({ id: 'weather.empty.geolocationClosed' })
+            emptyText = chrome.i18n.getMessage('weather_empty_geolocationClosed')
             break
           case 2:
-            emptyText = intl.formatMessage({ id: 'weather.empty.geolocationEmpty' })
+            emptyText = chrome.i18n.getMessage('weather_empty_geolocationEmpty')
             break
           case 3:
-            emptyText = intl.formatMessage({ id: 'weather.empty.geolocationTimeout' })
+            emptyText = chrome.i18n.getMessage('weather_empty_geolocationTimeout')
             break
         }
         if (lang === 'zh-CN') {
@@ -241,15 +230,14 @@ class Weather extends Component {
     }
   }
   calcWeek = (date) => {
-    const { intl } = this.context
     const weekArr = [
-      intl.formatMessage({ id: 'weather.week.Sunday' }),
-      intl.formatMessage({ id: 'weather.week.Monday' }),
-      intl.formatMessage({ id: 'weather.week.Tuesday' }),
-      intl.formatMessage({ id: 'weather.week.Wednesday' }),
-      intl.formatMessage({ id: 'weather.week.Thurday' }),
-      intl.formatMessage({ id: 'weather.week.Friday' }),
-      intl.formatMessage({ id: 'weather.week.Saturday' })
+      chrome.i18n.getMessage('weather_week_Sunday'),
+      chrome.i18n.getMessage('weather_week_Monday'),
+      chrome.i18n.getMessage('weather_week_Tuesday'),
+      chrome.i18n.getMessage('weather_week_Wednesday'),
+      chrome.i18n.getMessage('weather_week_Thurday'),
+      chrome.i18n.getMessage('weather_week_Friday'),
+      chrome.i18n.getMessage('weather_week_Saturday')
     ]
     const week = new Date(date).getDay()
     return weekArr[week]
@@ -259,7 +247,6 @@ class Weather extends Component {
     let Qlty
     const { data, times, base, loading, empty, emptyText } = this.state
     const { primary1Color, alternateTextColor } = this.props.muiTheme.palette
-    const { intl } = this.context
     return (
       <div className={classNames('weather-component', { 'empty': empty })}>
         {empty && (
@@ -283,7 +270,7 @@ class Weather extends Component {
                   )}
                   <p className="humidity">
                     <HumidityIcon color={alternateTextColor} style={{...style.icon, ...style.humidity}} />
-                    <span>{intl.formatMessage({ id: 'weather.humidity' })} {data.now.humidity}%</span>
+                    <span>{chrome.i18n.getMessage('weather_humidity')} {data.now.humidity}%</span>
                   </p>
                   <p className="wind">
                     <MapsNavigation color={alternateTextColor} style={{...style.icon, transform: `rotate(${180 + data.now.wind.direction * 1}deg)`}} />
@@ -340,6 +327,6 @@ const mapStateToProps = state => {
   return { settings }
 }
 
-export default LazilyLoadFactory(muiThemeable()(connect(mapStateToProps, { saveSettings })(Weather)), {
+export default LazilyLoadFactory(muiThemeable()(connect(mapStateToProps, settingsActions)(Weather)), {
   moment: () => import('moment')
 })

@@ -51,9 +51,6 @@ const style = {
 }
 
 class Search extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -110,7 +107,7 @@ class Search extends Component {
   render() {
     const { open, muiTheme } = this.props
     const { result, finished } = this.state
-    const { intl } = this.context
+
     return (
       <div className={classNames('search-bookmarks', { 'show': open })}>
         <Paper zDepth={1} style={style.searchHeader}>
@@ -125,7 +122,7 @@ class Search extends Component {
                 <div className="input-box">
                   <input
                     type="text"
-                    placeholder={intl.formatMessage({ id: 'bookmarks.search.placeholder' })}
+                    placeholder={chrome.i18n.getMessage('bookmarks_search_placeholder')}
                     ref="search"
                     onChange={this.watchInput}
                     style={{ color: muiTheme.palette.textColor }}
@@ -142,7 +139,7 @@ class Search extends Component {
         </Paper>
         <section className={classNames('result', { 'empty': !result.length && finished })} style={{ backgroundColor: muiTheme.paper.backgroundColor }}>
           {!result.length && finished && (
-            <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks.search' })}</p>
+            <p className="empty-text">{chrome.i18n.getMessage('empty_text_bookmarks_search')}</p>
           )}
           <List>
             {result.map((value, index) => {
@@ -286,9 +283,6 @@ class Folder extends Component {
 }
 
 class Bookmark extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -394,7 +388,6 @@ class Bookmark extends Component {
   render() {
     const { muiTheme } = this.props
     const { bookmarks, recent, slideIndex } = this.state
-    const { intl } = this.context
     return (
       <div className="bookmark-component">
         <Paper zDepth={2} style={style.header}>
@@ -403,10 +396,10 @@ class Bookmark extends Component {
               <div className="search-icon">
                 <ActionSearch color={muiTheme.palette.alternateTextColor} />
               </div>
-              <div className="placeholder" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'bookmarks.search.placeholder' })}</div>
+              <div className="placeholder" style={{ color: muiTheme.palette.alternateTextColor }}>{chrome.i18n.getMessage('bookmarks_search_placeholder')}</div>
             </div>
             <IconButton
-              tooltip={intl.formatMessage({ id: 'bookmarks.bookmarks.manager' })}
+              tooltip={chrome.i18n.getMessage('bookmarks_bookmarks_manager')}
               tooltipPosition="bottom-left"
               tooltipStyles={style.tooltip}
               style={style.managerButton}
@@ -420,8 +413,8 @@ class Bookmark extends Component {
             value={slideIndex}
             inkBarStyle={{ backgroundColor: muiTheme.palette.alternateTextColor }}
           >
-            <Tab label={intl.formatMessage({ id: 'bookmarks.tabs.all' })} value={0} />
-            <Tab label={intl.formatMessage({ id: 'bookmarks.tabs.recent' })} value={1} />
+            <Tab label={chrome.i18n.getMessage('bookmarks_tabs_all')} value={0} />
+            <Tab label={chrome.i18n.getMessage('bookmarks_tabs_recent')} value={1} />
           </Tabs>
         </Paper>
         <SwipeableViews
@@ -430,13 +423,13 @@ class Bookmark extends Component {
         >
           <section className={classNames('folder-list', { 'empty': !bookmarks })} ref="wrapper" onScroll={this.listenScroll}>
             {!bookmarks && (
-              <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks' })}</p>
+              <p className="empty-text">{chrome.i18n.getMessage('empty_text_bookmarks')}</p>
             )}
             {bookmarks}
           </section>
           <section className={classNames('recent', { 'empty': !recent.length })}>
             {!recent.length && (
-              <p className="empty-text">{intl.formatMessage({ id: 'empty.text.bookmarks.recent' })}</p>
+              <p className="empty-text">{chrome.i18n.getMessage('empty_text_bookmarks_recent')}</p>
             )}
             <List>
               {recent.map((value, index) => {

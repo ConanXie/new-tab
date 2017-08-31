@@ -101,9 +101,6 @@ class Settings extends Component {
     saveSettings: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired
   }
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -170,13 +167,12 @@ class Settings extends Component {
   restoreBackups = (e) => {
     const file = e.target.files[0]
     const fr = new FileReader()
-    const { intl } = this.context
     fr.onloadend = e => {
       const { settings, websites, classified, engines } = JSON.parse(e.target.result)
       if (!classified) {
         this.setState({
           snackbarOpen: true,
-          snackbarMessage: intl.formatMessage({ id: 'settings.br.restore.not.supported' })
+          snackbarMessage: chrome.i18n.getMessage('settings_br_restore_not_supported')
         })
         return
       }
@@ -186,7 +182,7 @@ class Settings extends Component {
 
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: intl.formatMessage({ id: 'settings.br.restore.message' })
+        snackbarMessage: chrome.i18n.getMessage('settings_br_restore_message')
       })
     }
     fr.readAsText(file)
@@ -203,10 +199,9 @@ class Settings extends Component {
   }
   resetSettings = () => {
     window.localStorage.removeItem('settings')
-    const { intl } = this.context
     this.setState({
       snackbarOpen: true,
-      snackbarMessage: intl.formatMessage({ id: 'settings.br.reset.message' })
+      snackbarMessage: chrome.i18n.getMessage('settings_br_reset_message')
     })
     this.hideReset()
   }
@@ -218,15 +213,14 @@ class Settings extends Component {
   render() {
     const { open, settings, muiTheme, hideSettings, saveSettings } = this.props
     const { display, load, currentTheme, snackbarOpen, snackbarMessage } = this.state
-    const { intl } = this.context
     const resetActions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideReset}
       />,
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.resetSettings}
       />
@@ -249,7 +243,7 @@ class Settings extends Component {
                   <IconButton onClick={hideSettings}>
                     <ArrowBack color={muiTheme.palette.alternateTextColor} />
                   </IconButton>
-                  <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'settings.toolbar.title' })}</div>
+                  <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{chrome.i18n.getMessage('settings_toolbar_title')}</div>
                 </div>
               </div>
             </Paper>
@@ -261,7 +255,7 @@ class Settings extends Component {
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.website.open.label' })}
+                        label={chrome.i18n.getMessage('settings_website_open_label')}
                         defaultToggled={settings.linkTarget}
                         onToggle={(event, bool) => { saveSettings({ linkTarget: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -273,7 +267,7 @@ class Settings extends Component {
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.apps.display.label' })}
+                        label={chrome.i18n.getMessage('settings_apps_display_label')}
                         defaultToggled={settings.hideAppsName}
                         onToggle={(event, bool) => { saveSettings({ hideAppsName: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -285,7 +279,7 @@ class Settings extends Component {
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.bookmarks.position.label' })}
+                        label={chrome.i18n.getMessage('settings_bookmarks_position_label')}
                         defaultToggled={settings.rememberBookmarksState}
                         onToggle={(event, bool) => { saveSettings({ rememberBookmarksState: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -293,14 +287,14 @@ class Settings extends Component {
                     </div>
                   </div>
                   {/*search*/}
-                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.search.title' })}</h2>
+                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{chrome.i18n.getMessage('settings_search_title')}</h2>
                   <Engines />
                   <div className="toggle-box">
                     <ActionSearch style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.engine.search.label' })}
+                        label={chrome.i18n.getMessage('settings_engine_search_label')}
                         defaultToggled={settings.searchTarget}
                         onToggle={(event, bool) => { saveSettings({ searchTarget: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -312,7 +306,7 @@ class Settings extends Component {
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.search.predict.label' })}
+                        label={chrome.i18n.getMessage('settings_search_predict_label')}
                         defaultToggled={settings.searchPredict}
                         onToggle={(event, bool) => { saveSettings({ searchPredict: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -324,7 +318,7 @@ class Settings extends Component {
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.search.remaining.label' })}
+                        label={chrome.i18n.getMessage('settings_search_remaining_label')}
                         defaultToggled={settings.remaining}
                         onToggle={(event, bool) => { saveSettings({ remaining: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -332,14 +326,14 @@ class Settings extends Component {
                     </div>
                   </div>
                   {/*theme*/}
-                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.theme.title' })}</h2>
+                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{chrome.i18n.getMessage('settings_theme_title')}</h2>
                   <Theme />
                   <div className="toggle-box">
                     <ImageBrightness style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.theme.dark.label' })}
+                        label={chrome.i18n.getMessage('settings_theme_dark_label')}
                         defaultToggled={settings.darkMode}
                         onToggle={(event, bool) => { saveSettings({ darkMode: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -347,13 +341,13 @@ class Settings extends Component {
                     </div>
                   </div>
                   {/*Weather*/}
-                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.weather.title' })}</h2>
+                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{chrome.i18n.getMessage('settings_weather_title')}</h2>
                   <div className="toggle-box">
                     <FahrenheitIcon style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.weather.fahrenheit.label' })}
+                        label={chrome.i18n.getMessage('settings_weather_fahrenheit_label')}
                         defaultToggled={settings.useFahrenheit}
                         onToggle={(event, bool) => { saveSettings({ useFahrenheit: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -365,7 +359,7 @@ class Settings extends Component {
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={intl.formatMessage({ id: 'settings.weather.gps.off.label' })}
+                        label={chrome.i18n.getMessage('settings_weather_gps.off_label')}
                         defaultToggled={settings.blockGeolocation}
                         onToggle={(event, bool) => { saveSettings({ blockGeolocation: bool }) }}
                         labelStyle={style.toggleLabel}
@@ -374,40 +368,40 @@ class Settings extends Component {
                   </div>
                   <Region />
                   {/*backup and restore*/}
-                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'settings.br.title' })}</h2>
+                  <h2 className="settings-title" style={{ color: muiTheme.palette.secondaryTextColor }}>{chrome.i18n.getMessage('settings_br_title')}</h2>
                   <ListItem
                     leftIcon={<FileUpload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                    primaryText={intl.formatMessage({ id: 'settings.br.backup.label' })}
+                    primaryText={chrome.i18n.getMessage('settings_br_backup_label')}
                     innerDivStyle={{ paddingLeft: '58px' }}
                     onClick={this.createBackups}
                   />
                   <ListItem
                     leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                    primaryText={intl.formatMessage({ id: 'settings.br.restore.label' })}
+                    primaryText={chrome.i18n.getMessage('settings_br_restore_label')}
                     innerDivStyle={{ paddingLeft: '58px' }}
                   >
                     <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
                   </ListItem>
                   <ListItem
                     leftIcon={<SettingsRestore style={style.listIcon} color={muiTheme.palette.primary1Color} />}
-                    primaryText={intl.formatMessage({ id: 'settings.br.reset.label' })}
+                    primaryText={chrome.i18n.getMessage('settings_br_reset_label')}
                     innerDivStyle={{ paddingLeft: '58px' }}
                     onClick={this.openReset}
                   />
                 </Paper>
                 <Dialog
-                  title={intl.formatMessage({ id: 'settings.reset.title' })}
+                  title={chrome.i18n.getMessage('settings_reset_title')}
                   open={this.state.resetOpen}
                   actions={resetActions}
                   onRequestClose={this.hideReset}
                   contentStyle={style.dialogContent}
                 >
-                  {intl.formatMessage({ id: 'settings.reset.warning' })}
+                  {chrome.i18n.getMessage('settings_reset_warning')}
                 </Dialog>
               </div>
               <div className="settings-section">
                 <Paper className="settings-content about" zDepth={1}>
-                  <h3>{intl.formatMessage({ id: 'settings.about.title' })}</h3>
+                  <h3>{chrome.i18n.getMessage('settings_about_title')}</h3>
                   <p className="name">
                     <span>Material Design New Tab </span>
                     <a
@@ -431,24 +425,24 @@ class Settings extends Component {
                   <div className="hot-key-box">
                     <div className="tip">
                       <HardwareKeyboard style={{ width: 18, height: 18 }} color="#999" />
-                      <span>{intl.formatMessage({ id: 'hotkey.title' })}</span>
+                      <span>{chrome.i18n.getMessage('hotkey.title')}</span>
                     </div>
                     <div className="hot-key-list">
-                      <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.apps' })}</span>
+                      <span className="hot-key-item">{chrome.i18n.getMessage('hotkey_apps')}</span>
                       <span className="hot-key">Alt + A</span>
                     </div>
                     <div className="hot-key-list">
-                      <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.bookmarks' })}</span>
+                      <span className="hot-key-item">{chrome.i18n.getMessage('hotkey_bookmarks')}</span>
                       <span className="hot-key">Alt + B</span>
                     </div>
                     <div className="hot-key-list">
-                      <span className="hot-key-item">{intl.formatMessage({ id: 'hotkey.settings' })}</span>
+                      <span className="hot-key-item">{chrome.i18n.getMessage('hotkey_settings')}</span>
                       <span className="hot-key">Alt + S</span>
                     </div>
                   </div>
                   <div className="tip">
                     <FileCloud style={{ width: 18, height: 18 }} color="#999" />
-                    <span>{intl.formatMessage({ id: 'settings.about.weather.sources' })}: YAHOO! & HeWeather</span>
+                    <span>{chrome.i18n.getMessage('settings_about_weather_sources')}: YAHOO! & HeWeather</span>
                   </div>
                   {navigator.language !== 'zh-CN' && (
                     <div className="tip">

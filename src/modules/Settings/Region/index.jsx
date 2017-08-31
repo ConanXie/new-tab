@@ -29,9 +29,6 @@ const style = {
 }
 
 class Region extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -70,18 +67,17 @@ class Region extends Component {
     this.hideDialog()
   }
   render() {
-    const { intl } = this.context
     const { muiTheme, settings } = this.props
     const { dialogOpen, snackbarOpen } = this.state
 
     const actions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideDialog}
       />,
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.handleSubmit}
       />
@@ -91,13 +87,13 @@ class Region extends Component {
       <div>
         <ListItem
           leftIcon={<EditLocation style={{ marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
-          primaryText={intl.formatMessage({ id: 'settings.weather.location.label' })}
+          primaryText={chrome.i18n.getMessage('settings_weather_location_label')}
           secondaryText={settings.region ? settings.region : 'N/A'}
           innerDivStyle={{ paddingLeft: '58px' }}
           onClick={this.openDialog}
         />
         <Dialog
-          title={intl.formatMessage({ id: 'region.edit.title' })}
+          title={chrome.i18n.getMessage('region_edit_title')}
           actions={actions}
           modal={false}
           open={dialogOpen}
@@ -106,7 +102,7 @@ class Region extends Component {
           titleStyle={style.dialogTitle}
         >
           <TextField
-            floatingLabelText={intl.formatMessage({ id: 'region.input.placeholder' })}
+            floatingLabelText={chrome.i18n.getMessage('region_input_placeholder')}
             defaultValue={settings.region}
             style={style.textField}
             onChange={this.regionChange}
@@ -114,7 +110,7 @@ class Region extends Component {
         </Dialog>
         <Snackbar
           open={snackbarOpen}
-          message={intl.formatMessage({ id: 'region.tip.geolocation' })}
+          message={chrome.i18n.getMessage('region_tip_geolocation')}
           autoHideDuration={2000}
           onRequestClose={this.closeSnackerbar}
         />

@@ -9,24 +9,15 @@ import { Provider } from 'react-redux'
 import reducer from './reducers'
 const store = createStore(reducer, applyMiddleware(thunk))
 
-import { IntlProvider } from 'react-intl'
-
 import { AppContainer } from 'react-hot-loader'
 import App from './modules/App'
 
-import { messages } from './config'
-
 const renderApp = (Component = App) => render((
-  <IntlProvider
-    locale={'en-US'}
-    messages={messages}
-  >
-    <Provider store={store}>
-      <AppContainer>
-        <Component />
-      </AppContainer>
-    </Provider>
-  </IntlProvider>
+  <Provider store={store}>
+    <AppContainer>
+      <Component />
+    </AppContainer>
+  </Provider>
 ), document.querySelector('#app'))
 
 renderApp()

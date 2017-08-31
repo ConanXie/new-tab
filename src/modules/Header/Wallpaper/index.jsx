@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { saveSettings } from '../../../actions/settings'
+import * as settingsActions from '@/actions/settings'
 
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
@@ -80,9 +80,6 @@ const styles = {
 }
 
 class Wallpaper extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     const { backgroundSource, backgroundColor, backgroundShade, updateFrequency } = props.settings
@@ -166,21 +163,19 @@ class Wallpaper extends Component {
     })
   }
   fetchFailed() {
-    const { intl } = this.context
     this.setState({
       snackbarOpen: true,
-      snackbarMessage: intl.formatMessage({ id: 'desktop.msg.fetch.failed' }),
+      snackbarMessage: chrome.i18n.getMessage('desktop_msg_fetch_failed'),
       fetching: false,
       completed: 0
     })
   }
   fetchWallpaper = async event => {
-    const { intl } = this.context
     // Block multiple requests
     if (this.state.fetching) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: intl.formatMessage({ id: 'desktop.msg.fetching' })
+        snackbarMessage: chrome.i18n.getMessage('desktop_msg_fetching')
       })
       return
     }
@@ -267,7 +262,6 @@ class Wallpaper extends Component {
    * Read image from local disk
    */
   readImage = event => {
-    const { intl } = this.context
     const { blurRadius } = this.props.settings
     const file = event.target.files[0]
     const { type, size } = file
@@ -275,14 +269,14 @@ class Wallpaper extends Component {
     if (!/image\/(jpg|jpeg|png|gif)/.test(type)) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: intl.formatMessage({ id: 'desktop.msg.not.supported' })
+        snackbarMessage: chrome.i18n.getMessage('desktop_msg_not_supported')
       })
       return
     }
     if (size > this.spaceSize) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: intl.formatMessage({ id: 'desktop.msg.too.large' })
+        snackbarMessage: chrome.i18n.getMessage('desktop_msg_too_large')
       })
       return
     }
@@ -506,26 +500,25 @@ class Wallpaper extends Component {
     this.props.saveSettings({ logoTransparency: transparency })
   }
   render() {
-    const { intl } = this.context
     const { settings, saveSettings, muiTheme, closeDrawer } = this.props
     const { source, frequency, color, shade, frequencyDialogOpen, colorDialogOpen, opacity, snackbarOpen, snackbarMessage, fetching, load, completed } = this.state
     const { darkMode, topShadow, background, blurRadius, maskStrength, hideWebsites } = settings
 
     const colorActions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideColorDialog}
       />,
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.setBackgroundColor}
       />
     ]
     const frequencyActions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideFrequencyDialog}
       />
@@ -537,7 +530,7 @@ class Wallpaper extends Component {
             <Paper className="header-bar" style={{ backgroundColor: muiTheme.palette.primary1Color }} rounded={false} zDepth={1}>
               <div className="tool-bar">
                 <div className="bar-left">
-                  <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{intl.formatMessage({ id: 'desktop.header.title' })}</div>
+                  <div className="bar-label" style={{ color: muiTheme.palette.alternateTextColor }}>{chrome.i18n.getMessage('desktop_header_title')}</div>
                 </div>
                 <div className="bar-right">
                   <IconButton onClick={closeDrawer}>
@@ -548,10 +541,10 @@ class Wallpaper extends Component {
             </Paper>
             <section>
               <div className="area">
-                <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.wallpaper' })}</h2>
+                <h2 style={{ color: muiTheme.palette.primary1Color }}>{chrome.i18n.getMessage('desktop_area_title_wallpaper')}</h2>
                 <div className="column">
                   <Checkbox
-                    label={intl.formatMessage({ id: 'desktop.top.shadow.label' })}
+                    label={chrome.i18n.getMessage('desktop_top_shadow_label')}
                     labelPosition="left"
                     defaultChecked={settings.topShadow}
                     onCheck={(event, bool) => saveSettings({ topShadow: bool })}
@@ -560,7 +553,7 @@ class Wallpaper extends Component {
                 </div>
                 <div className="column">
                   <Toggle
-                    label={intl.formatMessage({ id: 'desktop.wallpaper.label' })}
+                    label={chrome.i18n.getMessage('desktop_wallpaper_label')}
                     defaultToggled={settings.background}
                     disabled={darkMode}
                     onToggle={this.useWallpaper}
@@ -568,32 +561,32 @@ class Wallpaper extends Component {
                 </div>
                 <div className="column no-padding-right">
                   <SelectField
-                    floatingLabelText={intl.formatMessage({ id: 'wallpaper.source.title' })}
+                    floatingLabelText={chrome.i18n.getMessage('wallpaper_source_title')}
                     value={source}
                     disabled={darkMode || !background}
                     fullWidth={true}
                     underlineStyle={{ display: 'none' }}
                     onChange={this.handleSourceChange}
                   >
-                    <MenuItem value={1} primaryText={intl.formatMessage({ id: 'wallpaper.source.internet' })} />
-                    <MenuItem value={2} primaryText={intl.formatMessage({ id: 'wallpaper.source.local' })} />
-                    <MenuItem value={3} primaryText={intl.formatMessage({ id: 'wallpaper.source.solid' })} />
+                    <MenuItem value={1} primaryText={chrome.i18n.getMessage('wallpaper_source_internet')} />
+                    <MenuItem value={2} primaryText={chrome.i18n.getMessage('wallpaper_source_local')} />
+                    <MenuItem value={3} primaryText={chrome.i18n.getMessage('wallpaper_source_solid')} />
                   </SelectField>
                 </div>
                 <div>
                   {source === 1 && (
                     <div>
                       <ListItem
-                        primaryText={intl.formatMessage({ id: 'wallpaper.frequency.primary' })}
-                        secondaryText={intl.formatMessage({ id: 'wallpaper.frequency.secondary' })}
+                        primaryText={chrome.i18n.getMessage('wallpaper_frequency_primary')}
+                        secondaryText={chrome.i18n.getMessage('wallpaper_frequency_secondary')}
                         disabled={darkMode || !background}
                         innerDivStyle={styles.listItem}
                         onClick={this.showFrequencyDialog}
                       />
                       <div className="fetch-new">
                         <ListItem
-                          primaryText={intl.formatMessage({ id: 'wallpaper.new.primary' })}
-                          secondaryText={intl.formatMessage({ id: 'wallpaper.new.secondary' })}
+                          primaryText={chrome.i18n.getMessage('wallpaper_new_primary')}
+                          secondaryText={chrome.i18n.getMessage('wallpaper_new_secondary')}
                           disabled={darkMode || !background}
                           innerDivStyle={styles.listItem}
                           onClick={this.fetchWallpaper}
@@ -603,8 +596,8 @@ class Wallpaper extends Component {
                         )}
                       </div>
                       <ListItem
-                        primaryText={intl.formatMessage({ id: 'wallpaper.download.primary' })}
-                        secondaryText={intl.formatMessage({ id: 'wallpaper.download.secondary' })}
+                        primaryText={chrome.i18n.getMessage('wallpaper_download_primary')}
+                        secondaryText={chrome.i18n.getMessage('wallpaper_download_secondary')}
                         disabled={darkMode || !background}
                         innerDivStyle={styles.listItem}
                         onClick={this.saveToLocal}
@@ -613,8 +606,8 @@ class Wallpaper extends Component {
                   )}
                   {source === 2 && (
                     <ListItem
-                      primaryText={intl.formatMessage({ id: 'wallpaper.local.primary' })}
-                      secondaryText={intl.formatMessage({ id: 'wallpaper.local.secondary' })}
+                      primaryText={chrome.i18n.getMessage('wallpaper_local_primary')}
+                      secondaryText={chrome.i18n.getMessage('wallpaper_local_secondary')}
                       disabled={darkMode || !background}
                       innerDivStyle={styles.listItem}
                     >
@@ -629,8 +622,8 @@ class Wallpaper extends Component {
                   )}
                   {source === 3 && (
                     <ListItem
-                      primaryText={intl.formatMessage({ id: 'wallpaper.solid.color.primary' })}
-                      secondaryText={intl.formatMessage({ id: 'wallpaper.solid.color.secondary' })}
+                      primaryText={chrome.i18n.getMessage('wallpaper_solid_color_primary')}
+                      secondaryText={chrome.i18n.getMessage('wallpaper_solid_color_secondary')}
                       disabled={darkMode || !background}
                       innerDivStyle={styles.listItem}
                       onClick={this.showColorDialog}
@@ -639,7 +632,7 @@ class Wallpaper extends Component {
                 </div>
                 {source !== 3 && (
                   <div className="border">
-                    <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.blur.primary' })}</h3>
+                    <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{chrome.i18n.getMessage('wallpaper_blur_primary')}</h3>
                     <div className="slider-wrap">
                       <BlurOn color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                       <Slider
@@ -657,7 +650,7 @@ class Wallpaper extends Component {
                   </div>
                 )}
                 <div className="border">
-                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.mask.primary' })}</h3>
+                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{chrome.i18n.getMessage('wallpaper_mask_primary')}</h3>
                   <div className="slider-wrap">
                     <BrightnessMedium color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                     <Slider
@@ -672,7 +665,7 @@ class Wallpaper extends Component {
                   </div>
                 </div>
                 <div className="border">
-                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'wallpaper.shade.primary' })}</h3>
+                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{chrome.i18n.getMessage('wallpaper_shade_primary')}</h3>
                   <RadioButtonGroup
                     name="shade"
                     defaultSelected={shade}
@@ -681,14 +674,14 @@ class Wallpaper extends Component {
                   >
                     <RadioButton
                       value={1}
-                      label={intl.formatMessage({ id: 'wallpaper.shade.light' })}
+                      label={chrome.i18n.getMessage('wallpaper_shade_light')}
                       disabled={darkMode || !background}
                       style={styles.radio}
                       labelStyle={styles.radioLabel}
                     />
                     <RadioButton
                       value={2}
-                      label={intl.formatMessage({ id: 'wallpaper.shade.dark' })}
+                      label={chrome.i18n.getMessage('wallpaper_shade_dark')}
                       disabled={darkMode || !background}
                       style={styles.radio}
                       labelStyle={styles.radioLabel}
@@ -697,10 +690,10 @@ class Wallpaper extends Component {
                 </div>
               </div>
               <div className="area">
-                <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.search' })}</h2>
+                <h2 style={{ color: muiTheme.palette.primary1Color }}>{chrome.i18n.getMessage('desktop_area_title_search')}</h2>
                 <div className="column">
                   <Toggle
-                    label={intl.formatMessage({ id: 'search.hide.label' })}
+                    label={chrome.i18n.getMessage('search_hide_label')}
                     defaultToggled={settings.hideSearch}
                     onToggle={(event, bool) => saveSettings({ hideSearch: bool })}
                   />
@@ -708,7 +701,7 @@ class Wallpaper extends Component {
                 <div className="column">
                   <Checkbox
                     disabled={settings.hideSearch}
-                    label={intl.formatMessage({ id: 'search.input.transparency.label' })}
+                    label={chrome.i18n.getMessage('search_input_transparency_label')}
                     labelPosition="left"
                     defaultChecked={settings.transparentSearchInput}
                     onCheck={(event, bool) => saveSettings({ transparentSearchInput: bool })}
@@ -716,7 +709,7 @@ class Wallpaper extends Component {
                   />
                 </div>
                 <div className="border">
-                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{intl.formatMessage({ id: 'search.logo.transparency.primary' })}</h3>
+                  <h3 style={{ color: muiTheme.palette.secondaryTextColor }}>{chrome.i18n.getMessage('search_logo_transparency_primary')}</h3>
                   <div className="slider-wrap">
                     <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                     <Slider
@@ -731,10 +724,10 @@ class Wallpaper extends Component {
                 </div>
               </div>
               <div className="area">
-                <h2 style={{ color: muiTheme.palette.primary1Color }}>{intl.formatMessage({ id: 'desktop.area.title.webistes' })}</h2>
+                <h2 style={{ color: muiTheme.palette.primary1Color }}>{chrome.i18n.getMessage('desktop_area_title_webistes')}</h2>
                 <div className="column">
                   <Toggle
-                    label={intl.formatMessage({ id: 'webistes.hide.label' })}
+                    label={chrome.i18n.getMessage('webistes_hide_label')}
                     defaultToggled={settings.hideWebsites}
                     onToggle={(event, bool) => saveSettings({ hideWebsites: bool })}
                   />
@@ -742,7 +735,7 @@ class Wallpaper extends Component {
                 <div className="column">
                   <Checkbox
                     disabled={darkMode || hideWebsites || !background || settings.backgroundShade !== 2}
-                    label={intl.formatMessage({ id: 'webistes.text.shadow.label' })}
+                    label={chrome.i18n.getMessage('webistes_text_shadow_label')}
                     labelPosition="left"
                     defaultChecked={settings.websiteLabelShadow}
                     onCheck={(event, bool) => saveSettings({ websiteLabelShadow: bool })}
@@ -752,7 +745,7 @@ class Wallpaper extends Component {
               </div>
             </section>
             <Dialog
-              title={intl.formatMessage({ id: 'wallpaper.frequency.dialog.title' })}
+              title={chrome.i18n.getMessage('wallpaper_frequency_dialog_title')}
               actions={frequencyActions}
               contentStyle={styles.frequencyDialogContent}
               bodyStyle={{ paddingBottom: 0, overflow: 'visible' }}
@@ -766,22 +759,22 @@ class Wallpaper extends Component {
               >
                 <RadioButton
                   value={1}
-                  label={intl.formatMessage({ id: 'wallpaper.frequency.minute' })}
+                  label={chrome.i18n.getMessage('wallpaper_frequency_minute')}
                   style={styles.radioLeft}
                 />
                 <RadioButton
                   value={2}
-                  label={intl.formatMessage({ id: 'wallpaper.frequency.hour' })}
+                  label={chrome.i18n.getMessage('wallpaper_frequency_hour')}
                   style={styles.radioLeft}
                 />
                 <RadioButton
                   value={3}
-                  label={intl.formatMessage({ id: 'wallpaper.frequency.day' })}
+                  label={chrome.i18n.getMessage('wallpaper_frequency_day')}
                   style={styles.radioLeft}
                 />
                 <RadioButton
                   value={0}
-                  label={intl.formatMessage({ id: 'wallpaper.frequency.close' })}
+                  label={chrome.i18n.getMessage('wallpaper_frequency_close')}
                 />
               </RadioButtonGroup>
             </Dialog>
@@ -795,7 +788,7 @@ class Wallpaper extends Component {
                 <input type="color" id="color" hidden onInput={this.getColor} value={color} ref="color" onChange={() => {}} />
                 <label htmlFor="color" style={{ backgroundColor: color }}></label>
                 <TextField
-                  floatingLabelText={intl.formatMessage({ id: 'theme.input.placeholder' })}
+                  floatingLabelText={chrome.i18n.getMessage('theme_input_placeholder')}
                   value={color}
                   onChange={this.handleColorInput}
                 />
@@ -818,4 +811,4 @@ const mapStateToProps = state => {
   return { settings }
 }
 
-export default muiThemeable()(connect(mapStateToProps, { saveSettings })(Wallpaper))
+export default muiThemeable()(connect(mapStateToProps, settingsActions)(Wallpaper))

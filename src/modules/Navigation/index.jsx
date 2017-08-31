@@ -19,8 +19,6 @@ import {
 } from '../../actions/websites'
 import { saveSettings } from '../../actions/settings'
 
-import { FormattedMessage } from 'react-intl'
-
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import Paper from 'material-ui/Paper'
 import Checkbox from 'material-ui/Checkbox'
@@ -118,9 +116,6 @@ const style = {
 }
 
 class Navigation extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -196,18 +191,17 @@ class Navigation extends Component {
     const { edit } = this.state
     const { name, link, index, cIndex } = this.cache
     const { addWebsite, editWebsite, store } = this.props
-    const { intl } = this.context
     if (!name) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: intl.formatMessage({ id: 'nav.edit.input.forget.name' })
+        snackbarMessage: chrome.i18n.getMessage('nav_edit_input_forget_name')
       })
       return
     }
     if (!link) {
       this.setState({
         snackbarOpen: true,
-        snackbarMessage: intl.formatMessage({ id: 'nav.edit.input.forget.URL' })
+        snackbarMessage: chrome.i18n.getMessage('nav_edit_input_forget_URL')
       })
       return
     }
@@ -225,7 +219,7 @@ class Navigation extends Component {
       } else {
         this.setState({
           snackbarOpen: true,
-          snackbarMessage: intl.formatMessage({ id: 'nav.websites.max.tip' }) + websiteMax
+          snackbarMessage: chrome.i18n.getMessage('nav_websites_max_tip') + websiteMax
         })
         return
       }
@@ -321,10 +315,9 @@ class Navigation extends Component {
   handleDelete = (name, index, cIndex) => {
     // this.openDeleteMessage()
     const { deleteWebsite, store } = this.props
-    const { intl } = this.context
     this.setState({
       deleteOpen: true,
-      deleteMessage: `${intl.formatMessage({ id: 'nav.delete.status' })} ${name}`
+      deleteMessage: `${chrome.i18n.getMessage('nav_delete_status')} ${name}`
     })
     // Record the info
     this.cache.index = index
@@ -674,7 +667,6 @@ class Navigation extends Component {
     e.target.src = require('./images/favicon-default.svg')
   }
   render() {
-    const { intl } = this.context
     const { store, classifiedStore, isEmpty, muiTheme, settings, saveSettings } = this.props
     const { edit, dialog, confirm, classifyDialog, snackbarOpen, snackbarMessage, deleteOpen, deleteMessage, name, link, cIndex, isClassified} = this.state
     const { linkTarget, darkMode, background, backgroundShade, hideSearch, websiteLabelShadow } = settings
@@ -699,36 +691,36 @@ class Navigation extends Component {
     
     const actions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideDialog}
       />,
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.handleSubmit}
       />
     ]
     const confirmActions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideConfirm}
       />,
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.handleConfirm}
       />
     ]
     const addClassifyActions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.hideClassifyDialog}
       />,
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.addClassify}
       />
@@ -740,14 +732,14 @@ class Navigation extends Component {
             <div className={classNames('tool-area', { 'hide': !edit })}>
               {isClassified && (classifiedStore.length < classificationMax) && (
                 <FlatButton
-                  label={intl.formatMessage({ id: 'nav.increase.classification.btn' })}
+                  label={chrome.i18n.getMessage('nav_increase_classification_btn')}
                   labelStyle={{ color: labelColor }}
                   icon={<ContentAdd color={labelColor} />}
                   onClick={this.openClassifyDialog}
                 />
               )}
               <Checkbox
-                label={intl.formatMessage({ id: 'nav.show.classification' })}
+                label={chrome.i18n.getMessage('nav_show_classification')}
                 style={style.classifyCheckbox}
                 labelStyle={style.classifyCheckboxLabel}
                 defaultChecked={isClassified}
@@ -759,15 +751,15 @@ class Navigation extends Component {
           <div className={classNames('websites-wrap', { 'empty': isEmpty })}>
             {isEmpty && (
               <div className="empty-box">
-                <p className="empty-text">{intl.formatMessage({ id: 'empty.text.navigation' })}</p>
+                <p className="empty-text">{chrome.i18n.getMessage('empty_text_navigation')}</p>
                 <RaisedButton
-                  label={intl.formatMessage({ id: 'empty.text.navigation.add' })}
+                  label={chrome.i18n.getMessage('empty_text_navigation_add')}
                   primary={true}
                   onClick={this.openDialog}
                 />
-                <span className="or">{intl.formatMessage({ id: 'empty.text.navigation.or' })}</span>
+                <span className="or">{chrome.i18n.getMessage('empty_text_navigation_or')}</span>
                 <FlatButton
-                  label={intl.formatMessage({ id: 'empty.text.navigation.hide' })}
+                  label={chrome.i18n.getMessage('empty_text_navigation_hide')}
                   primary={true}
                   onClick={() => saveSettings({ hideWebsites: true })}
                 />
@@ -824,7 +816,7 @@ class Navigation extends Component {
                   <div className="classification-name" style={{ color: classificationColor }}>
                     {edit && item.name !== 'unclassified' && (
                       <TextField
-                        hintText={intl.formatMessage({ id: 'nav.edit.input.website' })}
+                        hintText={chrome.i18n.getMessage('nav_edit_input_website')}
                         defaultValue={item.name}
                         fullWidth={true}
                         style={style.classficationInput}
@@ -837,7 +829,7 @@ class Navigation extends Component {
                       <p>{item.name}</p>
                     )}
                     {(item.name === 'unclassified') && (
-                      <p>{intl.formatMessage({ id: 'nav.classification.unclassified' })}</p>
+                      <p>{chrome.i18n.getMessage('nav_classification_unclassified')}</p>
                     )}
                   </div>
                   <div className="classification-area" style={{ width: this.wrapperWidth }}>
@@ -880,7 +872,7 @@ class Navigation extends Component {
                   </div>
                   {item.name !== 'unclassified' && (
                     <FlatButton
-                      label={intl.formatMessage({ id: 'nav.delete.classification' })}
+                      label={chrome.i18n.getMessage('nav_delete_classification')}
                       icon={<ContentClear />}
                       onClick={e => { this.deleteClassification(cIndex) }}
                       className="delete-classification"
@@ -922,7 +914,7 @@ class Navigation extends Component {
           )}
         </Paper>
         <Dialog
-          title={edit ? intl.formatMessage({ id: 'nav.edit.title.edit' }) : intl.formatMessage({ id: 'nav.edit.title.add' })}
+          title={edit ? chrome.i18n.getMessage('nav_edit_title_edit') : chrome.i18n.getMessage('nav_edit_title_add')}
           actions={actions}
           modal={false}
           open={dialog}
@@ -931,20 +923,20 @@ class Navigation extends Component {
           titleStyle={style.dialogTitle}
         >
           <TextField
-            floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.website' })}
+            floatingLabelText={chrome.i18n.getMessage('nav_edit_input_website')}
             defaultValue={name}
             style={style.textField}
             onChange={this.nameChange}
           /><br />
           <TextField
-            floatingLabelText={intl.formatMessage({ id: 'nav.edit.input.URL' })}
+            floatingLabelText={chrome.i18n.getMessage('nav_edit_input_URL')}
             defaultValue={link}
             style={style.textField}
             onChange={this.linkChange}
           /><br />
           {isClassified && !edit && (
             <SelectField
-              floatingLabelText={intl.formatMessage({ id: 'nav.add.choose.classification' })}
+              floatingLabelText={chrome.i18n.getMessage('nav_add_choose_classification')}
               value={cIndex}
               fullWidth={true}
               onChange={this.classifyChange}
@@ -954,7 +946,7 @@ class Navigation extends Component {
                   <MenuItem
                     key={index}
                     value={index}
-                    primaryText={cla.name !== 'unclassified' ? cla.name : intl.formatMessage({ id: 'nav.classification.unclassified' })}
+                    primaryText={cla.name !== 'unclassified' ? cla.name : chrome.i18n.getMessage('nav_classification_unclassified')}
                   />
                 )
               })}
@@ -962,7 +954,7 @@ class Navigation extends Component {
           )}
         </Dialog>
         <Dialog
-          title={intl.formatMessage({ id: 'nav.increase.classification.title' })}
+          title={chrome.i18n.getMessage('nav_increase_classification_title')}
           actions={addClassifyActions}
           modal={false}
           open={classifyDialog}
@@ -971,7 +963,7 @@ class Navigation extends Component {
           titleStyle={style.dialogTitle}
         >
           <TextField
-            floatingLabelText={intl.formatMessage({ id: 'nav.increase.classification.label' })}
+            floatingLabelText={chrome.i18n.getMessage('nav_increase_classification_label')}
             style={style.textField}
             /*onChange={this.linkChange}*/
             ref="classificationName"
@@ -986,7 +978,7 @@ class Navigation extends Component {
         <Snackbar
           open={deleteOpen}
           message={deleteMessage}
-          action={intl.formatMessage({ id: 'nav.delete.undo' })}
+          action={chrome.i18n.getMessage('nav_delete_undo')}
           autoHideDuration={2000}
           onRequestClose={this.closeDelete}
           onActionTouchTap={this.undoDelete}

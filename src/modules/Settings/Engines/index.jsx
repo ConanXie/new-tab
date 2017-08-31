@@ -73,9 +73,6 @@ const ADD = 'add'
 const EDIT = 'edit'
 
 class Engines extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  }
   constructor(props) {
     super(props)
     this.state = {
@@ -136,14 +133,13 @@ class Engines extends Component {
     this.form.link = value
   }
   handleSubmit = () => {
-    const { intl } = this.context
     const { name, link, index } = this.form
     const { addEngine, updateEngine, engines } = this.props
     // check format of user inputing
     let passed = true
     if (!name.trim()) {
       this.setState({
-        nameError: intl.formatMessage({ id: 'engines.custom.name.error' })
+        nameError: chrome.i18n.getMessage('engines_custom_name_error')
       })
       passed = false
     } else {
@@ -153,7 +149,7 @@ class Engines extends Component {
     }
     if (!/^http(s)?:\/\/\S+%s/.test(link)) {
       this.setState({
-        linkError: intl.formatMessage({ id: 'engines.custom.URL.error' })
+        linkError: chrome.i18n.getMessage('engines_custom_URL_error')
       })
       passed = false
     } else {
@@ -174,19 +170,18 @@ class Engines extends Component {
     this.closeEditDialog()
   }
   render() {
-    const { intl } = this.context
     const { muiTheme, engines, makeDefault, deleteEngine, moveDown, moveUp } = this.props
     const { status, tableOpen, formOpen, nameError, linkError } = this.state
     const { name, link } = this.form
 
     const actions = [
       <FlatButton
-        label={intl.formatMessage({ id: 'button.cancel' })}
+        label={chrome.i18n.getMessage('button_cancel')}
         primary={true}
         onClick={this.closeEditDialog}
       />,
       <FlatButton
-        label={intl.formatMessage({ id: 'button.confirm' })}
+        label={chrome.i18n.getMessage('button_confirm')}
         primary={true}
         onClick={this.handleSubmit}
       />
@@ -198,7 +193,7 @@ class Engines extends Component {
       <div>
         <ListItem
           leftIcon={<ViewList style={{ marginLeft: 0 }} color={muiTheme.palette.primary1Color} />}
-          primaryText={intl.formatMessage({ id: 'engines.settings.management' })}
+          primaryText={chrome.i18n.getMessage('engines_settings_management')}
           innerDivStyle={{ paddingLeft: '58px' }}
           onClick={this.openTableDialog}
         />
@@ -208,7 +203,7 @@ class Engines extends Component {
           onRequestClose={this.closeTableDialog}
         >
           <AppBar
-            title={intl.formatMessage({ id: 'engines.settings.management' })}
+            title={chrome.i18n.getMessage('engines_settings_management')}
             iconElementRight={AddBtn}
             showMenuIconButton={false}
             style={style.appbar}
@@ -227,8 +222,8 @@ class Engines extends Component {
               enableSelectAll={false}
             >
               <TableRow>
-                <TableHeaderColumn>{intl.formatMessage({ id: 'engines.text' })}</TableHeaderColumn>
-                <TableHeaderColumn>{intl.formatMessage({ id: 'engines.URL' })}</TableHeaderColumn>
+                <TableHeaderColumn>{chrome.i18n.getMessage('engines_text')}</TableHeaderColumn>
+                <TableHeaderColumn>{chrome.i18n.getMessage('engines_URL')}</TableHeaderColumn>
                 <TableHeaderColumn style={style.menuRow}></TableHeaderColumn>
               </TableRow>
             </TableHeader>
@@ -239,7 +234,7 @@ class Engines extends Component {
                 const { id, name, link, isDefault } = row
                 return (
                   <TableRow key={id}>
-                    <TableRowColumn>{name} {isDefault ? intl.formatMessage({ id: 'engines.table.default' }) : ''}</TableRowColumn>
+                    <TableRowColumn>{name} {isDefault ? chrome.i18n.getMessage('engines_table_default') : ''}</TableRowColumn>
                     <TableRowColumn>{link}</TableRowColumn>
                     <TableRowColumn
                       style={style.menuRow}
@@ -251,17 +246,17 @@ class Engines extends Component {
                         menuStyle={{ minWidth: 168 }}
                       >
                         {!isDefault && (
-                          <MenuItem onClick={e => { makeDefault(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.default' })} />
+                          <MenuItem onClick={e => { makeDefault(index) }} primaryText={chrome.i18n.getMessage('engines_menu_default')} />
                         )}
-                        <MenuItem onClick={e => { this.edit(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.edit' })} />
+                        <MenuItem onClick={e => { this.edit(index) }} primaryText={chrome.i18n.getMessage('engines_menu_edit')} />
                         {!isDefault && (
-                          <MenuItem onClick={e => { deleteEngine(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.remove' })} />
+                          <MenuItem onClick={e => { deleteEngine(index) }} primaryText={chrome.i18n.getMessage('engines_menu_remove')} />
                         )}
                         {index && (
-                          <MenuItem onClick={e => { moveUp(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.move.up' })} />
+                          <MenuItem onClick={e => { moveUp(index) }} primaryText={chrome.i18n.getMessage('engines_menu_move_up')} />
                         )}
                         {(index < engines.length - 1) && (
-                          <MenuItem onClick={e => { moveDown(index) }} primaryText={intl.formatMessage({ id: 'engines.menu.move.down' })} />
+                          <MenuItem onClick={e => { moveDown(index) }} primaryText={chrome.i18n.getMessage('engines_menu_move_down')} />
                         )}
                       </IconMenu>
                     </TableRowColumn>
@@ -272,7 +267,7 @@ class Engines extends Component {
           </Table>
         </Dialog>
         <Dialog
-          title={status === ADD ? intl.formatMessage({ id: 'engines.add' }) : intl.formatMessage({ id: 'engines.edit' })}
+          title={status === ADD ? chrome.i18n.getMessage('engines_add') : chrome.i18n.getMessage('engines_edit')}
           modal={false}
           actions={actions}
           open={formOpen}
@@ -281,14 +276,14 @@ class Engines extends Component {
           titleStyle={style.editDialogTitle}
         >
           <TextField
-            floatingLabelText={intl.formatMessage({ id: 'engines.custom.name.placeholder' })}
+            floatingLabelText={chrome.i18n.getMessage('engines_custom_name_placeholder')}
             defaultValue={name}
             style={style.textField}
             onChange={this.nameChange}
             errorText={nameError}
           /><br />
           <TextField
-            floatingLabelText={intl.formatMessage({ id: 'engines.custom.URL.placeholder' })}
+            floatingLabelText={chrome.i18n.getMessage('engines_custom_URL_placeholder')}
             defaultValue={link}
             style={style.textField}
             onChange={this.linkChange}
@@ -296,7 +291,7 @@ class Engines extends Component {
           />
           <p className="custom-engines-tip">
             <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
-            <span>{intl.formatMessage({ id: 'engines.custom.tip' })}</span>
+            <span>{chrome.i18n.getMessage('engines_custom_tip')}</span>
           </p>
         </Dialog>
       </div>
