@@ -359,7 +359,7 @@ class Settings extends Component {
                     <div className="toggle-wrapper">
                       <Toggle
                         className="toggle"
-                        label={chrome.i18n.getMessage('settings_weather_gps.off_label')}
+                        label={chrome.i18n.getMessage('settings_weather_gps_off_label')}
                         defaultToggled={settings.blockGeolocation}
                         onToggle={(event, bool) => { saveSettings({ blockGeolocation: bool }) }}
                         labelStyle={style.toggleLabel}
