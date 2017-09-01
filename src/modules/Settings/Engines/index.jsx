@@ -196,6 +196,7 @@ class Engines extends Component {
           primaryText={chrome.i18n.getMessage('engines_settings_management')}
           innerDivStyle={{ paddingLeft: '58px' }}
           onClick={this.openTableDialog}
+          className="settings-item"
         />
         <Dialog
           open={tableOpen}

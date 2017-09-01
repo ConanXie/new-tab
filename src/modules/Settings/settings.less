@@ -63,11 +63,10 @@
   .settings-content {
     box-sizing: border-box;
     width: 600px;
-    // height: 300px;
-    padding: 32px;
     margin: 0 auto;
+    padding: 32px 0;
     .settings-title {
-      padding-left: 5px;
+      padding-left: 32px;
       margin: 16px 0;
       font-weight: normal;
       font-size: 14px;
@@ -75,12 +74,16 @@
     .toggle-box {
       display: flex;
       align-items: center;
-      .toggle-wrapper {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        height: 48px;
-      }
+    }
+    .toggle-box,
+    .settings-item {
+      padding: 0 26px !important;
+    }
+    .toggle-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      height: 48px;
     }
     .toggle {
       flex: 1;
@@ -89,50 +92,51 @@
     .toggle > div {
       justify-content: space-between;
     }
-    &.about {
-      height: auto;
-      .name {
-        margin: 14px 0;
-        font-size: 16px;
-        .version {
-          margin-left: 10px;
-          font-size: 14px;
-        }
-      }
-      .donate-feedback {
-        position: relative;
-      }
-      .intro {
-        margin-top: 24px;
+  }
+  .about {
+    height: auto;
+    padding: 32px;
+    .name {
+      margin: 14px 0;
+      font-size: 16px;
+      .version {
+        margin-left: 10px;
         font-size: 14px;
-        color: #bbb;
-        a {
-          color: inherit;
-        }
       }
-      .tip {
-        display: flex;
-        align-items: center;
-        height: 20px;
-        margin-top: 24px;
-        span {
-          margin-left: 8px;
-          color: #999;
-          font-size: 13px;
-          flex: 1;
-        }
+    }
+    .donate-feedback {
+      position: relative;
+    }
+    .intro {
+      margin-top: 24px;
+      font-size: 14px;
+      color: #bbb;
+      a {
+        color: inherit;
       }
-      .hot-key-list {
-        display: flex;
-        justify-content: space-between;
-        // width: 241px;
-        width: 215px;
-        padding-left: 26px;
-        margin: 8px 0;
-        span {
-          color: #757575;
-          font-size: 13px;
-        }
+    }
+    .tip {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      margin-top: 24px;
+      span {
+        margin-left: 8px;
+        color: #999;
+        font-size: 13px;
+        flex: 1;
+      }
+    }
+    .hot-key-list {
+      display: flex;
+      justify-content: space-between;
+      // width: 241px;
+      width: 215px;
+      padding-left: 26px;
+      margin: 8px 0;
+      span {
+        color: #757575;
+        font-size: 13px;
       }
     }
   }

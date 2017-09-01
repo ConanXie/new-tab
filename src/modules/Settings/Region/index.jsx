@@ -91,6 +91,7 @@ class Region extends Component {
           secondaryText={settings.region ? settings.region : 'N/A'}
           innerDivStyle={{ paddingLeft: '58px' }}
           onClick={this.openDialog}
+          className="settings-item"
         />
         <Dialog
           title={chrome.i18n.getMessage('region_edit_title')}

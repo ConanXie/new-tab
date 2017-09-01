@@ -151,6 +151,7 @@ class Theme extends Component {
           primaryText={chrome.i18n.getMessage('settings_theme_switch_label')}
           innerDivStyle={{ paddingLeft: '58px' }}
           onClick={this.openTheme}
+          className="settings-item"
         />
         <Dialog
           open={this.state.themeOpen}

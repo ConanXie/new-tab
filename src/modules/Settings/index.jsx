@@ -249,7 +249,7 @@ class Settings extends Component {
             </Paper>
             <section style={{ backgroundColor: muiTheme.palette.settingsBackgroundColor }}>
               <div className="settings-section">
-                <Paper className="settings-content" style={{ paddingLeft: 28, paddingRight: 28 }} zDepth={1}>
+                <Paper className="settings-content" zDepth={1}>
                   <div className="toggle-box">
                     <ContentLink style={style.toggleIcon} color={muiTheme.palette.primary1Color} />
                     <div className="toggle-wrapper">
@@ -374,11 +374,13 @@ class Settings extends Component {
                     primaryText={chrome.i18n.getMessage('settings_br_backup_label')}
                     innerDivStyle={{ paddingLeft: '58px' }}
                     onClick={this.createBackups}
+                    className="settings-item"
                   />
                   <ListItem
                     leftIcon={<FileDownload style={style.listIcon} color={muiTheme.palette.primary1Color} />}
                     primaryText={chrome.i18n.getMessage('settings_br_restore_label')}
                     innerDivStyle={{ paddingLeft: '58px' }}
+                    className="settings-item"
                   >
                     <input type="file" style={style.fileInput} accept="application/json" onChange={this.restoreBackups} />
                   </ListItem>
@@ -387,6 +389,7 @@ class Settings extends Component {
                     primaryText={chrome.i18n.getMessage('settings_br_reset_label')}
                     innerDivStyle={{ paddingLeft: '58px' }}
                     onClick={this.openReset}
+                    className="settings-item"
                   />
                 </Paper>
                 <Dialog
@@ -415,17 +418,10 @@ class Settings extends Component {
                     <Donate />
                     <Feedback />
                   </div>
-                  {/*仅对中文用户展示*/}
-                  {navigator.language === 'zh-CN' &&
-                    <p className="tip">
-                      <ActionInfo style={{ width: 18, height: 18 }} color="#999" />
-                      <span>翻墙使用体验更佳</span>
-                    </p>
-                  }
                   <div className="hot-key-box">
                     <div className="tip">
                       <HardwareKeyboard style={{ width: 18, height: 18 }} color="#999" />
-                      <span>{chrome.i18n.getMessage('hotkey.title')}</span>
+                      <span>{chrome.i18n.getMessage('hotkey_title')}</span>
                     </div>
                     <div className="hot-key-list">
                       <span className="hot-key-item">{chrome.i18n.getMessage('hotkey_apps')}</span>
