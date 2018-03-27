@@ -7,7 +7,7 @@
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.8.2-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 [![Powered by](https://img.shields.io/badge/Powered%20by-material--ui-green.svg)](http://www.material-ui.com)
 
-A new tab page extension for Chrome with **Material Design**.
+A Chrome new tab page extension with **Material Design**.
 
 ![Screenshot](https://lh3.googleusercontent.com/gDaDhxRdfd39Etou9ry-X8Lm8KH9qi5hxea8yZs7Y_zCRjMrEMb1-qbXKqYtG4Bq3PGffxTF=s640-h400-e365)
 
