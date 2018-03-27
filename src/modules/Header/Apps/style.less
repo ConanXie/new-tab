@@ -26,41 +26,45 @@
       color: #999;
     }
   }
-  .app-box {
-    width: 25%;
-    display: inline-block;
-    margin-bottom: 38px;
-    text-align: center;
-    a {
-      color: inherit;
-      text-decoration: none;
+}
+.app-box {
+  width: 25%;
+  display: inline-block;
+  margin-bottom: 38px;
+  text-align: center;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  dl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 110px;
+    cursor: pointer;
+    &:hover {
+      background: rgba(200, 200, 200, 0.16);
     }
-    dl {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 110px;
-      dt {
-        img {
-          width: 48px;
-          height: auto;
-          margin: 0 auto;
-        }
-      }
-      dd {
-        text-align: center;
-        font-size: 14px;
-        width: 60%;
-        margin-top: 8px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        &.hide {
-          display: none;
-          // visibility: hidden;
-        }
-      }
+  }
+  dt {
+    img {
+      width: 48px;
+      height: auto;
+      margin: 0 auto;
+    }
+  }
+  dd {
+    text-align: center;
+    font-size: 14px;
+    width: 80%;
+    margin-top: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &.hide {
+      display: none;
+      // visibility: hidden;
     }
   }
 }

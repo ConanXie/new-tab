@@ -73,16 +73,14 @@ class Apps extends Component {
           )}
           {!!apps.length && (
             <div className="app-box">
-              <FlatButton style={style.appBtn}>
-                <a href="https://chrome.google.com/webstore?utm_source=MaterialDesignNewTab">
-                  <dl title="Chrome Web Store">
-                    <dt>
-                      <img src="chrome://extension-icon/ahfgeienlihckogmohjhadlkjgocpleb/128/0" alt="Chrome Web Store" />
-                    </dt>
-                    <dd className={classNames({ 'hide': settings.hideAppsName })}>Chrome Web Store</dd>
-                  </dl>
-                </a>
-              </FlatButton>
+              <a href="https://chrome.google.com/webstore?utm_source=MaterialDesignNewTab">
+                <dl title="Web Store">
+                  <dt>
+                    <img src="chrome://extension-icon/ahfgeienlihckogmohjhadlkjgocpleb/128/0" alt="Web Store" />
+                  </dt>
+                  <dd className={classNames({ 'hide': settings.hideAppsName })}>Web Store</dd>
+                </dl>
+              </a>
             </div>
           )}
           {apps.map(app => {
@@ -93,14 +91,12 @@ class Apps extends Component {
 
             return (
               <div className="app-box" key={id}>
-                <FlatButton style={style.appBtn}>
-                  <dl onClick={e => chrome.management.launchApp(id)} title={shortName}>
-                    <dt>
-                      <img src={`${url}?grayscale=${!enabled}`} alt={shortName} />
-                    </dt>
-                    <dd className={classNames({ 'hide': settings.hideAppsName })}>{shortName}</dd>
-                  </dl>
-                </FlatButton>
+                <dl onClick={e => chrome.management.launchApp(id)} title={shortName}>
+                  <dt>
+                    <img src={`${url}?grayscale=${!enabled}`} alt={shortName} />
+                  </dt>
+                  <dd className={classNames({ 'hide': settings.hideAppsName })}>{shortName}</dd>
+                </dl>
               </div>
             )
           })}
