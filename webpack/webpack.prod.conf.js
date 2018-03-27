@@ -44,7 +44,7 @@ module.exports = {
       })
     }, {
       test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
-      use: ['url-loader?limit=1&name=assets/[name].[ext]']
+      use: ['url-loader?limit=10000&name=assets/[name].[ext]']
     }]
   },
   plugins: [
