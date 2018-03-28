@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "material-ui": "^0.19.3",
+    "material-ui": "^0.20.0",
     "moment": "^2.18.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
