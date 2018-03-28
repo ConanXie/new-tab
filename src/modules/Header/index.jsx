@@ -50,7 +50,7 @@ class Header extends Component {
     }
   }
   componentDidMount() {
-    document.onkeydown = () => {
+    document.addEventListener('keydown', () => {
       const { weatherOpen, bookmarkOpen } = this.state
       const { settingsPage, showSettings, hideSettings } = this.props
       const { keyCode, altKey } = window.event
@@ -73,7 +73,7 @@ class Header extends Component {
       if (keyCode === 83 && altKey) {
         settingsPage ? hideSettings() : showSettings()
       }
-    }
+    }, false)
   }
   render() {
     const { showSettings, settings, muiTheme } = this.props

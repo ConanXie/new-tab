@@ -443,7 +443,7 @@ class Settings extends Component {
                   {navigator.language !== 'zh-CN' && (
                     <div className="tip">
                       <SocialMood style={{ width: 18, height: 18 }} color="#999" />
-                      <span>Forgive me for my poor English. You can also give me some advice on translation to add or improve the language you are using. Thank you.</span>
+                      <span>Please forgive me my poor English, you can also give me some advices on the translation. Thank you.</span>
                     </div>
                   )}
                   {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}

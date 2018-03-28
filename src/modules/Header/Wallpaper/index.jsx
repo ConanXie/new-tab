@@ -714,7 +714,7 @@ class Wallpaper extends Component {
                     <ActionOpacity color={muiTheme.palette.secondaryTextColor} style={styles.sliderIcon} />
                     <Slider
                       disabled={settings.hideSearch}
-                      value={1 - settings.logoTransparency}
+                      value={1 - (settings.logoTransparency === undefined ? 1 : settings.logoTransparency)}
                       name="transparency"
                       onChange={this.handleTransparency}
                       onDragStop={this.applyTransparency}

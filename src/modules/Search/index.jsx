@@ -360,6 +360,7 @@ class Search extends Component {
             <div className="input-box">
               <input
                 type="text"
+                tabIndex="1"
                 id="search-input"
                 className={classNames({ 'night': darkMode })}
                 ref="text"

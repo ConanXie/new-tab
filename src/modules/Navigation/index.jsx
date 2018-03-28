@@ -981,7 +981,7 @@ class Navigation extends Component {
           action={chrome.i18n.getMessage('nav_delete_undo')}
           autoHideDuration={2000}
           onRequestClose={this.closeDelete}
-          onActionTouchTap={this.undoDelete}
+          onActionClick={this.undoDelete}
         />
       </div>
     )
