@@ -6,7 +6,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
-import { code } from '../config'
 import colors from './Settings/Theme/colors'
 
 import LazilyLoad, { importLazy } from '@/scripts/LazilyLoad'
@@ -14,7 +13,6 @@ import Header from './Header'
 import Search from './Search'
 import Navigation from './Navigation'
 import Settings from './Settings'
-import Onboarding from './Onboarding'
 
 class App extends Component {
   constructor(props) {
@@ -52,13 +50,6 @@ class App extends Component {
       this.changeBackground()
     } else {
       this.setBackground(this.darkTheme.paper.backgroundColor)
-    }
-
-    const _code = localStorage.getItem('code')
-    if (_code !== code) {
-      this.setState({
-        onboarding: true
-      })
     }
     
     chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT')
@@ -198,7 +189,7 @@ class App extends Component {
     }
   }
   render() {
-    const { muiTheme, onboarding } = this.state
+    const { muiTheme } = this.state
     const { hideWebsites, hideSearch } = this.props.settings
 
     return (
@@ -221,9 +212,6 @@ class App extends Component {
             <Navigation />
           )}
           <Settings />
-          {onboarding && (
-            <Onboarding />
-          )}
         </div>
       </MuiThemeProvider>
     )
