@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.3
+###### _Mar 31, 2018_
+- Add **Russian** support
+
 ## 1.8.2
 ###### _Aug 19, 2017_
 - Fix classification input color on dark background
