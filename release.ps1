@@ -19,7 +19,8 @@ $readme = Get-Content README.md
 $readme = $readme -replace "(\d+\.){2}\d+", $args
 Set-Content README.md -Value $readme
 
-Set-Location "dist"
+$distPath = "dist"
+Set-Location $distPath
 
 # manifest.json
 $manifest = Get-Content manifest.json
@@ -45,19 +46,27 @@ foreach ($name in Get-ChildItem -name) {
     $files += $name
   }
 }
-# Write-Output $files
-Compress-Archive -Path $files -Force -DestinationPath "new-tab v$args.zip"
 
-Set-Location ".."
-Move-Item -Force dist/*.zip releases
+$releasesPath = "../releases"
+if (!(Test-Path $releasesPath)) {
+  New-Item $releasesPath -type directory
+}
+# Write-Output $files
+Compress-Archive -Path $files -Force -DestinationPath "$releasesPath/new-tab v$args.zip"
 
 Write-Output "---------- Done ----------"
 
+Set-Location ".."
+
 Write-Output "After this operation, changes of the dist folder will be cleaned up."
 $confirmation = Read-Host "Do you want to continue? [Y/n]"
+
 if ($confirmation -eq 'y' -or $confirmation -eq 'Y') {
-  Remove-Item -Recurse dist/assets
-  git checkout -- dist
+
+  Remove-Item -Recurse "$distPath/assets"
+  Get-ChildItem $distPath | Where{$_.Name -Match "js$"} | Remove-Item
+
+  git checkout -- $distPath
 
   Write-Output "---------- Done ----------"
 }
