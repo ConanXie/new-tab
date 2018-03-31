@@ -393,7 +393,7 @@
     "message": "Internet"
   },
   "wallpaper_source_local": {
-    "message": "Local"
+    "message": "Disk"
   },
   "wallpaper_source_solid": {
     "message": "Solid color"
@@ -429,13 +429,13 @@
     "message": "Download it"
   },
   "wallpaper_download_secondary": {
-    "message": "Save the current wallpaper to local"
+    "message": "Save the current wallpaper to disk"
   },
   "wallpaper_local_primary": {
     "message": "Choose an image"
   },
   "wallpaper_local_secondary": {
-    "message": "Set wallpaper with local image file"
+    "message": "Set wallpaper with disk image file"
   },
   "wallpaper_solid_color_primary": {
     "message": "Pick a color"
