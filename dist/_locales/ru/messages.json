@@ -1,0 +1,497 @@
+﻿{
+  "appDescription": {
+    "message": "Новая вкладка Material Design"
+  },
+  "themeTeal": {
+    "message": "Бирюзовый"
+  },
+  "themeRed": {
+    "message": "Красный"
+  },
+  "themePink": {
+    "message": "Розовый"
+  },
+  "themeIndigo": {
+    "message": "Индиго"
+  },
+  "themeBlue": {
+    "message": "Синий"
+  },
+  "themeDeepOrange": {
+    "message": "Красно-оранжевый"
+  },
+  "themePurple": {
+    "message": "Фиолетовый"
+  },
+  "themeGreen": {
+    "message": "Салатовый"
+  },
+  "themeOrange": {
+    "message": "Оранжевый"
+  },
+  "themeBlueGrey": {
+    "message": "Синевато-серый"
+  },
+  "themeAmber": {
+    "message": "Янтарный"
+  },
+  "themeBrown": {
+    "message": "Коричневый"
+  },
+  "themeGrey": {
+    "message": "Серый"
+  },
+  "themeLightBlue": {
+    "message": "Голубой"
+  },
+  "themeDeepPurple": {
+    "message": "Фиолетово-синий"
+  },
+  "button_cancel": {
+    "message": "Отменить"
+  },
+  "button_confirm": {
+    "message": "Ок"
+  },
+  "nav_edit_title_edit": {
+    "message": "Редактировать сайт"
+  },
+  "nav_edit_title_add": {
+    "message": "Добавить сайт"
+  },
+  "nav_edit_input_website": {
+    "message": "Название"
+  },
+  "nav_edit_input_URL": {
+    "message": "Адрес"
+  },
+  "nav_edit_input_forget_name": {
+    "message": "Не забывайте название сайта рџ™‚"
+  },
+  "nav_edit_input_forget_URL": {
+    "message": "Не забывайте адрес сайта рџ™‚"
+  },
+  "nav_delete_status": {
+    "message": "Удалено"
+  },
+  "nav_delete_undo": {
+    "message": "Вернуть"
+  },
+  "nav_classification_unclassified": {
+    "message": "Не классифицировано"
+  },
+  "nav_add_choose_classification": {
+    "message": "Выберите класс"
+  },
+  "nav_increase_classification_title": {
+    "message": "Добавить класс"
+  },
+  "nav_increase_classification_label": {
+    "message": "Имя класса"
+  },
+  "nav_delete_classification": {
+    "message": "Удалить"
+  },
+  "nav_increase_classification_btn": {
+    "message": "Добавить"
+  },
+  "nav_show_classification": {
+    "message": "Показать класс"
+  },
+  "nav_websites_max_tip": {
+    "message": "Максимальное количество сайтов —"
+  },
+  "settings_toolbar_title": {
+    "message": "Настройки"
+  },
+  "settings_engine_search_label": {
+    "message": "Открыть результаты поиска в новой вкладке"
+  },
+  "settings_website_open_label": {
+    "message": "Открыть сайт в новой вкладке"
+  },
+  "settings_apps_display_label": {
+    "message": "Скрыть название приложений"
+  },
+  "settings_bookmarks_position_label": {
+    "message": "Запомнить предыдущее состояние закладок"
+  },
+  "settings_search_predict_label": {
+    "message": "Показать результаты поиска при вводе"
+  },
+  "settings_search_remaining_label": {
+    "message": "Показать ссылки на остальные поисковые системы при поиске"
+  },
+  "settings_search_title": {
+    "message": "Поиск"
+  },
+  "settings_theme_title": {
+    "message": "Тема"
+  },
+  "settings_theme_switch_label": {
+    "message": "Цвета"
+  },
+  "settings_theme_dark_label": {
+    "message": "Ночной режим"
+  },
+  "settings_weather_title": {
+    "message": "Погода"
+  },
+  "settings_weather_fahrenheit_label": {
+    "message": "Измерять в Фаренгейтах"
+  },
+  "settings_weather_gps_off_label": {
+    "message": "Блокировать авто-нахождение местоположение"
+  },
+  "settings_weather_location_label": {
+    "message": "Текущий город"
+  },
+  "settings_br_title": {
+    "message": "Бекап и Сброс "
+  },
+  "settings_br_backup_label": {
+    "message": "Создать бекап"
+  },
+  "settings_br_restore_label": {
+    "message": "Восстановить из бекапа"
+  },
+  "settings_br_restore_message": {
+    "message": "Успех, обновите окно"
+  },
+  "settings_br_restore_not_supported": {
+    "message": "К сожалению, бекап больше не поддерживается"
+  },
+  "settings_br_reset_label": {
+    "message": "Сбросить настройки"
+  },
+  "settings_br_reset_message": {
+    "message": "Успех, обновите окно."
+  },
+  "settings_reset_title": {
+    "message": "Подтвердить сброс"
+  },
+  "settings_reset_warning": {
+    "message": "Они будут сброшены до настроек по умолчанию"
+  },
+  "settings_about_title": {
+    "message": "О приложении"
+  },
+  "settings_donate": {
+    "message": "Пожертвовать"
+  },
+  "settings_feedback": {
+    "message": "Обратная связь"
+  },
+  "settings_about_weather_sources": {
+    "message": "Источники метеорологических данных"
+  },
+  "bookmarks_search_placeholder": {
+    "message": "Искать закладки"
+  },
+  "bookmarks_bookmarks_manager": {
+    "message": "Менеджер закладок"
+  },
+  "bookmarks_tabs_all": {
+    "message": "Все"
+  },
+  "bookmarks_tabs_recent": {
+    "message": "Недавно добавленные"
+  },
+  "empty_text_apps": {
+    "message": "Здесь нет приложений."
+  },
+  "empty_text_bookmarks": {
+    "message": "Здесь нет закладок."
+  },
+  "empty_text_bookmarks_search": {
+    "message": "Закладки не найдены"
+  },
+  "empty_text_bookmarks_recent": {
+    "message": "Нет новых закладок"
+  },
+  "empty_text_navigation": {
+    "message": "Здесь нет сайтов."
+  },
+  "empty_text_navigation_add": {
+    "message": "Добавить"
+  },
+  "empty_text_navigation_or": {
+    "message": "или"
+  },
+  "empty_text_navigation_hide": {
+    "message": "Скрыть"
+  },
+  "hotkey_title": {
+    "message": "Горячие клавиши"
+  },
+  "hotkey_apps": {
+    "message": "Приложения"
+  },
+  "hotkey_bookmarks": {
+    "message": "Закладки"
+  },
+  "hotkey_settings": {
+    "message": "Настройки"
+  },
+  "weather_air": {
+    "message": "Направление ветра"
+  },
+  "weather_humidity": {
+    "message": "Влажность"
+  },
+  "weather_week_Sunday": {
+    "message": "Вс"
+  },
+  "weather_week_Monday": {
+    "message": "Пн"
+  },
+  "weather_week_Tuesday": {
+    "message": "Вт"
+  },
+  "weather_week_Wednesday": {
+    "message": "Ср"
+  },
+  "weather_week_Thurday": {
+    "message": "Чт"
+  },
+  "weather_week_Friday": {
+    "message": "Пт"
+  },
+  "weather_week_Saturday": {
+    "message": "Сб"
+  },
+  "weather_today": {
+    "message": "Сегодня"
+  },
+  "weather_empty_noData": {
+    "message": "Извините, не удалось получить данные о погоде на данный момент"
+  },
+  "weather_empty_requestError": {
+    "message": "Извините, запрос данных вызвал ошибку"
+  },
+  "weather_empty_geolocationError": {
+    "message": "Что-то пошло не так, когда мы пытались получить ваше местоположение"
+  },
+  "weather_empty_geolocationClosed": {
+    "message": "Вы отклонили запрос на получение информации о местоположении"
+  },
+  "weather_empty_geolocationEmpty": {
+    "message": "Браузер не может получить информацию о вашем местоположении"
+  },
+  "weather_empty_geolocationTimeout": {
+    "message": "Получить тайм-аут информации о местоположении"
+  },
+  "weather_empty_region": {
+    "message": "Город не доступен"
+  },
+  "region_edit_title": {
+    "message": "Редактировать город"
+  },
+  "region_input_placeholder": {
+    "message": "Город"
+  },
+  "region_tip_geolocation": {
+    "message": "В настоящее время используется ваше местоположение"
+  },
+  "theme_custom_label": {
+    "message": "Свой цвет"
+  },
+  "theme_input_placeholder": {
+    "message": "Код цвета, например, #abc123"
+  },
+  "theme_radio_dark": {
+    "message": "Тёмная тема"
+  },
+  "theme_radio_bright": {
+    "message": "Светлая тема"
+  },
+  "engines_settings_management": {
+    "message": "Управление поисковыми движками"
+  },
+  "engines_text": {
+    "message": "Поисковый движок"
+  },
+  "engines_URL": {
+    "message": "Адрес запроса"
+  },
+  "engines_table_default": {
+    "message": "(По умолчанию)"
+  },
+  "engines_menu_default": {
+    "message": "Использовать по умолчанию"
+  },
+  "engines_menu_edit": {
+    "message": "Редактировать"
+  },
+  "engines_menu_remove": {
+    "message": "Убрать из списка"
+  },
+  "engines_menu_move_up": {
+    "message": "Переместить вверх"
+  },
+  "engines_menu_move_down": {
+    "message": "Переместить вниз"
+  },
+  "engines_add": {
+    "message": "Добавить поисковой движок"
+  },
+  "engines_edit": {
+    "message": "Редактировать поисковой движок"
+  },
+  "engines_custom_name_placeholder": {
+    "message": "Поисковый движок"
+  },
+  "engines_custom_URL_placeholder": {
+    "message": "Адрес с %s вместо запроса"
+  },
+  "engines_custom_tip": {
+    "message": "У пользовательских поисковых движков могут отсутствовать результаты"
+  },
+  "engines_custom_name_error": {
+    "message": "Не забывайте название поискового движка рџ™‚"
+  },
+  "engines_custom_URL_error": {
+    "message": "Неправильный формат адреса"
+  },
+  "feedback_email_placeholder": {
+    "message": "Ваша электронная почта"
+  },
+  "feedback_message_placeholder": {
+    "message": "Дайте мне несколько предложений"
+  },
+  "feedback_email_error": {
+    "message": "Неправильный формат электронной почты"
+  },
+  "feedback_message_error": {
+    "message": "Напишите мне что-нибудь"
+  },
+  "feedback_success": {
+    "message": "Я получил ваше предложение, спасибо"
+  },
+  "apps_title": {
+    "message": "Приложения"
+  },
+  "apps_manage_tip": {
+    "message": "Управление предложениями"
+  },
+  "desktop_header_title": {
+    "message": "Рабочий стол"
+  },
+  "desktop_area_title_wallpaper": {
+    "message": "Обои"
+  },
+  "desktop_top_shadow_label": {
+    "message": "Тень вверху"
+  },
+  "desktop_wallpaper_label": {
+    "message": "Использовать обои"
+  },
+  "wallpaper_source_title": {
+    "message": "Выберите источник обоев"
+  },
+  "wallpaper_source_internet": {
+    "message": "Интернет"
+  },
+  "wallpaper_source_local": {
+    "message": "Диск"
+  },
+  "wallpaper_source_solid": {
+    "message": "Однотонные обои"
+  },
+  "wallpaper_frequency_primary": {
+    "message": "Частота обновления"
+  },
+  "wallpaper_frequency_secondary": {
+    "message": "Выбор интервала для обновлений обоев"
+  },
+  "wallpaper_frequency_dialog_title": {
+    "message": "Выберите частоту обновления"
+  },
+  "wallpaper_frequency_minute": {
+    "message": "10 минут"
+  },
+  "wallpaper_frequency_hour": {
+    "message": "Час"
+  },
+  "wallpaper_frequency_day": {
+    "message": "День"
+  },
+  "wallpaper_frequency_close": {
+    "message": "Не обновлять"
+  },
+  "wallpaper_new_primary": {
+    "message": "Новые обои"
+  },
+  "wallpaper_new_secondary": {
+    "message": "Нажмите, чтобы поменять обои"
+  },
+  "wallpaper_download_primary": {
+    "message": "Скачать обои"
+  },
+  "wallpaper_download_secondary": {
+    "message": "Сохранение текущих обоев на диск"
+  },
+  "wallpaper_local_primary": {
+    "message": "Выберите изображение"
+  },
+  "wallpaper_local_secondary": {
+    "message": "Выберите файл с обоями"
+  },
+  "wallpaper_solid_color_primary": {
+    "message": "Выберите цвет"
+  },
+  "wallpaper_solid_color_secondary": {
+    "message": "Установите обои со своим цветом"
+  },
+  "wallpaper_blur_primary": {
+    "message": "Сила размытия"
+  },
+  "wallpaper_shade_primary": {
+    "message": "Тип обоев"
+  },
+  "wallpaper_shade_light": {
+    "message": "Светлые"
+  },
+  "wallpaper_shade_dark": {
+    "message": "Тёмные"
+  },
+  "wallpaper_mask_primary": {
+    "message": "Сила маски"
+  },
+  "desktop_area_title_search": {
+    "message": "Поиск"
+  },
+  "search_hide_label": {
+    "message": "Скрыть поиск"
+  },
+  "search_input_transparency_label": {
+    "message": "Прозрачность поля ввода"
+  },
+  "search_logo_transparency_primary": {
+    "message": "Прозрачность логотипа"
+  },
+  "desktop_area_title_webistes": {
+    "message": "Сайты"
+  },
+  "webistes_hide_label": {
+    "message": "Скрыть сайты"
+  },
+  "webistes_text_shadow_label": {
+    "message": "Тень у текста"
+  },
+  "desktop_msg_not_supported": {
+    "message": "Этот файл не поддерживается"
+  },
+  "desktop_msg_too_large": {
+    "message": "Это изображение слишком большое"
+  },
+  "desktop_msg_fetching": {
+    "message": "При извлечении файла, пожалуйста, будьте терпеливы"
+  },
+  "desktop_msg_fetch_failed": {
+    "message": "Упс, что-то пошло не так"
+  },
+  "search_from": {
+    "message": "Искать в"
+  }
+}
