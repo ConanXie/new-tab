@@ -27,6 +27,10 @@ A Chrome new tab page extension with **Material Design**.
 ## Feedback
 Please create an issue if you have any questions or suggestions about it.
 
+## Thanks
+Special thanks to those who make this extension support more languages.
+- **Russian** @Руслан Чешневский
+
 ## Donation
 If you find the extension useful, you can buy me a cup of coffee.  
 The `DONATE` button at settings page.💖
