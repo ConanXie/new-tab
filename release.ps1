@@ -64,7 +64,7 @@ $confirmation = Read-Host "Do you want to continue? [Y/n]"
 if ($confirmation -eq 'y' -or $confirmation -eq 'Y') {
 
   Remove-Item -Recurse "$distPath/assets"
-  Get-ChildItem $distPath | Where{$_.Name -Match "js$"} | Remove-Item
+  Get-ChildItem $distPath | Where-Object{$_.Name -Match "js$"} | Remove-Item
 
   git checkout -- $distPath
 
