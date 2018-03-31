@@ -30,7 +30,7 @@ import SettingsRestore from 'material-ui/svg-icons/action/settings-backup-restor
 import ActionInfo from 'material-ui/svg-icons/action/info-outline'
 import HardwareKeyboard from 'material-ui/svg-icons/hardware/keyboard'
 import FileCloud from 'material-ui/svg-icons/file/cloud'
-import SocialMood from 'material-ui/svg-icons/social/mood'
+import ContentSend from 'material-ui/svg-icons/content/send'
 import GPSOff from 'material-ui/svg-icons/device/gps-off'
 import LowPriority from 'material-ui/svg-icons/content/low-priority'
 import Checkbox from 'material-ui/Checkbox'
@@ -406,7 +406,7 @@ class Settings extends Component {
                 <Paper className="settings-content about" zDepth={1}>
                   <h3>{chrome.i18n.getMessage('settings_about_title')}</h3>
                   <p className="name">
-                    <span>Material Design New Tab </span>
+                    <span>{chrome.i18n.getMessage('appDescription')} </span>
                     <a
                       href={navigator.language === 'zh-CN' ? 'https://tab.xiejie.co/logs' : 'https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md'}
                       target="_blank"
@@ -442,8 +442,8 @@ class Settings extends Component {
                   </div>
                   {navigator.language !== 'zh-CN' && (
                     <div className="tip">
-                      <SocialMood style={{ width: 18, height: 18 }} color="#999" />
-                      <span>Please forgive me my poor English, you can also give me some advices on the translation. Thank you.</span>
+                      <ContentSend style={{ width: 18, height: 18 }} color="#999" />
+                      <span>If you want to add additional languages support or have some suggestions, please give me feedback. Thank you.</span>
                     </div>
                   )}
                   {/*<p className="intro">Please create an issue on <a href="https://github.com/ConanXie/react-koa-website/issues" target="_blank">Github</a> if you have any problems when using this extension. Thank you 😉</p>*/}
