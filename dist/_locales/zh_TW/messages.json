@@ -2,42 +2,6 @@
   "appDescription": {
     "message": "Material Design 新增分頁"
   },
-  "previousBtn": {
-    "message": "上一步"
-  },
-  "NextBtn": {
-    "message": "下一步"
-  },
-  "skipBtn": {
-    "message": "跳過"
-  },
-  "tryIt": {
-    "message": "開始使用"
-  },
-  "onboardingFirstTitle": {
-    "message": "網站"
-  },
-  "onboardingFirstContent": {
-    "message": "你可以在主頁添加你喜歡的網站。分類功能讓你更快捷地打開網站。你可以隨時編輯，刪除，還能夠拖動放置到合適的位置。"
-  },
-  "onboardingSecondTitle": {
-    "message": "搜尋"
-  },
-  "onboardingSecondContent": {
-    "message": "這裡有多個主流搜尋引擎供你選擇，鼠標移動至 LOGO 處可隨時切換。你可以開啟搜尋預測，讓搜尋更加便捷。"
-  },
-  "onboardingThirdTitle": {
-    "message": "天氣與應用程式"
-  },
-  "onboardingThirdContent": {
-    "message": "簡潔美觀的天氣預報，前提是你允許擴充功能使用你的位置。你可以在這裡瀏覽你的 Chrome 應用程式，點擊可以啟動。"
-  },
-  "onboardingFourthTitle": {
-    "message": "書籤"
-  },
-  "onboardingFourthContent": {
-    "message": "一個簡易的書籤瀏覽功能，你可以選擇記憶書籤位置。提供了書籤搜尋功能，方便你最快速地找到你的書籤。"
-  },
   "themeTeal": {
     "message": "水鴨青"
   },
@@ -83,14 +47,12 @@
   "themeDeepPurple": {
     "message": "深紫"
   },
-  /*general*/
   "button_cancel": {
     "message": "取消"
   },
   "button_confirm": {
     "message": "確定"
   },
-  /*Nav*/
   "nav_edit_title_edit": {
     "message": "編輯網站"
   },
@@ -139,7 +101,6 @@
   "nav_websites_max_tip": {
     "message": "網站數量上限是"
   },
-  /*settings*/
   "settings_toolbar_title": {
     "message": "設定"
   },
@@ -224,7 +185,6 @@
   "settings_about_weather_sources": {
     "message": "氣象資料來自"
   },
-  /*bookmarks*/
   "bookmarks_search_placeholder": {
     "message": "搜尋書籤"
   },
@@ -237,7 +197,6 @@
   "bookmarks_tabs_recent": {
     "message": "最近新增"
   },
-  /*empty text*/
   "empty_text_apps": {
     "message": "你沒有任何應用程式"
   },
@@ -262,7 +221,6 @@
   "empty_text_navigation_hide": {
     "message": "隐藏"
   },
-  /*hot key*/
   "hotkey_title": {
     "message": "快速鍵"
   },
@@ -275,7 +233,6 @@
   "hotkey_settings": {
     "message": "設定"
   },
-  /*weather*/
   "weather_air": {
     "message": "空氣"
   },
@@ -327,7 +284,6 @@
   "weather_empty_region": {
     "message": "當前地區不可用"
   },
-  /*weather region*/
   "region_edit_title": {
     "message": "編輯地區"
   },
@@ -337,7 +293,6 @@
   "region_tip_geolocation": {
     "message": "當前使用地理位置"
   },
-  /*theme*/
   "theme_custom_label": {
     "message": "自訂"
   },
@@ -350,7 +305,6 @@
   "theme_radio_bright": {
     "message": "亮色主題"
   },
-  /*search engines*/
   "engines_settings_management": {
     "message": "管理搜尋引擎"
   },
@@ -399,7 +353,6 @@
   "engines_custom_URL_error": {
     "message": "網址格式不正確"
   },
-  /*feedback*/
   "feedback_email_placeholder": {
     "message": "你的邮箱"
   },
@@ -415,14 +368,12 @@
   "feedback_success": {
     "message": "回馈成功，十分感謝"
   },
-  /*Apps*/
   "apps_title": {
     "message": "應用程式"
   },
   "apps_manage_tip": {
     "message": "管理應用程式"
   },
-  /*Desktop*/
   "desktop_header_title": {
     "message": "主荧幕"
   },
@@ -540,7 +491,6 @@
   "desktop_msg_fetch_failed": {
     "message": "圖像獲取失敗"
   },
-  /* search */
   "search_from": {
     "message": "搜尋自"
   }

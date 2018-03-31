@@ -2,42 +2,6 @@
   "appDescription": {
     "message": "Material Design 新标签页"
   },
-  "previousBtn": {
-    "message": "上一步"
-  },
-  "NextBtn": {
-    "message": "下一步"
-  },
-  "skipBtn": {
-    "message": "跳过"
-  },
-  "tryIt": {
-    "message": "开始使用"
-  },
-  "onboardingFirstTitle": {
-    "message": "网站"
-  },
-  "onboardingFirstContent": {
-    "message": "你可以在主页添加你喜欢的网站。分类功能让你更快捷地打开网站。你可以随时编辑，删除，还能够拖动放置到合适的位置。"
-  },
-  "onboardingSecondTitle": {
-    "message": "搜索"
-  },
-  "onboardingSecondContent": {
-    "message": "这里有多款主流搜索引擎供你选择，鼠标移动至 LOGO 处可随时切换。你可以开启搜索预测，让搜索更加便捷。"
-  },
-  "onboardingThirdTitle": {
-    "message": "天气与应用"
-  },
-  "onboardingThirdContent": {
-    "message": "简洁美观的天气预报，前提是你允许扩展使用你的位置。你可以在这里浏览你的 Chrome 应用，点击可以启动。"
-  },
-  "onboardingFourthTitle": {
-    "message": "书签"
-  },
-  "onboardingFourthContent": {
-    "message": "一个简易的书签浏览功能，你可以选择保存书签位置。提供了书签搜索功能，方便你最快速地找到你的书签。"
-  },
   "themeTeal": {
     "message": "水鸭青"
   },
@@ -83,14 +47,12 @@
   "themeDeepPurple": {
     "message": "深紫"
   },
-  /*general*/
   "button_cancel": {
     "message": "取消"
   },
   "button_confirm": {
     "message": "确认"
   },
-  /*Nav*/
   "nav_edit_title_edit": {
     "message": "编辑网站"
   },
@@ -139,7 +101,6 @@
   "nav_websites_max_tip": {
     "message": "网站数量上限是"
   },
-  /*settings*/
   "settings_toolbar_title": {
     "message": "设置"
   },
@@ -224,7 +185,6 @@
   "settings_about_weather_sources": {
     "message": "天气数据来源"
   },
-  /*bookmarks*/
   "bookmarks_search_placeholder": {
     "message": "搜索书签"
   },
@@ -237,7 +197,6 @@
   "bookmarks_tabs_recent": {
     "message": "最近添加"
   },
-  /*empty text*/
   "empty_text_apps": {
     "message": "你没有任何应用"
   },
@@ -262,7 +221,6 @@
   "empty_text_navigation_hide": {
     "message": "隐藏"
   },
-  /*hot key*/
   "hotkey_title": {
     "message": "快捷键"
   },
@@ -275,7 +233,6 @@
   "hotkey_settings": {
     "message": "设置"
   },
-  /*weather*/
   "weather_air": {
     "message": "空气"
   },
@@ -327,7 +284,6 @@
   "weather_empty_region": {
     "message": "当前地区不可用"
   },
-  /*weather region*/
   "region_edit_title": {
     "message": "编辑地区"
   },
@@ -337,7 +293,6 @@
   "region_tip_geolocation": {
     "message": "当前使用地理位置"
   },
-  /*theme*/
   "theme_custom_label": {
     "message": "自定义"
   },
@@ -350,7 +305,6 @@
   "theme_radio_bright": {
     "message": "亮色主题"
   },
-  /*search engines*/
   "engines_settings_management": {
     "message": "管理搜索引擎"
   },
@@ -399,7 +353,6 @@
   "engines_custom_URL_error": {
     "message": "网址格式不正确"
   },
-  /*feedback*/
   "feedback_email_placeholder": {
     "message": "你的邮箱"
   },
@@ -415,14 +368,12 @@
   "feedback_success": {
     "message": "反馈成功，十分感谢"
   },
-  /*Apps*/
   "apps_title": {
     "message": "应用"
   },
   "apps_manage_tip": {
     "message": "管理应用"
   },
-  /*Desktop*/
   "desktop_header_title": {
     "message": "主屏幕"
   },
@@ -540,7 +491,6 @@
   "desktop_msg_fetch_failed": {
     "message": "图片获取失败"
   },
-  /* search */
   "search_from": {
     "message": "搜索自"
   }

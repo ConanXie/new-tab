@@ -2,42 +2,6 @@
   "appDescription": {
     "message": "Material Design new tab page"
   },
-  "previousBtn": {
-    "message": "Previous"
-  },
-  "NextBtn": {
-    "message": "Next"
-  },
-  "skipBtn": {
-    "message": "Skip"
-  },
-  "tryIt": {
-    "message": "Try it"
-  },
-  "onboardingFirstTitle": {
-    "message": "Websites"
-  },
-  "onboardingFirstContent": {
-    "message": "Add your favorite websites on the main page. You can edit, delete or drag them to the right place."
-  },
-  "onboardingSecondTitle": {
-    "message": "Search"
-  },
-  "onboardingSecondContent": {
-    "message": "Powerful search engines. The default search engines have predictions as you type."
-  },
-  "onboardingThirdTitle": {
-    "message": "Weather & Apps"
-  },
-  "onboardingThirdContent": {
-    "message": "Beautiful weather. You can view your Chrome apps here and click to start."
-  },
-  "onboardingFourthTitle": {
-    "message": "Bookmarks"
-  },
-  "onboardingFourthContent": {
-    "message": "Simple bookmarks. Search bookmarks and view the recently added bookmarks."
-  },
   "themeTeal": {
     "message": "Teal"
   },
@@ -83,14 +47,12 @@
   "themeDeepPurple": {
     "message": "Deep Purple"
   },
-  /*general*/
   "button_cancel": {
     "message": "CANCEL"
   },
   "button_confirm": {
     "message": "OK"
   },
-  /*Nav*/
   "nav_edit_title_edit": {
     "message": "Edit website"
   },
@@ -104,10 +66,10 @@
     "message": "URL"
   },
   "nav_edit_input_forget_name": {
-    "message": "Don\"t forget website name 🙂"
+    "message": "Don't forget website name 🙂"
   },
   "nav_edit_input_forget_URL": {
-    "message": "Don\"t forget website URL 🙂"
+    "message": "Don't forget website URL 🙂"
   },
   "nav_delete_status": {
     "message": "Deleted"
@@ -139,7 +101,6 @@
   "nav_websites_max_tip": {
     "message": "The maximum number of websites is"
   },
-  /*settings*/
   "settings_toolbar_title": {
     "message": "Settings"
   },
@@ -224,7 +185,6 @@
   "settings_about_weather_sources": {
     "message": "Weather data sources"
   },
-  /*bookmarks*/
   "bookmarks_search_placeholder": {
     "message": "Search bookmarks"
   },
@@ -237,9 +197,8 @@
   "bookmarks_tabs_recent": {
     "message": "Recently added"
   },
-  /*empty text*/
   "empty_text_apps": {
-    "message": "There aren\"t any applications here"
+    "message": "There aren't any applications here"
   },
   "empty_text_bookmarks": {
     "message": "Without any bookmarks"
@@ -251,7 +210,7 @@
     "message": "No new bookmarks"
   },
   "empty_text_navigation": {
-    "message": "There aren\"t any websites here"
+    "message": "There aren't any websites here"
   },
   "empty_text_navigation_add": {
     "message": "Add now"
@@ -262,7 +221,6 @@
   "empty_text_navigation_hide": {
     "message": "Hide it"
   },
-  /*hot key*/
   "hotkey_title": {
     "message": "Hotkey"
   },
@@ -275,7 +233,6 @@
   "hotkey_settings": {
     "message": "Settings"
   },
-  /*weather*/
   "weather_air": {
     "message": "Air"
   },
@@ -327,7 +284,6 @@
   "weather_empty_region": {
     "message": "Region is not available"
   },
-  /*weather region*/
   "region_edit_title": {
     "message": "Edit region"
   },
@@ -337,7 +293,6 @@
   "region_tip_geolocation": {
     "message": "Currently using geolocation"
   },
-  /*theme*/
   "theme_custom_label": {
     "message": "Custom"
   },
@@ -350,7 +305,6 @@
   "theme_radio_bright": {
     "message": "Bright Theme"
   },
-  /*search engines*/
   "engines_settings_management": {
     "message": "Manage search engines"
   },
@@ -399,7 +353,6 @@
   "engines_custom_URL_error": {
     "message": "The URL format is incorrect"
   },
-  /*feedback*/
   "feedback_email_placeholder": {
     "message": "Your email"
   },
@@ -415,14 +368,12 @@
   "feedback_success": {
     "message": "I received your feedback, thank you"
   },
-  /*Apps*/
   "apps_title": {
     "message": "Apps"
   },
   "apps_manage_tip": {
     "message": "Manage apps"
   },
-  /*Desktop*/
   "desktop_header_title": {
     "message": "Desktop"
   },
@@ -540,7 +491,6 @@
   "desktop_msg_fetch_failed": {
     "message": "Oops, something went wrong"
   },
-  /* search */
   "search_from": {
     "message": "Search from"
   }
