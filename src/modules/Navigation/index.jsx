@@ -146,7 +146,11 @@ class Navigation extends Component {
     this.cache = {}
   }
   componentDidMount() {
-    this.props.initialData()
+    if (this.props.settings.background) {
+      setTimeout(() => this.props.initialData(), 150)
+    } else {
+      this.props.initialData()
+    }
   }
   checkClick = (e) => {
     if (this.state.edit) {
