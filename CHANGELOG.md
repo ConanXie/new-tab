@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.4
+###### _Apr 03, 2018_
+- Fix white flash when starding
+- Improve the translation of Russian
+
 ## 1.8.3
 ###### _Mar 31, 2018_
 - Add **Russian** support
