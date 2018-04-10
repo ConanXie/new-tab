@@ -1,27 +1,24 @@
-import './styles'
+import * as React from "react"
+import { render } from "react-dom"
+import { AppContainer } from "react-hot-loader"
+import { Provider } from "mobx-react"
+import "typeface-roboto"
+import "./styles"
 
-import React, { Component } from 'react'
-import { render } from 'react-dom'
+import App from "./App"
 
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import { Provider } from 'react-redux'
-import reducer from './reducers'
-const store = createStore(reducer, applyMiddleware(thunk))
-
-import { AppContainer } from 'react-hot-loader'
-import App from './modules/App'
-
-const renderApp = (Component = App) => render((
-  <Provider store={store}>
+const renderApp = () => {
+  render((
     <AppContainer>
-      <Component />
+      <Provider>
+        <App />
+      </Provider>
     </AppContainer>
-  </Provider>
-), document.querySelector('#app'))
+  ), document.querySelector("#app"))
+}
 
 renderApp()
 
 if (module.hot) {
-  module.hot.accept('./modules/App', () => renderApp())
+  module.hot.accept("./App", () => renderApp())
 }
