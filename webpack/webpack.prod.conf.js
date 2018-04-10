@@ -1,67 +1,62 @@
 const path = require('path')
 const webpack = require('webpack')
+const merge = require('webpack-merge')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const baseConfig = require('./webpack.base.conf')
+const node_modules = path.resolve(__dirname, '../node_modules')
 
-module.exports = {
-  context: path.resolve(__dirname, '../src'),
-  entry: {
-    app: [
-      'babel-polyfill',
-      './Main.jsx'
-    ],
-    vendors: [
-      'react',
-      'react-dom',
-      'react-redux',
-      'redux',
-      'redux-thunk',
-      'classnames'
-    ]
+// Replace css & less rule
+baseConfig.module.rules.splice(1, 1, {
+  test: /\.(le|c)ss$/,
+  use: ExtractTextPlugin.extract({
+    fallback: 'style-loader',
+    use: [{
+      loader: 'css-loader',
+      options: {
+        minimize: true
+      }
+    }, 'less-loader']
+  })
+})
+
+module.exports = merge(baseConfig, {
+  mode: 'production',
+  entry: './index',
+  output: {
+    path: path.resolve(__dirname, '../extension'),
+    filename: '[name].min.js'
   },
-  resolve: {
-    extensions: ['.js', '.jsx', '.less', '.css', '.jpg', '.png', '.svg', '.woff2', '.gif'],
-    alias: {
-      '@': path.join(__dirname, '../src')
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
     }
   },
-  output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: 'bundle.min.js'
-  },
-  module: {
-    rules: [{
-      test: /\.js(x)?$/,
-      exclude: /node_modules/,
-      use: [{
-        loader: 'babel-loader'
-      }]
-    }, {
-      test: /\.less$/,
-      use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: ['css-loader', 'less-loader']
-      })
-    }, {
-      test: /\.(jpg|jpeg|png|svg|gif|woff2)$/,
-      use: ['url-loader?limit=10000&name=assets/[name].[ext]']
-    }]
-  },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
+    new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(en|zh-cn|zh-tw)$/),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendors',
-      filename: 'vendors.min.js'
+    new UglifyJSPlugin(),
+    new ExtractTextPlugin({
+      filename: 'style.min.css'
     }),
-    new ExtractTextPlugin('style.min.css')
-  ],
-  stats: {
-    colors: true
-  }
-}
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: path.resolve(__dirname, '../index.html'),
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: false,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    })
+  ]
+})
