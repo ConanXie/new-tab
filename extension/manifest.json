@@ -1,16 +1,13 @@
 {
   "name": "Material Design New Tab",
-  "version": "1.8.0",
+  "version": "2.0.0",
   "manifest_version": 2,
   "default_locale": "en",
   "description": "__MSG_appDescription__",
   "icons": {
-    "16": "icons/icon@16.png",
-    "48": "icons/icon@48.png",
-    "128": "icons/icon@128.png"
-  },
-  "background": {
-    "page": "index.html"
+    "16": "logo/logo16.png",
+    "48": "logo/logo48.png",
+    "128": "logo/logo128.png"
   },
   "chrome_url_overrides": {
     "newtab": "index.html"
@@ -19,7 +16,6 @@
     "storage",
     "management",
     "bookmarks",
-    "background",
     "geolocation",
     "<all_urls>"
   ],
