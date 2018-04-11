@@ -10,7 +10,7 @@ const node_modules = path.resolve(__dirname, '../node_modules')
 
 // Replace css & less rule
 baseConfig.module.rules.splice(1, 1, {
-  test: /\.(le|c)ss$/,
+  test: /\.(css|styl)$/,
   use: ExtractTextPlugin.extract({
     fallback: 'style-loader',
     use: [{
@@ -18,7 +18,7 @@ baseConfig.module.rules.splice(1, 1, {
       options: {
         minimize: true
       }
-    }, 'less-loader']
+    }, 'stylus-loader']
   })
 })
 
@@ -45,7 +45,7 @@ module.exports = merge(baseConfig, {
     new webpack.optimize.ModuleConcatenationPlugin(),
     new UglifyJSPlugin(),
     new ExtractTextPlugin({
-      filename: 'style.min.css'
+      filename: '[name].min.css'
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',

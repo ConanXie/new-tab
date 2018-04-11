@@ -4,7 +4,7 @@ const webpack = require('webpack')
 module.exports = {
   context: path.resolve(__dirname, '../src'),
   resolve: {
-    extensions: ['.js', '.ts', '.tsx', '.less', '.css', '.jpg', '.png', '.svg', '.woff', '.woff2', '.gif']
+    extensions: ['.js', '.ts', '.tsx', '.styl', '.css', '.jpg', '.png', '.svg', '.woff', '.woff2', '.gif']
   },
   module: {
     rules: [{
@@ -12,7 +12,7 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'awesome-typescript-loader'
     }, {
-      test: /\.(le|c)ss$/,
+      test: /\.(css|styl)$/,
       use: [{
         loader: 'style-loader',
       }, {
@@ -21,7 +21,7 @@ module.exports = {
           sourceMap: true
         }
       }, {
-        loader: 'less-loader'
+        loader: 'stylus-loader'
       }]
     }, {
       test: /\.(jpe?g|png|svg|gif)$/,
