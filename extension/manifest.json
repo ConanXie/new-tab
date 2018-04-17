@@ -12,6 +12,11 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
+  "browser_action": {
+    "default_icon": "logo/logo48.png",
+    "default_popup": "popup.html"
+  },
+  "options_page": "settings.html",
   "permissions": [
     "storage",
     "management",
