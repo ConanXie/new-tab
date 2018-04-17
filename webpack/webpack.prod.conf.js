@@ -22,12 +22,11 @@ baseConfig.module.rules.splice(1, 1, {
   })
 })
 
-module.exports = merge(baseConfig, {
+const webpackConfig = merge(baseConfig, {
   mode: 'production',
-  entry: './index',
   output: {
     path: path.resolve(__dirname, '../extension'),
-    filename: '[name].min.js'
+    filename: '[name].js'
   },
   optimization: {
     splitChunks: {
@@ -45,18 +44,26 @@ module.exports = merge(baseConfig, {
     new webpack.optimize.ModuleConcatenationPlugin(),
     new UglifyJSPlugin(),
     new ExtractTextPlugin({
-      filename: '[name].min.css'
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, '../index.html'),
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: false,
-        removeAttributeQuotes: true
-      },
-      chunksSortMode: 'dependency'
+      filename: '[name].css'
     })
   ]
 })
+
+for (let name in webpackConfig.entry) {
+  const config = {
+    filename: name + '.html',
+    template: path.resolve(__dirname, '../index.html'),
+    inject: true,
+    minify: {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeAttributeQuotes: true
+    },
+    chunks: ['vendors', name],
+    chunksSortMode: 'dependency',
+    hash: true
+  }
+  webpackConfig.plugins.push(new HtmlWebpackPlugin(config))
+}
+
+module.exports = webpackConfig

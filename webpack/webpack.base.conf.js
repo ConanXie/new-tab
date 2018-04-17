@@ -3,6 +3,11 @@ const webpack = require('webpack')
 
 module.exports = {
   context: path.resolve(__dirname, '../src'),
+  entry: {
+    index: './views/index',
+    popup: './views/popup',
+    settings: './views/settings'
+  },
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.styl', '.css', '.jpg', '.png', '.svg', '.woff', '.woff2', '.gif']
   },

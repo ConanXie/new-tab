@@ -4,18 +4,18 @@ const merge = require('webpack-merge')
 
 const baseConfig = require('./webpack.base.conf')
 
+// inject module hot replacement
+Object.keys(baseConfig.entry).forEach(name => {
+  baseConfig.entry[name] = ['react-hot-loader/patch', 'webpack/hot/only-dev-server'].concat(baseConfig.entry[name])
+})
+
 const port = 5001
 
 module.exports = merge(baseConfig, {
   mode: 'development',
-  entry: [
-    'react-hot-loader/patch',
-    'webpack/hot/only-dev-server',
-    './index'
-  ],
   output: {
     publicPath: `http://localhost:${port}/`,
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
