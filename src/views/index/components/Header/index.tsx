@@ -9,6 +9,9 @@ import WallpaperIcon from "@material-ui/icons/Wallpaper"
 import WidgetsIcon from "@material-ui/icons/Widgets"
 import SettingsIcon from "@material-ui/icons/Settings"
 import Drawer from "material-ui/Drawer"
+import LazilyLoad, { importLazy } from "../../../../utils/LazilyLoad"
+
+import "./style"
 
 const styles = {
   root: {
@@ -20,7 +23,7 @@ const styles = {
   }
 }
 
-class Header extends React.Component<WithStyles<"root"|"gutters">> {
+class Header extends React.Component<WithStyles<"root" | "gutters">> {
   public state = {
     wallpaperOpen: false
   }
@@ -58,7 +61,17 @@ class Header extends React.Component<WithStyles<"root"|"gutters">> {
           </Toolbar>
         </AppBar>
         <Drawer anchor="right" open={this.state.wallpaperOpen} onClose={this.closeWallpaperDrawer}>
-          <h1>Wallpaper Drawer</h1>
+          <div className="wallpaper-drawer">
+            <LazilyLoad
+              modules={{
+                Wallpaper: () => importLazy(import("./Wallpaper"))
+              }}
+            >
+              {({ Wallpaper }: { Wallpaper: React.SFC }) => (
+                <Wallpaper />
+              )}
+            </LazilyLoad>
+          </div>
         </Drawer>
       </div>
     )
