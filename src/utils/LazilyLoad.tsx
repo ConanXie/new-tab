@@ -1,30 +1,37 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import * as React from "react"
 
-class LazilyLoad extends Component {
+interface PropType {
+  modules: object
+  children: (modules: object) => any
+}
 
-  constructor() {
-    super(...arguments)
-    this.state = {
-      isLoaded: false
-    }
+class LazilyLoad extends React.Component<PropType> {
+  public state = {
+    isLoaded: false,
+    modules: {}
   }
 
-  componentDidMount() {
+  private _isMounted: boolean = false
+
+  public componentDidMount() {
     this._isMounted = true
     this.load()
   }
 
-  componentDidUpdate(previous) {
-    if (this.props.modules === previous.modules) return null
-    this.load()
+  public componentDidUpdate(previous: PropType) {
+    const shouldLoad = !!Object.keys(this.props.modules).filter((key) => {
+      return this.props.modules[key] !== previous.modules[key]
+    }).length
+    if (shouldLoad) {
+      this.load()
+    }
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this._isMounted = false
   }
 
-  load() {
+  private load() {
     this.setState({
       isLoaded: false
     })
@@ -33,36 +40,39 @@ class LazilyLoad extends Component {
     const keys = Object.keys(modules)
 
     Promise.all(keys.map((key) => modules[key]()))
-      .then((values) => (keys.reduce((agg, key, index) => {
+      .then(values => (keys.reduce((agg, key, index) => {
         agg[key] = values[index]
         return agg
       }, {})))
-      .then((result) => {
-        if (!this._isMounted) return null
+      .then(result => {
+        if (!this._isMounted) {
+          return
+        }
         this.setState({ modules: result, isLoaded: true })
       })
   }
 
-  render() {
-    if (!this.state.isLoaded) return null
+  public render() {
+    if (!this.state.isLoaded) {
+      return null
+    }
     return React.Children.only(this.props.children(this.state.modules))
   }
 }
 
-LazilyLoad.propTypes = {
-  children: PropTypes.func.isRequired,
-}
-
-export const LazilyLoadFactory = (Component, modules) => {
-  return (props) => (
+/**
+ * 高阶函数，用于组件内部懒加载其它组件
+ */
+export const LazilyLoadFactory = (Component: React.SFC, modules: object) => {
+  return (props: object) => (
     <LazilyLoad modules={modules}>
       {(mods) => <Component {...mods} {...props} />}
     </LazilyLoad>
   )
 }
 
-export const importLazy = (promise) => (
-  promise.then((result) => result.default)
+export const importLazy = (promise: Promise<{}>) => (
+  promise.then((result: { default: string }) => result.default)
 )
 
 export default LazilyLoad
