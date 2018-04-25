@@ -1,5 +1,8 @@
 import * as React from "react"
+import Header from './components/Header'
 
 export default () => (
-  <h1>A completely new extension.</h1>
+  <div>
+    <Header />
+  </div>
 )
