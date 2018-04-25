@@ -3,7 +3,7 @@ import { render } from "react-dom"
 import { AppContainer } from "react-hot-loader"
 import { Provider } from "mobx-react"
 import "typeface-roboto"
-import "./styles"
+import "../../styles"
 
 import App from "./App"
 
