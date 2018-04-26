@@ -1,6 +1,6 @@
 import * as React from "react"
+import { observer, inject } from "mobx-react"
 
-import withStyles, { WithStyles } from "material-ui/styles/withStyles"
 import Switch from "material-ui/Switch"
 import Divider from "material-ui/Divider"
 import List, {
@@ -8,45 +8,24 @@ import List, {
   ListItemText,
   ListItemSecondaryAction
 } from "material-ui/List"
-import Menu, { MenuItem } from "material-ui/Menu"
 
-const source = [
-  chrome.i18n.getMessage("wallpaper_source_internet"),
-  chrome.i18n.getMessage("wallpaper_source_local"),
-  chrome.i18n.getMessage("wallpaper_source_solid")
-]
-
-const styles = {
-  paper: {
-    width: 200
-  }
+import { Wallpaper as WallpaperType } from "../../../store/wallpaper"
+import TypeMenu from "./components/TypeMenu"
+interface PropTypes {
+  wallpaper: WallpaperType
 }
 
-class Wallpaper extends React.Component<WithStyles<"paper">> {
-  public state = {
-    useWallpaper: false,
-    sourceIndex: 0,
-    anchorEl: undefined
-  }
+@inject("wallpaper") @observer
+class Wallpaper extends React.Component<PropTypes> {
+  public state = {}
   private handleToggle = () => {
-    this.setState({
-      useWallpaper: !this.state.useWallpaper
-    })
+    this.props.wallpaper.saveUseWallpaper(!this.props.wallpaper.useWallpaper)
   }
-  private handleClickSourceListItem = (event: React.MouseEvent<HTMLElement>) => {
-    this.setState({ anchorEl: event.currentTarget })
-  }
-  private handleSourceMenuClose = () => {
-    this.setState({ anchorEl: undefined })
-  }
-  private handleSourceMenuClick(index: number) {
-    this.setState({ sourceIndex: index, anchorEl: undefined })
+  private handleTypeChange = (value: number) => {
+    this.props.wallpaper.saveWallpaperType(value)
   }
   public render() {
-    const {
-      sourceIndex,
-      anchorEl
-    } = this.state
+    const { wallpaper } = this.props
 
     return (
       <div>
@@ -54,43 +33,15 @@ class Wallpaper extends React.Component<WithStyles<"paper">> {
           <ListItem button onClick={this.handleToggle}>
             <ListItemText primary={chrome.i18n.getMessage("desktop_wallpaper_label")} />
             <ListItemSecondaryAction>
-              <Switch checked={this.state.useWallpaper} onChange={this.handleToggle} />
+              <Switch checked={wallpaper.useWallpaper} onChange={this.handleToggle} />
             </ListItemSecondaryAction>
           </ListItem>
           <Divider />
-          <ListItem
-            button
-            aria-haspopup="true"
-            aria-controls="source-menu"
-            aria-label={chrome.i18n.getMessage("wallpaper_source_title")}
-            onClick={this.handleClickSourceListItem}
-          >
-            <ListItemText
-              primary={chrome.i18n.getMessage("wallpaper_source_title")}
-              secondary={source[sourceIndex]}
-            />
-          </ListItem>
+          <TypeMenu type={wallpaper.wallpaperType} onChange={this.handleTypeChange} />
         </List>
-        <Menu
-          id="source-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleSourceMenuClose}
-          classes={{ paper: this.props.classes.paper }}
-        >
-          {source.map((item, index) => (
-            <MenuItem
-              key={item}
-              selected={index === sourceIndex}
-              onClick={event => this.handleSourceMenuClick(index)}
-            >
-              {item}
-            </MenuItem>
-          ))}
-        </Menu>
       </div>
     )
   }
 }
 
-export default withStyles(styles)<{}>(Wallpaper)
+export default Wallpaper
