@@ -23,7 +23,8 @@ const styles = {
   }
 }
 
-class Header extends React.Component<WithStyles<"root" | "gutters">> {
+type StylesType = "root" | "gutters"
+class Header extends React.Component<WithStyles<StylesType>> {
   public state = {
     wallpaperOpen: false
   }
