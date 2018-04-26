@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="dist/icons/icon@128.png" width="64" alt="LOGO" />
+  <img src="extension/logo/logo128.png" width="64" alt="LOGO" />
 </div>
 
 # [Material Design New Tab](https://tab.xiejie.co)
