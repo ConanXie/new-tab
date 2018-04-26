@@ -6,11 +6,12 @@ import "typeface-roboto"
 import "../../styles"
 
 import App from "./App"
+import * as store from "./store"
 
 const renderApp = () => {
   render((
     <AppContainer>
-      <Provider>
+      <Provider {...store}>
         <App />
       </Provider>
     </AppContainer>
