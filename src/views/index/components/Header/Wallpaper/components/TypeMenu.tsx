@@ -7,7 +7,7 @@ import {
 } from "material-ui/List"
 import Menu, { MenuItem } from "material-ui/Menu"
 
-const source = [
+const source: string[] = [
   chrome.i18n.getMessage("wallpaper_source_internet"),
   chrome.i18n.getMessage("wallpaper_source_local"),
   chrome.i18n.getMessage("wallpaper_source_solid")
