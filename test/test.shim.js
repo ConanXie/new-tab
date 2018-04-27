@@ -7,3 +7,15 @@
 global.requestAnimationFrame = function(callback) {
   setTimeout(callback, 0)
 }
+
+/**
+ * chrome extension API mocks
+ */
+const messages = require('../extension/_locales/en/messages.json')
+
+global.chrome = {
+  i18n: {
+    getMessage: key => messages[key].message
+  }
+}
+
