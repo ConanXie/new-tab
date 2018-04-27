@@ -41,7 +41,7 @@
       "^.+\\.(css|less)$": "<rootDir>/test/test.ignore.js"
     },
     "testMatch": [
-      "<rootDir>/(test|src)/**/*.(ts|tsx)"
+      "<rootDir>/(test|src)/**/*.test.(ts|tsx)"
     ],
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}"
@@ -56,6 +56,7 @@
     "mobx-react": "^5.0.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
+    "react-color": "^2.14.1",
     "react-dom": "^16.3.2",
     "shortid": "^2.2.8",
     "stackblur-canvas": "^1.4.1",
@@ -67,7 +68,9 @@
     "@types/enzyme": "^3.1.10",
     "@types/jest": "^22.2.3",
     "@types/react": "^16.3.12",
+    "@types/react-color": "^2.13.4",
     "@types/react-dom": "^16.0.5",
+    "@types/react-test-renderer": "^16.0.1",
     "@types/webpack-env": "^1.13.6",
     "awesome-typescript-loader": "^5.0.0",
     "css-loader": "^0.28.11",
