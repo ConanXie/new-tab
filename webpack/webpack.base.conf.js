@@ -1,15 +1,20 @@
 const path = require('path')
 const webpack = require('webpack')
 
+const context = path.resolve(__dirname, '../src')
+
 module.exports = {
-  context: path.resolve(__dirname, '../src'),
+  context,
   entry: {
     index: './views/index',
     popup: './views/popup',
     settings: './views/settings'
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx', '.styl', '.css', '.jpg', '.png', '.svg', '.woff', '.woff2', '.gif']
+    extensions: ['.js', '.ts', '.tsx', '.styl', '.css', '.jpg', '.png', '.svg', '.woff', '.woff2', '.gif'],
+    alias: {
+      utils: path.join(context, 'utils')
+    }
   },
   module: {
     rules: [{
