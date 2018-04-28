@@ -9,7 +9,7 @@ import WallpaperIcon from "@material-ui/icons/Wallpaper"
 import WidgetsIcon from "@material-ui/icons/Widgets"
 import SettingsIcon from "@material-ui/icons/Settings"
 import Drawer from "material-ui/Drawer"
-import LazilyLoad, { importLazy } from "../../../../utils/LazilyLoad"
+import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 
 import "./style"
 
