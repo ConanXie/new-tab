@@ -15,7 +15,7 @@ interface PropsType {
 }
 
 class ColorPicker extends React.Component<PropsType> {
-  state = {
+  public state = {
     color: this.props.color
   }
   private stageColor = (result: ColorResult) => {

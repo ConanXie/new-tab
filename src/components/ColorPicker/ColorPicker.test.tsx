@@ -24,7 +24,7 @@ describe("<ColorPicker />", () => {
   it("should initialize state correctly", () => {
     expect(wrapper.state("color")).toEqual(color)
   })
-  
+
   it("should call `handleClose` when click button", () => {
     const buttons = wrapper.find(Button)
 
