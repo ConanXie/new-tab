@@ -8,12 +8,14 @@ module.exports = {
   entry: {
     index: './views/index',
     popup: './views/popup',
-    settings: './views/settings'
+    settings: './views/settings',
+    background: './views/background'
   },
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.styl', '.css', '.jpg', '.png', '.svg', '.woff', '.woff2', '.gif'],
     alias: {
-      utils: path.join(context, 'utils')
+      utils: path.join(context, 'utils'),
+      stores: path.join(context, 'stores')
     }
   },
   module: {
