@@ -14,6 +14,7 @@
     "interface-name": false,
     "max-classes-per-file": false,
     "variable-name": false,
+    "no-empty-interface": false,
     // tsx rules
     "jsx-boolean-value": false,
     "member-ordering": false,
