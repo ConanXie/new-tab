@@ -1,6 +1,7 @@
-import { observable } from "mobx"
+import { observable, autorun } from "mobx"
 
 export class Wallpaper {
+  @observable public wallpaper: string = localStorage.getItem("wallpaper") || ""
   @observable public useWallpaper: boolean = false
   @observable public wallpaperType: number = 0
   public saveUseWallpaper(state: boolean) {
@@ -11,4 +12,10 @@ export class Wallpaper {
   }
 }
 
-export default new Wallpaper()
+const wallpaper = new Wallpaper()
+
+autorun(() => {
+  console.log(wallpaper.useWallpaper)
+})
+
+export default wallpaper

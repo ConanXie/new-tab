@@ -8,22 +8,61 @@ import List, {
   ListItemText,
   ListItemSecondaryAction
 } from "material-ui/List"
+import Snackbar from "material-ui/Snackbar"
+
+import makeDumbProps from "utils/makeDumbProps"
+import { sendMessage } from "utils/message"
+import { toBase64 } from "utils/fileConversions"
 
 import { Wallpaper as WallpaperType } from "../../../store/wallpaper"
 import TypeMenu from "./components/TypeMenu"
-interface PropTypes {
+import SelectImage from "./components/SelectImage"
+import FetchImage from "./components/FetchImage"
+interface PropsType {
   wallpaper: WallpaperType
 }
 
 @inject("wallpaper") @observer
-class Wallpaper extends React.Component<PropTypes> {
-  public state = {}
+class Wallpaper extends React.Component<PropsType> {
+  public state = {
+    snackbarOpen: false,
+    message: ""
+  }
+  private closeSnackbar = () => {
+    this.setState({ snackbarOpen: false })
+  }
+  private handleSnackbarClose = (event: React.SyntheticEvent<any>, reason: string) => {
+    if (reason === "clickaway") {
+      return
+    }
+    this.closeSnackbar()
+  }
+  private showMessage = (message: string) => {
+    this.setState({
+      snackbarOpen: true,
+      message
+    })
+  }
+
   private handleToggle = () => {
     this.props.wallpaper.saveUseWallpaper(!this.props.wallpaper.useWallpaper)
   }
   private handleTypeChange = (value: number) => {
     this.props.wallpaper.saveWallpaperType(value)
   }
+
+  private handleWallpaperUpdate = async (file: File | Blob) => {
+    const url = URL.createObjectURL(file)
+    // Update wallpaper
+    this.props.wallpaper.wallpaper = url
+    localStorage.setItem("wallpaper", url)
+    sendMessage("updateWallpaper", url)
+
+    // Save base64 data to storage
+    const base64 = await toBase64(file)
+    sendMessage("saveWallpaper", base64)
+  }
+
   public render() {
     const { wallpaper } = this.props
 
@@ -38,10 +77,20 @@ class Wallpaper extends React.Component<PropTypes> {
           </ListItem>
           <Divider />
           <TypeMenu type={wallpaper.wallpaperType} onChange={this.handleTypeChange} />
+          <Divider />
+          <SelectImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
+          <Divider />
+          <FetchImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
         </List>
+        <Snackbar
+          open={this.state.snackbarOpen}
+          autoHideDuration={2000}
+          onClose={this.handleSnackbarClose}
+          message={<span>{this.state.message}</span>}
+        />
       </div>
     )
   }
 }
 
-export default Wallpaper
+export default makeDumbProps(Wallpaper)

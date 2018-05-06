@@ -8,9 +8,8 @@ import {
 import Menu, { MenuItem } from "material-ui/Menu"
 
 const source: string[] = [
-  chrome.i18n.getMessage("wallpaper_source_internet"),
-  chrome.i18n.getMessage("wallpaper_source_local"),
-  chrome.i18n.getMessage("wallpaper_source_solid")
+  chrome.i18n.getMessage("wallpaper_type_image"),
+  chrome.i18n.getMessage("wallpaper_type_color")
 ]
 
 const styles = {
@@ -19,14 +18,14 @@ const styles = {
   }
 }
 
-interface ItypeMenuItem {
+interface ITypeMenuItem {
   selected: boolean
   value: number,
   label: string,
   onChange(v: number): void
 }
 
-export class TypeMenuItem extends React.Component<ItypeMenuItem> {
+export class TypeMenuItem extends React.Component<ITypeMenuItem> {
   private handleClick = () => {
     this.props.onChange(this.props.value)
   }
@@ -43,12 +42,12 @@ export class TypeMenuItem extends React.Component<ItypeMenuItem> {
   }
 }
 
-interface PropTypes {
+interface PropsType {
   type: number
   onChange(value: number): void
 }
 
-class TypeMenu extends React.Component<WithStyles<"paper"> & PropTypes> {
+class TypeMenu extends React.Component<WithStyles<"paper"> & PropsType> {
   public state = {
     anchorEl: undefined
   }
@@ -72,11 +71,11 @@ class TypeMenu extends React.Component<WithStyles<"paper"> & PropTypes> {
           button
           aria-haspopup="true"
           aria-controls="source-menu"
-          aria-label={chrome.i18n.getMessage("wallpaper_source_title")}
+          aria-label={chrome.i18n.getMessage("wallpaper_type_title")}
           onClick={this.handleClickListItem}
         >
           <ListItemText
-            primary={chrome.i18n.getMessage("wallpaper_source_title")}
+            primary={chrome.i18n.getMessage("wallpaper_type_title")}
             secondary={source[type]}
           />
         </ListItem>
@@ -104,4 +103,4 @@ class TypeMenu extends React.Component<WithStyles<"paper"> & PropTypes> {
   }
 }
 
-export default withStyles(styles)<PropTypes>(TypeMenu)
+export default withStyles(styles)<PropsType>(TypeMenu)

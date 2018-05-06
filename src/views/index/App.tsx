@@ -1,45 +1,60 @@
 import * as React from "react"
+import { inject, observer } from "mobx-react"
 
-import { MuiThemeProvider, createMuiTheme } from "material-ui/styles"
+import { MuiThemeProvider } from "material-ui/styles"
 import Button from "material-ui/Button"
 
-import Header from "./components/Header"
-import ColorPicker from "../../components/ColorPicker"
+// import Header from "./components/Header"
 
-export default class extends React.Component {
-  private defaultColor = "#3F51B5"
-  public state = {
-    color: this.defaultColor,
-    open: false,
-    theme: this.createTheme(this.defaultColor)
-  }
-  private createTheme(color: string) {
-    return createMuiTheme({
-      palette: {
-        primary: {
-          main: color
-        }
-      }
-    })
-  }
-  private applyTheme(color: string) {
-    const theme = this.createTheme(color)
-    this.setState({ theme })
-  }
-  private openColorPicker = () => {
-    this.setState({ open: true })
-  }
-  private closeColorPicker = (color?: string) => {
-    this.setState({ open: false })
+import LazilyLoad, { importLazy } from "utils/LazilyLoad"
+import { onMessage } from "utils/message"
+import makeDumbProps from "utils/makeDumbProps"
 
-    if (color) {
-      this.applyTheme(color)
+import { Wallpaper as WallpaperType } from "./store/wallpaper"
+import { Theme as ThemeSettings } from "stores/theme"
+
+interface PropsType {
+  wallpaper: WallpaperType
+  themeSettings: ThemeSettings
+}
+@inject("wallpaper", "themeSettings")
+@observer
+class App extends React.Component<PropsType> {
+  public state = {}
+  private setPageTitle() {
+    const title = document.createElement("title")
+    title.innerHTML = chrome.i18n.getMessage("new_tab")
+    document.head.appendChild(title)
+  }
+  private loadWallpaper() {
+    const wallpaper = localStorage.getItem("wallpaper")
+    if (wallpaper) {
+      this.props.wallpaper.wallpaper = wallpaper
     }
   }
+  public componentDidMount() {
+    this.setPageTitle()
+    onMessage("updateWallpaper", () => {
+      console.log("update wallpaper")
+      this.loadWallpaper()
+    })
+  }
   public render() {
+    const { wallpaper } = this.props.wallpaper
+
     return (
-      <MuiThemeProvider theme={this.state.theme}>
-        <Header />
+      <MuiThemeProvider theme={this.props.themeSettings.theme}>
+        <div id="bg" style={{ backgroundImage: `url(${wallpaper})` }} />
+        <LazilyLoad
+          modules={{
+            Header: () => importLazy(import("./components/Header"))
+          }}
+        >
+          {({ Header }: { Header: React.ComponentType }) => (
+            <Header />
+          )}
+        </LazilyLoad>
+        {/* <Header /> */}
         <br/>
         <br/>
         <br/>
@@ -47,12 +62,12 @@ export default class extends React.Component {
         <br/>
         <br/>
         <br/>
-        <Button variant="raised" color="primary" onClick={this.openColorPicker}>Color</Button>
+        <Button variant="raised" color="primary">Button</Button>
         <br/>
         <br/>
-        <Button variant="raised" color="secondary">secondary</Button>
-        <ColorPicker color={this.state.color} open={this.state.open} onClose={this.closeColorPicker} />
       </MuiThemeProvider>
     )
   }
 }
+
+export default makeDumbProps(App)
