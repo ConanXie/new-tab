@@ -2,50 +2,8 @@
   "appDescription": {
     "message": "Material Design new tab page"
   },
-  "themeTeal": {
-    "message": "Teal"
-  },
-  "themeRed": {
-    "message": "Red"
-  },
-  "themePink": {
-    "message": "Pink"
-  },
-  "themeIndigo": {
-    "message": "Indigo"
-  },
-  "themeBlue": {
-    "message": "Blue"
-  },
-  "themeDeepOrange": {
-    "message": "Deep Orange"
-  },
-  "themePurple": {
-    "message": "Purple"
-  },
-  "themeGreen": {
-    "message": "Green"
-  },
-  "themeOrange": {
-    "message": "Orange"
-  },
-  "themeBlueGrey": {
-    "message": "Blue Grey"
-  },
-  "themeAmber": {
-    "message": "Amber"
-  },
-  "themeBrown": {
-    "message": "Brown"
-  },
-  "themeGrey": {
-    "message": "Grey"
-  },
-  "themeLightBlue": {
-    "message": "Light Blue"
-  },
-  "themeDeepPurple": {
-    "message": "Deep Purple"
+  "new_tab": {
+    "message": "New Tab"
   },
   "button_cancel": {
     "message": "CANCEL"
@@ -386,17 +344,14 @@
   "desktop_wallpaper_label": {
     "message": "Use wallpaper"
   },
-  "wallpaper_source_title": {
-    "message": "Choose wallpaper source"
+  "wallpaper_type_title": {
+    "message": "Choose wallpaper type"
   },
-  "wallpaper_source_internet": {
-    "message": "Internet"
+  "wallpaper_type_image": {
+    "message": "Image"
   },
-  "wallpaper_source_local": {
-    "message": "Disk"
-  },
-  "wallpaper_source_solid": {
-    "message": "Solid color"
+  "wallpaper_type_color": {
+    "message": "Color"
   },
   "wallpaper_frequency_primary": {
     "message": "Update frequency"
@@ -423,7 +378,7 @@
     "message": "New one"
   },
   "wallpaper_new_secondary": {
-    "message": "Click to fetch a new wallpaper"
+    "message": "Click to fetch a random wallpaper"
   },
   "wallpaper_download_primary": {
     "message": "Download it"
@@ -432,10 +387,10 @@
     "message": "Save the current wallpaper to disk"
   },
   "wallpaper_local_primary": {
-    "message": "Choose an image"
+    "message": "Select an image"
   },
   "wallpaper_local_secondary": {
-    "message": "Set wallpaper with disk image file"
+    "message": "Set wallpaper with a disk image file"
   },
   "wallpaper_solid_color_primary": {
     "message": "Pick a color"
@@ -480,7 +435,7 @@
     "message": "Text shadow"
   },
   "desktop_msg_not_supported": {
-    "message": "This file is not supported"
+    "message": "This file type is not supported"
   },
   "desktop_msg_too_large": {
     "message": "This image is too large"
