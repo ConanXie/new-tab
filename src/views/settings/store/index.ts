@@ -1,5 +1,5 @@
-import settings from "./Settings"
+import themeSettings from "stores/theme"
 
 export {
-  settings
+  themeSettings
 }
