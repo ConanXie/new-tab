@@ -28,7 +28,7 @@ const webpackConfig = merge(baseConfig, {
     path: path.resolve(__dirname, '../extension'),
     filename: '[name].js'
   },
-  optimization: {
+  /* optimization: {
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -38,7 +38,7 @@ const webpackConfig = merge(baseConfig, {
         }
       }
     }
-  },
+  }, */
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
