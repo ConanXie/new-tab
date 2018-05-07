@@ -44,7 +44,9 @@
       "<rootDir>/(test|src)/**/*.test.(ts|tsx)"
     ],
     "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}"
+      "src/**/*.{ts,tsx}",
+      "!src/**/index.{ts,tsx}",
+      "!src/utils/**"
     ]
   },
   "dependencies": {
