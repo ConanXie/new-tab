@@ -4,9 +4,9 @@ import { inject, observer } from "mobx-react"
 import { MuiThemeProvider } from "material-ui/styles"
 import Button from "material-ui/Button"
 
-// import Header from "./components/Header"
+import Header from "./components/Header"
 
-import LazilyLoad, { importLazy } from "utils/LazilyLoad"
+// import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import { onMessage } from "utils/message"
 import makeDumbProps from "utils/makeDumbProps"
 
@@ -40,21 +40,10 @@ class App extends React.Component<PropsType> {
     })
   }
   public render() {
-    const { wallpaper } = this.props.wallpaper
-
     return (
       <MuiThemeProvider theme={this.props.themeSettings.theme}>
-        <div id="bg" style={{ backgroundImage: `url(${wallpaper})` }} />
-        <LazilyLoad
-          modules={{
-            Header: () => importLazy(import("./components/Header"))
-          }}
-        >
-          {({ Header }: { Header: React.ComponentType }) => (
-            <Header />
-          )}
-        </LazilyLoad>
-        {/* <Header /> */}
+        <div id="bg" style={this.props.wallpaper.backgroundStyles} />
+        <Header />
         <br/>
         <br/>
         <br/>

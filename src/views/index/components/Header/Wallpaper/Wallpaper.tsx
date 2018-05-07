@@ -18,6 +18,7 @@ import { Wallpaper as WallpaperType } from "../../../store/wallpaper"
 import TypeMenu from "./components/TypeMenu"
 import SelectImage from "./components/SelectImage"
 import FetchImage from "./components/FetchImage"
+import SelectColor from "./components/SelectColor"
 interface PropsType {
   wallpaper: WallpaperType
 }
@@ -63,6 +64,10 @@ class Wallpaper extends React.Component<PropsType> {
     sendMessage("saveWallpaper", base64)
   }
 
+  private handleColorChange = (color: string) => {
+    this.props.wallpaper.color = color
+  }
+
   public render() {
     const { wallpaper } = this.props
 
@@ -81,6 +86,8 @@ class Wallpaper extends React.Component<PropsType> {
           <SelectImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
           <Divider />
           <FetchImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
+          <Divider />
+          <SelectColor onChange={this.handleColorChange} color={wallpaper.color} />
         </List>
         <Snackbar
           open={this.state.snackbarOpen}

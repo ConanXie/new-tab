@@ -79,4 +79,4 @@ class Header extends React.Component<WithStyles<StylesType>> {
   }
 }
 
-export default withStyles(styles)<{}>(Header)
+export default withStyles(styles)(Header)
