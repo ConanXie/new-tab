@@ -401,14 +401,11 @@
   "wallpaper_blur_primary": {
     "message": "Blur radius"
   },
-  "wallpaper_shade_primary": {
-    "message": "Background brightness"
+  "wallpaper_dark_icons": {
+    "message": "Dark icons"
   },
-  "wallpaper_shade_light": {
-    "message": "Light"
-  },
-  "wallpaper_shade_dark": {
-    "message": "Dark"
+  "wallpaper_dark_icons_descr": {
+    "message": "Change the toolbar icons to a dark color"
   },
   "wallpaper_mask_primary": {
     "message": "Mask strength"
