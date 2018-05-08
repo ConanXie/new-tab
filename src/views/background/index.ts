@@ -1,3 +1,4 @@
+import * as store from "store2"
 import { onMessage, sendMessage } from "utils/message"
 import { base64toBlobURL } from "utils/fileConversions"
 
@@ -18,7 +19,14 @@ chrome.storage.local.get([wallpaper], result => {
     const sign = ";base64,"
     const code = data.substr(data.indexOf(sign) + sign.length)
     const url = base64toBlobURL(code, type)
-    localStorage.setItem(wallpaper, url)
+    // Update wallpaper data in localStorage
+    store.transact("wallpaper", data => {
+      if (!data || typeof data !== "object") {
+        data = {}
+      }
+      data.wallpaper = url
+      return data
+    })
     sendMessage("updateWallpaper", url)
   }
 })

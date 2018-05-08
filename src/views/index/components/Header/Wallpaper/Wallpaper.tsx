@@ -14,16 +14,16 @@ import makeDumbProps from "utils/makeDumbProps"
 import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
 
-import { Wallpaper as WallpaperType } from "../../../store/wallpaper"
+import { WallpaperStore } from "../../../store/wallpaper"
 import TypeMenu from "./components/TypeMenu"
 import SelectImage from "./components/SelectImage"
 import FetchImage from "./components/FetchImage"
 import SelectColor from "./components/SelectColor"
 interface PropsType {
-  wallpaper: WallpaperType
+  wallpaperStore: WallpaperStore
 }
 
-@inject("wallpaper") @observer
+@inject("wallpaperStore") @observer
 class Wallpaper extends React.Component<PropsType> {
   public state = {
     snackbarOpen: false,
@@ -46,17 +46,17 @@ class Wallpaper extends React.Component<PropsType> {
   }
 
   private handleToggle = () => {
-    this.props.wallpaper.saveUseWallpaper(!this.props.wallpaper.useWallpaper)
+    this.props.wallpaperStore.useWallpaper = !this.props.wallpaperStore.useWallpaper
   }
   private handleTypeChange = (value: number) => {
-    this.props.wallpaper.saveWallpaperType(value)
+    this.props.wallpaperStore.wallpaperType = value
   }
 
   private handleWallpaperUpdate = async (file: File | Blob) => {
     const url = URL.createObjectURL(file)
     // Update wallpaper
-    this.props.wallpaper.wallpaper = url
-    localStorage.setItem("wallpaper", url)
+    this.props.wallpaperStore.wallpaper = url
+    // Sync update
     sendMessage("updateWallpaper", url)
 
     // Save base64 data to storage
@@ -65,11 +65,11 @@ class Wallpaper extends React.Component<PropsType> {
   }
 
   private handleColorChange = (color: string) => {
-    this.props.wallpaper.color = color
+    this.props.wallpaperStore.color = color
   }
 
   public render() {
-    const { wallpaper } = this.props
+    const { wallpaperStore } = this.props
 
     return (
       <div>
@@ -77,17 +77,17 @@ class Wallpaper extends React.Component<PropsType> {
           <ListItem button onClick={this.handleToggle}>
             <ListItemText primary={chrome.i18n.getMessage("desktop_wallpaper_label")} />
             <ListItemSecondaryAction>
-              <Switch checked={wallpaper.useWallpaper} onChange={this.handleToggle} />
+              <Switch checked={wallpaperStore.useWallpaper} onChange={this.handleToggle} />
             </ListItemSecondaryAction>
           </ListItem>
           <Divider />
-          <TypeMenu type={wallpaper.wallpaperType} onChange={this.handleTypeChange} />
+          <TypeMenu type={wallpaperStore.wallpaperType} onChange={this.handleTypeChange} />
           <Divider />
           <SelectImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
           <Divider />
           <FetchImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
           <Divider />
-          <SelectColor onChange={this.handleColorChange} color={wallpaper.color} />
+          <SelectColor onChange={this.handleColorChange} color={wallpaperStore.color} />
         </List>
         <Snackbar
           open={this.state.snackbarOpen}
