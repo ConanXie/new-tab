@@ -5,7 +5,8 @@ const defaultWallpaperData = {
   wallpaper: "",
   color: "#2196F3",
   useWallpaper: true,
-  wallpaperType: 0
+  wallpaperType: 0,
+  darkIcons: false
 }
 
 interface BackgroundStyles {
@@ -17,13 +18,22 @@ export class WallpaperStore {
   @observable public color: string
   @observable public useWallpaper: boolean
   @observable public wallpaperType: number
+  @observable public darkIcons: boolean
   constructor() {
     const persistence = storage.get("wallpaper", {})
-    const { wallpaper, color, useWallpaper, wallpaperType } = persistence
+    const {
+      wallpaper,
+      color,
+      useWallpaper,
+      wallpaperType,
+      darkIcons
+    } = persistence
+
     this.wallpaper = wallpaper || defaultWallpaperData.wallpaper
     this.color = color || defaultWallpaperData.color
     this.useWallpaper = useWallpaper === undefined ? defaultWallpaperData.useWallpaper : Boolean(useWallpaper)
     this.wallpaperType = wallpaperType || defaultWallpaperData.wallpaperType
+    this.darkIcons = darkIcons === undefined ? defaultWallpaperData.darkIcons : Boolean(darkIcons)
   }
   @computed get backgroundStyles() {
     const styles: BackgroundStyles = {}

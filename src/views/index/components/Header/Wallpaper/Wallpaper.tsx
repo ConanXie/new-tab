@@ -19,6 +19,8 @@ import TypeMenu from "./components/TypeMenu"
 import SelectImage from "./components/SelectImage"
 import FetchImage from "./components/FetchImage"
 import SelectColor from "./components/SelectColor"
+import SaveImage from "./components/SaveImage"
+import DarkIcons from "./components/DarkIcons"
 interface PropsType {
   wallpaperStore: WallpaperStore
 }
@@ -53,6 +55,7 @@ class Wallpaper extends React.Component<PropsType> {
   }
 
   private handleWallpaperUpdate = async (file: File | Blob) => {
+    URL.revokeObjectURL(this.props.wallpaperStore.wallpaper)
     const url = URL.createObjectURL(file)
     // Update wallpaper
     this.props.wallpaperStore.wallpaper = url
@@ -66,6 +69,10 @@ class Wallpaper extends React.Component<PropsType> {
 
   private handleColorChange = (color: string) => {
     this.props.wallpaperStore.color = color
+  }
+
+  private handleDarkIconsToggle = () => {
+    this.props.wallpaperStore.darkIcons = !this.props.wallpaperStore.darkIcons
   }
 
   public render() {
@@ -87,7 +94,12 @@ class Wallpaper extends React.Component<PropsType> {
           <Divider />
           <FetchImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
           <Divider />
+          <SaveImage url={wallpaperStore.wallpaper} disabled={false} />
+          <Divider />
           <SelectColor onChange={this.handleColorChange} color={wallpaperStore.color} />
+          <Divider />
+          <DarkIcons onChange={this.handleDarkIconsToggle} checked={wallpaperStore.darkIcons} disabled={false} />
+          <Divider />
         </List>
         <Snackbar
           open={this.state.snackbarOpen}

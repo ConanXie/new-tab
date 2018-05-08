@@ -13,17 +13,18 @@ onMessage("saveWallpaper", data => {
 // Initialize wallpaper
 // Get base64 image data from storage and convert to blob url
 chrome.storage.local.get([wallpaper], result => {
-  const data: string = result[wallpaper]
-  if (data) {
-    const type = data.match(/:([\w\/]+);/)![1]
+  const base64Data: string = result[wallpaper]
+  if (base64Data) {
+    const type = base64Data.match(/:([\w\/]+);/)![1]
     const sign = ";base64,"
-    const code = data.substr(data.indexOf(sign) + sign.length)
+    const code = base64Data.substr(base64Data.indexOf(sign) + sign.length)
     const url = base64toBlobURL(code, type)
     // Update wallpaper data in localStorage
     store.transact("wallpaper", data => {
       if (!data || typeof data !== "object") {
         data = {}
       }
+      URL.revokeObjectURL(data.wallpaper)
       data.wallpaper = url
       return data
     })
