@@ -1,7 +1,7 @@
 import themeSettings from "stores/theme"
-import wallpaper from "./wallpaper"
+import wallpaperStore from "./wallpaper"
 
 export {
-  wallpaper,
+  wallpaperStore,
   themeSettings
 }

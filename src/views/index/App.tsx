@@ -10,14 +10,14 @@ import Header from "./components/Header"
 import { onMessage } from "utils/message"
 import makeDumbProps from "utils/makeDumbProps"
 
-import { Wallpaper as WallpaperType } from "./store/wallpaper"
+import { WallpaperStore } from "./store/wallpaper"
 import { Theme as ThemeSettings } from "stores/theme"
 
 interface PropsType {
-  wallpaper: WallpaperType
+  wallpaperStore: WallpaperStore
   themeSettings: ThemeSettings
 }
-@inject("wallpaper", "themeSettings")
+@inject("wallpaperStore", "themeSettings")
 @observer
 class App extends React.Component<PropsType> {
   public state = {}
@@ -26,23 +26,17 @@ class App extends React.Component<PropsType> {
     title.innerHTML = chrome.i18n.getMessage("new_tab")
     document.head.appendChild(title)
   }
-  private loadWallpaper() {
-    const wallpaper = localStorage.getItem("wallpaper")
-    if (wallpaper) {
-      this.props.wallpaper.wallpaper = wallpaper
-    }
-  }
   public componentDidMount() {
     this.setPageTitle()
-    onMessage("updateWallpaper", () => {
+    onMessage("updateWallpaper", url => {
       console.log("update wallpaper")
-      this.loadWallpaper()
+      this.props.wallpaperStore.wallpaper = url
     })
   }
   public render() {
     return (
       <MuiThemeProvider theme={this.props.themeSettings.theme}>
-        <div id="bg" style={this.props.wallpaper.backgroundStyles} />
+        <div id="bg" style={this.props.wallpaperStore.backgroundStyles} />
         <Header />
         <br/>
         <br/>

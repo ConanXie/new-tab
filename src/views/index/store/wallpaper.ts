@@ -1,40 +1,49 @@
 import { observable, computed, autorun } from "mobx"
-// import { StyleRules } from "material-ui/styles/withStyles"
+import * as storage from "store2"
+
+const defaultWallpaperData = {
+  wallpaper: "",
+  color: "#2196F3",
+  useWallpaper: true,
+  wallpaperType: 0
+}
 
 interface BackgroundStyles {
   backgroundImage?: string
   backgroundColor?: string
 }
-export class Wallpaper {
-  @observable public wallpaper: string = localStorage.getItem("wallpaper") || ""
-  @observable public color: string = localStorage.getItem("wallpaper-color") || "#ffffff"
-  @observable public useWallpaper: boolean = false
-  @observable public wallpaperType: number = 0
+export class WallpaperStore {
+  @observable public wallpaper: string
+  @observable public color: string
+  @observable public useWallpaper: boolean
+  @observable public wallpaperType: number
+  constructor() {
+    const persistence = storage.get("wallpaper", {})
+    const { wallpaper, color, useWallpaper, wallpaperType } = persistence
+    this.wallpaper = wallpaper || defaultWallpaperData.wallpaper
+    this.color = color || defaultWallpaperData.color
+    this.useWallpaper = useWallpaper === undefined ? defaultWallpaperData.useWallpaper : Boolean(useWallpaper)
+    this.wallpaperType = wallpaperType || defaultWallpaperData.wallpaperType
+  }
   @computed get backgroundStyles() {
     const styles: BackgroundStyles = {}
-
-    // 0: image
-    // 1: color
-    if (!this.wallpaperType) {
-      styles.backgroundImage = `url(${this.wallpaper})`
-    } else if (this.wallpaperType === 1) {
-      styles.backgroundColor = this.color
+    if (this.useWallpaper) {
+      // 0: image
+      // 1: color
+      if (!this.wallpaperType) {
+        styles.backgroundImage = `url(${this.wallpaper})`
+      } else if (this.wallpaperType === 1) {
+        styles.backgroundColor = this.color
+      }
     }
-
     return styles
-  }
-  public saveUseWallpaper(state: boolean) {
-    this.useWallpaper = state
-  }
-  public saveWallpaperType(type: number) {
-    this.wallpaperType = type
   }
 }
 
-const wallpaper = new Wallpaper()
+const wallpaperStore = new WallpaperStore()
 
 autorun(() => {
-  console.log(wallpaper.useWallpaper)
+  storage.set("wallpaper", wallpaperStore)
 })
 
-export default wallpaper
+export default wallpaperStore
