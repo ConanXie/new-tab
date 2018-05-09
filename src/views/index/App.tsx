@@ -5,6 +5,7 @@ import { MuiThemeProvider } from "material-ui/styles"
 import Button from "material-ui/Button"
 
 import Header from "./components/Header"
+import Background from "./components/Background"
 
 // import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import { onMessage } from "utils/message"
@@ -29,14 +30,13 @@ class App extends React.Component<PropsType> {
   public componentDidMount() {
     this.setPageTitle()
     onMessage("updateWallpaper", url => {
-      console.log("update wallpaper")
       this.props.wallpaperStore.wallpaper = url
     })
   }
   public render() {
     return (
       <MuiThemeProvider theme={this.props.themeSettings.theme}>
-        <div id="bg" style={this.props.wallpaperStore.backgroundStyles} />
+        <Background />
         <Header />
         <br/>
         <br/>
