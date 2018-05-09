@@ -1,13 +1,10 @@
 import * as React from "react"
 
-import List, {
-  ListItem,
-  ListItemText
-} from "material-ui/List"
-
 import ColorPicker from "components/ColorPicker"
 
-interface PropsType {
+import Item, { ItemPropsType } from "./Item"
+
+interface PropsType extends ItemPropsType {
   color: string
   onChange(value: string): void
 }
@@ -29,14 +26,12 @@ class SelectColor extends React.Component<PropsType> {
   public render() {
     return (
       <React.Fragment>
-        <List>
-          <ListItem button onClick={this.openColorPicker}>
-            <ListItemText
-              primary={chrome.i18n.getMessage("wallpaper_solid_color_primary")}
-              secondary={this.props.color}
-            />
-          </ListItem>
-        </List>
+        <Item
+          disabled={this.props.disabled}
+          primary={chrome.i18n.getMessage("wallpaper_color")}
+          secondary={this.props.color}
+          onClick={this.openColorPicker}
+        />
         <ColorPicker
           color={this.props.color}
           open={this.state.open}

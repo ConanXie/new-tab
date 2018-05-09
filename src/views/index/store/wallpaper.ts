@@ -9,7 +9,7 @@ const defaultWallpaperData = {
   darkIcons: false
 }
 
-interface BackgroundStyles {
+interface WallpaperStyles {
   backgroundImage?: string
   backgroundColor?: string
 }
@@ -35,8 +35,8 @@ export class WallpaperStore {
     this.wallpaperType = wallpaperType || defaultWallpaperData.wallpaperType
     this.darkIcons = darkIcons === undefined ? defaultWallpaperData.darkIcons : Boolean(darkIcons)
   }
-  @computed get backgroundStyles() {
-    const styles: BackgroundStyles = {}
+  @computed get wallpaperStyles() {
+    const styles: WallpaperStyles = {}
     if (this.useWallpaper) {
       // 0: image
       // 1: color
@@ -47,6 +47,12 @@ export class WallpaperStore {
       }
     }
     return styles
+  }
+  @computed get disabledImage() {
+    return !this.useWallpaper || this.wallpaperType === 1
+  }
+  @computed get disabledColor() {
+    return !this.useWallpaper || !this.wallpaperType
   }
 }
 

@@ -1,11 +1,10 @@
 import * as React from "react"
 
 import withStyles, { WithStyles, StyleRules } from "material-ui/styles/withStyles"
-import { ListItem, ListItemText } from "material-ui/List"
 
-import FetchProgress, {  } from "./FetchProgress"
+import FetchProgress from "./FetchProgress"
 
-import { OnError } from "../../types"
+import Item, { ItemPropsType, ItemMethods } from "../Item"
 
 const styles: StyleRules = {
   wrap: {
@@ -13,13 +12,12 @@ const styles: StyleRules = {
   }
 }
 
-interface PropsType extends OnError {}
 interface StateType {
   fetching: boolean,
   completed: number
 }
 
-class FetchImage extends React.Component<WithStyles<"wrap"> & PropsType, StateType> {
+class FetchImage extends React.Component<WithStyles<"wrap"> & ItemPropsType & ItemMethods, StateType> {
   private url = `https://tab.xiejie.co/api/wallpaper/${screen.width}x${screen.height}`
   public state = {
     fetching: false,
@@ -86,16 +84,16 @@ class FetchImage extends React.Component<WithStyles<"wrap"> & PropsType, StateTy
     const { fetching, completed } = this.state
     return (
       <div className={classes.wrap}>
-        <ListItem button onClick={this.startFetch}>
-          <ListItemText
-            primary={chrome.i18n.getMessage("wallpaper_new_primary")}
-            secondary={chrome.i18n.getMessage("wallpaper_new_secondary")}
-          />
-        </ListItem>
+        <Item
+          disabled={this.props.disabled}
+          primary={chrome.i18n.getMessage("wallpaper_random")}
+          secondary={chrome.i18n.getMessage("wallpaper_random_descr")}
+          onClick={this.startFetch}
+        />
         <FetchProgress fetching={fetching} progress={completed} />
       </div>
     )
   }
 }
 
-export default withStyles(styles)<PropsType>(FetchImage)
+export default withStyles(styles)<ItemPropsType & ItemMethods>(FetchImage)

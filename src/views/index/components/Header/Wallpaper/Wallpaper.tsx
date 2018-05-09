@@ -1,13 +1,8 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
 
-import Switch from "material-ui/Switch"
 import Divider from "material-ui/Divider"
-import List, {
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction
-} from "material-ui/List"
+import List from "material-ui/List"
 import Snackbar from "material-ui/Snackbar"
 
 import makeDumbProps from "utils/makeDumbProps"
@@ -15,6 +10,7 @@ import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
 
 import { WallpaperStore } from "../../../store/wallpaper"
+import WallpaperSwitch from "./components/WallpaperSwitch"
 import TypeMenu from "./components/TypeMenu"
 import SelectImage from "./components/SelectImage"
 import FetchImage from "./components/FetchImage"
@@ -47,7 +43,7 @@ class Wallpaper extends React.Component<PropsType> {
     })
   }
 
-  private handleToggle = () => {
+  private handleWallpaperSwitchChange = () => {
     this.props.wallpaperStore.useWallpaper = !this.props.wallpaperStore.useWallpaper
   }
   private handleTypeChange = (value: number) => {
@@ -76,29 +72,57 @@ class Wallpaper extends React.Component<PropsType> {
   }
 
   public render() {
-    const { wallpaperStore } = this.props
+    const {
+      useWallpaper,
+      wallpaperType,
+      wallpaper,
+      color,
+      darkIcons,
+      disabledImage,
+      disabledColor
+    } = this.props.wallpaperStore
 
     return (
       <div>
         <List>
-          <ListItem button onClick={this.handleToggle}>
-            <ListItemText primary={chrome.i18n.getMessage("desktop_wallpaper_label")} />
-            <ListItemSecondaryAction>
-              <Switch checked={wallpaperStore.useWallpaper} onChange={this.handleToggle} />
-            </ListItemSecondaryAction>
-          </ListItem>
+          <WallpaperSwitch
+            checked={useWallpaper}
+            onChange={this.handleWallpaperSwitchChange}
+          />
           <Divider />
-          <TypeMenu type={wallpaperStore.wallpaperType} onChange={this.handleTypeChange} />
+          <TypeMenu
+            disabled={disabledImage && disabledColor}
+            type={wallpaperType}
+            onChange={this.handleTypeChange}
+          />
           <Divider />
-          <SelectImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
+          <SelectImage
+            disabled={disabledImage}
+            onChange={this.handleWallpaperUpdate}
+            onError={this.showMessage}
+          />
           <Divider />
-          <FetchImage onChange={this.handleWallpaperUpdate} onError={this.showMessage} />
+          <FetchImage
+            disabled={disabledImage}
+            onChange={this.handleWallpaperUpdate}
+            onError={this.showMessage}
+          />
           <Divider />
-          <SaveImage url={wallpaperStore.wallpaper} disabled={false} />
+          <SaveImage
+            disabled={disabledImage}
+            url={wallpaper}
+          />
           <Divider />
-          <SelectColor onChange={this.handleColorChange} color={wallpaperStore.color} />
+          <SelectColor
+            disabled={disabledColor}
+            color={color}
+            onChange={this.handleColorChange}
+          />
           <Divider />
-          <DarkIcons onChange={this.handleDarkIconsToggle} checked={wallpaperStore.darkIcons} disabled={false} />
+          <DarkIcons
+            onChange={this.handleDarkIconsToggle}
+            checked={darkIcons}
+          />
           <Divider />
         </List>
         <Snackbar

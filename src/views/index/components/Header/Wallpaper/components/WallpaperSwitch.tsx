@@ -3,22 +3,20 @@ import * as React from "react"
 import { ListItemSecondaryAction } from "material-ui/List"
 import Switch from "material-ui/Switch"
 
-import Item, { ItemPropsType } from "./Item"
+import Item from "./Item"
 
-interface PropsType extends ItemPropsType {
+interface PropsType {
   checked: boolean
   onChange(): void
 }
 
 export default (props: PropsType) => (
   <Item
-    disabled={props.disabled}
-    primary={chrome.i18n.getMessage("wallpaper_dark_icons")}
-    secondary={chrome.i18n.getMessage("wallpaper_dark_icons_descr")}
+    primary={chrome.i18n.getMessage("desktop_wallpaper_label")}
     onClick={props.onChange}
   >
     <ListItemSecondaryAction>
-      <Switch checked={props.checked} onClick={props.onChange} />
+      <Switch checked={props.checked} onChange={props.onChange} />
     </ListItemSecondaryAction>
   </Item>
 )

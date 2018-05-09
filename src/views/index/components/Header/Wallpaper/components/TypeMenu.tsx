@@ -1,11 +1,8 @@
 import * as React from "react"
 
 import withStyles, { WithStyles } from "material-ui/styles/withStyles"
-import {
-  ListItem,
-  ListItemText
-} from "material-ui/List"
 import Menu, { MenuItem } from "material-ui/Menu"
+import Item, { ItemPropsType } from "./Item"
 
 const source: string[] = [
   chrome.i18n.getMessage("wallpaper_type_image"),
@@ -42,7 +39,7 @@ export class TypeMenuItem extends React.Component<ITypeMenuItem> {
   }
 }
 
-interface PropsType {
+interface PropsType extends ItemPropsType {
   type: number
   onChange(value: number): void
 }
@@ -66,19 +63,13 @@ class TypeMenu extends React.Component<WithStyles<"paper"> & PropsType> {
     const { type, classes } = this.props
 
     return (
-      <div>
-        <ListItem
-          button
-          aria-haspopup="true"
-          aria-controls="source-menu"
-          aria-label={chrome.i18n.getMessage("wallpaper_type_title")}
+      <React.Fragment>
+        <Item
+          disabled={this.props.disabled}
+          primary={chrome.i18n.getMessage("wallpaper_type")}
+          secondary={source[type]}
           onClick={this.handleClickListItem}
-        >
-          <ListItemText
-            primary={chrome.i18n.getMessage("wallpaper_type_title")}
-            secondary={source[type]}
-          />
-        </ListItem>
+        />
         <Menu
           id="source-menu"
           anchorEl={anchorEl}
@@ -98,7 +89,7 @@ class TypeMenu extends React.Component<WithStyles<"paper"> & PropsType> {
             </TypeMenuItem>
           ))}
         </Menu>
-      </div>
+      </React.Fragment>
     )
   }
 }

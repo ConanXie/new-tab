@@ -1,14 +1,10 @@
 import * as React from "react"
 
-import { ListItem, ListItemText } from "material-ui/List"
+import Item, { ItemPropsType, ItemMethods } from "./Item"
 
-import { OnError } from "../types"
-
-interface IPropsType extends OnError {}
-
-class SelectImage extends React.Component<IPropsType> {
+class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
   private imageAccepts: string[] = ["image/png", "image/jpeg", "image/gif", "image/jpg"]
-  private imageSize = 10485760 // 2MB
+  private imageSize = 10485760 // 10MB
 
   private fileInput: HTMLInputElement
   // Callback Refs
@@ -48,12 +44,12 @@ class SelectImage extends React.Component<IPropsType> {
   public render() {
     return (
       <React.Fragment>
-        <ListItem button onClick={this.openFolder}>
-          <ListItemText
-            primary={chrome.i18n.getMessage("wallpaper_local_primary")}
-            secondary={chrome.i18n.getMessage("wallpaper_local_secondary")}
-          />
-        </ListItem>
+        <Item
+          disabled={this.props.disabled}
+          primary={chrome.i18n.getMessage("wallpaper_disk")}
+          secondary={chrome.i18n.getMessage("wallpaper_disk_descr")}
+          onClick={this.openFolder}
+        />
         <input
           type="file"
           className="select-image"
