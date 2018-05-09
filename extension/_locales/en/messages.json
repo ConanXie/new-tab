@@ -344,7 +344,7 @@
   "desktop_wallpaper_label": {
     "message": "Use wallpaper"
   },
-  "wallpaper_type_title": {
+  "wallpaper_type": {
     "message": "Choose wallpaper type"
   },
   "wallpaper_type_image": {
@@ -374,28 +374,28 @@
   "wallpaper_frequency_close": {
     "message": "Turn off"
   },
-  "wallpaper_new_primary": {
+  "wallpaper_random": {
     "message": "New one"
   },
-  "wallpaper_new_secondary": {
+  "wallpaper_random_descr": {
     "message": "Click to fetch a random wallpaper"
   },
-  "wallpaper_download_primary": {
+  "wallpaper_download": {
     "message": "Download it"
   },
-  "wallpaper_download_secondary": {
+  "wallpaper_download_descr": {
     "message": "Save the current wallpaper to disk"
   },
-  "wallpaper_local_primary": {
+  "wallpaper_disk": {
     "message": "Select an image"
   },
-  "wallpaper_local_secondary": {
+  "wallpaper_disk_descr": {
     "message": "Set wallpaper with a disk image file"
   },
-  "wallpaper_solid_color_primary": {
+  "wallpaper_color": {
     "message": "Pick a color"
   },
-  "wallpaper_solid_color_secondary": {
+  "wallpaper_color_descr": {
     "message": "Set background with custom color"
   },
   "wallpaper_blur_primary": {
