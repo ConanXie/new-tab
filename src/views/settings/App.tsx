@@ -7,17 +7,17 @@ import CssBaseline from "material-ui/CssBaseline"
 import Layout from "./Layout"
 
 import makeDumbProps from "utils/makeDumbProps"
-import { Theme as ThemeSettings } from "stores/theme"
+import { ThemeStore } from "stores/theme"
 interface PropsType {
-  themeSettings: ThemeSettings
+  themeStore: ThemeStore
 }
 
-@inject("themeSettings")
+@inject("themeStore")
 @observer
 class App extends React.Component<PropsType> {
   public render() {
     return (
-      <MuiThemeProvider theme={this.props.themeSettings.theme}>
+      <MuiThemeProvider theme={this.props.themeStore.theme}>
         <CssBaseline />
         <Layout />
       </MuiThemeProvider>

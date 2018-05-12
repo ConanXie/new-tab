@@ -12,13 +12,13 @@ import { onMessage } from "utils/message"
 import makeDumbProps from "utils/makeDumbProps"
 
 import { WallpaperStore } from "./store/wallpaper"
-import { Theme as ThemeSettings } from "stores/theme"
+import { ThemeStore } from "stores/theme"
 
 interface PropsType {
   wallpaperStore: WallpaperStore
-  themeSettings: ThemeSettings
+  themeStore: ThemeStore
 }
-@inject("wallpaperStore", "themeSettings")
+@inject("wallpaperStore", "themeStore")
 @observer
 class App extends React.Component<PropsType> {
   public state = {}
@@ -35,7 +35,7 @@ class App extends React.Component<PropsType> {
   }
   public render() {
     return (
-      <MuiThemeProvider theme={this.props.themeSettings.theme}>
+      <MuiThemeProvider theme={this.props.themeStore.theme}>
         <Background />
         <Header />
         <br/>

@@ -1,9 +1,9 @@
 import { observable, computed, autorun } from "mobx"
-import * as storage from "store2"
+import { settingsStorage } from "utils/storage"
 
 const defaultWallpaperData = {
   wallpaper: "",
-  color: "#2196F3",
+  color: "#FF5722",
   useWallpaper: true,
   wallpaperType: 0,
   darkIcons: false
@@ -20,7 +20,7 @@ export class WallpaperStore {
   @observable public wallpaperType: number
   @observable public darkIcons: boolean
   constructor() {
-    const persistence = storage.get("wallpaper", {})
+    const persistence = settingsStorage.get("wallpaper", {})
     const {
       wallpaper,
       color,
@@ -59,7 +59,7 @@ export class WallpaperStore {
 const wallpaperStore = new WallpaperStore()
 
 autorun(() => {
-  storage.set("wallpaper", wallpaperStore)
+  settingsStorage.set("wallpaper", wallpaperStore)
 })
 
 export default wallpaperStore

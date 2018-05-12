@@ -8,13 +8,13 @@ import List, {
 
 import ColorPicker from "../../../components/ColorPicker"
 
-import { Theme as ThemeSettings } from "stores/theme"
+import { ThemeStore } from "stores/theme"
 
 interface PropsType {
-  themeSettings: ThemeSettings
+  themeStore: ThemeStore
 }
 
-@inject("themeSettings")
+@inject("themeStore")
 @observer
 class Theme extends React.Component<PropsType> {
   public state = {
@@ -27,7 +27,7 @@ class Theme extends React.Component<PropsType> {
     this.setState({ open: false })
 
     if (color) {
-      this.props.themeSettings.themeColor = color
+      this.props.themeStore.color = color
     }
   }
   public render() {
@@ -37,12 +37,12 @@ class Theme extends React.Component<PropsType> {
           <ListItem button onClick={this.openColorPicker}>
             <ListItemText
               primary={chrome.i18n.getMessage("settings_theme_switch_label")}
-              secondary={this.props.themeSettings.themeColor}
+              secondary={this.props.themeStore.color}
             />
           </ListItem>
         </List>
         <ColorPicker
-          color={this.props.themeSettings.themeColor}
+          color={this.props.themeStore.color}
           open={this.state.open}
           onClose={this.closeColorPicker}
         />

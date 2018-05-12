@@ -1,12 +1,20 @@
-import { observable, computed } from "mobx"
+import { observable, computed, autorun } from "mobx"
 import { createMuiTheme } from "material-ui"
+import { settingsStorage } from "utils/storage"
 
-export class Theme {
-  @observable public themeColor = localStorage.getItem("theme") || "#3F51B5"
+const defaultData = {
+  color: "#FF5722"
+}
+
+export class ThemeStore {
+  @observable public color: string
+  constructor() {
+    const persistence = settingsStorage.get("theme", {})
+    const { color } = persistence
+    this.color = color || defaultData.color
+  }
   @computed get theme() {
-    const color = this.themeColor
-    localStorage.setItem("theme", color)
-    return Theme.createTheme(color)
+    return ThemeStore.createTheme(this.color)
   }
   private static createTheme(color: string) {
     return createMuiTheme({
@@ -19,4 +27,10 @@ export class Theme {
   }
 }
 
-export default new Theme()
+const themeStore = new ThemeStore()
+
+autorun(() => {
+  settingsStorage.set("theme", themeStore)
+})
+
+export default themeStore
