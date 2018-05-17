@@ -18,7 +18,7 @@ export default (props: PropsType) => (
     onClick={props.onChange}
   >
     <ListItemSecondaryAction>
-      <Switch checked={props.checked} onClick={props.onChange} />
+      <Switch checked={props.checked} onClick={props.onChange} color="primary" />
     </ListItemSecondaryAction>
   </Item>
 )
