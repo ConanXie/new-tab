@@ -52,12 +52,6 @@ class Wallpaper extends React.Component<PropsType> {
 
   private handleWallpaperUpdate = async (file: File | Blob) => {
     URL.revokeObjectURL(this.props.wallpaperStore.wallpaper)
-    const url = URL.createObjectURL(file)
-    // Update wallpaper
-    this.props.wallpaperStore.wallpaper = url
-    // Sync update
-    sendMessage("updateWallpaper", url)
-
     // Save base64 data to storage
     const base64 = await toBase64(file)
     sendMessage("saveWallpaper", base64)
