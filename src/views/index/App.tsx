@@ -2,10 +2,10 @@ import * as React from "react"
 import { inject, observer } from "mobx-react"
 
 import { MuiThemeProvider } from "material-ui/styles"
-import Button from "material-ui/Button"
 
 import Header from "./components/Header"
 import Background from "./components/Background"
+import Desktop from "./components/Desktop"
 
 // import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import { onMessage } from "utils/message"
@@ -38,16 +38,7 @@ class App extends React.Component<PropsType> {
       <MuiThemeProvider theme={this.props.themeStore.theme}>
         <Background />
         <Header />
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <Button variant="raised" color="primary">Button</Button>
-        <br/>
-        <br/>
+        <Desktop />
       </MuiThemeProvider>
     )
   }
