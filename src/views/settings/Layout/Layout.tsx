@@ -135,8 +135,8 @@ class Layout extends React.Component<WithStyles<StylesType>> {
   private loadContent = (_: any) => {
     this.setState({ content: _.default })
   }
-  public componentWillMount() {
-    import("../components/Theme").then(this.loadContent)
+  public componentDidMount() {
+    this.settings[0].onClick()
   }
   public render() {
     const { classes, theme } = this.props
