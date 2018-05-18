@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import withStyles, { WithStyles, StyleRules } from "material-ui/styles/withStyles"
+import withStyles, { WithStyles, StyleRules } from "@material-ui/core/styles/withStyles"
 
 import FetchProgress from "./FetchProgress"
 

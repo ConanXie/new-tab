@@ -1,10 +1,9 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 
-import List, {
-  ListItem,
-  ListItemText
-} from "material-ui/List"
+import List from "@material-ui/core/List"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemText from "@material-ui/core/ListItemText"
 
 import ColorPicker from "../../../components/ColorPicker"
 

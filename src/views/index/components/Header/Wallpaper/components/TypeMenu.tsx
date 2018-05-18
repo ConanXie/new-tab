@@ -1,7 +1,8 @@
 import * as React from "react"
 
-import withStyles, { WithStyles } from "material-ui/styles/withStyles"
-import Menu, { MenuItem } from "material-ui/Menu"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import Menu from "@material-ui/core/Menu"
+import MenuItem from "@material-ui/core/MenuItem"
 import Item, { ItemPropsType } from "./Item"
 
 const source: string[] = [

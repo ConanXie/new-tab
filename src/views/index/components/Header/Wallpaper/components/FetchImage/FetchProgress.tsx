@@ -1,8 +1,8 @@
 import * as React from "react"
 import * as classNames from "classnames"
 
-import withStyles, { WithStyles, StyleRules } from "material-ui/styles/withStyles"
-import { LinearProgress } from "material-ui/Progress"
+import withStyles, { WithStyles, StyleRules } from "@material-ui/core/styles/withStyles"
+import LinearProgress from "@material-ui/core/LinearProgress"
 
 type StylesType = "root" | "hide"
 const styles: StyleRules<StylesType> = {

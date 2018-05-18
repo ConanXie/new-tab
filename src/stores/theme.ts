@@ -1,5 +1,5 @@
 import { observable, computed, autorun } from "mobx"
-import { createMuiTheme } from "material-ui"
+import { createMuiTheme } from "@material-ui/core"
 import { settingsStorage } from "utils/storage"
 
 const defaultData = {

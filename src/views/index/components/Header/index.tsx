@@ -1,8 +1,8 @@
 import * as React from "react"
 
-import withStyles, { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
-import AppBar from "material-ui/AppBar"
-import Drawer from "material-ui/Drawer"
+import withStyles, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
+import AppBar from "@material-ui/core/AppBar"
+import Drawer from "@material-ui/core/Drawer"
 import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 
 import Toolbar from "./Toolbar"

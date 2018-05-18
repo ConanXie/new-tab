@@ -1,8 +1,6 @@
 import * as React from "react"
-import {
-  ListItem,
-  ListItemText
-} from "material-ui/List"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemText from "@material-ui/core/ListItemText"
 
 interface PropsType {
   disabled?: boolean

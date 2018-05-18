@@ -1,9 +1,9 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
 
-import Divider from "material-ui/Divider"
-import List from "material-ui/List"
-import Snackbar from "material-ui/Snackbar"
+import Divider from "@material-ui/core/Divider"
+import List from "@material-ui/core/List"
+import Snackbar from "@material-ui/core/Snackbar"
 
 import makeDumbProps from "utils/makeDumbProps"
 import { sendMessage } from "utils/message"

@@ -1,10 +1,9 @@
 import * as React from "react"
 
-import List, {
-  ListItem,
-  ListItemIcon,
-  ListItemText
-} from "material-ui/List"
+import List from "@material-ui/core/List"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemIcon from "@material-ui/core/ListItemIcon"
+import ListItemText from "@material-ui/core/ListItemText"
 
 export interface SettingsItemType {
   icon: React.ComponentType,
