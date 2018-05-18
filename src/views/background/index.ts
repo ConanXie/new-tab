@@ -1,3 +1,4 @@
+import * as storage from "store2"
 import { settingsStorage } from "utils/storage"
 import { onMessage, sendMessage } from "utils/message"
 import { base64toBlobURL } from "utils/fileConversions"
@@ -9,6 +10,8 @@ const updateWallpaper = (base64: string) => {
   const sign = ";base64,"
   const code = base64.substr(base64.indexOf(sign) + sign.length)
   const url = base64toBlobURL(code, type)
+  // Save image type
+  storage("image.type", type)
   // Update wallpaper data in localStorage
   settingsStorage.transact(wallpaper, data => {
     if (!data || typeof data !== "object") {
@@ -21,7 +24,7 @@ const updateWallpaper = (base64: string) => {
   sendMessage("updateWallpaper", url)
 }
 
-onMessage("saveWallpaper", base64 => {
+onMessage("saveWallpaper", (base64: string) => {
   chrome.storage.local.set({
     [wallpaper]: base64
   })

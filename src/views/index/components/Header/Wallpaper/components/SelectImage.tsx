@@ -16,9 +16,10 @@ class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
   }
 
   /**
+   * Read image file
    * Validate the file type and size
    */
-  private validateImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  private readImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const file = event.target.files[0]
       // Clear input value
@@ -34,12 +35,9 @@ class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
           this.props.onError(chrome.i18n.getMessage("desktop_msg_too_large"))
           return
         }
-        this.readImage(file)
+        this.props.onChange(file)
       }
     }
-  }
-  private async readImage(file: File) {
-    this.props.onChange(file)
   }
   public render() {
     return (
@@ -55,7 +53,7 @@ class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
           className="select-image"
           ref={this.setFileInputRef}
           accept={this.imageAccepts.join(",")}
-          onChange={this.validateImage}
+          onChange={this.readImage}
         />
       </React.Fragment>
     )

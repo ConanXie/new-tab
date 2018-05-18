@@ -50,8 +50,7 @@ class Wallpaper extends React.Component<PropsType> {
     this.props.wallpaperStore.wallpaperType = value
   }
 
-  private handleWallpaperUpdate = async (file: File | Blob) => {
-    URL.revokeObjectURL(this.props.wallpaperStore.wallpaper)
+  private handleWallpaperChange = async (file: File | Blob) => {
     // Save base64 data to storage
     const base64 = await toBase64(file)
     sendMessage("saveWallpaper", base64)
@@ -92,13 +91,13 @@ class Wallpaper extends React.Component<PropsType> {
           <Divider />
           <SelectImage
             disabled={disabledImage}
-            onChange={this.handleWallpaperUpdate}
+            onChange={this.handleWallpaperChange}
             onError={this.showMessage}
           />
           <Divider />
           <FetchImage
             disabled={disabledImage}
-            onChange={this.handleWallpaperUpdate}
+            onChange={this.handleWallpaperChange}
             onError={this.showMessage}
           />
           <Divider />
