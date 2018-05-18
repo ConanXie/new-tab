@@ -50,10 +50,10 @@
     ]
   },
   "dependencies": {
-    "@material-ui/icons": "^1.0.0-beta.43",
+    "@material-ui/core": "^1.0.0",
+    "@material-ui/icons": "^1.0.0",
     "classnames": "^2.2.5",
-    "date-fns": "^2.0.0-alpha.7",
-    "material-ui": "^1.0.0-beta.47",
+    "date-fns": "^2.0.0-alpha.8",
     "mobx": "^4.2.1",
     "mobx-react": "^5.1.2",
     "prop-types": "^15.6.1",
@@ -66,7 +66,7 @@
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
-    "@storybook/react": "^4.0.0-alpha.4",
+    "@storybook/react": "^4.0.0-alpha.7",
     "@types/chrome": "0.0.65",
     "@types/classnames": "^2.2.3",
     "@types/enzyme": "^3.1.10",
@@ -85,7 +85,7 @@
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^22.4.3",
-    "react-hot-loader": "^4.1.3",
+    "react-hot-loader": "^4.2.0",
     "react-test-renderer": "^16.3.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
@@ -94,7 +94,7 @@
     "typescript": "^2.8.3",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^1.0.1",
-    "webpack": "^4.8.1",
+    "webpack": "^4.8.3",
     "webpack-cli": "^2.1.3",
     "webpack-dev-server": "^3.1.4",
     "webpack-merge": "^4.1.2"
