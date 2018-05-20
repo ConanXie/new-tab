@@ -5,7 +5,7 @@ const defaultWallpaperData = {
   wallpaper: "",
   color: "#FF5722",
   useWallpaper: true,
-  wallpaperType: 0,
+  wallpaperType: 1,
   darkIcons: false
 }
 
@@ -38,21 +38,21 @@ export class WallpaperStore {
   @computed get wallpaperStyles() {
     const styles: WallpaperStyles = {}
     if (this.useWallpaper) {
-      // 0: image
-      // 1: color
-      if (!this.wallpaperType) {
+      // 1: image
+      // 2: color
+      if (this.wallpaperType === 1) {
         styles.backgroundImage = `url(${this.wallpaper})`
-      } else if (this.wallpaperType === 1) {
+      } else if (this.wallpaperType === 2) {
         styles.backgroundColor = this.color
       }
     }
     return styles
   }
   @computed get disabledImage() {
-    return !this.useWallpaper || this.wallpaperType === 1
+    return !this.useWallpaper || this.wallpaperType === 2
   }
   @computed get disabledColor() {
-    return !this.useWallpaper || !this.wallpaperType
+    return !this.useWallpaper || this.wallpaperType === 1
   }
 }
 

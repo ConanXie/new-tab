@@ -5,10 +5,13 @@ import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 import Item, { ItemPropsType } from "./Item"
 
-const source: string[] = [
-  chrome.i18n.getMessage("wallpaper_type_image"),
-  chrome.i18n.getMessage("wallpaper_type_color")
-]
+const source = [{
+  type: 1,
+  text: chrome.i18n.getMessage("wallpaper_type_image")
+}, {
+  type: 2,
+  text: chrome.i18n.getMessage("wallpaper_type_color")
+}]
 
 const styles = {
   paper: {
@@ -62,13 +65,14 @@ class TypeMenu extends React.Component<WithStyles<"paper"> & PropsType> {
   public render() {
     const { anchorEl } = this.state
     const { type, classes } = this.props
+    const currentType = source.find(item => item.type === type)!.text
 
     return (
       <React.Fragment>
         <Item
           disabled={this.props.disabled}
           primary={chrome.i18n.getMessage("wallpaper_type")}
-          secondary={source[type]}
+          secondary={currentType}
           onClick={this.handleClickListItem}
         />
         <Menu
@@ -80,10 +84,10 @@ class TypeMenu extends React.Component<WithStyles<"paper"> & PropsType> {
         >
           {source.map((item, index) => (
             <TypeMenuItem
-              key={item}
-              selected={index === type}
-              value={index}
-              label={item}
+              key={item.text}
+              selected={item.type === type}
+              value={item.type}
+              label={item.text}
               onChange={this.handleMenuClick}
             >
               {item}
