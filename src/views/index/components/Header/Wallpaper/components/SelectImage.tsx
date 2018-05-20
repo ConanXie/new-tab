@@ -1,10 +1,9 @@
 import * as React from "react"
 
 import Item, { ItemPropsType, ItemMethods } from "./Item"
+import { imageAccepts, imageSize } from "config"
 
 class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
-  private imageAccepts: string[] = ["image/png", "image/jpeg", "image/gif", "image/jpg"]
-  private imageSize = 10485760 // 10MB
 
   private fileInput: HTMLInputElement
   // Callback Refs
@@ -26,12 +25,12 @@ class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
       event.target.value = ""
       if (file) {
         const { type, size } = file
-        const matched = this.imageAccepts.find(item => item === type)
+        const matched = imageAccepts.find(item => item === type)
         if (!matched) {
           this.props.onError(chrome.i18n.getMessage("desktop_msg_not_supported"))
           return
         }
-        if (size > this.imageSize) {
+        if (size > imageSize) {
           this.props.onError(chrome.i18n.getMessage("desktop_msg_too_large"))
           return
         }
@@ -52,7 +51,7 @@ class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
           type="file"
           className="select-image"
           ref={this.setFileInputRef}
-          accept={this.imageAccepts.join(",")}
+          accept={imageAccepts.join(",")}
           onChange={this.readImage}
         />
       </React.Fragment>

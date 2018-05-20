@@ -2,20 +2,10 @@
  * Configure for the program
  */
 
-const version = '1.8.4'
+export const websitesMax = 100
 
-const code = 'Apricot'
+export const searchEnginesMax = 30
 
-const classificationMax = 20
+export const imageAccepts: string[] = ["image/png", "image/jpeg", "image/gif", "image/jpg"]
 
-const websiteMax = 100
-
-const searchEnginesMax = 30
-
-export {
-  version,
-  code,
-  classificationMax,
-  websiteMax,
-  searchEnginesMax
-}
+export const imageSize = 10485760 // 10MB
