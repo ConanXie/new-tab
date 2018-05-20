@@ -14,6 +14,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.styl', '.css', '.jpg', '.png', '.svg', '.woff', '.woff2', '.gif'],
     alias: {
+      config: path.join(context, 'config'),
       utils: path.join(context, 'utils'),
       stores: path.join(context, 'stores'),
       components: path.join(context, 'components')
