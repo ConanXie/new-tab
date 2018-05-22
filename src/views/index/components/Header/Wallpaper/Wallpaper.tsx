@@ -6,8 +6,6 @@ import List from "@material-ui/core/List"
 import Snackbar from "@material-ui/core/Snackbar"
 
 import makeDumbProps from "utils/makeDumbProps"
-import { sendMessage } from "utils/message"
-import { toBase64 } from "utils/fileConversions"
 
 import { WallpaperStore } from "../../../store/wallpaper"
 import WallpaperSwitch from "./components/WallpaperSwitch"
@@ -43,27 +41,6 @@ class Wallpaper extends React.Component<PropsType> {
     })
   }
 
-  private handleWallpaperSwitchChange = () => {
-    this.props.wallpaperStore.useWallpaper = !this.props.wallpaperStore.useWallpaper
-  }
-  private handleTypeChange = (value: number) => {
-    this.props.wallpaperStore.wallpaperType = value
-  }
-
-  private handleWallpaperChange = async (file: File | Blob) => {
-    // Save base64 data to storage
-    const base64 = await toBase64(file)
-    sendMessage("saveWallpaper", base64)
-  }
-
-  private handleColorChange = (color: string) => {
-    this.props.wallpaperStore.color = color
-  }
-
-  private handleDarkIconsToggle = () => {
-    this.props.wallpaperStore.darkIcons = !this.props.wallpaperStore.darkIcons
-  }
-
   public render() {
     const {
       useWallpaper,
@@ -72,7 +49,12 @@ class Wallpaper extends React.Component<PropsType> {
       color,
       darkIcons,
       disabledImage,
-      disabledColor
+      disabledColor,
+      wallpaperSwitch,
+      changeWallpaperType,
+      updateWallpaper,
+      handleColorChange,
+      toggleDarkIcons
     } = this.props.wallpaperStore
 
     return (
@@ -80,24 +62,24 @@ class Wallpaper extends React.Component<PropsType> {
         <List>
           <WallpaperSwitch
             checked={useWallpaper}
-            onChange={this.handleWallpaperSwitchChange}
+            onChange={wallpaperSwitch}
           />
           <Divider />
           <TypeMenu
             disabled={disabledImage && disabledColor}
             type={wallpaperType}
-            onChange={this.handleTypeChange}
+            onChange={changeWallpaperType}
           />
           <Divider />
           <SelectImage
             disabled={disabledImage}
-            onChange={this.handleWallpaperChange}
+            onChange={updateWallpaper}
             onError={this.showMessage}
           />
           <Divider />
           <FetchImage
             disabled={disabledImage}
-            onChange={this.handleWallpaperChange}
+            onChange={updateWallpaper}
             onError={this.showMessage}
           />
           <Divider />
@@ -109,11 +91,11 @@ class Wallpaper extends React.Component<PropsType> {
           <SelectColor
             disabled={disabledColor}
             color={color}
-            onChange={this.handleColorChange}
+            onChange={handleColorChange}
           />
           <Divider />
           <DarkIcons
-            onChange={this.handleDarkIconsToggle}
+            onChange={toggleDarkIcons}
             checked={darkIcons}
           />
           <Divider />

@@ -29,10 +29,7 @@ class App extends React.Component<PropsType> {
   }
   public componentDidMount() {
     this.setPageTitle()
-    onMessage("updateWallpaper", url => {
-      this.props.wallpaperStore.wallpaperType = 1
-      this.props.wallpaperStore.wallpaper = url
-    })
+    onMessage("updateWallpaper", this.props.wallpaperStore.wallpaperUpdated)
   }
   public render() {
     return (

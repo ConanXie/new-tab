@@ -1,5 +1,7 @@
-import { observable, computed, autorun } from "mobx"
+import { observable, computed, autorun, action } from "mobx"
 import { settingsStorage } from "utils/storage"
+import { sendMessage } from "utils/message"
+import { toBase64 } from "utils/fileConversions"
 
 const defaultWallpaperData = {
   wallpaper: "",
@@ -53,6 +55,33 @@ export class WallpaperStore {
   }
   @computed get disabledColor() {
     return !this.useWallpaper || this.wallpaperType === 1
+  }
+  @action("wallpaper switch")
+  public wallpaperSwitch = () => {
+    this.useWallpaper = !this.useWallpaper
+  }
+  @action("update wallpaper -- image")
+  public updateWallpaper = async (file: File | Blob) => {
+    // Save base64 data to storage
+    const base64 = await toBase64(file)
+    sendMessage("saveWallpaper", base64)
+  }
+  @action("wallpaper updated -- image")
+  public wallpaperUpdated = (url: string) => {
+    this.wallpaperType = 1
+    this.wallpaper = url
+  }
+  @action("change wallpaper type")
+  public changeWallpaperType = (value: number) => {
+    this.wallpaperType = value
+  }
+  @action("handle background color change")
+  public handleColorChange = (color: string) => {
+    this.color = color
+  }
+  @action("toggle dark icons")
+  public toggleDarkIcons = () => {
+    this.darkIcons = !this.darkIcons
   }
 }
 

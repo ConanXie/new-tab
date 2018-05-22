@@ -3,8 +3,6 @@ import { inject, observer } from "mobx-react"
 
 import { imageAccepts, imageSize } from "config"
 import makeDumbProps from "utils/makeDumbProps"
-import { toBase64 } from "utils/fileConversions"
-import { sendMessage } from "utils/message"
 import { WallpaperStore } from "../../store/wallpaper"
 
 interface PropsType {
@@ -21,14 +19,14 @@ class Background extends React.Component<PropsType> {
     event.stopPropagation()
     event.preventDefault()
     const file = event.dataTransfer.files[0]
-    if (file && this.props.wallpaperStore.useWallpaper) {
+    const { useWallpaper, updateWallpaper } = this.props.wallpaperStore
+    if (file && useWallpaper) {
       const { type, size } = file
       const matched = imageAccepts.find(item => item === type)
       if (!matched || size > imageSize) {
         return
       }
-      const base64 = await toBase64(file)
-      sendMessage("saveWallpaper", base64)
+      updateWallpaper(file)
     }
   }
   public componentDidMount() {
