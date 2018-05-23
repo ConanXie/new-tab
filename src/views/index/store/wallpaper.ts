@@ -1,9 +1,9 @@
-import { observable, computed, autorun, action } from "mobx"
+import { observable, computed, autorun, action, transaction } from "mobx"
 import { settingsStorage } from "utils/storage"
 import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
 
-const defaultWallpaperData = {
+export const defaultWallpaperData = {
   wallpaper: "",
   color: "#FF5722",
   useWallpaper: true,
@@ -21,8 +21,7 @@ export class WallpaperStore {
   @observable public useWallpaper: boolean
   @observable public wallpaperType: number
   @observable public darkIcons: boolean
-  constructor() {
-    const persistence = settingsStorage.get("wallpaper", {})
+  constructor(persistence: any) {
     const {
       wallpaper,
       color,
@@ -68,8 +67,10 @@ export class WallpaperStore {
   }
   @action("wallpaper updated -- image")
   public wallpaperUpdated = (url: string) => {
-    this.wallpaperType = 1
-    this.wallpaper = url
+    transaction(() => {
+      this.wallpaperType = 1
+      this.wallpaper = url
+    })
   }
   @action("change wallpaper type")
   public changeWallpaperType = (value: number) => {
@@ -85,7 +86,8 @@ export class WallpaperStore {
   }
 }
 
-const wallpaperStore = new WallpaperStore()
+const persistence = settingsStorage.get("wallpaper", {})
+const wallpaperStore = new WallpaperStore(persistence)
 
 autorun(() => {
   settingsStorage.set("wallpaper", wallpaperStore)
