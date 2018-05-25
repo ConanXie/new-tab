@@ -16,18 +16,18 @@ import Settings from './Settings'
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     
     const {
       currentTheme,
       darkMode,
       customTheme
-    } = props.settings
+    } = props.settings;
     
     // Create dark theme at first
-    this.darkTheme = this.createDarkTheme()
-    let muiTheme
-    const index = currentTheme ? currentTheme : 0
+    this.darkTheme = this.createDarkTheme();
+    let muiTheme;
+    const index = currentTheme ? currentTheme : 0;
     // Night mode
     if (darkMode) {
       muiTheme = this.darkTheme
@@ -52,9 +52,9 @@ class App extends Component {
       this.setBackground(this.darkTheme.paper.backgroundColor)
     }
     
-    chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT')
+    chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT');
     
-    const errHandler = e => console.error(e)
+    const errHandler = e => console.error(e);
     // Save bing wallpaper to temporary file system when user installed the extension
     window.webkitRequestFileSystem(window.TEMPORARY, 10 * 1024 * 1024, fs => {
       fs.root.getFile('wallpaper.jpg', { create: false }, () => {}, err => {
@@ -64,22 +64,22 @@ class App extends Component {
               return res.json()
             }
           }).then(data => {
-            const imageUrl = 'https://www.bing.com' + data.images[0].url
+            const imageUrl = 'https://www.bing.com' + data.images[0].url;
             fetch(imageUrl).then(res => {
               if (res.ok) {
                 return res.blob()
               }
             }).then(data => {
               fileEntry.createWriter(fileWriter => {
-                let truncated = false
-                fileWriter.onerror = errHandler
+                let truncated = false;
+                fileWriter.onerror = errHandler;
                 fileWriter.onwriteend = function () {
                   if (!truncated) {
-                    truncated = true
-                    this.truncate(this.position)
+                    truncated = true;
+                    this.truncate(this.position);
                     return
                   }
-                }
+                };
                 fileWriter.write(data)
               }, errHandler)
             }).catch(errHandler)
@@ -95,38 +95,38 @@ class App extends Component {
         primary1Color: color,
         settingsBackgroundColor: 'hsla(0, 0%, 95%, 1)'
       }
-    }
+    };
     if (hue === 'bright') {
-      theme.palette.alternateTextColor = '#303030'
+      theme.palette.alternateTextColor = '#303030';
       theme.snackbar = {
         textColor: '#ffffff'
       }
     }
     return getMuiTheme(theme)
-  }
+  };
   createDarkTheme = () => {
-    darkBaseTheme.fontFamily = 'Roboto, Microsoft Yahei'
+    darkBaseTheme.fontFamily = 'Roboto, Microsoft Yahei';
     darkBaseTheme.palette = {
       ...darkBaseTheme.palette,
       primary1Color: '#607d8b',
       textColor: '#e2e4e4',
       alternateTextColor: '#e2e4e4',
       settingsBackgroundColor: 'rgba(42, 42, 42, 1)'
-    }
+    };
     darkBaseTheme.toggle = {
       thumbOnColor: '#32c5fa',
       thumbOffColor: '#fafafa',
       trackOnColor: '#265b6f',
       trackOffColor: '#646b6f'
-    }
+    };
     darkBaseTheme.snackbar = {
       textColor: '#333'
-    }
+    };
     return getMuiTheme(darkBaseTheme)
-  }
+  };
   componentWillReceiveProps(nextProps) {
     // console.log(this.props, nextProps)
-    const { currentTheme, darkMode, customTheme, background, backgroundSource, backgroundColor, blurRadius } = nextProps.settings
+    const { currentTheme, darkMode, customTheme, background, backgroundSource, backgroundColor, blurRadius } = nextProps.settings;
     if (currentTheme !== this.props.settings.currentTheme || (currentTheme === -1 && (customTheme.color !== this.props.settings.customTheme.color || customTheme.hue !== this.props.settings.customTheme.hue))) {
       setTimeout(() => {
         this.changeTheme(currentTheme)
@@ -142,23 +142,23 @@ class App extends Component {
     }
   }
   changeTheme = (index = 0) => {
-    let theme
+    let theme;
     if (index === -1) {
-      const { color, hue } = this.props.settings.customTheme
+      const { color, hue } = this.props.settings.customTheme;
       theme = this.createTheme(color, hue)
     } else {
       theme = this.createTheme(colors[index].color)
     }
     this.setState({
       muiTheme: theme
-    })
+    });
     this.changeBackground()
-  }
+  };
   changeBackground() {
-    const { background, backgroundSource, backgroundColor, blurRadius, maskStrength } = this.props.settings
-    let color
-    let image
-    let mask
+    const { background, backgroundSource, backgroundColor, blurRadius, maskStrength } = this.props.settings;
+    let color;
+    let image;
+    let mask;
     if (background) {
       if (backgroundSource === undefined || backgroundSource === 1 || backgroundSource === 2) {
         image = `url(filesystem:chrome-extension://${chrome.app.getDetails().id}/temporary/wallpaper${blurRadius ? '-blur' : ''}.jpg?r=${Date.now()})`
@@ -172,25 +172,25 @@ class App extends Component {
     this.setBackground(color, image, mask)
   }
   setBackground(color = '#fff', image = 'none', strength = 0) {
-    const bg = document.querySelector('#bg')
-    bg.style.backgroundColor = color
-    bg.style.backgroundImage = image
+    const bg = document.querySelector('#bg');
+    bg.style.backgroundColor = color;
+    bg.style.backgroundImage = image;
     document.querySelector('#mask').style.backgroundColor = `rgba(0, 0, 0, ${strength})`
   }
   darkMode = bool => {
-    const { currentTheme, customTheme } = this.props.settings
+    const { currentTheme, customTheme } = this.props.settings;
     if (bool) {
       this.setState({
         muiTheme: this.darkTheme
-      })
+      });
       this.setBackground(this.darkTheme.paper.backgroundColor)
     } else {
       this.changeTheme(currentTheme)
     }
-  }
+  };
   render() {
-    const { muiTheme } = this.state
-    const { hideWebsites, hideSearch } = this.props.settings
+    const { muiTheme } = this.state;
+    const { hideWebsites, hideSearch } = this.props.settings;
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -219,8 +219,8 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const { settings } = state
+  const { settings } = state;
   return { settings }
-}
+};
 
 export default connect(mapStateToProps)(App)

@@ -39,17 +39,20 @@ $html.RemoveAt(10)
 Set-Content index.html -Value $html
 
 $files = @()
-foreach ($name in Get-ChildItem -name) {
-  $format = Get-Item $name
-  # Write-Output $format.Extension
-  if ($name -ne "images" -and $format.Extension -ne ".zip") {
-    $files += $name
-  }
+foreach ($name in Get-ChildItem -name)
+{
+    $format = Get-Item $name
+    # Write-Output $format.Extension
+    if ($name -ne "images" -and $format.Extension -ne ".zip")
+    {
+        $files += $name
+    }
 }
 
 $releasesPath = "../releases"
-if (!(Test-Path $releasesPath)) {
-  New-Item $releasesPath -type directory
+if (!(Test-Path $releasesPath))
+{
+    New-Item $releasesPath -type directory
 }
 # Write-Output $files
 Compress-Archive -Path $files -Force -DestinationPath "$releasesPath/new-tab v$args.zip"
@@ -61,12 +64,13 @@ Set-Location ".."
 Write-Output "After this operation, changes of the dist folder will be cleaned up."
 $confirmation = Read-Host "Do you want to continue? [Y/n]"
 
-if ($confirmation -eq 'y' -or $confirmation -eq 'Y') {
+if ($confirmation -eq 'y' -or $confirmation -eq 'Y')
+{
 
-  Remove-Item -Recurse "$distPath/assets"
-  Get-ChildItem $distPath | Where-Object{$_.Name -Match "js$"} | Remove-Item
+    Remove-Item -Recurse "$distPath/assets"
+    Get-ChildItem $distPath | Where-Object{ $_.Name -Match "js$" } | Remove-Item
 
-  git checkout -- $distPath
+    git checkout -- $distPath
 
-  Write-Output "---------- Done ----------"
+    Write-Output "---------- Done ----------"
 }

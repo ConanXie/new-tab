@@ -1,6 +1,6 @@
 {
   "name": "Material Design New Tab",
-  "version": "1.8.0",
+  "version": "",
   "manifest_version": 2,
   "default_locale": "en",
   "description": "__MSG_appDescription__",
@@ -22,6 +22,5 @@
     "background",
     "geolocation",
     "<all_urls>"
-  ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval' http://localhost:5001; object-src 'self'"
+  ]
 }
