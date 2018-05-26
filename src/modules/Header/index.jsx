@@ -118,7 +118,7 @@ class Header extends Component {
                         </IconButton>
                     </div>
                 </div>
-                <Drawer
+                {(weatherActive || appActive) && (<Drawer
                     docked={false}
                     width={600}
                     open={weatherOpen}
@@ -130,7 +130,7 @@ class Header extends Component {
                             {appActive && (<Apps/>)}
                         </div>
                     )}
-                </Drawer>
+                </Drawer>)}
                 <Drawer
                     docked={false}
                     width={360}
