@@ -1,6 +1,6 @@
 {
   "name": "Material Design New Tab",
-  "version": "",
+  "version": "2.0.0",
   "manifest_version": 2,
   "default_locale": "en",
   "description": "__MSG_appDescription__",

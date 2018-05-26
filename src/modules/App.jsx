@@ -8,7 +8,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import colors from './Settings/Theme/colors'
 
-import {importLazy} from '@/scripts/LazilyLoad'
 import Header from './Header'
 import Search from './Search'
 import Navigation from './Navigation'
@@ -198,20 +197,13 @@ class App extends Component {
 
     render() {
         const {muiTheme} = this.state;
-        const {hideWebsites, hideSearch} = this.props.settings;
+        const {hideWebsites, hideSearch,hideWeather} = this.props.settings;
 
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
                     <div id="bg"/>
                     <div id="mask"/>
-                    {/* <LazilyLoad modules={{
-            Header: () => importLazy(import('./Header'))
-          }}>
-            {({ Header }) => {
-              return <Header />
-            }}
-          </LazilyLoad> */}
                     <Header/>
                     {!hideSearch && (
                         <Search/>

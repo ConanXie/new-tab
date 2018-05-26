@@ -46,6 +46,7 @@ const style = {
     }
 };
 
+
 class Weather extends Component {
     constructor(props) {
         super(props);
@@ -183,7 +184,8 @@ class Weather extends Component {
             })
         }
     };
-    responseError = err => {
+
+    responseError = () => {
 
         console.error('Fetch failed!');
 
@@ -194,6 +196,7 @@ class Weather extends Component {
             emptyText: chrome.i18n.getMessage('weather_empty_requestError')
         })
     };
+
     getData = region => {
         const lang = navigator.language;
 
@@ -234,6 +237,7 @@ class Weather extends Component {
             }, {maximumAge: 60000, timeout: 6000})
         }
     };
+
     calcWeek = (date) => {
         const weekArr = [
             chrome.i18n.getMessage('weather_week_Sunday'),
@@ -249,8 +253,6 @@ class Weather extends Component {
     };
 
     render() {
-        // let Interface;
-        // let Qlty;
         const {data, times, base, loading, empty, emptyText} = this.state;
         const {primary1Color, alternateTextColor} = this.props.muiTheme.palette;
         return (
@@ -333,11 +335,14 @@ class Weather extends Component {
     }
 }
 
+/**
+ * @param state
+ * @returns {{settings: *}}
+ */
 const mapStateToProps = state => {
     const {settings} = state;
     return {settings}
 };
-
 export default LazilyLoadFactory(muiThemeable()(connect(mapStateToProps, settingsActions)(Weather)), {
     moment: () => import('moment')
 })

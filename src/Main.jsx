@@ -17,6 +17,7 @@ import App from './modules/App'
 const store = createStore(reducer, applyMiddleware(thunk));
 /**
  * Render if is {@link App}
+ *
  * @param Component
  * @returns {*}
  */

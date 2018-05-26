@@ -48,6 +48,24 @@ const FahrenheitIcon = props => {
     )
 };
 
+const WeatherIcon = props => {
+    return (
+        <SvgIcon {...props}>
+            <path xmlns="http://www.w3.org/2000/svg"
+                  d="M19.35,10.04C18.67,6.59,15.64,4,12,4C9.11,4,6.6,5.64,5.35,8.04C2.34,8.36,0,10.91,0,14c0,3.31,2.69,6,6,6h13   c2.76,0,5-2.24,5-5C24,12.36,21.95,10.22,19.35,10.04z"/>
+        </SvgIcon>
+    )
+};
+
+const App = props => {
+    return (
+        <SvgIcon {...props}>
+            <path xmlns="http://www.w3.org/2000/svg"
+                  d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/>
+        </SvgIcon>
+    )
+};
+
 const style = {
     toggleLabel: {
         fontSize: '15px'
@@ -206,7 +224,7 @@ class Settings extends Component {
 
     render() {
         const {open, settings, muiTheme, hideSettings, saveSettings} = this.props;
-        const {display, load, currentTheme, snackbarOpen, snackbarMessage} = this.state;
+        const {display, appActive, load, currentTheme, snackbarOpen, snackbarMessage, weatherOpen} = this.state;
         const resetActions = [
             <FlatButton
                 label={chrome.i18n.getMessage('button_cancel')}
@@ -263,6 +281,20 @@ class Settings extends Component {
                                         </div>
                                     </div>
                                     <div className="toggle-box">
+                                        <App style={style.toggleIcon} color={muiTheme.palette.primary1Color}/>
+                                        <div className="toggle-wrapper">
+                                            <Toggle
+                                                className="toggle"
+                                                label={chrome.i18n.getMessage('settings_apps')}
+                                                defaultToggled={settings.appActive}
+                                                onToggle={(event, bool) => {
+                                                    saveSettings({appActive: bool})
+                                                }}
+                                                labelStyle={style.toggleLabel}
+                                            />
+                                        </div>
+                                    </div>
+                                    {settings.appActive && (<div className="toggle-box">
                                         <TextFormat style={style.toggleIcon} color={muiTheme.palette.primary1Color}/>
                                         <div className="toggle-wrapper">
                                             <Toggle
@@ -275,7 +307,7 @@ class Settings extends Component {
                                                 labelStyle={style.toggleLabel}
                                             />
                                         </div>
-                                    </div>
+                                    </div>)}
                                     <div className="toggle-box">
                                         <BookmarkBorder style={style.toggleIcon}
                                                         color={muiTheme.palette.primary1Color}/>
@@ -361,6 +393,21 @@ class Settings extends Component {
                                     <h2 className="settings-title"
                                         style={{color: muiTheme.palette.secondaryTextColor}}>{chrome.i18n.getMessage('settings_weather_title')}</h2>
                                     <div className="toggle-box">
+                                        <WeatherIcon style={style.toggleIcon}
+                                                     color={muiTheme.palette.primary1Color}/>
+                                        <div className="toggle-wrapper">
+                                            <Toggle
+                                                className="toggle"
+                                                label={chrome.i18n.getMessage('settings_weather_active')}
+                                                defaultToggled={settings.weatherActive}
+                                                onToggle={(event, bool) => {
+                                                    saveSettings({weatherActive: bool})
+                                                }}
+                                                labelStyle={style.toggleLabel}
+                                            />
+                                        </div>
+                                    </div>
+                                    {settings.weatherActive && (<div className="toggle-box">
                                         <FahrenheitIcon style={style.toggleIcon}
                                                         color={muiTheme.palette.primary1Color}/>
                                         <div className="toggle-wrapper">
@@ -374,8 +421,8 @@ class Settings extends Component {
                                                 labelStyle={style.toggleLabel}
                                             />
                                         </div>
-                                    </div>
-                                    <div className="toggle-box">
+                                    </div>)}
+                                    {settings.weatherActive && (<div className="toggle-box">
                                         <GPSOff style={style.toggleIcon} color={muiTheme.palette.primary1Color}/>
                                         <div className="toggle-wrapper">
                                             <Toggle
@@ -388,8 +435,8 @@ class Settings extends Component {
                                                 labelStyle={style.toggleLabel}
                                             />
                                         </div>
-                                    </div>
-                                    <Region/>
+                                    </div>)}
+                                    {settings.weatherActive && (<Region/>)}
                                     {/*backup and restore*/}
                                     <h2 className="settings-title"
                                         style={{color: muiTheme.palette.secondaryTextColor}}>{chrome.i18n.getMessage('settings_br_title')}</h2>

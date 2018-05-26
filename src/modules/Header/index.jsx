@@ -81,7 +81,7 @@ class Header extends Component {
     render() {
         const {showSettings, settings, muiTheme} = this.props;
         const {weatherOpen, bookmarkOpen, wallpaperOpen, loadApps, loadBookmarks, loadWallpaper} = this.state;
-        const {topShadow, darkMode, background, backgroundShade} = settings;
+        const {appActive, weatherActive, topShadow, darkMode, background, backgroundShade} = settings;
 
         let iconColor = muiTheme.palette.textColor;
         if ((topShadow && !darkMode) || (background && backgroundShade === 2)) {
@@ -98,11 +98,11 @@ class Header extends Component {
             >
                 <div className="tool-bar">
                     <div className="bar-left">
-                        <IconButton
+                        {(appActive || weatherActive) && (<IconButton
                             onClick={() => this.setState({weatherOpen: true, loadApps: true})}
                         >
                             <NavigationMenu color={iconColor}/>
-                        </IconButton>
+                        </IconButton>)}
                     </div>
                     <div className="bar-right">
                         <IconButton style={style.rightIcon}
@@ -126,8 +126,8 @@ class Header extends Component {
                 >
                     {loadApps && (
                         <div>
-                            <Weather/>
-                            <Apps/>
+                            {weatherActive && (<Weather/>)}
+                            {appActive && (<Apps/>)}
                         </div>
                     )}
                 </Drawer>
