@@ -2,6 +2,9 @@
   "appDescription": {
     "message": "Material Design 新增分頁"
   },
+  "newTab": {
+    "message": "新增分頁"
+  },
   "themeTeal": {
     "message": "水鴨青"
   },
@@ -110,6 +113,9 @@
   "settings_website_open_label": {
     "message": "在新分頁中開啓網站"
   },
+  "settings_apps": {
+    "message": "顯示應用程式"
+  },
   "settings_apps_display_label": {
     "message": "隱藏應用程式的標籤"
   },
@@ -136,6 +142,9 @@
   },
   "settings_weather_title": {
     "message": "天氣"
+  },
+  "settings_weather_active": {
+    "message": "使用天氣"
   },
   "settings_weather_fahrenheit_label": {
     "message": "天氣使用華氏溫標"

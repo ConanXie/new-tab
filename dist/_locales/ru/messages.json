@@ -2,6 +2,9 @@
   "appDescription": {
     "message": "Новая вкладка Material Design"
   },
+  "newTab": {
+    "message": "New Tab"
+  },
   "themeTeal": {
     "message": "Бирюзовый"
   },
@@ -110,6 +113,9 @@
   "settings_website_open_label": {
     "message": "Открыть сайт в новой вкладке"
   },
+  "settings_apps": {
+    "message": "Apps"
+  },
   "settings_apps_display_label": {
     "message": "Скрыть название приложений"
   },
@@ -136,6 +142,9 @@
   },
   "settings_weather_title": {
     "message": "Погода"
+  },
+  "settings_weather_active": {
+    "message": "Weather"
   },
   "settings_weather_fahrenheit_label": {
     "message": "Измерять в Фаренгейтах"
