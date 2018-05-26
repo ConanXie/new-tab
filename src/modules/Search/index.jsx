@@ -109,7 +109,8 @@ class Search extends Component {
     openSearch(link) {
         const text = this.refs.text.value;
         const target = this.props.settings.searchTarget ? '_blank' : '_self';
-        window.open(link.replace('%s', text).replace(/#/g, '%23'), target)
+        if (text !== "")
+            window.open(link.replace('%s', text).replace(/#/g, '%23'), target)
     }
 
     changeEngine = index => {
