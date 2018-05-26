@@ -767,7 +767,9 @@ class Navigation extends Component {
                                 <FlatButton
                                     label={chrome.i18n.getMessage('empty_text_navigation_hide')}
                                     primary={true}
+                                    className={classNames('hide-btn', {'white': !darkMode && background && backgroundShade === 2})}
                                     onClick={() => saveSettings({hideWebsites: true})}
+                                    hoverColor={muiTheme.palette.primary1Color}
                                 />
                             </div>
                         )}

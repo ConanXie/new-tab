@@ -329,7 +329,7 @@ class Search extends Component {
 
         return (
             <div className="search-wrapper">
-                <div className="logo-area">
+                <div className="logo-area" style={{height: logoTransparency === 0 ? 0 : '92px'}}>
                     <div
                         className={classNames('logo', {'white': !darkMode && background && backgroundShade === 2})}
                         data-host={host}

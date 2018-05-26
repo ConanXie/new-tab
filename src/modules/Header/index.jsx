@@ -84,8 +84,8 @@ class Header extends Component {
         const {appActive, weatherActive, topShadow, darkMode, background, backgroundShade} = settings;
 
         let iconColor = muiTheme.palette.textColor;
-        if ((topShadow && !darkMode) || (background && backgroundShade === 2)) {
-            iconColor = 'rgba(255, 255, 255, 0.87)'
+        if ((topShadow && darkMode) || (background && backgroundShade === 2)) {
+            iconColor = 'rgb(255, 255, 255)'
         }
 
         return (

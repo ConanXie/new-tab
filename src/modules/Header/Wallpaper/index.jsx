@@ -501,7 +501,12 @@ class Wallpaper extends Component {
     handleTransparency = (event, value) => {
         const transparency = 1 - value;
         document.querySelector('.logo').style.opacity = transparency;
-        document.querySelector('.engine-name').style.opacity = transparency
+        document.querySelector('.engine-name').style.opacity = transparency;
+        if (transparency === 0) {
+            document.querySelector(".logo-area").style.height = 0;
+        } else {
+            document.querySelector(".logo-area").style = null;
+        }
     };
     applyTransparency = () => {
         const transparency = 1 - document.querySelector('[name=transparency]').value;
