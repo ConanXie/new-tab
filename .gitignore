@@ -1,5 +1,8 @@
 node_modules/
 releases/
 
+*.min.js
+*.min.css
+
 #IDEA
 .idea/
