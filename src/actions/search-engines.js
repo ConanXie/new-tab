@@ -8,7 +8,7 @@ export const UPDATE_ENGINES = 'UPDATE_ENGINES';
  * get data from chrome storage sync
  */
 function getEngines() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         chrome.storage.sync.get('engines', result => {
             const {engines} = result;
             if (Array.isArray(engines)) {

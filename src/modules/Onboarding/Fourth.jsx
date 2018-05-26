@@ -7,7 +7,7 @@ class Fourth extends Component {
   render() {
     return (
       <div className="step step-four">
-        <div className="illustration"></div>
+        <div className="illustration"/>
         <h1>{chrome.i18n.getMessage('onboardingFourthTitle')}</h1>
         <p>{chrome.i18n.getMessage('onboardingFourthContent')}</p>
       </div>

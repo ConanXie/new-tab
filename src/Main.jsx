@@ -10,8 +10,16 @@ import reducer from './reducers'
 import {AppContainer} from 'react-hot-loader'
 import App from './modules/App'
 
+/**
+ *
+ * @type {Store<any>}
+ */
 const store = createStore(reducer, applyMiddleware(thunk));
-
+/**
+ * Render if is {@link App}
+ * @param Component
+ * @returns {*}
+ */
 const renderApp = (Component = App) => render((
     <Provider store={store}>
         <AppContainer>

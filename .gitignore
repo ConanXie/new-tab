@@ -1,5 +1,5 @@
-node_modules
-releases
+node_modules/
+releases/
 
 #IDEA
 .idea/
