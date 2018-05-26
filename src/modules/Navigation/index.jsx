@@ -750,14 +750,20 @@ class Navigation extends Component {
                     </div>
                     <div className={classNames('websites-wrap', {'empty': isEmpty})}>
                         {isEmpty && (
-                            <div className="empty-box">
-                                <p className="empty-text">{chrome.i18n.getMessage('empty_text_navigation')}</p>
+                            <div
+                                className="empty-box"
+                            >
+                                <p
+                                    className={classNames('empty-text', {'white': !darkMode && background && backgroundShade === 2})}
+                                >{chrome.i18n.getMessage('empty_text_navigation')}</p>
                                 <RaisedButton
                                     label={chrome.i18n.getMessage('empty_text_navigation_add')}
                                     primary={true}
                                     onClick={this.openDialog}
                                 />
-                                <span className="or">{chrome.i18n.getMessage('empty_text_navigation_or')}</span>
+                                <span
+                                    className={classNames('or', {'white': !darkMode && background && backgroundShade === 2})}
+                                >{chrome.i18n.getMessage('empty_text_navigation_or')}</span>
                                 <FlatButton
                                     label={chrome.i18n.getMessage('empty_text_navigation_hide')}
                                     primary={true}
