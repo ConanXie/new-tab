@@ -7,6 +7,7 @@
     width: 272px;
     height: 92px;
     margin: 0 auto;
+    transition: 150ms cubic-bezier(0.4, 0.0, 0.2, 1);
     &:hover .engines-menu {
       opacity: 1;
     }
@@ -37,8 +38,13 @@
     text-align: center;
   }
   .input-box {
-    display: inline-block;
-    position: relative;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    &.hover, &.focus {
+      box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    }
   }
   input {
     outline: none;
@@ -49,22 +55,18 @@
     line-height: 44px;
     padding: 0 38px 0 16px;
     font-size: 16px;
-    border-radius: 2px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-    transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1),
-                background-color 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-    &.hover, &.focus {
-      box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 150ms cubic-bezier(0.4, 0.0, 0.2, 1),
+    background-color 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    &.focus {
+      background-color: rgb(255, 255, 255) !important;
+      color: rgba(0, 0, 0, 0.87) !important;
     }
     &.night {
       background-color: rgba(255, 255, 255, 0.2);
     }
   }
-  .list-wrapper {
-    position: absolute;
-    top: 44px;
-    width: 100%;
-    z-index: 90;
+  .first.list-box {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
   }
   .list-box {
     position: relative;
@@ -107,25 +109,25 @@
 
 @media screen and (max-width: 900px) {
   .search-wrapper {
-    margin: 80px auto 0!important;
+    margin: 80px auto 0 !important;
   }
 }
 
 @media screen and (min-width: 901px) and (max-width: 1200px) {
   .search-wrapper {
-    margin: 90px auto 0!important;
+    margin: 90px auto 0 !important;
   }
 }
 
 @media screen and (min-width: 1001px) and (max-width: 1200px) {
   .search-wrapper {
-    margin: 100px auto 0!important;
+    margin: 100px auto 0 !important;
   }
 }
 
 @media screen and (min-width: 1201px) and (max-width: 1366px) {
   .search-wrapper {
-    margin: 120px auto 0!important;
+    margin: 120px auto 0 !important;
   }
 }
 
@@ -149,6 +151,6 @@
 
 @media screen and (min-width: 1367px) and (max-width: 1800px) {
   .search-wrapper {
-    margin: 140px auto 0!important;
+    margin: 140px auto 0 !important;
   }
 }

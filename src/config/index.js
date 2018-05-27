@@ -2,15 +2,15 @@
  * Configure for the program
  */
 
-const version = '1.8.4'
+const version = '';
 
-const code = 'Apricot'
+const code = 'Apricot';
 
-const classificationMax = 20
+const classificationMax = 20;
 
-const websiteMax = 100
+const websiteMax = 100;
 
-const searchEnginesMax = 30
+const searchEnginesMax = 30;
 
 export {
   version,

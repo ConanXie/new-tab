@@ -1,2 +1,8 @@
-node_modules
-releases
+node_modules/
+releases/
+
+dist/*.min.js
+dist/*.min.css
+
+#IDEA
+.idea/

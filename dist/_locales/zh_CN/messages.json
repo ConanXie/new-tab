@@ -2,6 +2,9 @@
   "appDescription": {
     "message": "Material Design 新标签页"
   },
+  "newTab": {
+    "message": "新标签页"
+  },
   "themeTeal": {
     "message": "水鸭青"
   },
@@ -110,6 +113,9 @@
   "settings_website_open_label": {
     "message": "在新标签页中打开网站"
   },
+  "settings_apps": {
+    "message": "显示应用"
+  },
   "settings_apps_display_label": {
     "message": "隐藏应用的标签"
   },
@@ -136,6 +142,9 @@
   },
   "settings_weather_title": {
     "message": "天气"
+  },
+  "settings_weather_active": {
+    "message": "使用天气"
   },
   "settings_weather_fahrenheit_label": {
     "message": "天气使用华氏度"

@@ -2,6 +2,9 @@
   "appDescription": {
     "message": "Material Design new tab page"
   },
+  "newTab": {
+    "message": "New Tab"
+  },
   "themeTeal": {
     "message": "Teal"
   },
@@ -110,6 +113,9 @@
   "settings_website_open_label": {
     "message": "Open website in new tab"
   },
+  "settings_apps": {
+    "message": "Apps"
+  },
   "settings_apps_display_label": {
     "message": "Hide the label of application"
   },
@@ -135,6 +141,9 @@
     "message": "Night mode"
   },
   "settings_weather_title": {
+    "message": "Weather"
+  },
+  "settings_weather_active": {
     "message": "Weather"
   },
   "settings_weather_fahrenheit_label": {
