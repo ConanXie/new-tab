@@ -45,59 +45,6 @@ class Search extends Component {
     static propsType = {
         settings: PropTypes.object.isRequired
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            predictions: [],
-            empty: true
-        };
-        // the default engine has rendered
-        this.isDone = false;
-        // record the index of predictions, default value is -1
-        this.predictionsIndex = -1;
-        // record current engine index
-        this.engineIndex = 0;
-        // exec the host of engine's url
-        this.pattern = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
-    }
-
-    componentDidMount() {
-        this.props.initialData();
-        // disable spell check on search input
-        this.refs.text.setAttribute('spellcheck', 'false')
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (!this.isDone) {
-            const {engines} = nextProps;
-            const theDefault = nextProps.engines.filter((engine, index) => {
-                if (engine.isDefault) {
-                    this.engineIndex = index
-                }
-                return engine.isDefault
-            });
-            const {link, name} = theDefault[0];
-            const host = this.pattern.exec(link)[3];
-            this.setState({
-                link,
-                host,
-                name
-            });
-            this.isDone = true
-        }
-        if (this.props.settings.searchPredict !== nextProps.settings.searchPredict && !nextProps.settings.searchPredict) {
-            this.setState({
-                predictions: []
-            })
-        }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        // if input is empty then prevent render of predictions change caused by network delay
-        return !(this.inputText === '' && nextState.predictions.length);
-    }
-
     /**
      * open window to search
      */
@@ -105,14 +52,6 @@ class Search extends Component {
         e.preventDefault();
         this.openSearch(this.state.link)
     };
-
-    openSearch(link) {
-        const text = this.refs.text.value;
-        const target = this.props.settings.searchTarget ? '_blank' : '_self';
-        if (text !== "")
-            window.open(link.replace('%s', text).replace(/#/g, '%23'), target)
-    }
-
     changeEngine = index => {
         const {name, link} = this.props.engines[index];
         const host = this.pattern.exec(link)[3];
@@ -293,6 +232,65 @@ class Search extends Component {
         }
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            predictions: [],
+            empty: true
+        };
+        // the default engine has rendered
+        this.isDone = false;
+        // record the index of predictions, default value is -1
+        this.predictionsIndex = -1;
+        // record current engine index
+        this.engineIndex = 0;
+        // exec the host of engine's url
+        this.pattern = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
+    }
+
+    componentDidMount() {
+        this.props.initialData();
+        // disable spell check on search input
+        this.refs.text.setAttribute('spellcheck', 'false')
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (!this.isDone) {
+            const {engines} = nextProps;
+            const theDefault = nextProps.engines.filter((engine, index) => {
+                if (engine.isDefault) {
+                    this.engineIndex = index
+                }
+                return engine.isDefault
+            });
+            const {link, name} = theDefault[0];
+            const host = this.pattern.exec(link)[3];
+            this.setState({
+                link,
+                host,
+                name
+            });
+            this.isDone = true
+        }
+        if (this.props.settings.searchPredict !== nextProps.settings.searchPredict && !nextProps.settings.searchPredict) {
+            this.setState({
+                predictions: []
+            })
+        }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        // if input is empty then prevent render of predictions change caused by network delay
+        return !(this.inputText === '' && nextState.predictions.length);
+    }
+
+    openSearch(link) {
+        const text = this.refs.text.value;
+        const target = this.props.settings.searchTarget ? '_blank' : '_self';
+        if (text !== "")
+            window.open(link.replace('%s', text).replace(/#/g, '%23'), target)
+    }
+
     searchFrom(index) {
         this.openSearch(this.props.engines[index].link)
     }
@@ -362,7 +360,10 @@ class Search extends Component {
                 </div>
                 <div className="search-box">
                     <form action="" onSubmit={this.search} autoComplete="off">
-                        <div className="input-box">
+                        <div className={classNames(
+                            'input-box',
+                            {'focus': focus}
+                        )}>
                             <input
                                 type="text"
                                 tabIndex="1"
@@ -387,12 +388,17 @@ class Search extends Component {
                             >
                                 <SearchIcon/>
                             </IconButton>
-                            <div className="list-wrapper">
+                            <div>
                                 {remaining && !empty && (
-                                    <Paper className={classNames('list-box', {'show': focus})} zDepth={1}
-                                           style={{backgroundColor: muiTheme.paper.backgroundColor}}>
+                                    <Paper className={classNames('list-box', 'first', {'show': focus})} zDepth={0}
+                                           style={{
+                                               backgroundColor: muiTheme.paper.backgroundColor,
+                                           }}
+                                           rounded={false}>
                                         <ul ref="engines" className="engines-list" data-expanded="0"
-                                            style={{height: (engines.length < remainder + 1 ? engines.length - 1 : remainder) * 24}}>
+                                            style={{
+                                                height: (engines.length < remainder + 1 ? engines.length - 1 : remainder) * 24
+                                            }}>
                                             {engines.map((engine, index) => {
                                                 const {id, name} = engine;
                                                 if (index !== this.engineIndex) {
@@ -425,8 +431,12 @@ class Search extends Component {
                                         )}
                                     </Paper>
                                 )}
-                                <Paper className={classNames('list-box', {'show': focus})} zDepth={1}
-                                       style={{backgroundColor: muiTheme.paper.backgroundColor}}>
+                                <Paper className={classNames('list-box', {'show': focus})} zDepth={0}
+                                       style={{
+                                           backgroundColor: muiTheme.paper.backgroundColor,
+                                           borderTopRightRadius: 0,
+                                           borderTopLeftRadius: 0
+                                       }}>
                                     <ul ref="predictions">
                                         {predictions && predictions.map((v, i) => {
                                             return (
