@@ -9,12 +9,17 @@ import Toolbar from "./Toolbar"
 
 import "./style"
 
-type StylesType = "root"
+type StylesType = "root" | "drawerMask"
 
 const styles: StyleRulesCallback<StylesType> = theme => ({
   root: {
     backgroundColor: "transparent",
     boxShadow: "none"
+  },
+  drawerMask: {
+    "& > div:first-child": {
+      backgroundColor: "transparent"
+    }
   }
 })
 
@@ -40,7 +45,12 @@ class Header extends React.Component<WithStyles<StylesType>> {
         <AppBar square className={classes.root}>
           <Toolbar onWallpaperIconClick={this.openWallpaperDrawer} />
         </AppBar>
-        <Drawer anchor="right" open={this.state.wallpaperOpen} onClose={this.closeWallpaperDrawer}>
+        <Drawer
+          anchor="right"
+          open={this.state.wallpaperOpen}
+          onClose={this.closeWallpaperDrawer}
+          classes={{ modal: classes.drawerMask }}
+        >
           <div className="wallpaper-drawer">
             <LazilyLoad
               modules={{
