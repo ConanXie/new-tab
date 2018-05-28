@@ -1,0 +1,500 @@
+{
+  "appDescription": {
+    "message": "Material Design new tab page – страница за Нов раздел"
+  },
+  "new_tab": {
+    "message": "Нов раздел"
+  },
+  "themeTeal": {
+    "message": "Синьо-зелено"
+  },
+  "themeRed": {
+    "message": "Червено"
+  },
+  "themePink": {
+    "message": "Розово"
+  },
+  "themeIndigo": {
+    "message": "Индиго"
+  },
+  "themeBlue": {
+    "message": "Синьо"
+  },
+  "themeDeepOrange": {
+    "message": "Тъмнооранжево"
+  },
+  "themePurple": {
+    "message": "Лилаво"
+  },
+  "themeGreen": {
+    "message": "Зелено"
+  },
+  "themeOrange": {
+    "message": "Оранжево"
+  },
+  "themeBlueGrey": {
+    "message": "Синьо-сиво"
+  },
+  "themeAmber": {
+    "message": "Кехлибарено"
+  },
+  "themeBrown": {
+    "message": "Кафяво"
+  },
+  "themeGrey": {
+    "message": "Сиво"
+  },
+  "themeLightBlue": {
+    "message": "Светлосиньо"
+  },
+  "themeDeepPurple": {
+    "message": "Тъмнолилаво"
+  },
+  "button_cancel": {
+    "message": "ОТКАЗ"
+  },
+  "button_confirm": {
+    "message": "ОК"
+  },
+  "nav_edit_title_edit": {
+    "message": "Редактиране на сайт"
+  },
+  "nav_edit_title_add": {
+    "message": "Добавяне на сайт"
+  },
+  "nav_edit_input_website": {
+    "message": "Име"
+  },
+  "nav_edit_input_URL": {
+    "message": "URL"
+  },
+  "nav_edit_input_forget_name": {
+    "message": "Не забравяйте да напишете име на сайта 🙂"
+  },
+  "nav_edit_input_forget_URL": {
+    "message": "Не забравяйте да напишете URL на сайта 🙂"
+  },
+  "nav_delete_status": {
+    "message": "Изтрито"
+  },
+  "nav_delete_undo": {
+    "message": "Отмени"
+  },
+  "nav_classification_unclassified": {
+    "message": "Без категория"
+  },
+  "nav_add_choose_classification": {
+    "message": "Изберете категория"
+  },
+  "nav_increase_classification_title": {
+    "message": "Добавяне на нова категория"
+  },
+  "nav_increase_classification_label": {
+    "message": "Име на категорията"
+  },
+  "nav_delete_classification": {
+    "message": "Изтрий"
+  },
+  "nav_increase_classification_btn": {
+    "message": "Нова категория"
+  },
+  "nav_show_classification": {
+    "message": "Показване на категориите"
+  },
+  "nav_websites_max_tip": {
+    "message": "Максималният брой сайтове е"
+  },
+  "settings_toolbar_title": {
+    "message": "Настройки"
+  },
+  "settings_engine_search_label": {
+    "message": "Резултатите от търсене да се отварят в Нов раздел"
+  },
+  "settings_website_open_label": {
+    "message": "Сайтовете да се отварят в Нов раздел"
+  },
+  "settings_apps_display_label": {
+    "message": "Скриване на имената на приложенията"
+  },
+  "settings_bookmarks_position_label": {
+    "message": "Да се запазва позицията на менюто с отметките"
+  },
+  "settings_search_predict_label": {
+    "message": "Показване на предложения, докато пишете"
+  },
+  "settings_search_remaining_label": {
+    "message": "Да се показват останалите търсачки"
+  },
+  "settings_search_title": {
+    "message": "Търсене"
+  },
+  "settings_theme_title": {
+    "message": "Тема"
+  },
+  "settings_theme_switch_label": {
+    "message": "Избор на цвят"
+  },
+  "settings_theme_dark_label": {
+    "message": "Тъмна тема"
+  },
+  "settings_weather_title": {
+    "message": "Времето"
+  },
+  "settings_weather_fahrenheit_label": {
+    "message": "Да се показват градуси по Фаренхайт вместо Целзий"
+  },
+  "settings_weather_gps_off_label": {
+    "message": "Да не се използва геолокация с GPS"
+  },
+  "settings_weather_location_label": {
+    "message": "Сегашен район"
+  },
+  "settings_br_title": {
+    "message": "Резервни копия и възстановяване"
+  },
+  "settings_br_backup_label": {
+    "message": "Създаване на бекъп файл"
+  },
+  "settings_br_restore_label": {
+    "message": "Възстановяване от бекъп файл"
+  },
+  "settings_br_restore_message": {
+    "message": "Възстановяването е успешно, моля презаредете страницата"
+  },
+  "settings_br_restore_not_supported": {
+    "message": "Съжаляваме, този бекъп вече не се поддържа"
+  },
+  "settings_br_reset_label": {
+    "message": "Връщане на първоначалните настройки"
+  },
+  "settings_br_reset_message": {
+    "message": "Готово, моля презаредете страницата"
+  },
+  "settings_reset_title": {
+    "message": "Потвърдете връщането"
+  },
+  "settings_reset_warning": {
+    "message": "Всички опции и настройки ще бъдат върнати до първоначалното им състояние"
+  },
+  "settings_about_title": {
+    "message": "Относно"
+  },
+  "settings_donate": {
+    "message": "Даряване"
+  },
+  "settings_feedback": {
+    "message": "Изпращане на отзив"
+  },
+  "settings_about_weather_sources": {
+    "message": "Източници за времето"
+  },
+  "bookmarks_search_placeholder": {
+    "message": "Търсене в отметките"
+  },
+  "bookmarks_bookmarks_manager": {
+    "message": "Мениджър на отметките"
+  },
+  "bookmarks_tabs_all": {
+    "message": "Всички"
+  },
+  "bookmarks_tabs_recent": {
+    "message": "Последно добавени"
+  },
+  "empty_text_apps": {
+    "message": "Няма приложения"
+  },
+  "empty_text_bookmarks": {
+    "message": "Няма отметки"
+  },
+  "empty_text_bookmarks_search": {
+    "message": "Не са намерени отметки"
+  },
+  "empty_text_bookmarks_recent": {
+    "message": "Няма нови отметки"
+  },
+  "empty_text_navigation": {
+    "message": "Няма добавени сайтове"
+  },
+  "empty_text_navigation_add": {
+    "message": "Добавете сега"
+  },
+  "empty_text_navigation_or": {
+    "message": "или"
+  },
+  "empty_text_navigation_hide": {
+    "message": "Скрийте това"
+  },
+  "hotkey_title": {
+    "message": "Клавишни комбинации"
+  },
+  "hotkey_apps": {
+    "message": "Приложения"
+  },
+  "hotkey_bookmarks": {
+    "message": "Отметки"
+  },
+  "hotkey_settings": {
+    "message": "Настройки"
+  },
+  "weather_air": {
+    "message": "Въздух"
+  },
+  "weather_humidity": {
+    "message": "Влажност"
+  },
+  "weather_week_Sunday": {
+    "message": "Нед"
+  },
+  "weather_week_Monday": {
+    "message": "Пон"
+  },
+  "weather_week_Tuesday": {
+    "message": "Вт"
+  },
+  "weather_week_Wednesday": {
+    "message": "Ср"
+  },
+  "weather_week_Thurday": {
+    "message": "Чет"
+  },
+  "weather_week_Friday": {
+    "message": "Пет"
+  },
+  "weather_week_Saturday": {
+    "message": "Съб"
+  },
+  "weather_today": {
+    "message": "Днес"
+  },
+  "weather_empty_noData": {
+    "message": "Съжаляваме, нямаме информация за времето"
+  },
+  "weather_empty_requestError": {
+    "message": "Съжаляваме, заявката за времето даде грешка"
+  },
+  "weather_empty_geolocationError": {
+    "message": "Нещо се обърка при взимане на Вашата геолокация, "
+  },
+  "weather_empty_geolocationClosed": {
+    "message": "Отказали сте заявката за достъп до Вашето местоположение"
+  },
+  "weather_empty_geolocationEmpty": {
+    "message": "Браузърът не успя да разбере Вашето местоположение"
+  },
+  "weather_empty_geolocationTimeout": {
+    "message": "Взимането на Вашето местоположение отне прекалено много време"
+  },
+  "weather_empty_region": {
+    "message": "Този район не е достъпен"
+  },
+  "region_edit_title": {
+    "message": "Редактиране на района"
+  },
+  "region_input_placeholder": {
+    "message": "Район"
+  },
+  "region_tip_geolocation": {
+    "message": "Използва се геолокация"
+  },
+  "theme_custom_label": {
+    "message": "Друг"
+  },
+  "theme_input_placeholder": {
+    "message": "Код на цвета, например #009688"
+  },
+  "theme_radio_dark": {
+    "message": "Тъмна тема"
+  },
+  "theme_radio_bright": {
+    "message": "Светла тема"
+  },
+  "engines_settings_management": {
+    "message": "Редактиране на търсачките"
+  },
+  "engines_text": {
+    "message": "Търсачка"
+  },
+  "engines_URL": {
+    "message": "URL за заявки за търсене"
+  },
+  "engines_table_default": {
+    "message": "(По подразбиране)"
+  },
+  "engines_menu_default": {
+    "message": "Задаване по подразбиране"
+  },
+  "engines_menu_edit": {
+    "message": "Редактиране"
+  },
+  "engines_menu_remove": {
+    "message": "Премахване"
+  },
+  "engines_menu_move_up": {
+    "message": "Премести нагоре"
+  },
+  "engines_menu_move_down": {
+    "message": "Премести надолу"
+  },
+  "engines_add": {
+    "message": "Добавяне на търсачка"
+  },
+  "engines_edit": {
+    "message": "Редактиране на търсачка"
+  },
+  "engines_custom_name_placeholder": {
+    "message": "Име на търсачката"
+  },
+  "engines_custom_URL_placeholder": {
+    "message": "URL с %s на мястото на текста за търсене"
+  },
+  "engines_custom_tip": {
+    "message": "Някои търсачки може да не поддържат автоматично дописване на заявките"
+  },
+  "engines_custom_name_error": {
+    "message": "Напишете име на търсачката"
+  },
+  "engines_custom_URL_error": {
+    "message": "URL форматът е невалиден"
+  },
+  "feedback_email_placeholder": {
+    "message": "Вашият имейл"
+  },
+  "feedback_message_placeholder": {
+    "message": "Вашите предложения"
+  },
+  "feedback_email_error": {
+    "message": "Имейл форматът е невалиден"
+  },
+  "feedback_message_error": {
+    "message": "Напишете нещо"
+  },
+  "feedback_success": {
+    "message": "Получих Вашето съобщение, благодаря"
+  },
+  "apps_title": {
+    "message": "Приложения"
+  },
+  "apps_manage_tip": {
+    "message": "Редактиране на приложенията"
+  },
+  "desktop_header_title": {
+    "message": "Начална страница"
+  },
+  "desktop_area_title_wallpaper": {
+    "message": "Тапет"
+  },
+  "desktop_top_shadow_label": {
+    "message": "Сянка отгоре"
+  },
+  "desktop_wallpaper_label": {
+    "message": "Да се използва тапет"
+  },
+  "wallpaper_source_title": {
+    "message": "Тапетът да е"
+  },
+  "wallpaper_source_internet": {
+    "message": "от интернет"
+  },
+  "wallpaper_source_local": {
+    "message": "от Вашия хард диск"
+  },
+  "wallpaper_source_solid": {
+    "message": "цвят"
+  },
+  "wallpaper_frequency_primary": {
+    "message": "Честота на сменяне"
+  },
+  "wallpaper_frequency_secondary": {
+    "message": "Изберете колко често тапетът да се сменя автоматично"
+  },
+  "wallpaper_frequency_dialog_title": {
+    "message": "Изберете честота"
+  },
+  "wallpaper_frequency_minute": {
+    "message": "10 минути"
+  },
+  "wallpaper_frequency_hour": {
+    "message": "1 час"
+  },
+  "wallpaper_frequency_day": {
+    "message": "1 ден"
+  },
+  "wallpaper_frequency_close": {
+    "message": "Изключено"
+  },
+  "wallpaper_new_primary": {
+    "message": "Нов"
+  },
+  "wallpaper_new_secondary": {
+    "message": "Изтегляне на ново фоново изображение"
+  },
+  "wallpaper_download_primary": {
+    "message": "Изтеглете го"
+  },
+  "wallpaper_download_secondary": {
+    "message": "Запазване на сегашното фоново изображение на диска"
+  },
+  "wallpaper_local_primary": {
+    "message": "Изберете изображение"
+  },
+  "wallpaper_local_secondary": {
+    "message": "Използване на файл от диска за фоново изображение"
+  },
+  "wallpaper_solid_color_primary": {
+    "message": "Изберете цвят"
+  },
+  "wallpaper_solid_color_secondary": {
+    "message": "Задаване на специфичен цвят като фон"
+  },
+  "wallpaper_blur_primary": {
+    "message": "Радиус на замъгляването"
+  },
+  "wallpaper_shade_primary": {
+    "message": "Фонът е"
+  },
+  "wallpaper_shade_light": {
+    "message": "Светъл"
+  },
+  "wallpaper_shade_dark": {
+    "message": "Тъмен"
+  },
+  "wallpaper_mask_primary": {
+    "message": "Сила на маската"
+  },
+  "desktop_area_title_search": {
+    "message": "Търсене"
+  },
+  "search_hide_label": {
+    "message": "Да не се показва търсачка"
+  },
+  "search_input_transparency_label": {
+    "message": "Прозрачно поле за търсене"
+  },
+  "search_logo_transparency_primary": {
+    "message": "Прозрачност на логото"
+  },
+  "desktop_area_title_webistes": {
+    "message": "Сайтове"
+  },
+  "webistes_hide_label": {
+    "message": "Да не се показват"
+  },
+  "webistes_text_shadow_label": {
+    "message": "Сянка на имената"
+  },
+  "desktop_msg_not_supported": {
+    "message": "Този файлов формат не се поддържа"
+  },
+  "desktop_msg_too_large": {
+    "message": "Това изображение е прекалено голямо"
+  },
+  "desktop_msg_fetching": {
+    "message": "Изтегля се, моля изчакайте"
+  },
+  "desktop_msg_fetch_failed": {
+    "message": "Упс, нещо се обърка"
+  },
+  "search_from": {
+    "message": "Търсене от"
+  }
+}
