@@ -1,2 +1,4 @@
 node_modules
 releases
+coverage
+__snapshots__
