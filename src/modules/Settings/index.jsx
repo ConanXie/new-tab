@@ -50,8 +50,6 @@ const FahrenheitIcon = props => {
   )
 }
 
-import { version } from '../../config'
-
 import Donate from './Donate'
 import Feedback from './Feedback'
 import Theme from './Theme'
@@ -411,7 +409,7 @@ class Settings extends Component {
                       href={chrome.i18n.getUILanguage() === 'zh-CN' ? 'https://tab.xiejie.co/logs' : 'https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md'}
                       target="_blank"
                     >
-                      <FlatButton label={version} />
+                      <FlatButton label={chrome.runtime.getManifest().version} />
                     </a>
                   </p>
                   <div className="donate-feedback">
