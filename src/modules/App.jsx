@@ -88,6 +88,11 @@ class App extends Component {
       })
     }, errHandler)
   }
+  setPageTitle() {
+    const title = document.createElement("title")
+    title.text = chrome.i18n.getMessage("new_tab")
+    document.head.appendChild(title)
+  }
   createTheme = (color, hue) => {
     const theme = {
       fontFamily: 'Roboto, Microsoft Yahei',
