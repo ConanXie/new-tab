@@ -140,19 +140,19 @@ class Layout extends React.Component<WithStyles<StylesType>> {
   }
   public render() {
     const { classes, theme } = this.props
-    const Content = this.state.content
+    const { open, content: Content } = this.state
     return (
       <div className={classes.layout}>
         <AppBar
           position="absolute"
-          className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+          className={classNames(classes.appBar, open && classes.appBarShift)}
         >
-          <Toolbar disableGutters={!this.state.open}>
+          <Toolbar disableGutters={!open}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
               onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, this.state.open && classes.hide)}
+              className={classNames(classes.menuButton, open && classes.hide)}
             >
               <MenuIcon />
             </IconButton>
@@ -164,9 +164,9 @@ class Layout extends React.Component<WithStyles<StylesType>> {
         <Drawer
           variant="permanent"
           classes={{
-            paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose)
+            paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose)
           }}
-          open={this.state.open}
+          open={open}
         >
           <div className={classes.toolbar}>
             <IconButton onClick={this.handleDrawerClose}>
