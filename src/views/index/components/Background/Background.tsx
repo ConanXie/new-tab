@@ -11,7 +11,7 @@ interface PropsType {
 
 @inject("wallpaperStore")
 @observer
-class Background extends React.Component<PropsType> {
+export class Background extends React.Component<PropsType> {
   private handleDrag = (event: DragEvent) => {
     event.preventDefault()
   }
