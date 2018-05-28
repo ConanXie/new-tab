@@ -313,7 +313,7 @@ class Bookmark extends Component {
   }
   // load bookmarks
   componentDidMount() {
-    this.props.moment.locale(navigator.language)
+    this.props.moment.locale(chrome.i18n.getUILanguage())
     // get data from localStorage
     if (this.props.settings.rememberBookmarksState) {
       this.opens = JSON.parse(localStorage.getItem('bookmarksOpens')) || []

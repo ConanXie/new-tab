@@ -406,9 +406,9 @@ class Settings extends Component {
                 <Paper className="settings-content about" zDepth={1}>
                   <h3>{chrome.i18n.getMessage('settings_about_title')}</h3>
                   <p className="name">
-                    <span>{chrome.i18n.getMessage('appDescription')} </span>
+                  <span>{chrome.i18n.getMessage('appDescription')} </span>
                     <a
-                      href={navigator.language === 'zh-CN' ? 'https://tab.xiejie.co/logs' : 'https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md'}
+                      href={chrome.i18n.getUILanguage() === 'zh-CN' ? 'https://tab.xiejie.co/logs' : 'https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md'}
                       target="_blank"
                     >
                       <FlatButton label={version} />
@@ -440,7 +440,7 @@ class Settings extends Component {
                     <FileCloud style={{ width: 18, height: 18 }} color="#999" />
                     <span>{chrome.i18n.getMessage('settings_about_weather_sources')}: YAHOO! & HeWeather</span>
                   </div>
-                  {navigator.language !== 'zh-CN' && (
+                  {chrome.i18n.getUILanguage() !== 'zh-CN' && (
                     <div className="tip">
                       <ContentSend style={{ width: 18, height: 18 }} color="#999" />
                       <span>If you want to add additional languages support or have some suggestions, please give me feedback. Thank you.</span>

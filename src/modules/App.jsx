@@ -59,7 +59,7 @@ class App extends Component {
     window.webkitRequestFileSystem(window.TEMPORARY, 10 * 1024 * 1024, fs => {
       fs.root.getFile('wallpaper.jpg', { create: false }, () => {}, err => {
         fs.root.getFile('wallpaper.jpg', { create: true }, fileEntry => {
-          fetch(`https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=${navigator.language}`, { credentials: 'include' }).then(res => {
+          fetch(`https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=${chrome.i18n.getUILanguage()}`, { credentials: 'include' }).then(res => {
             if (res.ok) {
               return res.json()
             }
