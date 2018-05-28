@@ -2,6 +2,9 @@
   "appDescription": {
     "message": "Material Design 新增分頁"
   },
+  "new_tab": {
+    "message": "新增分頁"
+  },
   "themeTeal": {
     "message": "水鴨青"
   },

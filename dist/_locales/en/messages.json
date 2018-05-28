@@ -2,6 +2,9 @@
   "appDescription": {
     "message": "Material Design new tab page"
   },
+  "new_tab": {
+    "message": "New Tab"
+  },
   "themeTeal": {
     "message": "Teal"
   },
