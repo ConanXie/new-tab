@@ -16,7 +16,7 @@ function getEngines() {
       } else {
         const temp = [...defaultEngines]
         // 简体中文以外去掉百度与搜狗
-        if (navigator.language !== 'zh-CN') {
+        if (chrome.i18n.getUILanguage() !== 'zh-CN') {
           temp.splice(1, 2)
         }
         temp.map(engine => {

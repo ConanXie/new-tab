@@ -40,7 +40,7 @@ class Donate extends Component {
     })
   }
   openDonation = () => {
-    if (navigator.language !== 'zh-CN') {
+    if (chrome.i18n.getUILanguage() !== 'zh-CN') {
       chrome.tabs.create({ url: 'https://www.paypal.me/conanxie' })
     } else {
       this.showDialog()

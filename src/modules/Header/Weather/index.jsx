@@ -190,7 +190,7 @@ class Weather extends Component {
     })
   }
   getData = region => {
-    const lang = navigator.language
+    const lang = chrome.i18n.getUILanguage()
 
     if (region) {
       fetch(`https://tab.xiejie.co/api/weather/v5/${region}?lang=${lang}`).then(this.responseHandler, this.responseError)

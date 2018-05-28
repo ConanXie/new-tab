@@ -6,7 +6,7 @@
 function getPredictions(url, text) {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await fetch(url.replace('%l', navigator.language).replace('%s', text) + `&r=${Date.now()}`)
+      const res = await fetch(url.replace('%l', chrome.i18n.getUILanguage()).replace('%s', text) + `&r=${Date.now()}`)
       // extract the encoding of response headers, e.g. UTF-8
       const encoding = /[\w\-]+$/.exec(res.headers.get('Content-Type'))[0]
       const blob = await res.blob()

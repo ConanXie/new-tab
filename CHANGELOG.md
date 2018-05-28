@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.5
+###### _May 28, 2018_
+- Added support for **Bulgarian**
+- Fix the title of new tab page
+
 ## 1.8.4
 ###### _Apr 03, 2018_
 - Fix white flash when starding
