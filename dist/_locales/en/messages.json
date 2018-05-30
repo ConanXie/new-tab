@@ -81,25 +81,25 @@
     "message": "Undo"
   },
   "nav_classification_unclassified": {
-    "message": "Unclassified"
+    "message": "Uncategorized"
   },
   "nav_add_choose_classification": {
-    "message": "Choose classification"
+    "message": "Select category"
   },
   "nav_increase_classification_title": {
-    "message": "Increase classification"
+    "message": "New category"
   },
   "nav_increase_classification_label": {
-    "message": "Classification name"
+    "message": "Category name"
   },
   "nav_delete_classification": {
     "message": "Delete"
   },
   "nav_increase_classification_btn": {
-    "message": "Increase"
+    "message": "New"
   },
   "nav_show_classification": {
-    "message": "Show classification"
+    "message": "Use category"
   },
   "nav_websites_max_tip": {
     "message": "The maximum number of websites is"
