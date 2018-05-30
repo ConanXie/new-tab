@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.6
+###### _May 30, 2018_
+- Fix some text in English
+
 ## 1.8.5
 ###### _May 28, 2018_
 - Added support for **Bulgarian**
