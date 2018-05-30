@@ -30,6 +30,7 @@ Please create an issue if you have any questions or suggestions about it.
 ## Thanks
 Special thanks to those who make this extension support more languages.
 - **Russian** @Руслан Чешневский
+- **Bulgarian** @Martin Minchev
 
 ## Donation
 If you find the extension useful, you can buy me a cup of coffee.  
