@@ -26,18 +26,6 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'awesome-typescript-loader'
     }, {
-      test: /\.(css|styl)$/,
-      use: [{
-        loader: 'style-loader',
-      }, {
-        loader: 'css-loader',
-        options: {
-          sourceMap: true
-        }
-      }, {
-        loader: 'stylus-loader'
-      }]
-    }, {
       test: /\.(jpe?g|png|svg|gif)$/,
       loader: 'url-loader',
       options: {
