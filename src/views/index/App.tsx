@@ -21,11 +21,8 @@ interface PropsType {
 @inject("wallpaperStore", "themeStore")
 @observer
 class App extends React.Component<PropsType> {
-  public state = {}
   private setPageTitle() {
-    const title = document.createElement("title")
-    title.innerHTML = chrome.i18n.getMessage("new_tab")
-    document.head.appendChild(title)
+    document.title = chrome.i18n.getMessage("new_tab")
   }
   public componentDidMount() {
     this.setPageTitle()
