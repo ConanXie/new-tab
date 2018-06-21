@@ -18,11 +18,7 @@ class Desktop extends React.Component<PropsType> {
     clientY: 0,
     menuOpen: false
   }
-  private pageElement: HTMLDivElement
-  // Callback Refs
-  private setPageRef = (element: HTMLDivElement) => {
-    this.pageElement = element
-  }
+  private pageElement: React.RefObject<HTMLDivElement> = React.createRef()
   private handleMouseDown = (event: React.MouseEvent<HTMLAnchorElement>) => {
     switch (event.button) {
       case 0:
@@ -38,7 +34,7 @@ class Desktop extends React.Component<PropsType> {
     console.log(event.button)
     const ele = event.currentTarget
     const wrap = ele.parentNode
-    const { clientWidth, clientHeight, offsetTop: pageOffsetTop } = this.pageElement
+    const { clientWidth, clientHeight, offsetTop: pageOffsetTop } = this.pageElement.current!
     const downScreenX = event.screenX
     const downScreenY = event.screenY
     const { offsetLeft, offsetTop } = ele
@@ -123,7 +119,7 @@ class Desktop extends React.Component<PropsType> {
     const { column, row, menuOpen, clientX, clientY } = this.state
     return (
       <div className="desktop">
-        <div className="page" ref={this.setPageRef}>
+        <div className="page" ref={this.pageElement}>
           {data.map(item => {
             const { index, id, name, url, icon } = item
             const src = chrome.runtime.getURL(`icons/${icon}.png`)

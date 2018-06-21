@@ -5,13 +5,9 @@ import { imageAccepts, imageSize } from "config"
 
 class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
 
-  private fileInput: HTMLInputElement
-  // Callback Refs
-  private setFileInputRef = (element: HTMLInputElement) => {
-    this.fileInput = element
-  }
+  private fileInput: React.RefObject<HTMLInputElement> = React.createRef()
   private openFolder = () => {
-    this.fileInput.click()
+    this.fileInput.current!.click()
   }
 
   /**
@@ -50,7 +46,7 @@ class SelectImage extends React.Component<ItemPropsType & ItemMethods> {
         <input
           type="file"
           className="select-image"
-          ref={this.setFileInputRef}
+          ref={this.fileInput}
           accept={imageAccepts.join(",")}
           onChange={this.readImage}
         />
