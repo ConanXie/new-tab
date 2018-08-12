@@ -27,8 +27,8 @@ export function base64toBlobURL(data: string, type: string = "", sliceSize: numb
  * Convert file or blob to base64
  * @param data File or Blob object
  */
-export function toBase64(data: File | Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
+export function toBase64(data: File | Blob): Promise<string | null | ArrayBuffer> {
+  return new Promise(resolve => {
     const reader = new FileReader()
     reader.onloadend = () => {
       resolve(reader.result)
