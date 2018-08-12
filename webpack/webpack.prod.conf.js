@@ -1,6 +1,8 @@
 const path = require('path')
+const webpack = require('webpack')
 const merge = require('webpack-merge')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -17,20 +19,17 @@ const webpackConfig = merge(baseConfig, {
   module: {
     rules: [{
       test: /\.(css|styl)$/,
-      use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [{
-          loader: 'css-loader',
-          options: {
-            minimize: true
-          }
-        }, 'stylus-loader']
-      })
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader',
+        'stylus-loader'
+      ]
     }]
   },
   optimization: {
     minimizer: [
-      new UglifyJSPlugin()
+      new UglifyJSPlugin(),
+      new OptimizeCSSAssetsPlugin()
     ],
     splitChunks: {
       chunks: 'all',
@@ -38,7 +37,8 @@ const webpackConfig = merge(baseConfig, {
     }
   },
   plugins: [
-    new ExtractTextPlugin({
+    new webpack.HashedModuleIdsPlugin(),
+    new MiniCssExtractPlugin({
       filename: '[name].css'
     })
   ]
