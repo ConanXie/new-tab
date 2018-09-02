@@ -1,22 +1,42 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 
+import EditIcon from "@material-ui/icons/Edit"
+import InfoIcon from "@material-ui/icons/InfoOutlined"
+import ClearIcon from "@material-ui/icons/Clear"
+
 import makeDumbProps from "utils/makeDumbProps"
 import { DesktopStore } from "../../store/desktop"
-import ContextMenu from "components/ContextMenu"
+import { MenuStore } from "stores/menu"
+import WidgetWrap from "../Widgets/Wrap"
+import DateTime from "../Widgets/DateTime"
 
 interface PropsType {
   desktopStore: DesktopStore
+  menuStore: MenuStore
 }
-@inject("desktopStore")
+@inject("desktopStore", "menuStore")
 @observer
 class Desktop extends React.Component<PropsType> {
+  public editWebsite = () => {
+    console.log("edit website")
+  }
   public state = {
     column: 6,
     row: 4,
-    clientX: 0,
-    clientY: 0,
-    menuOpen: false
+    menus: [{
+      icon: <EditIcon />,
+      text: "Edit",
+      onClick: this.editWebsite
+    }, {
+      icon: <InfoIcon />,
+      text: "Website info",
+      onClick: this.editWebsite
+    }, {
+      icon: <ClearIcon />,
+      text: "Remove",
+      onClick: this.editWebsite
+    }]
   }
   private pageElement: React.RefObject<HTMLDivElement> = React.createRef()
   private handleMouseDown = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -25,7 +45,7 @@ class Desktop extends React.Component<PropsType> {
         this.beginGrab(event)
         break
       case 2:
-        this.showMenu(event)
+        // this.showMenu(event)
         break
     }
   }
@@ -103,20 +123,13 @@ class Desktop extends React.Component<PropsType> {
   }
   // private prevent
   private showMenu = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const { clientX, clientY } = event
-    document.addEventListener("contextmenu", e => e.preventDefault(), false)
-    this.setState({
-      menuOpen: true,
-      clientX,
-      clientY
-    })
-  }
-  private handleMenuClose = () => {
-    this.setState({ menuOpen: false })
+    event.preventDefault()
+    this.props.menuStore.setPosition(event.clientX, event.clientY)
+    this.props.menuStore.showMenu(this.state.menus)
   }
   public render() {
     const { data } = this.props.desktopStore
-    const { column, row, menuOpen, clientX, clientY } = this.state
+    const { column, row } = this.state
     return (
       <div className="desktop">
         <div className="page" ref={this.pageElement}>
@@ -132,21 +145,21 @@ class Desktop extends React.Component<PropsType> {
             }
             return (
               <div key={id} className="wrap" style={styles}>
-                <a href={url} data-id={id} onMouseDown={this.handleMouseDown}>
+                <a href={url} data-id={id} onMouseDown={this.handleMouseDown} onContextMenu={this.showMenu}>
                   <img src={src} alt={name} />
                   <p>{name}</p>
                 </a>
               </div>
             )
           })}
+          <WidgetWrap style={{
+            width: `${100 / column * 3}vw`,
+            height: `calc((100vh - 64px) / ${row})`,
+            transform: `translate(calc(${`${100 / column}vw`}*${3}), calc(${`calc((100vh - 64px) / ${row})`}*${3}))`
+          }}>
+            <DateTime />
+          </WidgetWrap>
         </div>
-        <ContextMenu
-          open={menuOpen}
-          id="desktop-menu"
-          top={clientY}
-          left={clientX}
-          handleClose={this.handleMenuClose}
-        />
       </div>
     )
   }
