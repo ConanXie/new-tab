@@ -1,24 +1,26 @@
 import * as React from "react"
+import { inject, observer } from "mobx-react"
 
 import withStyles, { WithStyles, StyleRules } from "@material-ui/core/styles/withStyles"
-import Menu from "@material-ui/core/Menu"
+import Paper from "@material-ui/core/Paper"
+import MenuList from "@material-ui/core/MenuList"
 import MenuItem from "@material-ui/core/MenuItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import Divider from "@material-ui/core/Divider"
-import EditIcon from "@material-ui/icons/Edit"
-import InfoIcon from "@material-ui/icons/InfoOutline"
-import ClearIcon from "@material-ui/icons/Clear"
 
-type StylesType = "paper"
+import { MenuStore } from "stores/menu"
+
+type StylesType = "root"
   | "menuItem"
   | "icon"
   | "text"
   | "divider"
 
 const styles: StyleRules = {
-  paper: {
+  root: {
     "borderRadius": 10,
+    "overflow": "hidden",
     "& > ul": {
       padding: 0
     }
@@ -38,79 +40,76 @@ const styles: StyleRules = {
 }
 
 interface PropsType {
-  id: string
-  open: boolean
-  top: number
-  left: number
-  handleClose(): void
+  menuStore?: MenuStore
 }
 
 interface PosStyleType {
-  top?: number,
-  right?: number,
-  left?: number,
-  bottom?: number
+  top?: number | string
+  right?: number | string
+  left?: number | string
+  bottom?: number | string
+  visibility?: string
 }
 
-class ContextMenu extends React.Component<WithStyles<StylesType> & PropsType, { style: PosStyleType }> {
-  public state = {
-    style: {}
-  }
+@inject("menuStore")
+@observer
+class ContextMenu extends React.Component<WithStyles<StylesType> & PropsType> {
+  private contextmenuRef: React.RefObject<HTMLDivElement> = React.createRef()
+  /**
+   * The position of contextmenu
+   */
   public calcPosition = () => {
-    const ulElement = document.querySelector(`#${this.props.id} ul`)
-    const { clientWidth, clientHeight } = ulElement!
-    const { top, left } = this.props
-    const style: PosStyleType = {}
+    const wrap = this.contextmenuRef.current!
+    const { clientWidth, clientHeight } = wrap
+    const { top, left } = this.props.menuStore!
+    const style: PosStyleType = {
+      visibility: "visible"
+    }
     if (left + clientWidth > window.innerWidth) {
       style.right = 0
     } else {
-      style.left = left
+      style.left = left + "px"
     }
     if (top + clientHeight > window.innerHeight) {
-      style.bottom = window.innerHeight - top
+      style.bottom = window.innerHeight - top + "px"
     } else {
-      style.top = top
+      style.top = top + "px"
     }
-    this.setState({ style })
+    wrap.removeAttribute("style")
+    const properties = Object.keys(style)
+    for (const i of properties) {
+      wrap.style[i] = style[i]
+    }
+  }
+  public componentDidUpdate() {
+    if (this.props.menuStore!.menus.length) {
+      this.calcPosition()
+    } else {
+      this.contextmenuRef.current!.style.visibility = "hidden"
+    }
   }
   public render() {
-    const {
-      id,
-      open,
-      classes
-    } = this.props
-    const { style } = this.state
+    const { classes, menuStore } = this.props
     return (
-      <Menu
-        classes={{ paper: classes.paper }}
-        id={id}
-        open={open}
-        anchorReference="none"
-        PaperProps={{ style }}
-        onEnter={this.calcPosition}
-        onClose={this.props.handleClose}
-      >
-        <MenuItem classes={{ root: classes.menuItem }}>
-          <ListItemIcon className={classes.icon}>
-            <EditIcon />
-          </ListItemIcon>
-          <ListItemText primary="Edit" classes={{ primary: classes.text }} />
-        </MenuItem>
-        <Divider inset className={classes.divider} component="li" />
-        <MenuItem classes={{ root: classes.menuItem }}>
-          <ListItemIcon className={classes.icon}>
-            <InfoIcon />
-          </ListItemIcon>
-          <ListItemText primary="Website info" classes={{ primary: classes.text }} />
-        </MenuItem>
-        <Divider inset className={classes.divider} component="li" />
-        <MenuItem classes={{ root: classes.menuItem }}>
-          <ListItemIcon className={classes.icon}>
-            <ClearIcon />
-          </ListItemIcon>
-          <ListItemText primary="Remove" classes={{ primary: classes.text }} />
-        </MenuItem>
-      </Menu>
+      <div className="contextmenu" ref={this.contextmenuRef}>
+        <Paper classes={{ root: classes.root }}>
+          <MenuList>
+            {menuStore && menuStore.menus.map(({ icon, text, onClick }, index) => (
+              <div key={text}>
+                <MenuItem classes={{ root: classes.menuItem }} onClick={onClick}>
+                  <ListItemIcon className={classes.icon}>
+                    {icon}
+                  </ListItemIcon>
+                  <ListItemText primary={text} classes={{ primary: classes.text }} />
+                </MenuItem>
+                {index < menuStore.menus.length - 1 && (
+                  <Divider inset className={classes.divider} component="li" />
+                )}
+              </div>
+            ))}
+          </MenuList>
+        </Paper>
+      </div>
     )
   }
 }
