@@ -15,6 +15,7 @@
     "max-classes-per-file": false,
     "variable-name": false,
     "no-empty-interface": false,
+    "object-literal-key-quotes": [true, "as-needed"],
     // tsx rules
     "jsx-boolean-value": false,
     "member-ordering": false,
