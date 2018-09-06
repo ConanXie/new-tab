@@ -21,6 +21,7 @@
   "scripts": {
     "start": "webpack-dev-server --progress --color --config webpack/webpack.dev.conf.js",
     "build": "webpack --config webpack/webpack.prod.conf.js",
+    "release": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./release.ps1",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "test": "jest --colors",
     "test:coverage": "jest --silent --coverage",
