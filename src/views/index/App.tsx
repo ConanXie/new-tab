@@ -30,7 +30,8 @@ class App extends React.Component<PropsType> {
   public componentDidMount() {
     onMessage("updateWallpaper", this.props.wallpaperStore.wallpaperUpdated)
     this.setPageTitle()
-    document.addEventListener("click", this.props.menuStore.clearMenus, false)  }
+    document.addEventListener("click", this.props.menuStore.clearMenus, false)
+  }
   public render() {
     return (
       <MuiThemeProvider theme={this.props.themeStore.theme}>

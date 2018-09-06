@@ -7,36 +7,43 @@ import ClearIcon from "@material-ui/icons/Clear"
 
 import makeDumbProps from "utils/makeDumbProps"
 import { DesktopStore } from "../../store/desktop"
+import { WebSiteInfoStore } from "../../store/websiteInfo"
 import { MenuStore } from "stores/menu"
-import WidgetWrap from "../Widgets/Wrap"
-import DateTime from "../Widgets/DateTime"
+/* import WidgetWrap from "../Widgets/Wrap"
+import DateTime from "../Widgets/DateTime" */
+import WebsiteInfo from "./WebsiteInfo"
+import Webiste from "./Website"
 
 interface PropsType {
   desktopStore: DesktopStore
-  menuStore: MenuStore
+  menuStore: MenuStore,
+  websiteInfoStore: WebSiteInfoStore
 }
-@inject("desktopStore", "menuStore")
+@inject("desktopStore", "menuStore", "websiteInfoStore")
 @observer
 class Desktop extends React.Component<PropsType> {
-  public editWebsite = () => {
-    console.log("edit website")
-  }
   public state = {
     column: 6,
     row: 4,
     menus: [{
       icon: <EditIcon />,
       text: "Edit",
-      onClick: this.editWebsite
+      onClick: () => {
+        this.editWebsite()
+      }
     }, {
       icon: <InfoIcon />,
       text: "Website info",
-      onClick: this.editWebsite
+      onClick: () => {
+        this.showInfo()
+      }
     }, {
       icon: <ClearIcon />,
       text: "Remove",
-      onClick: this.editWebsite
-    }]
+      onClick: () => {
+        this.editWebsite()
+      }
+    }],
   }
   private pageElement: React.RefObject<HTMLDivElement> = React.createRef()
   private handleMouseDown = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -71,12 +78,16 @@ class Desktop extends React.Component<PropsType> {
 
         const offsetX = evt.offsetX
         const offsetY = evt.offsetY
-        console.log(offsetX, offsetY)
-        clone.style.transform = `translate(${evt.clientX - offsetLeft - offsetX}px, ${evt.clientY - offsetTop - offsetY}px)`
+        // console.log(offsetX, offsetY)
+        const translateX = evt.clientX - offsetLeft - offsetX
+        const translateY = evt.clientY - offsetTop - offsetY
+        clone.style.transform = `translate(${translateX}px, ${translateY}px)`
 
         const moveClone = (e: any) => {
           e.preventDefault()
-          clone.style.transform = `translate(${e.clientX - offsetLeft - offsetX}px, ${e.clientY - offsetTop - offsetY}px)`
+          const transX = e.clientX - offsetLeft - offsetX
+          const transY = e.clientY - offsetTop - offsetY
+          clone.style.transform = `translate(${transX}px, ${transY}px)`
         }
         document.addEventListener("mousemove", moveClone, false)
 
@@ -96,7 +107,9 @@ class Desktop extends React.Component<PropsType> {
             const index = indexRow * this.state.column + indexColumn
             // console.log(index)
             clone.classList.add("grabbed")
-            clone.style.transform = `translate(${ indexColumn * unitWidth }px, ${ unitHeight * indexRow + pageOffsetTop }px)`
+            const transX = indexColumn * unitWidth
+            const transY = unitHeight * indexRow + pageOffsetTop
+            clone.style.transform = `translate(${transX}px, ${transY}px)`
             clone.addEventListener("transitionend", () => {
               // console.log(ele)
               this.props.desktopStore.updateIndex(ele.dataset.id, index)
@@ -122,10 +135,25 @@ class Desktop extends React.Component<PropsType> {
     document.addEventListener("mouseup", mouseUp, false)
   }
   // private prevent
-  private showMenu = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  private showMenu = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     event.preventDefault()
     this.props.menuStore.setPosition(event.clientX, event.clientY)
+    this.props.menuStore.recordId(id)
     this.props.menuStore.showMenu(this.state.menus)
+  }
+  public editWebsite = () => {
+    console.log("edit website")
+  }
+  public showInfo = () => {
+    const website = this.props.desktopStore.data.find(item => item.id === this.props.menuStore.id)
+    if (website) {
+      this.props.websiteInfoStore.meta = {
+        icon: chrome.runtime.getURL(`icons/${website.icon}.png`),
+        url: website.url,
+        name: website.name
+      }
+      this.props.websiteInfoStore.openDialog()
+    }
   }
   public render() {
     const { data } = this.props.desktopStore
@@ -138,28 +166,36 @@ class Desktop extends React.Component<PropsType> {
             const src = chrome.runtime.getURL(`icons/${icon}.png`)
             const width = `${100 / column}vw`
             const height = `calc((100vh - 64px) / ${row})`
-            const styles = {
+            const styles: React.CSSProperties = {
               width,
               height,
               transform: `translate(calc(${width}*${index % column}), calc(${height}*${Math.floor(index / column)}))`
             }
+            const meta = {
+              name,
+              url,
+              src,
+              id
+            }
             return (
-              <div key={id} className="wrap" style={styles}>
-                <a href={url} data-id={id} onMouseDown={this.handleMouseDown} onContextMenu={this.showMenu}>
-                  <img src={src} alt={name} />
-                  <p>{name}</p>
-                </a>
-              </div>
+              <Webiste
+                key={id}
+                styles={styles}
+                meta={meta}
+                onMouseDown={this.handleMouseDown}
+                onContextMenu={this.showMenu}
+              />
             )
           })}
-          <WidgetWrap style={{
+          {/* <WidgetWrap style={{
             width: `${100 / column * 3}vw`,
             height: `calc((100vh - 64px) / ${row})`,
             transform: `translate(calc(${`${100 / column}vw`}*${3}), calc(${`calc((100vh - 64px) / ${row})`}*${3}))`
           }}>
-            <DateTime />
-          </WidgetWrap>
+          <DateTime />
+        </WidgetWrap> */}
         </div>
+        <WebsiteInfo />
       </div>
     )
   }
