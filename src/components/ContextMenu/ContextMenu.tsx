@@ -10,6 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText"
 import Divider from "@material-ui/core/Divider"
 
 import { MenuStore } from "stores/menu"
+import makeDumbProps from "utils/makeDumbProps"
 
 type StylesType = "root"
   | "menuItem"
@@ -19,8 +20,8 @@ type StylesType = "root"
 
 const styles: StyleRules = {
   root: {
-    "borderRadius": 10,
-    "overflow": "hidden",
+    borderRadius: 10,
+    overflow: "hidden",
     "& > ul": {
       padding: 0
     }
@@ -40,7 +41,7 @@ const styles: StyleRules = {
 }
 
 interface PropsType {
-  menuStore?: MenuStore
+  menuStore: MenuStore
 }
 
 interface PosStyleType {
@@ -82,11 +83,14 @@ class ContextMenu extends React.Component<WithStyles<StylesType> & PropsType> {
     }
   }
   public componentDidUpdate() {
-    if (this.props.menuStore!.menus.length) {
+    if (this.props.menuStore.menus.length) {
       this.calcPosition()
     } else {
       this.contextmenuRef.current!.style.visibility = "hidden"
     }
+  }
+  public componentDidMount() {
+    document.addEventListener("click", this.props.menuStore.clearMenus, false)
   }
   public render() {
     const { classes, menuStore } = this.props
@@ -94,7 +98,7 @@ class ContextMenu extends React.Component<WithStyles<StylesType> & PropsType> {
       <div className="contextmenu" ref={this.contextmenuRef}>
         <Paper classes={{ root: classes.root }}>
           <MenuList>
-            {menuStore && menuStore.menus.map(({ icon, text, onClick }, index) => (
+            {menuStore.menus.map(({ icon, text, onClick }, index) => (
               <div key={text}>
                 <MenuItem classes={{ root: classes.menuItem }} onClick={onClick}>
                   <ListItemIcon className={classes.icon}>
@@ -114,4 +118,4 @@ class ContextMenu extends React.Component<WithStyles<StylesType> & PropsType> {
   }
 }
 
-export default withStyles(styles)<PropsType>(ContextMenu)
+export default makeDumbProps(withStyles(styles)<PropsType>(ContextMenu))

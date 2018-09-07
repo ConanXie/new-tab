@@ -21,14 +21,14 @@ export class WallpaperStore {
   @observable public useWallpaper: boolean
   @observable public wallpaperType: number
   @observable public darkIcons: boolean
-  constructor(persistence: any) {
+  constructor(data: any) {
     const {
       wallpaper,
       color,
       useWallpaper,
       wallpaperType,
       darkIcons
-    } = persistence
+    } = data
 
     this.wallpaper = wallpaper || defaultWallpaperData.wallpaper
     this.color = color || defaultWallpaperData.color

@@ -22,8 +22,10 @@ const styles: StyleRules = {
   },
   avatar: {
     display: "inline-block",
-    background: "none",
+    width: 36,
+    height: 36,
     marginRight: 16,
+    background: "none",
     "& > img": {
       width: "100%",
       height: "100%",
@@ -62,14 +64,18 @@ class WebsiteInfo extends React.Component<PropsType & WithStyles<StylesType>> {
         onClose={this.handleClose}
       >
         <DialogTitle className={this.props.classes.title}>
-          <Avatar className={this.props.classes.avatar}><img src={meta.icon} /></Avatar>
+          <Avatar className={this.props.classes.avatar}>
+            <img src={meta.icon} />
+          </Avatar>
           {meta.name}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>{meta.url}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">Close</Button>
+          <Button onClick={this.handleClose} color="primary">
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
     )

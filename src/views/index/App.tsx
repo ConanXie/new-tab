@@ -14,23 +14,16 @@ import makeDumbProps from "utils/makeDumbProps"
 
 import { WallpaperStore } from "./store/wallpaper"
 import { ThemeStore } from "stores/theme"
-import { MenuStore } from "stores/menu"
 
 interface PropsType {
   wallpaperStore: WallpaperStore
   themeStore: ThemeStore
-  menuStore: MenuStore
 }
-@inject("wallpaperStore", "themeStore", "menuStore")
+@inject("wallpaperStore", "themeStore")
 @observer
 class App extends React.Component<PropsType> {
-  private setPageTitle() {
-    document.title = chrome.i18n.getMessage("new_tab")
-  }
   public componentDidMount() {
     onMessage("updateWallpaper", this.props.wallpaperStore.wallpaperUpdated)
-    this.setPageTitle()
-    document.addEventListener("click", this.props.menuStore.clearMenus, false)
   }
   public render() {
     return (
