@@ -5,13 +5,13 @@ import EditIcon from "@material-ui/icons/Edit"
 import InfoIcon from "@material-ui/icons/InfoOutlined"
 import ClearIcon from "@material-ui/icons/Clear"
 
+import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import makeDumbProps from "utils/makeDumbProps"
 import { DesktopStore } from "../../store/desktop"
 import { WebSiteInfoStore } from "../../store/websiteInfo"
 import { MenuStore } from "stores/menu"
 /* import WidgetWrap from "../Widgets/Wrap"
 import DateTime from "../Widgets/DateTime" */
-import WebsiteInfo from "./WebsiteInfo"
 import Webiste from "./Website"
 
 interface PropsType {
@@ -56,70 +56,65 @@ class Desktop extends React.Component<PropsType> {
         break
     }
   }
-  private beginGrab = (event: any) => {
+  private beginGrab = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault()
-    console.log(event.button)
+    // console.log(event)
     const ele = event.currentTarget
-    const wrap = ele.parentNode
+    const wrap = ele.parentNode! as HTMLElement
+    const { top, left } = wrap.getBoundingClientRect()
     const { clientWidth, clientHeight, offsetTop: pageOffsetTop } = this.pageElement.current!
     const downScreenX = event.screenX
     const downScreenY = event.screenY
-    const { offsetLeft, offsetTop } = ele
-    let clone: any
-    const mouseMove = (evt: any) => {
+
+    let clone: HTMLElement
+    const mouseMove = (evt: MouseEvent) => {
       const moveScreenX = evt.screenX
       const moveScreenY = evt.screenY
+      // moved
       if (!clone && (downScreenX !== moveScreenX || downScreenY !== moveScreenY)) {
-        // ele.removeEventListener("mousemove", mouseMove, false)
+        const offsetLeft = evt.clientX - left
+        const offsetTop = evt.clientY - top
 
-        clone = wrap.cloneNode(true)
+        clone = wrap.cloneNode(true) as HTMLElement
         clone.classList.add("grabbing")
         wrap.setAttribute("aria-grabbed", "true")
 
-        const offsetX = evt.offsetX
-        const offsetY = evt.offsetY
-        // console.log(offsetX, offsetY)
-        const translateX = evt.clientX - offsetLeft - offsetX
-        const translateY = evt.clientY - offsetTop - offsetY
+        const translateX = evt.clientX - offsetLeft
+        const translateY = evt.clientY - offsetTop
         clone.style.transform = `translate(${translateX}px, ${translateY}px)`
 
-        const moveClone = (e: any) => {
+        const moveClone = (e: MouseEvent) => {
           e.preventDefault()
-          const transX = e.clientX - offsetLeft - offsetX
-          const transY = e.clientY - offsetTop - offsetY
+          const transX = e.clientX - offsetLeft
+          const transY = e.clientY - offsetTop
           clone.style.transform = `translate(${transX}px, ${transY}px)`
         }
         document.addEventListener("mousemove", moveClone, false)
 
-        const _mouseUp = (e: any) => {
-          /* console.log(e.clientX, e.clientY)
-          console.log(clientWidth, clientHeight)
-          console.log(wrap.offsetTop) */
+        const _mouseUp = (e: MouseEvent) => {
           const x = e.clientX
           const y = e.clientY - pageOffsetTop
           const unitWidth = clientWidth / this.state.column
           const unitHeight = clientHeight / this.state.row
-          // console.log(unitWidth, unitHeight)
+
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
             const indexColumn = Math.floor(x / unitWidth)
             const indexRow = Math.floor(y / unitHeight)
-            // console.log(indexColumn, indexRow)
+
             const index = indexRow * this.state.column + indexColumn
-            // console.log(index)
+
             clone.classList.add("grabbed")
             const transX = indexColumn * unitWidth
             const transY = unitHeight * indexRow + pageOffsetTop
             clone.style.transform = `translate(${transX}px, ${transY}px)`
+
             clone.addEventListener("transitionend", () => {
-              // console.log(ele)
-              this.props.desktopStore.updateIndex(ele.dataset.id, index)
+              this.props.desktopStore.updateIndex(ele.dataset.id as string, index)
               wrap.setAttribute("aria-grabbed", "false")
               document.body.removeChild(clone)
             }, false)
           }
           document.removeEventListener("mousemove", moveClone, false)
-          // wrap.setAttribute("aria-grabbed", "false")
-          // document.body.removeChild(clone)
           document.removeEventListener("mouseup", _mouseUp, false)
         }
         document.addEventListener("mouseup", _mouseUp, false)
@@ -128,8 +123,8 @@ class Desktop extends React.Component<PropsType> {
       }
     }
     ele.addEventListener("mousemove", mouseMove, false)
-    const mouseUp = (e: any) => {
-      // ele.removeEventListener("mousemove", mouseMove, false)
+    const mouseUp = (e: MouseEvent) => {
+      ele.removeEventListener("mousemove", mouseMove, false)
       document.removeEventListener("mouseup", mouseUp, false)
     }
     document.addEventListener("mouseup", mouseUp, false)
@@ -195,7 +190,15 @@ class Desktop extends React.Component<PropsType> {
           <DateTime />
         </WidgetWrap> */}
         </div>
-        <WebsiteInfo />
+        <LazilyLoad
+          modules={{
+            WebsiteInfo: () => importLazy(import("./WebsiteInfo"))
+          }}
+        >
+          {({ WebsiteInfo }: { WebsiteInfo: React.ComponentType }) => (
+            <WebsiteInfo />
+          )}
+        </LazilyLoad>
       </div>
     )
   }
