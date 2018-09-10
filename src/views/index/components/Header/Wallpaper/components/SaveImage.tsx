@@ -1,5 +1,4 @@
 import * as React from "react"
-import * as shortid from "shortid"
 import * as storage from "store2"
 
 import Item, { ItemPropsType } from "./Item"
@@ -14,12 +13,12 @@ class SaveImage extends React.Component<PropsType> {
     return type === "jpeg" ? "jpg" : type
   }
   private saveCurrentWallpaper = () => {
-    const id = shortid.generate().toLowerCase()
     const suffix = this.getSuffix(storage.get("image.type"))
-    const a = document.createElement("a")
-    a.href = this.props.url
-    a.download = `material-design-new-tab-${id}.${suffix}`
-    a.click()
+    const filename = `mdnt-bg.${suffix}`
+    chrome.downloads.download({
+      url: this.props.url,
+      filename,
+    })
   }
   public render() {
     return (
