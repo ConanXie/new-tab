@@ -61,7 +61,7 @@ class Desktop extends React.Component<PropsType> {
     // console.log(event)
     const ele = event.currentTarget
     const wrap = ele.parentNode! as HTMLElement
-    const { top, left } = wrap.getBoundingClientRect()
+    const { top, left, width, height } = wrap.getBoundingClientRect()
     const { clientWidth, clientHeight, offsetTop: pageOffsetTop } = this.pageElement.current!
     const downScreenX = event.screenX
     const downScreenY = event.screenY
@@ -81,6 +81,8 @@ class Desktop extends React.Component<PropsType> {
 
         const translateX = evt.clientX - offsetLeft
         const translateY = evt.clientY - offsetTop
+        clone.style.width = width + "px"
+        clone.style.height = height + "px"
         clone.style.transform = `translate(${translateX}px, ${translateY}px)`
 
         const moveClone = (e: MouseEvent) => {
@@ -153,18 +155,18 @@ class Desktop extends React.Component<PropsType> {
   public render() {
     const { data } = this.props.desktopStore
     const { column, row } = this.state
+    const styles: React.CSSProperties = {
+      gridTemplateColumns: `repeat(${column}, 1fr)`,
+      gridAutoRows: `calc((100vh - 64px) / ${row})`
+    }
     return (
       <div className="desktop">
-        <div className="page" ref={this.pageElement}>
+        <div className="page" ref={this.pageElement} style={styles}>
           {data.map(item => {
             const { index, id, name, url, icon } = item
             const src = chrome.runtime.getURL(`icons/${icon}.png`)
-            const width = `${100 / column}vw`
-            const height = `calc((100vh - 64px) / ${row})`
-            const styles: React.CSSProperties = {
-              width,
-              height,
-              transform: `translate(calc(${width}*${index % column}), calc(${height}*${Math.floor(index / column)}))`
+            const style: React.CSSProperties = {
+              gridArea: `${Math.floor(index / column) + 1} / ${index % column + 1} / auto / auto`
             }
             const meta = {
               name,
@@ -175,7 +177,7 @@ class Desktop extends React.Component<PropsType> {
             return (
               <Webiste
                 key={id}
-                styles={styles}
+                style={style}
                 meta={meta}
                 onMouseDown={this.handleMouseDown}
                 onContextMenu={this.showMenu}

@@ -1,7 +1,7 @@
 import * as React from "react"
 
 interface PropsType {
-  styles: React.CSSProperties
+  style: React.CSSProperties
   meta: {
     id: string
     url: string
@@ -22,7 +22,7 @@ class Webiste extends React.Component<PropsType> {
   public render() {
     const { url, id, src, name } = this.props.meta
     return (
-      <div className="wrap" style={this.props.styles}>
+      <div className="wrap" style={this.props.style}>
         <a
           href={url}
           data-id={id}
