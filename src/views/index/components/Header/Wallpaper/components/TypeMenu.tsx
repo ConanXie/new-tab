@@ -99,4 +99,4 @@ class TypeMenu extends React.Component<WithStyles<"paper"> & PropsType> {
   }
 }
 
-export default withStyles(styles)<PropsType>(TypeMenu)
+export default withStyles(styles)(TypeMenu)

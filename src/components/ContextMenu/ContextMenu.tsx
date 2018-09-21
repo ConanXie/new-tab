@@ -118,4 +118,4 @@ class ContextMenu extends React.Component<WithStyles<StylesType> & PropsType> {
   }
 }
 
-export default makeDumbProps(withStyles(styles)<PropsType>(ContextMenu))
+export default makeDumbProps(withStyles(styles)(ContextMenu))

@@ -64,4 +64,4 @@ class TopToolbar extends React.Component<WithStyles<StylesType> & PropsType> {
   }
 }
 
-export default withStyles(styles)<PropsType>(TopToolbar)
+export default withStyles(styles)(TopToolbar)

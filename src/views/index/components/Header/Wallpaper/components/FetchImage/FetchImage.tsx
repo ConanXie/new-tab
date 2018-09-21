@@ -96,4 +96,4 @@ class FetchImage extends React.Component<WithStyles<"wrap"> & ItemPropsType & It
   }
 }
 
-export default withStyles(styles)<ItemPropsType & ItemMethods>(FetchImage)
+export default withStyles(styles)(FetchImage)

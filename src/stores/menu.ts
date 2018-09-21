@@ -7,7 +7,7 @@ interface MenuType {
 }
 
 export class MenuStore {
-  @observable public id: string
+  @observable public id: string = ""
   @observable public top: number = 0
   @observable public left: number = 0
   @observable public menus: MenuType[] = []

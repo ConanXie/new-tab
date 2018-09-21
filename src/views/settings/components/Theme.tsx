@@ -5,7 +5,7 @@ import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 
-import ColorPicker from "../../../components/ColorPicker"
+import ColorPicker from "components/ColorPicker"
 
 import { ThemeStore } from "stores/theme"
 

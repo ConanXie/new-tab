@@ -35,4 +35,4 @@ class FetchProgress extends React.Component<WithStyles<StylesType> & PropsType> 
   }
 }
 
-export default withStyles(styles)<PropsType>(FetchProgress)
+export default withStyles(styles)(FetchProgress)

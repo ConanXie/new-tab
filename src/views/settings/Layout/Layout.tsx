@@ -2,6 +2,8 @@ import * as React from "react"
 import * as classNames from "classnames"
 
 import withStyle, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
+import { withTheme } from "@material-ui/core/styles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import IconButton from "@material-ui/core/IconButton"
@@ -105,7 +107,11 @@ type StylesType = "root"
   | "layout"
   | "paper"
 
-class Layout extends React.Component<WithStyles<StylesType>> {
+interface PropsType {
+  theme: Theme
+}
+
+class Layout extends React.Component<WithStyles<StylesType> & PropsType> {
   public state = {
     open: false,
     content: null as React.ComponentType | null
@@ -189,4 +195,4 @@ class Layout extends React.Component<WithStyles<StylesType>> {
   }
 }
 
-export default withStyle(styles, { withTheme: true })(Layout)
+export default withTheme()(withStyle(styles)(Layout))
