@@ -36,9 +36,12 @@ interface PropsType {
 @inject("wallpaperStore")
 @observer
 class TopToolbar extends React.Component<WithStyles<StylesType> & PropsType> {
-  private handleWallpaperIconClick = () => {
+
+  public handleWallpaperIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur()
     this.props.onWallpaperIconClick()
   }
+
   public render() {
     const { classes, wallpaperStore } = this.props
     const cls = wallpaperStore!.darkIcons ? classes.iconDark : classes.iconLight
