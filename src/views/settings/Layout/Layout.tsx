@@ -10,7 +10,6 @@ import IconButton from "@material-ui/core/IconButton"
 import Typography from "@material-ui/core/Typography"
 import Drawer from "@material-ui/core/Drawer"
 import Divider from "@material-ui/core/Divider"
-import Paper from "@material-ui/core/Paper"
 import MenuIcon from "@material-ui/icons/Menu"
 import ChevronRightIcon from "@material-ui/icons/ChevronRight"
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
@@ -89,10 +88,6 @@ const styles: StyleRulesCallback = theme => ({
   layout: {
     display: "flex"
   },
-  paper: {
-    width: "680px",
-    margin: "0 auto"
-  }
 })
 
 type StylesType = "root"
@@ -105,7 +100,6 @@ type StylesType = "root"
   | "toolbar"
   | "content"
   | "layout"
-  | "paper"
 
 interface PropsType {
   theme: Theme
@@ -113,8 +107,8 @@ interface PropsType {
 
 class Layout extends React.Component<WithStyles<StylesType> & PropsType> {
   public state = {
-    open: false,
-    content: null as React.ComponentType | null
+    open: true,
+    content: null as React.ComponentType | null,
   }
   /**
    * Control Drawer display
@@ -186,9 +180,7 @@ class Layout extends React.Component<WithStyles<StylesType> & PropsType> {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Paper elevation={2} classes={{ root: classes.paper }}>
-            {Content && <Content />}
-          </Paper>
+          {Content && <Content />}
         </main>
       </div>
     )
