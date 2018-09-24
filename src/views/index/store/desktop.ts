@@ -1,6 +1,6 @@
-import { observable, action } from "mobx"
+import { observable, action, computed } from "mobx"
 
-interface DataType {
+export interface DataType {
   index: number
   id: string
   name: string
@@ -94,10 +94,49 @@ export class DesktopStore {
     icon: "facebook",
     url: "https://www.facebook.com"
   }]
+  @observable public removed: DataType[] = []
+
+  @computed public get latestRemovedName() {
+    return this.removed.length ? this.removed[0].name : ""
+  }
+
   @action("update index")
   public updateIndex = (id: string, index: number) => {
     const i = this.data.findIndex(item => item.id === id)
     this.data[i].index = index
+  }
+
+  @action("update info")
+  public updateInfo = (id: string, name: string, url: string) => {
+    const result = this.data.find(item => item.id === id)
+    if (result) {
+      result.name = name
+      result.url = url
+    }
+  }
+
+  @action("remove website")
+  public removeWebsite = (id: string) => {
+    const i = this.data.findIndex(item => item.id === id)
+    if (i > -1) {
+      const rm = this.data.splice(i, 1)[0]
+      this.removed.unshift(rm)
+    }
+  }
+
+  @action("undo")
+  public undo = (all?: boolean) => {
+    if (!all) {
+      const latest = this.removed.shift()
+      if (latest) {
+        this.data.push(latest)
+      }
+    } else {
+      this.data = this.data.concat(this.removed)
+      setTimeout(() => {
+        this.removed = []
+      }, 300)
+    }
   }
 }
 

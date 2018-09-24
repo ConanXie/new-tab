@@ -9,22 +9,32 @@ import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import makeDumbProps from "utils/makeDumbProps"
 import { DesktopStore } from "../../store/desktop"
 import { WebSiteInfoStore } from "../../store/websiteInfo"
+import { WebsiteEditStore } from "../../store/websiteEdit"
 import { MenuStore } from "stores/menu"
 /* import WidgetWrap from "../Widgets/Wrap"
 import DateTime from "../Widgets/DateTime" */
 import Webiste from "./Website"
+import Undo from "./Undo"
 
 interface PropsType {
   desktopStore: DesktopStore
-  menuStore: MenuStore,
+  menuStore: MenuStore
   websiteInfoStore: WebSiteInfoStore
+  websiteEditStore: WebsiteEditStore
 }
-@inject("desktopStore", "menuStore", "websiteInfoStore")
+@inject(
+  "desktopStore",
+  "menuStore",
+  "websiteInfoStore",
+  "websiteEditStore",
+)
 @observer
 class Desktop extends React.Component<PropsType> {
   public state = {
     column: 6,
     row: 4,
+    id: "",
+    undoOpen: false,
     menus: [{
       icon: <EditIcon />,
       text: "Edit",
@@ -41,7 +51,7 @@ class Desktop extends React.Component<PropsType> {
       icon: <ClearIcon />,
       text: "Remove",
       onClick: () => {
-        this.editWebsite()
+        this.removeWebsite()
       }
     }],
   }
@@ -134,23 +144,22 @@ class Desktop extends React.Component<PropsType> {
   // private prevent
   private showMenu = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     event.preventDefault()
+    this.setState({ id })
     this.props.menuStore.setPosition(event.clientX, event.clientY)
-    this.props.menuStore.recordId(id)
     this.props.menuStore.showMenu(this.state.menus)
   }
   public editWebsite = () => {
-    console.log("edit website")
+    this.props.websiteEditStore.openDialog(this.state.id)
   }
   public showInfo = () => {
-    const website = this.props.desktopStore.data.find(item => item.id === this.props.menuStore.id)
-    if (website) {
-      this.props.websiteInfoStore.meta = {
-        icon: chrome.runtime.getURL(`icons/${website.icon}.png`),
-        url: website.url,
-        name: website.name
-      }
-      this.props.websiteInfoStore.openDialog()
-    }
+    this.props.websiteInfoStore.openDialog(this.state.id)
+  }
+  public removeWebsite = () => {
+    this.props.desktopStore.removeWebsite(this.state.id)
+    this.setState({ undoOpen: true })
+  }
+  public closeUndo = () => {
+    this.setState({ undoOpen: false })
   }
   public render() {
     const { data } = this.props.desktopStore
@@ -194,13 +203,25 @@ class Desktop extends React.Component<PropsType> {
         </div>
         <LazilyLoad
           modules={{
-            WebsiteInfo: () => importLazy(import("./WebsiteInfo"))
+            WebsiteInfo: () => importLazy(import("./WebsiteInfo")),
+            WebsiteEdit: () => importLazy(import("./WebsiteEdit")),
+            Undo: () => importLazy(import("./Undo")),
           }}
         >
-          {({ WebsiteInfo }: { WebsiteInfo: React.ComponentType }) => (
-            <WebsiteInfo />
+          {({
+            WebsiteInfo,
+            WebsiteEdit,
+          }: {
+            WebsiteInfo: React.ComponentType
+            WebsiteEdit: React.ComponentType
+          }) => (
+            <React.Fragment>
+              <WebsiteInfo />
+              <WebsiteEdit />
+            </React.Fragment>
           )}
         </LazilyLoad>
+        <Undo open={this.state.undoOpen} onClose={this.closeUndo} />
       </div>
     )
   }

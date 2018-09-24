@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import Typography from "@material-ui/core/Typography"
+
 interface PropsType {
   style: React.CSSProperties
   meta: {
@@ -30,7 +32,7 @@ class Webiste extends React.Component<PropsType> {
           onContextMenu={this.handleContextMenu}
         >
           <img src={src} alt={name} />
-          <p>{name}</p>
+          <Typography className="shortcut-name" variant="subheading">{name}</Typography>
         </a>
       </div>
     )

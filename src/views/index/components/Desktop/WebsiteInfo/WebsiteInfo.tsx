@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { WithStyles, StyleRules, withStyles } from "@material-ui/core/styles"
+import { WithStyles, withStyles } from "@material-ui/core/styles"
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
@@ -13,7 +13,7 @@ import { WebSiteInfoStore } from "../../../store/websiteInfo"
 import { inject, observer } from "mobx-react"
 import makeDumbProps from "utils/makeDumbProps"
 
-const styles: StyleRules = {
+const styles = withStyles({
   title: {
     "& > h2": {
       display: "flex",
@@ -22,33 +22,23 @@ const styles: StyleRules = {
   },
   avatar: {
     display: "inline-block",
-    width: 36,
-    height: 36,
     marginRight: 16,
     background: "none",
-    "& > img": {
-      width: "100%",
-      height: "100%",
-    }
   }
-}
+})
 
-type StylesType = "title" | "avatar"
+type StylesType = "title"
+  | "avatar"
 
-interface PropsType {
+interface PropsType extends WithStyles<StylesType> {
   open: boolean
   onClose(): void
-  meta: {
-    name: string
-    icon: string
-    url: string
-  },
   websiteInfoStore: WebSiteInfoStore
 }
 
 @inject("websiteInfoStore")
 @observer
-class WebsiteInfo extends React.Component<PropsType & WithStyles<StylesType>> {
+class WebsiteInfo extends React.Component<PropsType> {
   public state = {}
 
   public handleClose = () => {
@@ -56,25 +46,27 @@ class WebsiteInfo extends React.Component<PropsType & WithStyles<StylesType>> {
   }
 
   public render() {
-    const { open, meta } = this.props.websiteInfoStore
+    const { classes } = this.props
+    const { open, info } = this.props.websiteInfoStore
 
     return (
       <Dialog
         open={open}
         onClose={this.handleClose}
       >
-        <DialogTitle className={this.props.classes.title}>
-          <Avatar className={this.props.classes.avatar}>
-            <img src={meta.icon} />
-          </Avatar>
-          {meta.name}
+        <DialogTitle className={classes.title}>
+          <Avatar
+            className={classes.avatar}
+            src={chrome.runtime.getURL(`icons/${info.icon}.png`)}
+          />
+          {info.name}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>{meta.url}</DialogContentText>
+          <DialogContentText>{info.url}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Close
+          <Button onClick={this.handleClose}>
+            {chrome.i18n.getMessage("button_close")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -82,4 +74,4 @@ class WebsiteInfo extends React.Component<PropsType & WithStyles<StylesType>> {
   }
 }
 
-export default makeDumbProps(withStyles(styles)(WebsiteInfo))
+export default makeDumbProps(styles(WebsiteInfo))

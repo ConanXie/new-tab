@@ -1,22 +1,20 @@
-import { observable, action } from "mobx"
+import { observable, action, computed } from "mobx"
 
-interface MetaType {
-  icon: string
-  url: string
-  name: string
-}
-
+import desktopStore, { DataType } from "./desktop"
 export class WebSiteInfoStore {
-  @observable public meta: MetaType = {
-    icon: "",
-    url: "",
-    name: ""
-  }
+  @observable public id: string = ""
   @observable public open: boolean = false
 
-  @action("open webiste info dialog")
-  public openDialog = () => this.open = true
-  @action("close webiste info dialog")
+  @computed get info() {
+    return desktopStore.data.find(item => item.id === this.id) || {} as DataType
+  }
+
+  @action("open webiste dialog")
+  public openDialog = (id: string = "") => {
+    this.open = true
+    this.id = id
+  }
+  @action("close webiste dialog")
   public closeDialog = () => this.open = false
 }
 
