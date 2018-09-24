@@ -7,15 +7,10 @@ interface MenuType {
 }
 
 export class MenuStore {
-  @observable public id: string = ""
   @observable public top: number = 0
   @observable public left: number = 0
   @observable public menus: MenuType[] = []
 
-  @action("record meta")
-  public recordId = (id: string) => {
-    this.id = id
-  }
   @action("set position")
   public setPosition = (left: number, top: number) => {
     this.left = left
