@@ -6,21 +6,27 @@
     "message": "New Tab"
   },
   "button_cancel": {
-    "message": "CANCEL"
+    "message": "Cancel"
   },
   "button_confirm": {
     "message": "OK"
   },
-  "nav_edit_title_edit": {
+  "button_done": {
+    "message": "Done"
+  },
+  "button_close": {
+    "message": "Close"
+  },
+  "website_edit_title": {
     "message": "Edit website"
   },
-  "nav_edit_title_add": {
+  "website_add_title": {
     "message": "Add website"
   },
-  "nav_edit_input_website": {
+  "website_edit_name": {
     "message": "Name"
   },
-  "nav_edit_input_URL": {
+  "website_edit_url": {
     "message": "URL"
   },
   "nav_edit_input_forget_name": {
@@ -29,11 +35,20 @@
   "nav_edit_input_forget_URL": {
     "message": "Don't forget website URL 🙂"
   },
-  "nav_delete_status": {
-    "message": "Deleted"
+  "website_removed_status": {
+    "message": "$NAME$ was removed",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Youtube"
+      }
+    }
   },
-  "nav_delete_undo": {
+  "website_removed_undo": {
     "message": "Undo"
+  },
+  "website_removed_undo_all": {
+    "message": "Undo All"
   },
   "nav_classification_unclassified": {
     "message": "Uncategorized"
@@ -89,8 +104,23 @@
   "settings_theme_switch_label": {
     "message": "Theme colors"
   },
-  "settings_theme_dark_label": {
+  "settings_night_mode_label": {
     "message": "Night mode"
+  },
+  "settings_night_mode_on": {
+    "message": "On"
+  },
+  "settings_night_mode_off": {
+    "message": "Off"
+  },
+  "settings_night_mode_custom": {
+    "message": "Custom"
+  },
+  "settings_night_mode_on_toolbar": {
+    "message": "Dark toolbar"
+  },
+  "settings_night_mode_on_toolbar_secondary": {
+    "message": "Change toolbar to dark background color on night mode"
   },
   "settings_weather_title": {
     "message": "Weather"
@@ -133,6 +163,15 @@
   },
   "settings_about_title": {
     "message": "About"
+  },
+  "settings_about_share": {
+    "message": "Share"
+  },
+  "settings_about_clipboard": {
+    "message": "Copied!"
+  },
+  "settings_about_source_code": {
+    "message": "Source code"
   },
   "settings_donate": {
     "message": "Donate"
