@@ -16,6 +16,7 @@
     "variable-name": false,
     "no-empty-interface": false,
     "object-literal-key-quotes": [true, "as-needed"],
+    "no-object-literal-type-assertion": false,
     // tsx rules
     "jsx-boolean-value": false,
     "member-ordering": false,
