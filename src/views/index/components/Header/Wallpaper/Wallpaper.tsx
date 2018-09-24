@@ -104,7 +104,7 @@ class Wallpaper extends React.Component<PropsType> {
           open={this.state.snackbarOpen}
           autoHideDuration={2000}
           onClose={this.handleSnackbarClose}
-          message={<span>{this.state.message}</span>}
+          message={this.state.message}
         />
       </div>
     )
