@@ -34,17 +34,17 @@ class ColorPicker extends React.Component<PropsType> {
         open={this.props.open}
         onClose={this.handleCancel}
       >
-        <DialogTitle>Color Picker</DialogTitle>
+        <DialogTitle>{chrome.i18n.getMessage("color_picker_title")}</DialogTitle>
         <DialogContent>
           <ChromePicker color={color} onChangeComplete={this.stageColor} disableAlpha={true} />
           <CirclePicker color={color} onChangeComplete={this.stageColor} />
         </DialogContent>
         <DialogActions>
-          <Button size="small" onClick={this.handleCancel} color="primary">
+          <Button size="small" onClick={this.handleCancel}>
             {chrome.i18n.getMessage("button_cancel")}
           </Button>
-          <Button id="ok" size="small" onClick={this.handleOK} color="primary" autoFocus>
-            {chrome.i18n.getMessage("button_confirm")}
+          <Button id="ok" size="small" onClick={this.handleOK} autoFocus>
+            {chrome.i18n.getMessage("button_done")}
           </Button>
         </DialogActions>
       </Dialog>
