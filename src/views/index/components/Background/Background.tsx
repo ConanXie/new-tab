@@ -18,7 +18,7 @@ export class Background extends React.Component<PropsType> {
   private handleDrop = async (event: DragEvent) => {
     event.stopPropagation()
     event.preventDefault()
-    const file = event.dataTransfer.files[0]
+    const file = event.dataTransfer!.files[0]
     const { useWallpaper, updateWallpaper } = this.props.wallpaperStore
     if (file && useWallpaper) {
       const { type, size } = file

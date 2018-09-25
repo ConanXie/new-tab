@@ -2,7 +2,8 @@ import { observable, computed, autorun, action } from "mobx"
 import { settingsStorage } from "utils/storage"
 import * as Color from "color"
 import createMuiTheme, { ThemeOptions } from "@material-ui/core/styles/createMuiTheme"
-import { deepOrange, grey } from "@material-ui/core/colors"
+import deepOrange from "@material-ui/core/colors/deepOrange"
+import grey from "@material-ui/core/colors/grey"
 
 const defaultData = {
   color: deepOrange[500],

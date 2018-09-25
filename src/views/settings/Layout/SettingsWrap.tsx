@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import withStyle, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
 import Paper from "@material-ui/core/Paper"
 
 const styles: StyleRulesCallback = theme => ({
@@ -23,4 +23,4 @@ const SettingsWrap = (props: PropsType) => (
   <Paper elevation={2} component="section" className={props.classes.root}>{props.children}</Paper>
 )
 
-export default withStyle(styles)(SettingsWrap)
+export default withStyles(styles)(SettingsWrap)

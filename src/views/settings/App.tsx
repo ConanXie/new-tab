@@ -1,8 +1,7 @@
 import * as React from "react"
 import { observer, inject } from "mobx-react"
 
-import { MuiThemeProvider } from "@material-ui/core/styles"
-import CssBaseline from "@material-ui/core/CssBaseline"
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
 
 import Layout from "./Layout"
 
@@ -18,7 +17,6 @@ class App extends React.Component<PropsType> {
   public render() {
     return (
       <MuiThemeProvider theme={this.props.themeStore.theme}>
-        <CssBaseline />
         <Layout />
       </MuiThemeProvider>
     )

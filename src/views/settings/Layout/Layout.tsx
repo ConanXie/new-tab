@@ -2,7 +2,7 @@ import * as React from "react"
 import * as classNames from "classnames"
 
 import withStyle, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
-import { withTheme } from "@material-ui/core/styles"
+import withTheme from "@material-ui/core/styles/withTheme"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
