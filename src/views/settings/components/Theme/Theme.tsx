@@ -10,7 +10,7 @@ import Divider from "@material-ui/core/Divider"
 import Checkbox from "@material-ui/core/Checkbox"
 
 import ColorPicker from "components/ColorPicker"
-import Wrap from "../Layout/SettingsWrap"
+import Wrap from "../../Layout/SettingsWrap"
 
 import { ThemeStore } from "stores/theme"
 

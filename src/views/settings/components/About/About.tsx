@@ -11,7 +11,7 @@ import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 // import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 
-import Wrap from "../Layout/SettingsWrap"
+import Wrap from "../../Layout/SettingsWrap"
 import GitHubIcon from "./Icons/GitHub"
 import LogoIcon from "./Icons/Logo"
 
