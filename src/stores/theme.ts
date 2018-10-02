@@ -4,31 +4,87 @@ import * as Color from "color"
 import createMuiTheme, { ThemeOptions } from "@material-ui/core/styles/createMuiTheme"
 import deepOrange from "@material-ui/core/colors/deepOrange"
 import grey from "@material-ui/core/colors/grey"
+import * as isWithinInterval from "date-fns/isWithinInterval"
+import * as format from "date-fns/format"
+import * as isValid from "date-fns/isValid"
+import * as isBefore from "date-fns/isBefore"
+
+export type modeType = 0 | 1 | 2
+
+export const nightModeStatus = [{
+  status: 1 as modeType,
+  text: chrome.i18n.getMessage("settings_night_mode_on"),
+}, {
+  status: 0 as modeType,
+  text: chrome.i18n.getMessage("settings_night_mode_off"),
+}, {
+  status: 2 as modeType,
+  text: chrome.i18n.getMessage("settings_night_mode_custom"),
+}]
 
 const defaultData = {
   color: deepOrange[500],
-  nightMode: false,
+  whiteToolbar: false,
+  nightMode: 0,
   darkToolbar: false,
+  nightTime: [
+    "15:30",
+    "5:00",
+  ],
 }
 
 export class ThemeStore {
   @observable public color: string
-  @observable public nightMode: boolean
+  @observable public whiteToolbar: boolean
+  @observable public nightMode: modeType
+  @observable public nightTime: string[]
   @observable public darkToolbar: boolean
   constructor() {
     const persistence = settingsStorage.get("theme", {})
     const {
       color,
+      whiteToolbar,
       nightMode,
+      nightTime,
       darkToolbar,
     } = persistence
     this.color = color || defaultData.color
+    this.whiteToolbar = whiteToolbar || defaultData.whiteToolbar
     this.nightMode = nightMode || defaultData.nightMode
+    this.nightTime = nightTime || defaultData.nightTime
     this.darkToolbar = darkToolbar || defaultData.darkToolbar
   }
 
   @computed get theme() {
-    return ThemeStore.createTheme(this.color, this.nightMode, this.darkToolbar)
+    return ThemeStore.createTheme(this)
+  }
+
+  @computed get applyNightMode(): boolean {
+    switch (this.nightMode) {
+      case 1:
+        return true
+      case 2:
+        const now = new Date()
+        const date = format(now, "YYYY/MM/dd")
+        const start = new Date(`${date} ${this.nightTime[0]}:00`)
+        const end = new Date(`${date} ${this.nightTime[1]}:00`)
+        if (!isValid(start) || !isValid(end)) {
+          return false
+        }
+        const inSameDay = isBefore(start, end)
+        if (inSameDay) {
+          return isWithinInterval(now, { start, end })
+        } else {
+          return !isWithinInterval(now, { start: end, end: start })
+        }
+      case 0:
+      default:
+        return false
+    }
+  }
+
+  @computed get nightModeText() {
+    return nightModeStatus.find(item => item.status === this.nightMode)!.text
   }
 
   @action("save theme color")
@@ -36,9 +92,19 @@ export class ThemeStore {
     this.color = color
   }
 
-  @action("toggle night mode")
-  public toggleNightMode = () => {
-    this.nightMode = !this.nightMode
+  @action("toggle white toolbar")
+  public toggleWhiteToolbar = () => {
+    this.whiteToolbar = !this.whiteToolbar
+  }
+
+  @action("change night mode")
+  public changeNightMode = (mode: modeType) => {
+    this.nightMode = mode
+  }
+
+  @action("set night time")
+  public setNightTime = (nightTime: string[]) => {
+    this.nightTime = nightTime
   }
 
   @action("toggle dark toolbar")
@@ -46,10 +112,16 @@ export class ThemeStore {
     this.darkToolbar = !this.darkToolbar
   }
 
-  private static createTheme(color: string, nightMode: boolean, darkToolbar: boolean) {
+  private static createTheme(settings: ThemeStore) {
+    const {
+      color,
+      whiteToolbar,
+      applyNightMode,
+      darkToolbar,
+    } = settings
     const colorTool = Color(color).hsl().round()
     const lightDiff = colorTool["color"][2] - 90
-    const isLight = lightDiff > 0 && !nightMode
+    const isLight = lightDiff > 0 && !applyNightMode
 
     const themeOptions: ThemeOptions = {
       typography: {
@@ -67,7 +139,7 @@ export class ThemeStore {
         ].join(","),
       },
       palette: {
-        type: nightMode ? "dark" : "light",
+        type: applyNightMode ? "dark" : "light",
         primary: {
           main: color,
         },
@@ -81,7 +153,16 @@ export class ThemeStore {
       },
     }
 
-    if (darkToolbar && nightMode) {
+    if (whiteToolbar) {
+      themeOptions.overrides!.MuiAppBar = {
+        colorPrimary: {
+          backgroundColor: "#fff",
+          color: grey[800]
+        },
+      }
+    }
+
+    if (applyNightMode && darkToolbar) {
       themeOptions.overrides!.MuiAppBar = {
         colorPrimary: {
           backgroundColor: grey[800],

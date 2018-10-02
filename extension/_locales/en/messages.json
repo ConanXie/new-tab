@@ -17,6 +17,9 @@
   "button_close": {
     "message": "Close"
   },
+  "color_picker_title": {
+    "message": "Color Picker"
+  },
   "website_edit_title": {
     "message": "Edit website"
   },
@@ -102,7 +105,10 @@
     "message": "Theme"
   },
   "settings_theme_switch_label": {
-    "message": "Theme colors"
+    "message": "Theme color"
+  },
+  "settings_theme_white_toolbar": {
+    "message": "White toolbar"
   },
   "settings_night_mode_label": {
     "message": "Night mode"
@@ -116,11 +122,29 @@
   "settings_night_mode_custom": {
     "message": "Custom"
   },
-  "settings_night_mode_on_toolbar": {
+  "settings_night_mode_custom_primary": {
+    "message": "Customize night mode time"
+  },
+  "settings_night_mode_custom_secondary": {
+    "message": "Current night time: $TIME$",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "18:30 ~ 5:00"
+      }
+    }
+  },
+  "settings_night_time_start": {
+    "message": "Start time"
+  },
+  "settings_night_time_end": {
+    "message": "End time"
+  },
+  "settings_night_mode_toolbar": {
     "message": "Dark toolbar"
   },
-  "settings_night_mode_on_toolbar_secondary": {
-    "message": "Change toolbar to dark background color on night mode"
+  "settings_night_mode_toolbar_secondary": {
+    "message": "Use dark theme for toolbar"
   },
   "settings_weather_title": {
     "message": "Weather"
