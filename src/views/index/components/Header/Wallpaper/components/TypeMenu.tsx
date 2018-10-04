@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
 import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 import Item, { ItemPropsType } from "./Item"
@@ -13,11 +14,11 @@ const source = [{
   text: chrome.i18n.getMessage("wallpaper_type_color")
 }]
 
-const styles = {
+const styles = createStyles({
   paper: {
     width: 200
   }
-}
+})
 
 interface ITypeMenuItem {
   selected: boolean
@@ -48,7 +49,7 @@ interface PropsType extends ItemPropsType {
   onChange(value: number): void
 }
 
-class TypeMenu extends React.Component<WithStyles<"paper"> & PropsType> {
+class TypeMenu extends React.Component<WithStyles<typeof styles> & PropsType> {
   public state = {
     anchorEl: undefined
   }

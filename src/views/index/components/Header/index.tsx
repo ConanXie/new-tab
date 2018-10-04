@@ -1,6 +1,8 @@
 import * as React from "react"
 
-import withStyles, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import AppBar from "@material-ui/core/AppBar"
 import Drawer from "@material-ui/core/Drawer"
 import LazilyLoad, { importLazy } from "utils/LazilyLoad"
@@ -9,9 +11,7 @@ import Toolbar from "./Toolbar"
 
 import "./style"
 
-type StylesType = "root" | "drawerMask"
-
-const styles: StyleRulesCallback<StylesType> = theme => ({
+const styles = (theme: Theme) => createStyles({
   root: {
     backgroundColor: "transparent",
     boxShadow: "none"
@@ -23,7 +23,7 @@ const styles: StyleRulesCallback<StylesType> = theme => ({
   }
 })
 
-class Header extends React.Component<WithStyles<StylesType>> {
+class Header extends React.Component<WithStyles<typeof styles>> {
   public state = {
     wallpaperOpen: false
   }

@@ -1,6 +1,8 @@
 import * as React from "react"
 
-import { WithStyles, StyleRulesCallback, withStyles } from "@material-ui/core/styles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Typography from "@material-ui/core/Typography"
 import IconButton from "@material-ui/core/IconButton"
 import Tooltip from "@material-ui/core/Tooltip"
@@ -15,21 +17,21 @@ import Wrap from "../../Layout/SettingsWrap"
 import GitHubIcon from "./Icons/GitHub"
 import LogoIcon from "./Icons/Logo"
 
-const styles: StyleRulesCallback = theme => ({
+const styles = ({ spacing, overrides }: Theme) => createStyles({
   sec: {
     padding: "24px",
   },
   header: {
     display: "flex",
     alignItems: "center",
-    marginBottom: theme.spacing.unit,
+    marginBottom: spacing.unit,
   },
   logo: {
     width: 40,
     height: 40,
-    marginRight: theme.spacing.unit,
-    marginLeft: -theme.spacing.unit / 4,
-    color: theme.overrides!.MuiButton!.root!.color,
+    marginRight: spacing.unit,
+    marginLeft: -spacing.unit / 4,
+    color: overrides!.MuiButton!.root!.color,
   },
   "@keyframes rotate": {
     from: {
@@ -41,16 +43,11 @@ const styles: StyleRulesCallback = theme => ({
   },
   iconBtnWrap: {
     textAlign: "right",
-    margin: -theme.spacing.unit * 2,
+    margin: -spacing.unit * 2,
   }
 })
 
-type StylesType = "sec"
-  | "header"
-  | "logo"
-  | "button"
-  | "iconBtnWrap"
-class About extends React.Component<WithStyles<StylesType>> {
+class About extends React.Component<WithStyles<typeof styles>> {
 
   public state = {
     snackbarOpen: false,
@@ -99,7 +96,6 @@ class About extends React.Component<WithStyles<StylesType>> {
               <Tooltip title={chrome.i18n.getMessage("settings_about_source_code")}>
                 <IconButton
                   href="https://github.com/ConanXie/new-tab/"
-                  className={classes.button}
                 >
                   <GitHubIcon />
                 </IconButton>

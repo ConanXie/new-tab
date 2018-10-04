@@ -1,7 +1,9 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 
-import { WithStyles, StyleRulesCallback, withStyles } from "@material-ui/core/styles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import { Theme as ThemeType } from "@material-ui/core/styles/createMuiTheme"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
@@ -18,14 +20,14 @@ import NightTime from "./NightTime"
 
 import { ThemeStore, nightModeStatus, modeType } from "stores/theme"
 
-const styles: StyleRulesCallback = theme => ({
+const styles = ({ spacing, palette }: ThemeType) => createStyles({
   color: {
-    width: theme.spacing.unit * 4,
-    height: theme.spacing.unit * 4,
+    width: spacing.unit * 4,
+    height: spacing.unit * 4,
     marginRight: 12,
     border: "2px solid #bfbfbf",
     borderRadius: "50%",
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: palette.primary.main,
     cursor: "pointer",
   },
   paper: {

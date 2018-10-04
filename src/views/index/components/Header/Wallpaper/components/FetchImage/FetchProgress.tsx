@@ -1,11 +1,11 @@
 import * as React from "react"
 import * as classNames from "classnames"
 
-import withStyles, { WithStyles, StyleRules } from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
 import LinearProgress from "@material-ui/core/LinearProgress"
 
-type StylesType = "root" | "hide"
-const styles: StyleRules<StylesType> = {
+const styles = createStyles({
   root: {
     position: "absolute",
     bottom: 0,
@@ -14,14 +14,14 @@ const styles: StyleRules<StylesType> = {
   hide: {
     opacity: 0
   }
-}
+})
 
-interface PropsType {
-  fetching: boolean,
+interface PropsType extends WithStyles<typeof styles> {
+  fetching: boolean
   progress: number
 }
 
-class FetchProgress extends React.Component<WithStyles<StylesType> & PropsType> {
+class FetchProgress extends React.Component<PropsType> {
   public render() {
     const { fetching, progress, classes } = this.props
     return (

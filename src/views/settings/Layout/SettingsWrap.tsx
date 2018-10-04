@@ -1,21 +1,21 @@
 import * as React from "react"
 
-import withStyles, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Paper from "@material-ui/core/Paper"
 
-const styles: StyleRulesCallback = theme => ({
+const styles = ({ spacing }: Theme) => createStyles({
   root: {
     width: "680px",
-    margin:  `${theme.spacing.unit * 3}px auto`,
+    margin:  `${spacing.unit * 3}px auto`,
     "&:first-of-type": {
       marginTop: 0
     }
   }
 })
 
-type StylesType = "root"
-
-interface PropsType extends WithStyles<StylesType> {
+interface PropsType extends WithStyles<typeof styles> {
   children: any
 }
 

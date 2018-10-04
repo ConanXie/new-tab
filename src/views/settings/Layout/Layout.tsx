@@ -1,7 +1,8 @@
 import * as React from "react"
 import * as classNames from "classnames"
 
-import withStyle, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
 import withTheme from "@material-ui/core/styles/withTheme"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import AppBar from "@material-ui/core/AppBar"
@@ -20,7 +21,7 @@ import SettingsList, { SettingsItemType } from "./SettingsList"
 
 const drawerWidth = 240
 
-const styles: StyleRulesCallback = theme => ({
+const styles = (theme: Theme) => createStyles({
   root: {
     flexGrow: 1,
     height: 430,
@@ -89,23 +90,11 @@ const styles: StyleRulesCallback = theme => ({
     display: "flex"
   },
 })
-
-type StylesType = "root"
-  | "appBar"
-  | "appBarShift"
-  | "menuButton"
-  | "hide"
-  | "drawerPaper"
-  | "drawerPaperClose"
-  | "toolbar"
-  | "content"
-  | "layout"
-
-interface PropsType {
+interface PropsType extends WithStyles<typeof styles> {
   theme: Theme
 }
 
-class Layout extends React.Component<WithStyles<StylesType> & PropsType> {
+class Layout extends React.Component<PropsType> {
   public state = {
     open: true,
     content: null as React.ComponentType | null,
@@ -187,4 +176,4 @@ class Layout extends React.Component<WithStyles<StylesType> & PropsType> {
   }
 }
 
-export default withTheme()(withStyle(styles)(Layout))
+export default withTheme()(withStyles(styles)(Layout))

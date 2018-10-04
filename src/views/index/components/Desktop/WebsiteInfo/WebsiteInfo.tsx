@@ -1,6 +1,8 @@
 import * as React from "react"
 
-import { WithStyles, withStyles } from "@material-ui/core/styles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
@@ -13,24 +15,21 @@ import { WebSiteInfoStore } from "../../../store/websiteInfo"
 import { inject, observer } from "mobx-react"
 import makeDumbProps from "utils/makeDumbProps"
 
-const styles = withStyles({
+const styles = ({ spacing }: Theme) => createStyles({
   title: {
     "& > h2": {
       display: "flex",
-      alignItems: "center"
-    }
+      alignItems: "center",
+    },
   },
   avatar: {
     display: "inline-block",
-    marginRight: 16,
+    marginRight: spacing.unit * 2,
     background: "none",
   }
 })
 
-type StylesType = "title"
-  | "avatar"
-
-interface PropsType extends WithStyles<StylesType> {
+interface PropsType extends WithStyles<typeof styles> {
   open: boolean
   onClose(): void
   websiteInfoStore: WebSiteInfoStore
@@ -74,4 +73,4 @@ class WebsiteInfo extends React.Component<PropsType> {
   }
 }
 
-export default makeDumbProps(styles(WebsiteInfo))
+export default makeDumbProps(withStyles(styles)(WebsiteInfo))

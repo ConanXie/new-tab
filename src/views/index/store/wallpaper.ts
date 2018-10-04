@@ -2,10 +2,11 @@ import { observable, computed, autorun, action, transaction } from "mobx"
 import { settingsStorage } from "utils/storage"
 import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
+import deepOrange from "@material-ui/core/colors/deepOrange"
 
 export const defaultWallpaperData = {
   wallpaper: "",
-  color: "#FF5722",
+  color: deepOrange[500],
   useWallpaper: true,
   wallpaperType: 1,
   darkIcons: false

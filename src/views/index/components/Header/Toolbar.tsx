@@ -2,7 +2,9 @@ import * as React from "react"
 import * as classNames from "classnames"
 import { inject, observer } from "mobx-react"
 
-import withStyles, { WithStyles, StyleRulesCallback } from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Toolbar from "@material-ui/core/Toolbar"
 import Tooltip from "@material-ui/core/Tooltip"
 import IconButton from "@material-ui/core/IconButton"
@@ -12,30 +14,26 @@ import SettingsIcon from "@material-ui/icons/Settings"
 
 import { WallpaperStore } from "../../store/wallpaper"
 
-type StylesType = "gutters"
-  | "iconLight"
-  | "iconDark"
-
-const styles: StyleRulesCallback<StylesType> = theme => ({
+const styles = ({ palette }: Theme) => createStyles({
   gutters: {
     justifyContent: "flex-end"
   },
   iconLight: {
-    color: theme.palette.grey["50"]
+    color: palette.grey["50"]
   },
   iconDark: {
-    color: theme.palette.grey["800"]
+    color: palette.grey["800"]
   }
 })
 
-interface PropsType {
+interface PropsType extends WithStyles<typeof styles> {
   wallpaperStore?: WallpaperStore
   onWallpaperIconClick(): void
 }
 
 @inject("wallpaperStore")
 @observer
-class TopToolbar extends React.Component<WithStyles<StylesType> & PropsType> {
+class TopToolbar extends React.Component<PropsType> {
 
   public handleWallpaperIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur()
@@ -47,18 +45,18 @@ class TopToolbar extends React.Component<WithStyles<StylesType> & PropsType> {
     const cls = wallpaperStore!.darkIcons ? classes.iconDark : classes.iconLight
     return (
       <Toolbar className={classes.gutters}>
-        <Tooltip id="tooltip-icon" enterDelay={300} title="Wallpaper">
-          <IconButton aria-label="Wallpaper" onClick={this.handleWallpaperIconClick}>
+        <Tooltip enterDelay={300} title="Wallpaper">
+          <IconButton onClick={this.handleWallpaperIconClick}>
             <WallpaperIcon className={classNames(cls)} />
           </IconButton>
         </Tooltip>
-        <Tooltip id="tooltip-icon" enterDelay={300} title="Widgets">
-          <IconButton aria-label="Widgets">
+        <Tooltip enterDelay={300} title="Widgets">
+          <IconButton>
             <WidgetsIcon className={classNames(cls)} />
           </IconButton>
         </Tooltip>
-        <Tooltip id="tooltip-icon" enterDelay={300} title="Settings">
-          <IconButton aria-label="Settings" href="./settings.html">
+        <Tooltip enterDelay={300} title="Settings">
+          <IconButton href="./settings.html">
             <SettingsIcon className={classNames(cls)} />
           </IconButton>
         </Tooltip>

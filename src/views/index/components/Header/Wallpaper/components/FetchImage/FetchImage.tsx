@@ -1,23 +1,24 @@
 import * as React from "react"
 
-import withStyles, { WithStyles, StyleRules } from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
 
 import FetchProgress from "./FetchProgress"
 
 import Item, { ItemPropsType, ItemMethods } from "../Item"
 
-const styles: StyleRules = {
+const styles = createStyles({
   wrap: {
     position: "relative"
   }
-}
+})
 
 interface StateType {
   fetching: boolean,
   completed: number
 }
 
-class FetchImage extends React.Component<WithStyles<"wrap"> & ItemPropsType & ItemMethods, StateType> {
+class FetchImage extends React.Component<WithStyles<typeof styles> & ItemPropsType & ItemMethods, StateType> {
   private url = `https://tab.xiejie.co/api/wallpaper/${screen.width}x${screen.height}`
   public state = {
     fetching: false,

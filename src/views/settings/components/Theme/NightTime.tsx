@@ -1,6 +1,8 @@
 import * as React from "react"
 
-import { WithStyles, StyleRulesCallback, withStyles } from "@material-ui/core/styles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogActions from "@material-ui/core/DialogActions"
@@ -10,11 +12,11 @@ import Typography from "@material-ui/core/Typography"
 
 const defaultValue = "00"
 
-const styles: StyleRulesCallback = theme => ({
+const styles = ({ spacing }: Theme) => createStyles({
   wrap: {
     display: "flex",
     "& > div:last-child": {
-      marginLeft: theme.spacing.unit * 6,
+      marginLeft: spacing.unit * 6,
     }
   },
   timeSec: {
@@ -23,7 +25,7 @@ const styles: StyleRulesCallback = theme => ({
   },
   timeTitle: {
     textAlign: "center",
-    marginBottom: theme.spacing.unit * 2,
+    marginBottom: spacing.unit * 2,
   },
   inputRoot: {
     width: "2em",
@@ -33,7 +35,7 @@ const styles: StyleRulesCallback = theme => ({
   },
   symbol: {
     marginTop: -4,
-    margin: `0 ${theme.spacing.unit}px`,
+    margin: `0 ${spacing.unit}px`,
   },
 })
 
@@ -147,10 +149,7 @@ class NightTime extends React.Component<PropsType, StateType> {
     const { value } = event.target
     const max = /hour/i.test(name) ? 23 : 59
     const isNumber = /^[0-5]?[0-9]$/.test(value)
-    let error = false
-    if (!isNumber || Number(value) > max) {
-      error = true
-    }
+    const error = !isNumber || Number(value) > max
     this.setState({
       [name as "startHours"]: {
         value,
