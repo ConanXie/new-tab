@@ -20,6 +20,8 @@ interface StateType {
 
 class FetchImage extends React.Component<WithStyles<typeof styles> & ItemPropsType & ItemMethods, StateType> {
   private url = `https://tab.xiejie.co/api/wallpaper/${screen.width}x${screen.height}`
+  public readonly max = 100
+  public readonly diff = 10
   public state = {
     fetching: false,
     completed: 0
@@ -37,7 +39,7 @@ class FetchImage extends React.Component<WithStyles<typeof styles> & ItemPropsTy
       // Get real URI of the image
       const res = await fetch(this.url)
       const data = await res.json()
-      this.setState({ completed: 5 })
+      this.setState({ completed: 3 })
       // Get image file
       const imageBlob = await this.getImage(data.result[0].url)
       this.endFetch()
@@ -60,16 +62,19 @@ class FetchImage extends React.Component<WithStyles<typeof styles> & ItemPropsTy
       xhr.responseType = "blob"
       xhr.onload = event => {
         if (xhr.status === 200) {
-          // setTimeout(() => resolve(xhr.response), 400)
           resolve(xhr.response)
         } else {
           reject(event)
         }
       }
       xhr.onerror = event => reject(event)
-      xhr.onprogress = event => {
-        const completed = Math.round(event.loaded / event.total * 100) + 5
-        this.setState({ completed: completed < 1 ? 1 : completed })
+      let completed = 0
+      xhr.onprogress = ({ loaded, total }) => {
+        const progress = Math.round(loaded / total * this.max)
+        if (progress - completed > this.diff) {
+          completed = progress
+          this.setState({ completed: Math.min(completed, this.max) })
+        }
       }
       xhr.send()
     })
