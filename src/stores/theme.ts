@@ -28,7 +28,7 @@ const defaultData = {
   nightMode: 0,
   darkToolbar: false,
   nightTime: [
-    "15:30",
+    "18:30",
     "5:00",
   ],
 }
