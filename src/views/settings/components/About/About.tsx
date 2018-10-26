@@ -84,7 +84,7 @@ class About extends React.Component<WithStyles<typeof styles>> {
           <div className={classes.sec}>
             <header className={classes.header}>
               <LogoIcon className={classes.logo} />
-              <Typography variant="title">Material Design New Tab</Typography>
+              <Typography variant="h6">Material Design New Tab</Typography>
             </header>
             <Typography gutterBottom>Everyone's favorite extension</Typography>
             <div className={classes.iconBtnWrap}>

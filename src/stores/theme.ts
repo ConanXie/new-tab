@@ -137,6 +137,7 @@ export class ThemeStore {
           `"Segoe UI Emoji"`,
           `"Segoe UI Symbol"`,
         ].join(","),
+        useNextVariants: true,
       },
       palette: {
         type: applyNightMode ? "dark" : "light",

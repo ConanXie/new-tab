@@ -32,7 +32,7 @@ class Webiste extends React.Component<PropsType> {
           onContextMenu={this.handleContextMenu}
         >
           <img src={src} alt={name} />
-          <Typography className="shortcut-name" variant="subheading">{name}</Typography>
+          <Typography className="shortcut-name" variant="subtitle1">{name}</Typography>
         </a>
       </div>
     )

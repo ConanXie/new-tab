@@ -145,7 +145,7 @@ class Layout extends React.Component<PropsType> {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="title" color="inherit" noWrap>
+            <Typography variant="h6" color="inherit" noWrap>
               {chrome.i18n.getMessage("settings_toolbar_title")}
             </Typography>
           </Toolbar>
