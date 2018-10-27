@@ -17,6 +17,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
 import ColorLensIcon from "@material-ui/icons/ColorLens"
 import InfoIcon from "@material-ui/icons/Info"
 
+import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import SettingsList, { SettingsItemType } from "./SettingsList"
 
 const drawerWidth = 240
@@ -171,6 +172,21 @@ class Layout extends React.Component<PropsType> {
           <div className={classes.toolbar} />
           {Content && <Content />}
         </main>
+
+        {/**
+          * For an unknown reason,
+          * the ripple on List and Switch disappears directly when some theme settings change.
+          * Use the code below to lazily load a ripple Component could fix that bug.
+          */}
+        <LazilyLoad
+          modules={{
+            Fix: () => importLazy(import("./Fix"))
+          }}
+        >
+          {({ Fix }: { Fix: React.ComponentType }) => (
+            <Fix />
+          )}
+        </LazilyLoad>
       </div>
     )
   }
