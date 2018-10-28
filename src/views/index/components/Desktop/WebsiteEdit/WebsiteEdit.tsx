@@ -39,7 +39,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
    */
   public static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const { name, url } = nextProps.websiteEditStore.info
-    if (name && !prevState.name && !prevState.synced) {
+    if (name && nextProps.websiteEditStore.open && !prevState.synced) {
       return {
         synced: true,
         name,
@@ -61,6 +61,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
    * close dialog
    */
   public handleClose = () => {
+    this.setState({ synced: false })
     this.props.websiteEditStore.closeDialog()
   }
 
