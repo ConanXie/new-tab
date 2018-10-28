@@ -1,14 +1,21 @@
 import * as React from "react"
 
-interface PropType {
-  modules: object
-  children: (modules: object) => any
+interface Modules {
+  [name: string]: () => Promise<{}>
+}
+interface Components {
+  [name: string]: React.ComponentType<any>
 }
 
-class LazilyLoad extends React.Component<PropType> {
+interface PropsType {
+  modules: Modules
+  children: (components: Components) => React.ReactNode
+}
+
+class LazilyLoad extends React.Component<PropsType> {
   public state = {
     isLoaded: false,
-    modules: {}
+    modules: {},
   }
 
   private _isMounted: boolean = false
@@ -18,7 +25,7 @@ class LazilyLoad extends React.Component<PropType> {
     this.load()
   }
 
-  public componentDidUpdate(previous: PropType) {
+  public componentDidUpdate(previous: PropsType) {
     const shouldLoad = !!Object.keys(this.props.modules).filter((key) => {
       return this.props.modules[key] !== previous.modules[key]
     }).length
@@ -33,7 +40,7 @@ class LazilyLoad extends React.Component<PropType> {
 
   private load() {
     this.setState({
-      isLoaded: false
+      isLoaded: false,
     })
 
     const { modules } = this.props
@@ -63,8 +70,8 @@ class LazilyLoad extends React.Component<PropType> {
 /**
  * 高阶函数，用于组件内部懒加载其它组件
  */
-export const LazilyLoadFactory = (Component: React.SFC, modules: object) => {
-  return (props: object) => (
+export const LazilyLoadFactory = (Component: React.SFC, modules: Modules) => {
+  return (props: {}) => (
     <LazilyLoad modules={modules}>
       {(mods) => <Component {...mods} {...props} />}
     </LazilyLoad>
