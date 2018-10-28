@@ -205,16 +205,9 @@ class Desktop extends React.Component<PropsType> {
           modules={{
             WebsiteInfo: () => importLazy(import("./WebsiteInfo")),
             WebsiteEdit: () => importLazy(import("./WebsiteEdit")),
-            Undo: () => importLazy(import("./Undo")),
           }}
         >
-          {({
-            WebsiteInfo,
-            WebsiteEdit,
-          }: {
-            WebsiteInfo: React.ComponentType
-            WebsiteEdit: React.ComponentType
-          }) => (
+          {({ WebsiteInfo, WebsiteEdit }) => (
             <React.Fragment>
               <WebsiteInfo />
               <WebsiteEdit />

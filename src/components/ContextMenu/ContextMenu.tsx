@@ -1,7 +1,8 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 
-import withStyles, { WithStyles, StyleRules } from "@material-ui/core/styles/withStyles"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
 import Paper from "@material-ui/core/Paper"
 import MenuList from "@material-ui/core/MenuList"
 import MenuItem from "@material-ui/core/MenuItem"
@@ -12,35 +13,29 @@ import Divider from "@material-ui/core/Divider"
 import { MenuStore } from "stores/menu"
 import makeDumbProps from "utils/makeDumbProps"
 
-type StylesType = "root"
-  | "menuItem"
-  | "icon"
-  | "text"
-  | "divider"
-
-const styles: StyleRules = {
+const styles = createStyles({
   root: {
     borderRadius: 10,
     overflow: "hidden",
     "& > ul": {
-      padding: 0
-    }
+      padding: 0,
+    },
   },
   menuItem: {
-    paddingRight: 56
+    paddingRight: 56,
   },
   text: {
-    font: "0.9rem Roboto, 'Microsoft Yahei'"
+    fontSize: "0.9rem",
   },
   divider: {
-    marginLeft: 56
+    marginLeft: 56,
   },
   icon: {
-    marginRight: 0
-  }
-}
+    marginRight: 0,
+  },
+})
 
-interface PropsType {
+interface PropsType extends WithStyles<typeof styles> {
   menuStore: MenuStore
 }
 
@@ -54,7 +49,7 @@ interface PosStyleType {
 
 @inject("menuStore")
 @observer
-class ContextMenu extends React.Component<WithStyles<StylesType> & PropsType> {
+class ContextMenu extends React.Component<PropsType> {
   private contextmenuRef: React.RefObject<HTMLDivElement> = React.createRef()
   /**
    * The position of contextmenu

@@ -6,7 +6,7 @@ interface PropsType {
   disabled?: boolean
   primary: string
   secondary?: string
-  children?: any
+  children?: React.ReactNode
   onClick(...args: any[]): any
 }
 

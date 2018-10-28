@@ -98,7 +98,7 @@ interface PropsType extends WithStyles<typeof styles> {
 class Layout extends React.Component<PropsType> {
   public state = {
     open: true,
-    content: null as React.ComponentType | null,
+    Content: null as React.ComponentType | null,
   }
   /**
    * Control Drawer display
@@ -123,14 +123,14 @@ class Layout extends React.Component<PropsType> {
     onClick: () => import("../components/About").then(this.loadContent)
   }]
   private loadContent = (_: any) => {
-    this.setState({ content: _.default })
+    this.setState({ Content: _.default })
   }
   public componentDidMount() {
     this.settings[0].onClick()
   }
   public render() {
     const { classes, theme } = this.props
-    const { open, content: Content } = this.state
+    const { open, Content } = this.state
     return (
       <div className={classes.layout}>
         <AppBar
@@ -183,7 +183,7 @@ class Layout extends React.Component<PropsType> {
             Fix: () => importLazy(import("./Fix"))
           }}
         >
-          {({ Fix }: { Fix: React.ComponentType }) => (
+          {({ Fix }) => (
             <Fix />
           )}
         </LazilyLoad>

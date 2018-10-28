@@ -16,7 +16,7 @@ const styles = ({ spacing }: Theme) => createStyles({
 })
 
 interface PropsType extends WithStyles<typeof styles> {
-  children: any
+  children: React.ReactNode
 }
 
 const SettingsWrap = (props: PropsType) => (

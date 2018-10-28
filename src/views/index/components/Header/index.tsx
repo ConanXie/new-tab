@@ -57,7 +57,7 @@ class Header extends React.Component<WithStyles<typeof styles>> {
                 Wallpaper: () => importLazy(import("./Wallpaper"))
               }}
             >
-              {({ Wallpaper }: { Wallpaper: React.ComponentType }) => (
+              {({ Wallpaper }) => (
                 <Wallpaper />
               )}
             </LazilyLoad>
