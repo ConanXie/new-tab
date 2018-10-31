@@ -1,19 +1,27 @@
 import * as React from "react"
 
-// import Avatar from "@material-ui/core/Avatar"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogContent from "@material-ui/core/DialogContent"
-// import DialogContentText from "@material-ui/core/DialogContentText"
 import DialogActions from "@material-ui/core/DialogActions"
 import TextField from "@material-ui/core/TextField"
 
 import { WebsiteEditStore } from "../../../store/websiteEdit"
 import { inject, observer } from "mobx-react"
-import makeDumbProps from "utils/makeDumbProps"
 
-interface PropsType {
+const styles = (theme: Theme) => createStyles({
+  dialog: {
+    width: "20vw",
+    minWidth: 230,
+    maxWidth: 320,
+  },
+})
+
+interface PropsType extends WithStyles<typeof styles> {
   websiteEditStore: WebsiteEditStore
 }
 
@@ -34,8 +42,8 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   }
   /**
    * sync website info from props for edit
-   * @param nextProps PropsType
-   * @param prevState StateType
+   * @param nextProps
+   * @param prevState
    */
   public static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
     const { name, url } = nextProps.websiteEditStore.info
@@ -78,7 +86,13 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
     const { name, url } = this.state
     const { open, id, info } = this.props.websiteEditStore
     return (
-      <Dialog open={open} onClose={this.handleClose}>
+      <Dialog
+        open={open}
+        onClose={this.handleClose}
+        classes={{
+          paper: this.props.classes.dialog,
+        }}
+      >
         <form onSubmit={this.handleDone}>
           <DialogTitle>
             {chrome.i18n.getMessage(id ? "website_edit_title" : "website_add_title")}
@@ -86,6 +100,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
           <DialogContent>
             <TextField
               autoFocus
+              fullWidth
               margin="dense"
               defaultValue={info.name}
               label={chrome.i18n.getMessage("website_edit_name")}
@@ -93,6 +108,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
             />
             <br />
             <TextField
+              fullWidth
               margin="dense"
               defaultValue={info.url || url}
               label={chrome.i18n.getMessage("website_edit_url")}
@@ -110,4 +126,4 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   }
 }
 
-export default makeDumbProps(WebsiteEdit)
+export default withStyles(styles)(WebsiteEdit)

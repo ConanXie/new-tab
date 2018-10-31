@@ -10,21 +10,20 @@ import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogContentText from "@material-ui/core/DialogContentText"
 import DialogActions from "@material-ui/core/DialogActions"
+import Typography from "@material-ui/core/Typography"
 
 import { WebSiteInfoStore } from "../../../store/websiteInfo"
 import { inject, observer } from "mobx-react"
-import makeDumbProps from "utils/makeDumbProps"
 
 const styles = ({ spacing }: Theme) => createStyles({
   title: {
-    "& > h2": {
-      display: "flex",
-      alignItems: "center",
-    },
+    display: "flex",
+    alignItems: "center",
   },
   avatar: {
     display: "inline-block",
     marginRight: spacing.unit * 2,
+    marginLeft: -spacing.unit / 2,
     background: "none",
   }
 })
@@ -53,12 +52,12 @@ class WebsiteInfo extends React.Component<PropsType> {
         open={open}
         onClose={this.handleClose}
       >
-        <DialogTitle className={classes.title}>
+        <DialogTitle className={classes.title} disableTypography>
           <Avatar
             className={classes.avatar}
             src={chrome.runtime.getURL(`icons/${info.icon}.png`)}
           />
-          {info.name}
+          <Typography variant="h6">{info.name}</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>{info.url}</DialogContentText>
@@ -73,4 +72,4 @@ class WebsiteInfo extends React.Component<PropsType> {
   }
 }
 
-export default makeDumbProps(withStyles(styles)(WebsiteInfo))
+export default withStyles(styles)(WebsiteInfo)
