@@ -81,6 +81,7 @@ const styles = (theme: Theme) => createStyles({
     ...theme.mixins.toolbar
   },
   content: {
+    boxSizing: "border-box",
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
