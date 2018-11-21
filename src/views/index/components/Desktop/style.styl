@@ -6,16 +6,21 @@ toolbar-height = 64px
 
 flex-center()
   display flex
+  flex-direction column
   align-items center
   justify-content center
 
 .page
   display grid
+  align-items stretch
+  justify-items stretch
   position relative
   width 100%
   height 100%
   overflow hidden
+
 .wrap
+  height 100%
   flex-center()
   &[aria-grabbed=true] {
     visibility hidden
@@ -30,7 +35,7 @@ flex-center()
     .shortcut-name
       visibility hidden
   &.grabbed
-    transition transform 0.2s cubic-bezier(0.333, 0, 0, 1)
+    transition transform .2s cubic-bezier(0.333, 0, 0, 1)
 
   a
     flex-center()
@@ -40,16 +45,57 @@ flex-center()
     transition .2s opacity ease-in-out
     &:hover
       opacity 1
-  img
-    width 5.5vw
-    max-width 96px
-    min-width 24px
+    &.touched .shortcut-icon
+      &::before
+      &::after
+        transform translate(-50%, -50%) scale(1)
+    
+  .shortcut-icon
+    position relative
+    &::before
+    &::after
+      content ""
+      z-index -1
+      display block
+      position absolute
+      left 50%
+      top 50%
+      border-radius 50%
+      transform translate(-50%, -50%) scale(0.7)
+      transition .15s transform ease-in
+    &::before
+      width 100%
+      height 100%
+      background-color #fff
+    &::after
+      width 120%
+      height 120%
+      background-color rgba(255, 255, 255, 0.5)
+
+    img
+      position relative
+      display block
+      width 5.5vw
+      max-width 96px
+      min-width 24px
+
+
   .shortcut-name
     max-width 8em
     margin-top 6px
-    font-size 16px
+    min-height calc(1em * 1.75)
     color #fff
     text-shadow 0 1px 2px rgba(0, 0, 0, 0.36)
     white-space: nowrap;
     overflow hidden
     text-overflow ellipsis
+
+
+.widget-wrap
+  // flex-center()
+
+  h1
+    // font normal 100px "Product Sans Thin"
+    font normal 100px "Product Sans Light"
+    // font 300 100px "Roboto"
+    color #fff

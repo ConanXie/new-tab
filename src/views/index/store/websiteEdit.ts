@@ -9,7 +9,7 @@ export class WebsiteEditStore extends WebSiteInfoStore {
     if (!/:\/\//.test(url)) {
       url = "https://" + url
     }
-    desktopStore.updateInfo(this.id, name, url)
+    desktopStore.updateInfo(this.id, this.index, name, url)
   }
 }
 

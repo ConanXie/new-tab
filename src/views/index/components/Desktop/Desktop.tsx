@@ -10,30 +10,37 @@ import makeDumbProps from "utils/makeDumbProps"
 import { DesktopStore } from "../../store/desktop"
 import { WebSiteInfoStore } from "../../store/websiteInfo"
 import { WebsiteEditStore } from "../../store/websiteEdit"
+import { FolderStore } from "../../store/folder"
 import { MenuStore } from "stores/menu"
-/* import WidgetWrap from "../Widgets/Wrap"
-import DateTime from "../Widgets/DateTime" */
+// import WidgetWrap from "../Widgets/Wrap"
+import DateTime from "../Widgets/DateTime"
 import Webiste from "./Website"
 import Undo from "./Undo"
+import Folder from "./Folder"
+import Wrap from "./Wrap"
+import FolderWindow from "./FolderWindow"
 
 interface PropsType {
   desktopStore: DesktopStore
   menuStore: MenuStore
   websiteInfoStore: WebSiteInfoStore
   websiteEditStore: WebsiteEditStore
+  folderStore: FolderStore
 }
 @inject(
   "desktopStore",
   "menuStore",
   "websiteInfoStore",
   "websiteEditStore",
+  "folderStore",
 )
 @observer
 class Desktop extends React.Component<PropsType> {
   public state = {
-    column: 6,
-    row: 4,
+    columns: 6,
+    rows: 4,
     id: "",
+    index: 0,
     undoOpen: false,
     menus: [{
       icon: <EditIcon />,
@@ -70,13 +77,19 @@ class Desktop extends React.Component<PropsType> {
     event.preventDefault()
     // console.log(event)
     const ele = event.currentTarget
+    const current = ele.dataset.id as string
     const wrap = ele.parentNode! as HTMLElement
     const { top, left, width, height } = wrap.getBoundingClientRect()
     const { clientWidth, clientHeight, offsetTop: pageOffsetTop } = this.pageElement.current!
     const downScreenX = event.screenX
     const downScreenY = event.screenY
+    const unitWidth = clientWidth / this.state.columns
+    const unitHeight = clientHeight / this.state.rows
 
     let clone: HTMLElement
+    let tempRow = Number(ele.dataset.row)
+    let tempColumn = Number(ele.dataset.column)
+    let tempOccupied: HTMLElement | undefined
     const mouseMove = (evt: MouseEvent) => {
       const moveScreenX = evt.screenX
       const moveScreenY = evt.screenY
@@ -100,32 +113,66 @@ class Desktop extends React.Component<PropsType> {
           const transX = e.clientX - offsetLeft
           const transY = e.clientY - offsetTop
           clone.style.transform = `translate(${transX}px, ${transY}px)`
+
+          const x = e.clientX
+          const y = e.clientY - pageOffsetTop
+          let row: number
+          let column: number
+
+          if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
+            row = Math.ceil(y / unitHeight)
+            column = Math.ceil(x / unitWidth)
+            if (tempRow !== row || tempColumn !== column) {
+              tempRow = row
+              tempColumn = column
+              if (tempOccupied) {
+                tempOccupied.classList.remove("touched")
+                tempOccupied = undefined
+              }
+
+              const occupied = this.props.desktopStore.getOccupied(tempRow, tempColumn)
+              if (occupied) {
+                const target = document.querySelector(`[data-id="${occupied.id}"]`)
+                if (target && target !== ele) {
+                  tempOccupied = target as HTMLElement
+                  tempOccupied.classList.add("touched")
+                }
+              }
+            }
+          } else {
+            tempOccupied = undefined
+          }
         }
         document.addEventListener("mousemove", moveClone, false)
 
         const _mouseUp = (e: MouseEvent) => {
           const x = e.clientX
           const y = e.clientY - pageOffsetTop
-          const unitWidth = clientWidth / this.state.column
-          const unitHeight = clientHeight / this.state.row
+          let row: number
+          let column: number
 
+          clone.classList.add("grabbed")
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
-            const indexColumn = Math.floor(x / unitWidth)
-            const indexRow = Math.floor(y / unitHeight)
+            row = Math.ceil(y / unitHeight)
+            column = Math.ceil(x / unitWidth)
 
-            const index = indexRow * this.state.column + indexColumn
-
-            clone.classList.add("grabbed")
-            const transX = indexColumn * unitWidth
-            const transY = unitHeight * indexRow + pageOffsetTop
+            const transX = (column - 1) * unitWidth
+            const transY = unitHeight * (row - 1) + pageOffsetTop
             clone.style.transform = `translate(${transX}px, ${transY}px)`
-
-            clone.addEventListener("transitionend", () => {
-              this.props.desktopStore.updateIndex(ele.dataset.id as string, index)
-              wrap.setAttribute("aria-grabbed", "false")
-              document.body.removeChild(clone)
-            }, false)
+          } else {
+            clone.style.transform = `translate(${translateX}px, ${translateY}px)`
           }
+          clone.addEventListener("transitionend", () => {
+            console.log("transitionend")
+            if (row !== undefined) {
+              this.props.desktopStore.updateArea(current, row, column)
+            }
+            if (tempOccupied) {
+              this.props.desktopStore.createFolder(current, tempOccupied.dataset.id as string)
+            }
+            wrap.setAttribute("aria-grabbed", "false")
+            document.body.removeChild(clone)
+          }, false)
           document.removeEventListener("mousemove", moveClone, false)
           document.removeEventListener("mouseup", _mouseUp, false)
         }
@@ -142,9 +189,9 @@ class Desktop extends React.Component<PropsType> {
     document.addEventListener("mouseup", mouseUp, false)
   }
   // private prevent
-  private showMenu = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  private showMenu = (event: React.MouseEvent<HTMLAnchorElement>, id: string, index: number = 0) => {
     event.preventDefault()
-    this.setState({ id })
+    this.setState({ id, index })
     this.props.menuStore.setPosition(event.clientX, event.clientY)
     this.props.menuStore.showMenu(this.state.menus)
   }
@@ -163,43 +210,62 @@ class Desktop extends React.Component<PropsType> {
   }
   public render() {
     const { data } = this.props.desktopStore
-    const { column, row } = this.state
+    const { open: folderOpen, openFolder, closeFolder, folderElement } = this.props.folderStore
+    const { columns, rows } = this.state
     const styles: React.CSSProperties = {
-      gridTemplateColumns: `repeat(${column}, 1fr)`,
-      gridAutoRows: `calc((100vh - 64px) / ${row})`
+      gridTemplateColumns: `repeat(${columns}, 1fr)`,
+      gridAutoRows: `calc((100vh - 64px) / ${rows})`,
     }
     return (
       <div className="desktop">
         <div className="page" ref={this.pageElement} style={styles}>
           {data.map(item => {
-            const { index, id, name, url, icon } = item
-            const src = chrome.runtime.getURL(`icons/${icon}.png`)
-            const style: React.CSSProperties = {
-              gridArea: `${Math.floor(index / column) + 1} / ${index % column + 1} / auto / auto`
+            const { row, column } = item
+            if (item.type === 1) {
+              if (item.shortcuts!.length <= 1) {
+                const { id, shortcuts } = item
+                const {
+                  name,
+                  url,
+                  icon,
+                } = shortcuts![0]
+                const src = chrome.runtime.getURL(`icons/${icon}.png`)
+                const meta = {
+                  row,
+                  column,
+                  name,
+                  url,
+                  src,
+                  id,
+                }
+                return (
+                  <Wrap row={row} column={column} key={id}>
+                    <Webiste
+                      meta={meta}
+                      onMouseDown={this.handleMouseDown}
+                      onContextMenu={this.showMenu}
+                    />
+                  </Wrap>
+                )
+              } else {
+                const { id } = item
+                return (
+                  <Wrap row={row} column={column} key={id}>
+                    <Folder
+                      {...item}
+                      onClick={openFolder}
+                      onMouseDown={this.handleMouseDown}
+                      onContextMenu={this.showMenu}
+                    />
+                  </Wrap>
+                )
+              }
             }
-            const meta = {
-              name,
-              url,
-              src,
-              id
-            }
-            return (
-              <Webiste
-                key={id}
-                style={style}
-                meta={meta}
-                onMouseDown={this.handleMouseDown}
-                onContextMenu={this.showMenu}
-              />
-            )
+            return null
           })}
-          {/* <WidgetWrap style={{
-            width: `${100 / column * 3}vw`,
-            height: `calc((100vh - 64px) / ${row})`,
-            transform: `translate(calc(${`${100 / column}vw`}*${3}), calc(${`calc((100vh - 64px) / ${row})`}*${3}))`
-          }}>
-          <DateTime />
-        </WidgetWrap> */}
+          <Wrap className="widget-wrap" row={4} column={5} rowEnd={5} columnEnd={7}>
+            <DateTime />
+          </Wrap>
         </div>
         <LazilyLoad
           modules={{
@@ -215,6 +281,11 @@ class Desktop extends React.Component<PropsType> {
           )}
         </LazilyLoad>
         <Undo open={this.state.undoOpen} onClose={this.closeUndo} />
+        <FolderWindow
+          open={folderOpen}
+          anchorEl={folderElement}
+          onClose={closeFolder}
+        />
       </div>
     )
   }
