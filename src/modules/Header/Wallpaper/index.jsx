@@ -185,7 +185,7 @@ class Wallpaper extends Component {
     })
     const { width, height } = window.screen
     // const url = `http://localhost:5300/api/wallpaper/${width}x${height}`
-    const url = `https://tab.xiejie.co/api/wallpaper/${width}x${height}`
+    const url = `https://tab.xiejie.app/api/wallpaper/${width}x${height}`
     try {
       const res = await fetch(url)
       const msg = await res.json()

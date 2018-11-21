@@ -406,7 +406,7 @@ class Settings extends Component {
                   <p className="name">
                   <span>Material Design New Tab </span>
                     <a
-                      href={chrome.i18n.getUILanguage() === 'zh-CN' ? 'https://tab.xiejie.co/logs' : 'https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md'}
+                      href={chrome.i18n.getUILanguage() === 'zh-CN' ? 'https://tab.xiejie.app/logs' : 'https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md'}
                       target="_blank"
                     >
                       <FlatButton label={chrome.runtime.getManifest().version} />

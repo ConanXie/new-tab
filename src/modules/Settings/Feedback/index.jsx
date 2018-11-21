@@ -45,7 +45,7 @@ class Feedback extends Component {
     }
     this.emailPattern = /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/
     // this.feedbackUrl = 'http://localhost:5300/api/feedback'
-    this.feedbackUrl = 'https://tab.xiejie.co/api/feedback'
+    this.feedbackUrl = 'https://tab.xiejie.app/api/feedback'
   }
   openDialog = () => {
     this.setState({

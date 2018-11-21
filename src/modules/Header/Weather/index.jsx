@@ -193,12 +193,12 @@ class Weather extends Component {
     const lang = chrome.i18n.getUILanguage()
 
     if (region) {
-      fetch(`https://tab.xiejie.co/api/weather/v5/${region}?lang=${lang}`).then(this.responseHandler, this.responseError)
+      fetch(`https://tab.xiejie.app/api/weather/v5/${region}?lang=${lang}`).then(this.responseHandler, this.responseError)
     } else  {
       navigator.geolocation.getCurrentPosition(pos => {
         const lat = pos.coords.latitude.toFixed(6)
         const lng = pos.coords.longitude.toFixed(6)
-        fetch(`https://tab.xiejie.co/api/weather/v4/${lat},${lng}?lang=${lang}`).then(this.responseHandler, this.responseError)
+        fetch(`https://tab.xiejie.app/api/weather/v4/${lat},${lng}?lang=${lang}`).then(this.responseHandler, this.responseError)
         // fetch(`http://localhost:5300/api/weather/v4/${lat},${lng}`).then(this.responseHandler, this.responseError)
       }, error => {
         let emptyText
@@ -217,7 +217,7 @@ class Weather extends Component {
             break
         }
         if (lang === 'zh-CN') {
-          fetch(`https://tab.xiejie.co/api/weather/v4?lang=${lang}`).then(this.responseHandler, this.responseError)
+          fetch(`https://tab.xiejie.app/api/weather/v4?lang=${lang}`).then(this.responseHandler, this.responseError)
           // fetch(`http://localhost:5300/api/weather/v4`).then(this.responseHandler, this.responseError)
         } else {
           this.setState({

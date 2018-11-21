@@ -51,7 +51,9 @@ class App extends Component {
     } else {
       this.setBackground(this.darkTheme.paper.backgroundColor)
     }
-    
+
+    this.setPageTitle()
+
     chrome.runtime.setUninstallURL('https://conanxie.typeform.com/to/I5WmdT')
     
     const errHandler = e => console.error(e)
