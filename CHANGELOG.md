@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.7
+###### _Nov 21, 2018_
+- Add page title
+- Fix scrolling
+- Migrate APIs to new domain
+
 ## 1.8.6
 ###### _May 30, 2018_
 - Fix some text in English
