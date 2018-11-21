@@ -19,7 +19,7 @@ interface StateType {
 }
 
 class FetchImage extends React.Component<WithStyles<typeof styles> & ItemPropsType & ItemMethods, StateType> {
-  private url = `https://tab.xiejie.co/api/wallpaper/${screen.width}x${screen.height}`
+  private url = `https://tab.xiejie.app/api/wallpaper/${screen.width}x${screen.height}`
   public readonly max = 100
   public readonly diff = 10
   public state = {
@@ -75,6 +75,9 @@ class FetchImage extends React.Component<WithStyles<typeof styles> & ItemPropsTy
           completed = progress
           this.setState({ completed: Math.min(completed, this.max) })
         }
+      }
+      xhr.onerror = () => {
+        reject()
       }
       xhr.send()
     })

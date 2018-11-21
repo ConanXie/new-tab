@@ -110,7 +110,7 @@ class About extends React.Component<WithStyles<typeof styles>> {
               button
               href={
                 chrome.i18n.getUILanguage() === "zh-CN"
-                ? "https://tab.xiejie.co/logs"
+                ? "https://tab.xiejie.app/logs"
                 : "https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md"
               }
             >
