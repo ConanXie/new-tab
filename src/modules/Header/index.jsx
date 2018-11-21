@@ -133,6 +133,7 @@ class Header extends Component {
           open={wallpaperOpen}
           onRequestChange={state => this.setState({ wallpaperOpen: state })}
           overlayStyle={{ opacity: 0 }}
+          containerStyle={{ overflow: 'hidden' }}
         >
           {loadWallpaper && (
             <Wallpaper closeDrawer={() => this.setState({ wallpaperOpen: false })} />
