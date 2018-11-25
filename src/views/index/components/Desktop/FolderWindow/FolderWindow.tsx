@@ -11,14 +11,17 @@ import Popover, { PopoverOrigin } from "@material-ui/core/Popover"
 import { FolderStore } from "../../../store/folder"
 import makeDumbProps from "utils/makeDumbProps"
 import Website from "../Website"
+import Wrap from "../Wrap"
+import grab from "../Website/grab"
 
 const styles = ({ spacing }: Theme) => createStyles({
   window: {
     display: "grid",
     padding: spacing.unit,
-    "& > div": {
+    "& > .wrap": {
       padding: spacing.unit * 2,
       height: "auto",
+      transition: "transform 0.2s cubic-bezier(0.333, 0, 0, 1)",
     },
   },
 })
@@ -42,9 +45,13 @@ class FolderWindow extends React.Component<PropsType> {
     return
   }
 
+  public handleGrab = (index: number) => (e: any) => {
+    const { id, shortcuts } = this.props.folderStore
+    grab(e, shortcuts[index], id)
+  }
+
   public render() {
     const { open, anchorEl, onClose, folderStore, classes } = this.props
-    const columns = Math.max(Math.ceil(folderStore.shortcuts.length / 2), 2)
 
     return (
       <Popover
@@ -56,9 +63,9 @@ class FolderWindow extends React.Component<PropsType> {
       >
         <div
           className={classNames(["folder-window", classes.window])}
-          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+          style={{ gridTemplateColumns: `repeat(${folderStore.gridColumns}, 1fr)` }}
         >
-          {folderStore.shortcuts.map(shortcut => {
+          {folderStore.shortcuts.map((shortcut, index) => {
             const meta = {
               row: 0,
               column: 0,
@@ -66,12 +73,14 @@ class FolderWindow extends React.Component<PropsType> {
               ...shortcut
             }
             return (
-              <Website
-                meta={meta}
-                key={shortcut.id}
-                onMouseDown={this.mock}
-                onContextMenu={this.mock}
-              />
+              <Wrap row={0} column={0} key={shortcut.id}>
+                <Website
+                  meta={meta}
+                  key={shortcut.id}
+                  onMouseDown={this.handleGrab(index)}
+                  onContextMenu={this.mock}
+                />
+              </Wrap>
             )
           })}
         </div>

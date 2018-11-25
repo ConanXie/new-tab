@@ -20,12 +20,8 @@ class Folder extends React.Component<PropsType> {
   public render() {
     const shortcuts = this.props.shortcuts!.slice(0, 4)
     return (
-      <div
-        className="wrap"
-        aria-grabbed="false"
-        onClick={this.handleClick}
-      >
-        <div>
+      <div data-id={this.props.id} onClick={this.handleClick}>
+        <div className="folder-wrap">
           <div ref={this.folderRef} className={classNames("folder", { two: shortcuts.length === 2 })}>
             {shortcuts.map(({ icon, name }, index) => (
               <div key={index}>
@@ -33,8 +29,8 @@ class Folder extends React.Component<PropsType> {
               </div>
             ))}
           </div>
-          <Typography className="shortcut-name" variant="subtitle1">{this.props.name}</Typography>
         </div>
+        <Typography className="shortcut-name" variant="subtitle1">{this.props.name}</Typography>
       </div>
     )
   }

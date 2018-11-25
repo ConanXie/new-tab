@@ -218,7 +218,7 @@ class Desktop extends React.Component<PropsType> {
     }
     return (
       <div className="desktop">
-        <div className="page" ref={this.pageElement} style={styles}>
+        <div className="page" id="desktop" ref={this.pageElement} style={styles}>
           {data.map(item => {
             const { row, column } = item
             if (item.type === 1) {

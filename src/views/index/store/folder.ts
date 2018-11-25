@@ -17,6 +17,14 @@ export class FolderStore {
     return []
   }
 
+  @computed get gridColumns() {
+    return Math.ceil(Math.sqrt(this.shortcuts.length))
+  }
+
+  @computed get gridRows() {
+    return Math.ceil(this.shortcuts.length / this.gridColumns)
+  }
+
   @action("open folder")
   public openFolder = (id: string, element: HTMLElement) => {
     this.id = id

@@ -1,4 +1,5 @@
 import * as React from "react"
+import * as classNames from "classnames"
 
 interface PropsType {
   row: number
@@ -14,6 +15,6 @@ export default ({ row, column, rowEnd, columnEnd, children, className }: PropsTy
     gridArea: `${row} / ${column} / ${rowEnd || "auto"} / ${columnEnd || "auto"}`,
   }
   return (
-    <div className={className} style={style}>{children}</div>
+    <div className={classNames(["wrap", className])} aria-grabbed="false" style={style}>{children}</div>
   )
 }

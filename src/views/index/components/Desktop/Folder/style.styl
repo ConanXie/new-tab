@@ -1,3 +1,29 @@
+.folder-wrap
+  position relative
+  display flex
+  justify-content center
+  align-items center
+  &::after
+    content ""
+    z-index -1
+    display block
+    position absolute
+    left 50%
+    top 50%
+    border-radius 50%
+    transform translate(-50%, -50%) scale(0.7)
+    transition .15s transform ease-in
+  &::after
+    width 108%
+    height 108%
+    background-color rgba(255, 255, 255, 0.5)
+
+.touched .folder-wrap
+  &::after
+    transform translate(-50%, -50%) scale(1)
+  .folder
+    // background-color #fff
+
 .folder
   overflow hidden
   box-sizing border-box
@@ -7,8 +33,8 @@
   height 5.5vw
   max-width 96px
   max-height 96px
-  min-width 24px
-  min-height 24px
+  min-width 48px
+  min-height 48px
   border 2px solid #fff
   border-radius 50%
   background-color rgba(255, 255, 255, .6)
@@ -22,10 +48,11 @@
       width 90%
 
   &.two
-    grid-gap 15px
+    grid-gap 20%
     & > div
       transform scale(1.3)
       img
         width 95%
+        min-width 18px
   
   

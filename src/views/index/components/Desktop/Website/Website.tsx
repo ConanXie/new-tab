@@ -32,21 +32,20 @@ class Webiste extends React.Component<PropsType> {
       name,
     } = this.props.meta
     return (
-      <div className="wrap" aria-grabbed="false">
-        <a
-          href={url}
-          data-id={id}
-          data-row={row}
-          data-column={column}
-          onMouseDown={this.props.onMouseDown}
-          onContextMenu={this.handleContextMenu}
-        >
-          <div className="shortcut-icon">
-            <img src={src} alt={name} />
-          </div>
-          <Typography className="shortcut-name" variant="subtitle1">{name}</Typography>
-        </a>
-      </div>
+      <a
+        href={url}
+        data-id={id}
+        data-row={row}
+        data-column={column}
+        onMouseDown={this.props.onMouseDown}
+        onContextMenu={this.handleContextMenu}
+        className="shortcut"
+      >
+        <div className="shortcut-icon">
+          <img src={src} alt={name} />
+        </div>
+        <Typography className="shortcut-name" variant="subtitle1">{name}</Typography>
+      </a>
     )
   }
 }
