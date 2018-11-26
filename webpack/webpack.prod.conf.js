@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const baseConfig = require('./webpack.base.conf')
@@ -28,7 +28,7 @@ const webpackConfig = merge(baseConfig, {
   },
   optimization: {
     minimizer: [
-      new UglifyJSPlugin(),
+      new TerserPlugin(),
       new OptimizeCSSAssetsPlugin()
     ],
     splitChunks: {
