@@ -29,6 +29,8 @@ export interface Desktop extends Based {
 }
 
 export class DesktopStore {
+  @observable public columns = 6
+  @observable public rows = 4
   @observable public data: Desktop[] = [{
     type: 1,
     row: 1,

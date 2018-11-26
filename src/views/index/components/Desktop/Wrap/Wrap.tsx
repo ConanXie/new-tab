@@ -6,15 +6,16 @@ interface PropsType {
   column: number
   rowEnd?: number
   columnEnd?: number
-  children?: React.ReactNode
+  grabbed?: boolean
   className?: string
+  children?: React.ReactNode
 }
 
-export default ({ row, column, rowEnd, columnEnd, children, className }: PropsType) => {
+export default ({ row, column, rowEnd, columnEnd, grabbed, className, children }: PropsType) => {
   const style: React.CSSProperties = {
     gridArea: `${row} / ${column} / ${rowEnd || "auto"} / ${columnEnd || "auto"}`,
   }
   return (
-    <div className={classNames(["wrap", className])} aria-grabbed="false" style={style}>{children}</div>
+    <div className={classNames(["wrap", className])} aria-grabbed={grabbed || false} style={style}>{children}</div>
   )
 }

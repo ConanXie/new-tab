@@ -70,10 +70,10 @@ class FolderWindow extends React.Component<PropsType> {
               row: 0,
               column: 0,
               src: chrome.runtime.getURL(`icons/${shortcut.icon}.png`),
-              ...shortcut
+              ...shortcut,
             }
             return (
-              <Wrap row={0} column={0} key={shortcut.id}>
+              <Wrap grabbed={folderStore.tempShortcut === shortcut.id} row={0} column={0} key={shortcut.id}>
                 <Website
                   meta={meta}
                   key={shortcut.id}

@@ -46,21 +46,31 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
       clone.style.height = height + "px"
       clone.style.transform = `translate(${translateX}px, ${translateY}px)`
       let origin: number
+      let tempOccupied: HTMLElement | undefined
+      let tempColumn: number
+      let tempRow: number
 
-      const moveClone = (e: MouseEvent) => {
+      /**
+       * Move the clone on screen
+       * @param e mousemove event
+       * @param reCalc re-calculate the clone's position
+       */
+      const moveClone = (e: MouseEvent, reCalc: boolean = false) => {
         e.preventDefault()
         const transX = e.clientX - offsetLeft
         const transY = e.clientY - offsetTop
-        clone.style.transform = `translate(${transX}px, ${transY}px)`
+        if (!reCalc) {
+          clone.style.transform = `translate(${transX}px, ${transY}px)`
+        }
 
         let x = e.clientX
         let y = e.clientY
-        console.log(x, y, pageOffsetTop)
+        // console.log(x, y, pageOffsetTop)
 
         if (env === "Folder") {
-          const folderWindow = wrap.parentNode as HTMLElement
+          const folderWindow = document.querySelector(".folder-window") as HTMLElement
           const { top: wTop, left: wLeft, width: wWidth, height: wHeight } = folderWindow.getBoundingClientRect()
-          console.log(x, y, wTop, wLeft, wWidth, wHeight)
+          // console.log(x, y, wTop, wLeft, wWidth, wHeight)
 
           // inner folder window
           if (x > wLeft && x < (wLeft + wWidth) && y > wTop && y < (wTop + wHeight)) {
@@ -81,40 +91,86 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
             if (origin === undefined) {
               origin = landing
             }
-            console.log("moving", landing, origin)
+            // console.log("moving", landing, origin)
             for (let i = 0; i < folderStore.shortcuts.length; i++) {
               const child = folderWindow.children[i] as HTMLElement
-              if (landing < origin) {
-                if (i >= landing && i < origin) {
-                  let trX = unitWidth
-                  let trY = 0
-                  if ((i + 1) % folderStore.gridColumns === 0) {
-                    trX = -(folderStore.gridColumns - 1) * unitWidth
-                    trY = unitHeight
+              if (child) {
+                if (landing < origin) {
+                  if (i >= landing && i < origin) {
+                    let trX = unitWidth
+                    let trY = 0
+                    if ((i + 1) % folderStore.gridColumns === 0) {
+                      trX = -(folderStore.gridColumns - 1) * unitWidth
+                      trY = unitHeight
+                    }
+                    child.style.transform = `translate(${trX}px, ${trY}px)`
+                    continue
                   }
-                  child.style.transform = `translate(${trX}px, ${trY}px)`
-                  continue
                 }
-              }
-              if (landing > origin) {
-                if (i > origin && i <= landing) {
-                  let trX = -unitWidth
-                  let trY = 0
-                  if (i % folderStore.gridColumns === 0) {
-                    trX = (folderStore.gridColumns - 1) * unitWidth
-                    trY = -unitHeight
+                if (landing > origin) {
+                  if (i > origin && i <= landing) {
+                    let trX = -unitWidth
+                    let trY = 0
+                    if (i % folderStore.gridColumns === 0) {
+                      trX = (folderStore.gridColumns - 1) * unitWidth
+                      trY = -unitHeight
+                    }
+                    child.style.transform = `translate(${trX}px, ${trY}px)`
+                    continue
                   }
-                  child.style.transform = `translate(${trX}px, ${trY}px)`
-                  continue
                 }
+                child.style.transform = `translate(${0}px, ${0}px)`
               }
-              child.style.transform = `translate(${0}px, ${0}px)`
             }
           } else {
             env = "Desktop"
-            folderStore.closeFolder()
+            folderStore.removeShortcut(shortcut.id)
+            // folderStore.closeFolder()
           }
-        } else if (env === "Desktop") {}
+        } else if (env === "Desktop") {
+          y -= pageOffsetTop
+          if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
+            const unitWidth = clientWidth / desktopStore.columns
+            const unitHeight = clientHeight / desktopStore.rows
+            const row = Math.ceil(y / unitHeight)
+            const column = Math.ceil(x / unitWidth)
+            if (tempRow !== row || tempColumn !== column) {
+              tempRow = row
+              tempColumn = column
+              if (tempOccupied) {
+                tempOccupied.classList.remove("touched")
+                tempOccupied = undefined
+              }
+              const occupied = desktopStore.getOccupied(row, column)
+              if (occupied && occupied.type === 1) {
+                componentId = occupied.id
+                const occupiedEl = document.querySelector(`[data-id="${occupied.id}"]`) as HTMLElement
+                if (occupiedEl) {
+                  tempOccupied = occupiedEl
+                  tempOccupied.classList.add("touched")
+                  if (occupied.shortcuts!.length > 1) {
+                    setTimeout(() => {
+                      folderStore.saveTempShortcut(shortcut.id)
+                      folderStore.openFolder(componentId, occupiedEl.querySelector(".folder") as HTMLElement)
+                      folderStore.pushShortcut(shortcut)
+                      origin = folderStore.shortcuts.length
+                      console.log("origin", origin)
+                      env = "Folder"
+                      // auto calculate coords
+                      setTimeout(() => moveClone(e, true), 300)
+                    }, 600)
+                  }
+                }
+              }
+            }
+
+          } else {
+            if (tempOccupied) {
+              tempOccupied.classList.remove("touched")
+              tempOccupied = undefined
+            }
+          }
+        }
       }
       document.addEventListener("mousemove", moveClone, false)
 
