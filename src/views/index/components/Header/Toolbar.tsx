@@ -8,9 +8,9 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Toolbar from "@material-ui/core/Toolbar"
 import Tooltip from "@material-ui/core/Tooltip"
 import IconButton from "@material-ui/core/IconButton"
-import WallpaperIcon from "@material-ui/icons/Wallpaper"
-import WidgetsIcon from "@material-ui/icons/Widgets"
-import SettingsIcon from "@material-ui/icons/Settings"
+import WallpaperIcon from "@material-ui/icons/WallpaperOutlined"
+import WidgetsIcon from "@material-ui/icons/WidgetsOutlined"
+import SettingsIcon from "@material-ui/icons/SettingsOutlined"
 
 import { WallpaperStore } from "../../store/wallpaper"
 
