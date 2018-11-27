@@ -5,25 +5,23 @@
 import desktopStore, { Shortcut } from "../../../store/desktop"
 import folderStore from "../../../store/folder"
 
-type Env = "Desktop" | "Folder" | "Drawer"
+export type Env = "Desktop" | "Folder" | "Drawer"
 
 /** The environment of the shortcut - desktop, folder or drawer */
 let env: Env
-let initialEnv: Env
 
-export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componentId: string) => {
+export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componentId: string, initialEnv: Env) => {
   event.preventDefault()
-  env = initialEnv = "Folder"
+  env = initialEnv
 
   // console.log(event)
   const el = event.currentTarget
-  const current = el.dataset.id as string
   const wrap = el.parentNode as HTMLElement
   const desktopEl = document.querySelector("#desktop") as HTMLElement
   const { top, left, width, height } = wrap.getBoundingClientRect()
   const { clientWidth, clientHeight, offsetTop: pageOffsetTop } = desktopEl
   const { screenX: downScreenX, screenY: downScreenY} = event
-  console.log(current, clientHeight, clientWidth, env)
+  // console.log(current, clientHeight, clientWidth, env)
   let clone: HTMLElement
   let cloneEventRef: MouseEvent
 
@@ -55,7 +53,7 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
       let tempOccupied: HTMLElement | undefined
       let tempColumn: number
       let tempRow: number
-      let timeout: NodeJS.Timeout
+      let timer: NodeJS.Timeout
 
       /**
        * Move the clone on screen
@@ -148,21 +146,23 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
               if (tempOccupied) {
                 tempOccupied.classList.remove("touched")
                 tempOccupied = undefined
+                clearTimeout(timer)
               }
               const occupied = desktopStore.getOccupied(row, column)
               if (occupied && occupied.type === 1) {
-                componentId = occupied.id
+                // componentId = occupied.id
                 const occupiedEl = document.querySelector(`[data-id="${occupied.id}"]`) as HTMLElement
                 if (occupiedEl) {
                   tempOccupied = occupiedEl
                   tempOccupied.classList.add("touched")
                   if (occupied.shortcuts!.length > 1) {
-                    if (timeout) {
-                      clearTimeout(timeout)
+                    const folderId = occupied.id
+                    if (timer) {
+                      clearTimeout(timer)
                     }
-                    timeout = setTimeout(() => {
+                    timer = setTimeout(() => {
                       folderStore.saveTempShortcut(shortcut.id)
-                      folderStore.openFolder(componentId, occupiedEl.querySelector(".folder") as HTMLElement)
+                      folderStore.openFolder(folderId, occupiedEl.querySelector(".folder") as HTMLElement)
                       folderStore.pushShortcut(shortcut)
                       origin = folderStore.shortcuts.length - 1
                       console.log("origin", origin)
@@ -190,11 +190,12 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
        * @param e mouseup event
        */
       const mouseUp = (e: MouseEvent) => {
+        clearTimeout(timer)
         clone.classList.add("grabbed")
         column--
         row--
         let landing: number
-        console.log("up", column, row)
+        // console.log("up", column, row)
         const adjustLeft = (unitWidth - width) / 2
         const adjustTop = (unitHeight - height) / 2
         if (env === "Folder") {
@@ -225,18 +226,31 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
         clone.addEventListener("transitionend", () => {
           wrap.setAttribute("aria-grabbed", "false")
 
-          console.log("end", column, row)
+          // console.log("end", column, row)
           if (env === "Folder") {
-            folderStore.syncShortcuts(shortcut.id, row * folderStore.gridColumns + column)
+            if (initialEnv === "Desktop") {
+              desktopStore.removeWebsite(componentId)
+            } else if (initialEnv === "Folder") {
+              folderStore.syncShortcuts(shortcut.id, row * folderStore.gridColumns + column)
+              if (tempOccupied && tempOccupied.dataset.id !== componentId) {
+                desktopStore.transferShortcut(componentId, shortcut.id, tempOccupied.dataset.id as string)
+              }
+            }
           } else if (env === "Desktop") {
             if (!tempOccupied) {
               if (initialEnv === "Folder") {
                 desktopStore.createShortcutComponent(componentId, shortcut.id, row + 1, column + 1)
-              } else {
-                desktopStore.updateArea(componentId, row, column)
+              } else if (initialEnv === "Desktop") {
+                desktopStore.updateArea(componentId, row + 1, column + 1)
               }
             } else {
-              desktopStore.createFolder(componentId, tempOccupied.dataset.id as string)
+              if (tempOccupied.dataset.id !== componentId) {
+                if (initialEnv === "Desktop") {
+                  desktopStore.createFolder(componentId, tempOccupied.dataset.id as string)
+                } else if (initialEnv === "Folder") {
+                  desktopStore.transferShortcut(componentId, shortcut.id, tempOccupied.dataset.id as string)
+                }
+              }
             }
           }
 
@@ -264,5 +278,4 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
     document.removeEventListener("mouseup", handleMouseUp, false)
   }
   document.addEventListener("mouseup", handleMouseUp, false)
-  console.log(desktopStore)
 }

@@ -7,7 +7,8 @@ import ClearIcon from "@material-ui/icons/Clear"
 
 import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import makeDumbProps from "utils/makeDumbProps"
-import { DesktopStore } from "../../store/desktop"
+import grab from "./Website/grab"
+import { DesktopStore, Shortcut } from "../../store/desktop"
 import { WebSiteInfoStore } from "../../store/websiteInfo"
 import { WebsiteEditStore } from "../../store/websiteEdit"
 import { FolderStore } from "../../store/folder"
@@ -188,6 +189,10 @@ class Desktop extends React.Component<PropsType> {
     }
     document.addEventListener("mouseup", mouseUp, false)
   }
+
+  public handleShortcutGrab = (shortcut: Shortcut, componentId: string) => (event: React.MouseEvent<HTMLElement>) => {
+    grab(event, shortcut, componentId, "Desktop")
+  }
   // private prevent
   private showMenu = (event: React.MouseEvent<HTMLAnchorElement>, id: string, index: number = 0) => {
     event.preventDefault()
@@ -242,7 +247,7 @@ class Desktop extends React.Component<PropsType> {
                   <Wrap row={row} column={column} key={id}>
                     <Webiste
                       meta={meta}
-                      onMouseDown={this.handleMouseDown}
+                      onMouseDown={this.handleShortcutGrab(shortcuts![0], id)}
                       onContextMenu={this.showMenu}
                     />
                   </Wrap>

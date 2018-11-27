@@ -47,7 +47,7 @@ class FolderWindow extends React.Component<PropsType> {
 
   public handleGrab = (index: number) => (e: any) => {
     const { id, shortcuts } = this.props.folderStore
-    grab(e, shortcuts[index], id)
+    grab(e, shortcuts[index], id, "Folder")
   }
 
   public render() {

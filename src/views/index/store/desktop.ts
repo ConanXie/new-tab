@@ -12,15 +12,13 @@ export interface Shortcut extends Based {
 }
 
 /**
- * @1: website shortcut
- * @2: shortcut folder
+ * @1: website shortcut or folder
+ * @2: widget
  */
-type DesktopType =
-  | 1
-  | 2
+export type ComponentType = 1 | 2
 
 export interface Desktop extends Based {
-  type: DesktopType
+  type: ComponentType
   row: number
   column: number
   name?: string
@@ -271,18 +269,29 @@ export class DesktopStore {
 
   @action
   public transferShortcut = (current: string, shortcutId: string, target: string) => {
-    // const currentIndex = this.findIndexById(current)
-    // const targetIndex = this.findIndexById(target)
+    const currentIndex = this.findIndexById(current)
+    const targetIndex = this.findIndexById(target)
+    if (currentIndex > -1 && targetIndex > -1) {
+      const { shortcuts } = this.data[currentIndex]
+      const shortcutIndex = shortcuts!.findIndex(item => item.id === shortcutId)
+      if (shortcutIndex > -1) {
+        const shortcut = shortcuts!.splice(shortcutIndex, 1)[0]
+        const checkIndex = this.data[targetIndex].shortcuts!.findIndex(item => item.id === shortcutId)
+        if (checkIndex === -1) {
+          this.data[targetIndex].shortcuts!.push(shortcut)
+        }
+      }
+    }
   }
 
   @action
   public createShortcutComponent = (current: string, shortcutId: string, row: number, column: number) => {
     const currentIndex = this.findIndexById(current)
     if (currentIndex > -1) {
-      const folder = this.data[currentIndex].shortcuts
-      const shortcutIndex = folder!.findIndex(item => item.id === shortcutId)
+      const { shortcuts } = this.data[currentIndex]
+      const shortcutIndex = shortcuts!.findIndex(item => item.id === shortcutId)
       if (shortcutIndex > -1) {
-        const shortcut = folder!.splice(shortcutIndex, 1)
+        const shortcut = shortcuts!.splice(shortcutIndex, 1)
         this.data.push({
           id: Date.now().toString(),
           type: 1,
