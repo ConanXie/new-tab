@@ -78,6 +78,7 @@ class About extends React.Component<WithStyles<typeof styles>> {
   public render() {
     const { classes } = this.props
     const { snackbarOpen, message } = this.state
+    const { version_name, version } = chrome.runtime.getManifest()
     return (
       <React.Fragment>
         <Wrap>
@@ -115,7 +116,7 @@ class About extends React.Component<WithStyles<typeof styles>> {
               }
             >
               <ListItemText
-                primary={chrome.runtime.getManifest().version}
+                primary={version_name || version}
                 secondary="Click here to read the changelog"
               />
             </ListItem>
