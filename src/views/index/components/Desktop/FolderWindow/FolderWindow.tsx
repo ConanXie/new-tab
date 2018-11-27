@@ -73,7 +73,12 @@ class FolderWindow extends React.Component<PropsType> {
               ...shortcut,
             }
             return (
-              <Wrap grabbed={folderStore.tempShortcut === shortcut.id} row={0} column={0} key={shortcut.id}>
+              <Wrap
+                grabbed={folderStore.tempShortcut === shortcut.id}
+                row={0}
+                column={0}
+                key={Math.random()}
+              >
                 <Website
                   meta={meta}
                   key={shortcut.id}

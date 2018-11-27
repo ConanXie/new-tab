@@ -9,10 +9,11 @@ type Env = "Desktop" | "Folder" | "Drawer"
 
 /** The environment of the shortcut - desktop, folder or drawer */
 let env: Env
+let initialEnv: Env
 
 export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componentId: string) => {
   event.preventDefault()
-  env = "Folder"
+  env = initialEnv = "Folder"
 
   // console.log(event)
   const el = event.currentTarget
@@ -24,6 +25,7 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
   const { screenX: downScreenX, screenY: downScreenY} = event
   console.log(current, clientHeight, clientWidth, env)
   let clone: HTMLElement
+  let cloneEventRef: MouseEvent
 
   /** Grab the shortcut */
   const handleMouseMove = (evt: MouseEvent) => {
@@ -45,10 +47,15 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
       clone.style.width = width + "px"
       clone.style.height = height + "px"
       clone.style.transform = `translate(${translateX}px, ${translateY}px)`
+      let column: number
+      let row: number
+      let unitWidth: number
+      let unitHeight: number
       let origin: number
       let tempOccupied: HTMLElement | undefined
       let tempColumn: number
       let tempRow: number
+      let timeout: NodeJS.Timeout
 
       /**
        * Move the clone on screen
@@ -57,13 +64,14 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
        */
       const moveClone = (e: MouseEvent, reCalc: boolean = false) => {
         e.preventDefault()
+        cloneEventRef = e
         const transX = e.clientX - offsetLeft
         const transY = e.clientY - offsetTop
         if (!reCalc) {
           clone.style.transform = `translate(${transX}px, ${transY}px)`
         }
 
-        let x = e.clientX
+        const x = e.clientX
         let y = e.clientY
         // console.log(x, y, pageOffsetTop)
 
@@ -77,12 +85,12 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
             const padding = parseInt(window.getComputedStyle(folderWindow, null).getPropertyValue("padding") || "0", 10)
             // console.log(padding)
             // const paddingSide = parseInt(padding, 10) / 2
-            const unitWidth = (wWidth - padding * 2) / folderStore.gridColumns
-            const unitHeight = (wHeight - padding * 2) / folderStore.gridRows
+            unitWidth = (wWidth - padding * 2) / folderStore.gridColumns
+            unitHeight = (wHeight - padding * 2) / folderStore.gridRows
             // console.log(unitWidth, unitHeight)
             // The cursor coords
-            let column = Math.ceil((x - wLeft - padding) / unitWidth)
-            let row = Math.ceil((y - wTop - padding) / unitHeight)
+            column = Math.ceil((x - wLeft - padding) / unitWidth)
+            row = Math.ceil((y - wTop - padding) / unitHeight)
             // between 1 and the grid size
             column = Math.min(Math.max(column, 1), folderStore.gridColumns)
             row = Math.min(Math.max(row, 1), folderStore.gridRows)
@@ -125,15 +133,15 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
           } else {
             env = "Desktop"
             folderStore.removeShortcut(shortcut.id)
-            // folderStore.closeFolder()
+            folderStore.closeFolder()
           }
         } else if (env === "Desktop") {
           y -= pageOffsetTop
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
-            const unitWidth = clientWidth / desktopStore.columns
-            const unitHeight = clientHeight / desktopStore.rows
-            const row = Math.ceil(y / unitHeight)
-            const column = Math.ceil(x / unitWidth)
+            unitWidth = clientWidth / desktopStore.columns
+            unitHeight = clientHeight / desktopStore.rows
+            row = Math.ceil(y / unitHeight)
+            column = Math.ceil(x / unitWidth)
             if (tempRow !== row || tempColumn !== column) {
               tempRow = row
               tempColumn = column
@@ -149,15 +157,18 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
                   tempOccupied = occupiedEl
                   tempOccupied.classList.add("touched")
                   if (occupied.shortcuts!.length > 1) {
-                    setTimeout(() => {
+                    if (timeout) {
+                      clearTimeout(timeout)
+                    }
+                    timeout = setTimeout(() => {
                       folderStore.saveTempShortcut(shortcut.id)
                       folderStore.openFolder(componentId, occupiedEl.querySelector(".folder") as HTMLElement)
                       folderStore.pushShortcut(shortcut)
-                      origin = folderStore.shortcuts.length
+                      origin = folderStore.shortcuts.length - 1
                       console.log("origin", origin)
                       env = "Folder"
                       // auto calculate coords
-                      setTimeout(() => moveClone(e, true), 300)
+                      setTimeout(() => moveClone(cloneEventRef, true), 300)
                     }, 600)
                   }
                 }
@@ -173,6 +184,74 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
         }
       }
       document.addEventListener("mousemove", moveClone, false)
+
+      /**
+       * Resolve data after move finished
+       * @param e mouseup event
+       */
+      const mouseUp = (e: MouseEvent) => {
+        clone.classList.add("grabbed")
+        column--
+        row--
+        let landing: number
+        console.log("up", column, row)
+        const adjustLeft = (unitWidth - width) / 2
+        const adjustTop = (unitHeight - height) / 2
+        if (env === "Folder") {
+          const folderWindow = document.querySelector(".folder-window") as HTMLElement
+          const { top: wTop, left: wLeft } = folderWindow.getBoundingClientRect()
+          const padding = parseInt(window.getComputedStyle(folderWindow, null).getPropertyValue("padding") || "0", 10)
+
+          landing = row * folderStore.gridColumns + column
+          if (landing >= folderStore.shortcuts.length) {
+            column = folderStore.shortcuts.length % folderStore.gridColumns - 1
+            row = folderStore.gridRows - 1
+          }
+          const transX = column * unitWidth + padding + wLeft
+          const transY = row * unitHeight + padding + wTop
+          clone.style.transform = `translate(${transX + adjustLeft}px, ${transY + adjustTop}px)`
+        } else if (env === "Desktop") {
+          const x = e.clientX
+          const y = e.clientY - pageOffsetTop
+          if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
+            const transX = column * unitWidth
+            const transY = row * unitHeight + pageOffsetTop
+            clone.style.transform = `translate(${transX + adjustLeft}px, ${transY + adjustTop}px)`
+          } else {
+            console.log("out")
+          }
+        }
+
+        clone.addEventListener("transitionend", () => {
+          wrap.setAttribute("aria-grabbed", "false")
+
+          console.log("end", column, row)
+          if (env === "Folder") {
+            folderStore.syncShortcuts(shortcut.id, row * folderStore.gridColumns + column)
+          } else if (env === "Desktop") {
+            if (!tempOccupied) {
+              if (initialEnv === "Folder") {
+                desktopStore.createShortcutComponent(componentId, shortcut.id, row + 1, column + 1)
+              } else {
+                desktopStore.updateArea(componentId, row, column)
+              }
+            } else {
+              desktopStore.createFolder(componentId, tempOccupied.dataset.id as string)
+            }
+          }
+
+          document.body.removeChild(clone)
+
+          if (tempOccupied) {
+            tempOccupied.classList.remove("touched")
+            tempOccupied = undefined
+          }
+        }, false)
+
+        document.removeEventListener("mousemove", moveClone, false)
+        document.removeEventListener("mouseup", mouseUp, false)
+      }
+      document.addEventListener("mouseup", mouseUp, false)
 
       document.body.appendChild(clone)
     }

@@ -269,6 +269,31 @@ export class DesktopStore {
     }
   }
 
+  @action
+  public transferShortcut = (current: string, shortcutId: string, target: string) => {
+    // const currentIndex = this.findIndexById(current)
+    // const targetIndex = this.findIndexById(target)
+  }
+
+  @action
+  public createShortcutComponent = (current: string, shortcutId: string, row: number, column: number) => {
+    const currentIndex = this.findIndexById(current)
+    if (currentIndex > -1) {
+      const folder = this.data[currentIndex].shortcuts
+      const shortcutIndex = folder!.findIndex(item => item.id === shortcutId)
+      if (shortcutIndex > -1) {
+        const shortcut = folder!.splice(shortcutIndex, 1)
+        this.data.push({
+          id: Date.now().toString(),
+          type: 1,
+          row,
+          column,
+          shortcuts: shortcut,
+        })
+      }
+    }
+  }
+
   public findIndexById = (id: string, origin: any[] = this.data) => {
     return origin.findIndex((item: any) => item.id === id)
   }

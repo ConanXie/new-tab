@@ -10,6 +10,10 @@ export class FolderStore {
   @observable public tempShortcut: string = ""
   @observable public shortcuts: Shortcut[] = []
 
+  @computed get component() {
+    return desktopStore.data.find(item => item.id === this.id)
+  }
+
   @computed get gridColumns() {
     return Math.ceil(Math.sqrt(this.shortcuts.length))
   }
@@ -21,7 +25,7 @@ export class FolderStore {
   @action("open folder")
   public openFolder = (id: string, element: HTMLElement) => {
     this.id = id
-    this.shortcuts = this.syncShortcuts(id)
+    this.shortcuts = this.copyShortcuts(id)
     this.folderElement = element
     this.open = true
   }
@@ -31,12 +35,11 @@ export class FolderStore {
     this.open = false
   }
 
-  @action("sync shortcuts")
-  public syncShortcuts = (id: string) => {
-    const component = desktopStore.data.find(item => item.id === id)
+  @action("copy shortcuts")
+  public copyShortcuts = (id: string) => {
 
-    if (component) {
-      const shortcuts = component.shortcuts as Shortcut[]
+    if (this.component) {
+      const shortcuts = this.component.shortcuts as Shortcut[]
       return shortcuts.filter(item => item.id !== this.tempShortcut)
     }
     return []
@@ -62,6 +65,15 @@ export class FolderStore {
   @action
   public saveTempShortcut = (shortcutId: string) => {
     this.tempShortcut = shortcutId
+  }
+
+  @action
+  public syncShortcuts = (shortcutId: string, index: number) => {
+    const origin = this.shortcuts.findIndex(item => item.id === shortcutId)
+    this.tempShortcut = ""
+    this.shortcuts.splice(index, 0, this.shortcuts.splice(origin, 1)[0])
+
+    this.component!.shortcuts = this.shortcuts
   }
 }
 
