@@ -276,9 +276,13 @@ export class DesktopStore {
       const shortcutIndex = shortcuts!.findIndex(item => item.id === shortcutId)
       if (shortcutIndex > -1) {
         const shortcut = shortcuts!.splice(shortcutIndex, 1)[0]
-        const checkIndex = this.data[targetIndex].shortcuts!.findIndex(item => item.id === shortcutId)
+        const targetFolder = this.data[targetIndex].shortcuts
+        if (!shortcuts!.length) {
+          this.data.splice(currentIndex, 1)
+        }
+        const checkIndex = targetFolder!.findIndex(item => item.id === shortcutId)
         if (checkIndex === -1) {
-          this.data[targetIndex].shortcuts!.push(shortcut)
+          targetFolder!.push(shortcut)
         }
       }
     }

@@ -228,10 +228,10 @@ export default (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, compon
 
           // console.log("end", column, row)
           if (env === "Folder") {
+            folderStore.syncShortcuts(shortcut.id, row * folderStore.gridColumns + column)
             if (initialEnv === "Desktop") {
-              desktopStore.removeWebsite(componentId)
+              desktopStore.transferShortcut(componentId, shortcut.id, tempOccupied!.dataset.id as string)
             } else if (initialEnv === "Folder") {
-              folderStore.syncShortcuts(shortcut.id, row * folderStore.gridColumns + column)
               if (tempOccupied && tempOccupied.dataset.id !== componentId) {
                 desktopStore.transferShortcut(componentId, shortcut.id, tempOccupied.dataset.id as string)
               }
