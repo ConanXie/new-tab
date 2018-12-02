@@ -6,7 +6,6 @@
   "description": "__MSG_appDescription__",
   "icons": {
     "16": "logo/logo16.png",
-    "48": "logo/logo48.png",
     "128": "logo/logo128.png"
   },
   "chrome_url_overrides": {
