@@ -1,14 +1,19 @@
-import { observable, computed, autorun, action, transaction } from "mobx"
+import { observable, computed, autorun, action } from "mobx"
 import { settingsStorage } from "utils/storage"
 import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
 import deepOrange from "@material-ui/core/colors/deepOrange"
 
+export enum WallpaperType {
+  Image = 1,
+  Color = 2,
+}
+
 export const defaultWallpaperData = {
   wallpaper: "",
   color: deepOrange[500],
   useWallpaper: true,
-  wallpaperType: 1,
+  wallpaperType: WallpaperType.Image,
   darkIcons: false
 }
 
@@ -20,7 +25,7 @@ export class WallpaperStore {
   @observable public wallpaper: string
   @observable public color: string
   @observable public useWallpaper: boolean
-  @observable public wallpaperType: number
+  @observable public wallpaperType: WallpaperType
   @observable public darkIcons: boolean
   constructor(data: any) {
     const {
@@ -40,21 +45,19 @@ export class WallpaperStore {
   @computed get wallpaperStyles() {
     const styles: WallpaperStyles = {}
     if (this.useWallpaper) {
-      // 1: image
-      // 2: color
-      if (this.wallpaperType === 1) {
+      if (this.wallpaperType === WallpaperType.Image) {
         styles.backgroundImage = `url(${this.wallpaper})`
-      } else if (this.wallpaperType === 2) {
+      } else if (this.wallpaperType === WallpaperType.Color) {
         styles.backgroundColor = this.color
       }
     }
     return styles
   }
   @computed get disabledImage() {
-    return !this.useWallpaper || this.wallpaperType === 2
+    return !this.useWallpaper || this.wallpaperType === WallpaperType.Color
   }
   @computed get disabledColor() {
-    return !this.useWallpaper || this.wallpaperType === 1
+    return !this.useWallpaper || this.wallpaperType === WallpaperType.Image
   }
   @action("wallpaper switch")
   public wallpaperSwitch = () => {
@@ -68,10 +71,8 @@ export class WallpaperStore {
   }
   @action("wallpaper updated -- image")
   public wallpaperUpdated = (url: string) => {
-    transaction(() => {
-      this.wallpaperType = 1
-      this.wallpaper = url
-    })
+    this.wallpaperType = WallpaperType.Image
+    this.wallpaper = url
   }
   @action("change wallpaper type")
   public changeWallpaperType = (value: number) => {

@@ -5,7 +5,11 @@
 import desktopStore, { Shortcut } from "../../../store/desktop"
 import folderStore from "../../../store/folder"
 
-export type Env = "Desktop" | "Folder" | "Drawer"
+export enum Env {
+  Desktop,
+  Folder,
+  Drawer,
+}
 
 /** The environment of the shortcut - desktop, folder or drawer */
 let env: Env
@@ -15,7 +19,7 @@ let env: Env
  * @param event mouse event
  * @param shortcut data
  * @param componentId component id
- * @param initialEnv the initial envrionment of the shortcut
+ * @param initialEnv the initial environment of the shortcut
  */
 const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componentId: string, initialEnv: Env) => {
   event.preventDefault()
@@ -85,7 +89,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
         const x = e.clientX
         let y = e.clientY
 
-        if (env === "Folder") {
+        if (env === Env.Folder) {
           if (!folderWindow) {
             folderWindow = document.querySelector(".folder-window") as HTMLElement
             const padding = window.getComputedStyle(folderWindow, null).getPropertyValue("padding") || "0"
@@ -151,12 +155,12 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
             }
 
           } else {
-            env = "Desktop"
+            env = Env.Desktop
             folderStore.saveTempShortcut(shortcut.id)
             folderStore.closeFolder()
             folderWindow = undefined
           }
-        } else if (env === "Desktop") {
+        } else if (env === Env.Desktop) {
           y -= pageOffsetTop
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
             unitWidth = clientWidth / desktopStore.columns
@@ -186,7 +190,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
                     timer = setTimeout(() => {
                       folderStore.openFolder(folderId, occupiedEl.querySelector(".folder") as HTMLElement, shortcut)
                       origin = lastLanding = folderStore.shortcuts.length - 1
-                      env = "Folder"
+                      env = Env.Folder
                       // auto calculate coords
                       enterFolderTimer = setTimeout(() => moveClone(cloneEventRef, true), 400)
                     }, 600)
@@ -215,7 +219,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
         column--
         row--
         let outerSpace = false
-        if (env === "Folder") {
+        if (env === Env.Folder) {
           if (enterFolderTimer) {
             clearTimeout(enterFolderTimer)
           }
@@ -236,7 +240,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
           const transX = column * unitWidth + folderWindowPadding + wLeft
           const transY = row * unitHeight + folderWindowPadding + wTop
           clone.style.transform = `translate(${transX + adjustLeft}px, ${transY + adjustTop}px)`
-        } else if (env === "Desktop") {
+        } else if (env === Env.Desktop) {
           const x = e.clientX
           const y = e.clientY - pageOffsetTop
           unitWidth = clientWidth / desktopStore.columns
@@ -250,9 +254,9 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
           } else {
             outerSpace = true
             /** Back to original position */
-            if (initialEnv === "Desktop") {
+            if (initialEnv === Env.Desktop) {
               clone.style.transform = `translate(${translateX + adjustLeft}px, ${translateY + adjustTop}px)`
-            } else if (initialEnv === "Folder") {
+            } else if (initialEnv === Env.Folder) {
               const { row: cRow, column: cColumn } = desktopStore.data.find(item => item.id === componentId)!
               const transX = (cColumn - 1) * unitWidth
               const transY = (cRow - 1) * unitHeight + pageOffsetTop
@@ -264,25 +268,25 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
         clone.addEventListener("transitionend", () => {
           wrap.setAttribute("aria-grabbed", "false")
 
-          if (env === "Folder") {
+          if (env === Env.Folder) {
             folderStore.syncShortcuts(shortcut.id, row * folderStore.gridColumns + column)
             if (tempOccupied && tempOccupied.dataset.id !== componentId) {
               desktopStore.transferShortcut(componentId, shortcut.id, tempOccupied.dataset.id as string)
             }
-          } else if (env === "Desktop") {
+          } else if (env === Env.Desktop) {
             if (!tempOccupied) {
               if (!outerSpace) {
-                if (initialEnv === "Folder") {
+                if (initialEnv === Env.Folder) {
                   desktopStore.createShortcutComponent(componentId, shortcut.id, row + 1, column + 1)
-                } else if (initialEnv === "Desktop") {
+                } else if (initialEnv === Env.Desktop) {
                   desktopStore.updateArea(componentId, row + 1, column + 1)
                 }
               }
             } else {
               if (tempOccupied.dataset.id !== componentId) {
-                if (initialEnv === "Desktop") {
+                if (initialEnv === Env.Desktop) {
                   desktopStore.createFolder(componentId, tempOccupied.dataset.id as string)
-                } else if (initialEnv === "Folder") {
+                } else if (initialEnv === Env.Folder) {
                   desktopStore.transferShortcut(componentId, shortcut.id, tempOccupied.dataset.id as string)
                 }
               }

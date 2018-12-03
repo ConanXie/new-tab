@@ -5,13 +5,14 @@ import createStyles from "@material-ui/core/styles/createStyles"
 import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 import Item, { ItemPropsType } from "./Item"
+import { WallpaperType } from "../../../../store/wallpaper"
 
 const source = [{
-  type: 1,
-  text: chrome.i18n.getMessage("wallpaper_type_image")
+  type: WallpaperType.Image,
+  text: chrome.i18n.getMessage("wallpaper_type_image"),
 }, {
-  type: 2,
-  text: chrome.i18n.getMessage("wallpaper_type_color")
+  type: WallpaperType.Color,
+  text: chrome.i18n.getMessage("wallpaper_type_color"),
 }]
 
 const styles = createStyles({

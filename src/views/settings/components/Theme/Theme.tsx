@@ -18,7 +18,7 @@ import ColorPicker from "components/ColorPicker"
 import Wrap from "../../Layout/SettingsWrap"
 import NightTime from "./NightTime"
 
-import { ThemeStore, nightModeStatus, ModeType } from "stores/theme"
+import { ThemeStore, nightModeMenu, NightModeStatus } from "stores/theme"
 
 const styles = ({ spacing, palette }: ThemeType) => createStyles({
   color: {
@@ -62,12 +62,12 @@ class Theme extends React.Component<PropsType> {
   public handleModeMenuClose = () => {
     this.setState({ anchorEl: null })
   }
-  public handleModeMenuClick = (value: ModeType) => {
+  public handleModeMenuClick = (value: NightModeStatus) => {
     this.setState({ anchorEl: null })
     this.props.themeStore.changeNightMode(value)
   }
 
-  public handleMenuItemClick = (value: ModeType) => () => this.handleModeMenuClick(value)
+  public handleMenuItemClick = (value: NightModeStatus) => () => this.handleModeMenuClick(value)
 
   /**
    * open night time edit dialog
@@ -140,7 +140,7 @@ class Theme extends React.Component<PropsType> {
               onClose={this.handleModeMenuClose}
               classes={{ paper: this.props.classes.paper }}
             >
-              {nightModeStatus.map(({ status, text }) => (
+              {nightModeMenu.map(({ status, text }) => (
                 <MenuItem
                   key={status}
                   selected={status === nightMode}

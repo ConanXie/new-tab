@@ -7,7 +7,7 @@ import ClearIcon from "@material-ui/icons/Clear"
 
 import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import makeDumbProps from "utils/makeDumbProps"
-import grab from "./Website/grab"
+import grab, { Env } from "./Website/grab"
 import { DesktopStore, Shortcut } from "../../store/desktop"
 import { WebSiteInfoStore } from "../../store/websiteInfo"
 import { WebsiteEditStore } from "../../store/websiteEdit"
@@ -191,7 +191,7 @@ class Desktop extends React.Component<PropsType> {
   }
 
   public handleShortcutGrab = (shortcut: Shortcut, componentId: string) => (event: React.MouseEvent<HTMLElement>) => {
-    grab(event, shortcut, componentId, "Desktop")
+    grab(event, shortcut, componentId, Env.Desktop)
   }
   // private prevent
   private showMenu = (event: React.MouseEvent<HTMLAnchorElement>, id: string, index: number = 0) => {

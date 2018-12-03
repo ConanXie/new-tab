@@ -15,28 +15,32 @@ import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 import isBefore from "date-fns/isBefore" */
 
-export type ModeType = 0 | 1 | 2
+export enum NightModeStatus {
+  Off,
+  On,
+  Custom,
+}
 
 export interface NightMode {
-  status: ModeType
+  status: NightModeStatus
   text: string
 }
 
-export const nightModeStatus: NightMode[] = [{
-  status: 1,
+export const nightModeMenu: NightMode[] = [{
+  status: NightModeStatus.On,
   text: chrome.i18n.getMessage("settings_night_mode_on"),
 }, {
-  status: 0,
+  status: NightModeStatus.Off,
   text: chrome.i18n.getMessage("settings_night_mode_off"),
 }, {
-  status: 2,
+  status: NightModeStatus.Custom,
   text: chrome.i18n.getMessage("settings_night_mode_custom"),
 }]
 
 const defaultData = {
   color: deepOrange[500],
   whiteToolbar: false,
-  nightMode: 0,
+  nightMode: NightModeStatus.Off,
   darkToolbar: false,
   nightTime: [
     "18:30",
@@ -47,7 +51,7 @@ const defaultData = {
 export class ThemeStore {
   @observable public color: string
   @observable public whiteToolbar: boolean
-  @observable public nightMode: ModeType
+  @observable public nightMode: NightModeStatus
   @observable public nightTime: string[]
   @observable public darkToolbar: boolean
   constructor() {
@@ -95,7 +99,7 @@ export class ThemeStore {
   }
 
   @computed get nightModeText() {
-    return nightModeStatus.find(item => item.status === this.nightMode)!.text
+    return nightModeMenu.find(item => item.status === this.nightMode)!.text
   }
 
   @action("save theme color")
@@ -109,7 +113,7 @@ export class ThemeStore {
   }
 
   @action("change night mode")
-  public changeNightMode = (mode: ModeType) => {
+  public changeNightMode = (mode: NightModeStatus) => {
     this.nightMode = mode
   }
 

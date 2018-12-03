@@ -12,7 +12,7 @@ import { FolderStore } from "../../../store/folder"
 import makeDumbProps from "utils/makeDumbProps"
 import Website from "../Website"
 import Wrap from "../Wrap"
-import grab from "../Website/grab"
+import grab, { Env } from "../Website/grab"
 
 const styles = ({ spacing }: Theme) => createStyles({
   window: {
@@ -47,7 +47,7 @@ class FolderWindow extends React.Component<PropsType> {
 
   public handleGrab = (index: number) => (e: any) => {
     const { id, shortcuts } = this.props.folderStore
-    grab(e, shortcuts[index], id, "Folder")
+    grab(e, shortcuts[index], id, Env.Folder)
   }
 
   public render() {
