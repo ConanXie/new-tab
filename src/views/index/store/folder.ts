@@ -1,4 +1,4 @@
-import { observable, action, computed, transaction } from "mobx"
+import { observable, action, computed } from "mobx"
 
 import desktopStore, { Shortcut } from "./desktop"
 
@@ -24,31 +24,27 @@ export class FolderStore {
 
   @action("open folder")
   public openFolder = (id: string, element: HTMLElement, shortcut?: Shortcut) => {
-    transaction(() => {
-      this.id = id
-      if (shortcut) {
-        this.saveTempShortcut(shortcut.id)
-      } else {
-        this.saveTempShortcut()
-      }
-      this.shortcuts = this.copyShortcuts(id)
-      if (shortcut) {
-        this.pushShortcut(shortcut)
-      }
-      this.folderElement = element
-      this.open = true
-    })
+    this.id = id
+    if (shortcut) {
+      this.saveTempShortcut(shortcut.id)
+    } else {
+      this.saveTempShortcut()
+    }
+    this.shortcuts = this.copyShortcuts()
+    if (shortcut) {
+      this.pushShortcut(shortcut)
+    }
+    this.folderElement = element
+    this.open = true
   }
 
   @action("close folder")
   public closeFolder = () => {
-    transaction(() => {
-      this.open = false
-    })
+    this.open = false
   }
 
   @action("copy shortcuts")
-  public copyShortcuts = (id: string) => {
+  public copyShortcuts = () => {
 
     if (this.component) {
       const shortcuts = this.component.shortcuts as Shortcut[]
@@ -63,9 +59,7 @@ export class FolderStore {
     if (index === -1) {
       this.shortcuts.push(shortcut)
     } else {
-      transaction(() => {
-        this.shortcuts.push(this.shortcuts.splice(index, 1)[0])
-      })
+      this.shortcuts.push(this.shortcuts.splice(index, 1)[0])
     }
   }
 
@@ -76,12 +70,10 @@ export class FolderStore {
 
   @action("sync shortcuts to desktop store")
   public syncShortcuts = (shortcutId: string, index: number) => {
-    transaction(() => {
-      const origin = this.shortcuts.findIndex(item => item.id === shortcutId)
-      this.saveTempShortcut()
-      this.shortcuts.splice(index, 0, this.shortcuts.splice(origin, 1)[0])
-      this.component!.shortcuts = this.shortcuts
-    })
+    const origin = this.shortcuts.findIndex(item => item.id === shortcutId)
+    this.saveTempShortcut()
+    this.shortcuts.splice(index, 0, this.shortcuts.splice(origin, 1)[0])
+    this.component!.shortcuts = this.shortcuts
   }
 }
 
