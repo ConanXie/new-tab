@@ -38,8 +38,6 @@ interface PropsType {
 @observer
 class Desktop extends React.Component<PropsType> {
   public state = {
-    columns: 6,
-    rows: 4,
     id: "",
     index: 0,
     undoOpen: false,
@@ -67,14 +65,14 @@ class Desktop extends React.Component<PropsType> {
   private handleMouseDown = (event: React.MouseEvent<HTMLAnchorElement>) => {
     switch (event.button) {
       case 0:
-        this.beginGrab(event)
+        // this.beginGrab(event)
         break
       case 2:
         // this.showMenu(event)
         break
     }
   }
-  private beginGrab = (event: React.MouseEvent<HTMLElement>) => {
+  /* private beginGrab = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault()
     // console.log(event)
     const ele = event.currentTarget
@@ -188,7 +186,7 @@ class Desktop extends React.Component<PropsType> {
       document.removeEventListener("mouseup", mouseUp, false)
     }
     document.addEventListener("mouseup", mouseUp, false)
-  }
+  } */
 
   public handleShortcutGrab = (shortcut: Shortcut, componentId: string) => (event: React.MouseEvent<HTMLElement>) => {
     grab(event, shortcut, componentId, Env.Desktop)
@@ -214,9 +212,8 @@ class Desktop extends React.Component<PropsType> {
     this.setState({ undoOpen: false })
   }
   public render() {
-    const { data } = this.props.desktopStore
+    const { columns, rows, data } = this.props.desktopStore
     const { open: folderOpen, openFolder, closeFolder, folderElement } = this.props.folderStore
-    const { columns, rows } = this.state
     const styles: React.CSSProperties = {
       gridTemplateColumns: `repeat(${columns}, 1fr)`,
       gridAutoRows: `calc((100vh - 64px) / ${rows})`,
@@ -268,7 +265,7 @@ class Desktop extends React.Component<PropsType> {
             }
             return null
           })}
-          <Wrap className="widget-wrap" row={4} column={5} rowEnd={5} columnEnd={7}>
+          <Wrap className="widget-wrap" row={1} column={4} rowEnd={2} columnEnd={6}>
             <DateTime />
           </Wrap>
         </div>

@@ -27,8 +27,8 @@ export interface Desktop extends Based {
 }
 
 export class DesktopStore {
-  @observable public columns = 6
-  @observable public rows = 4
+  @observable public columns = 8
+  @observable public rows = 5
   @observable public data: Desktop[] = [{
     type: 1,
     row: 1,
@@ -72,17 +72,18 @@ export class DesktopStore {
       icon: "facebook",
       url: "https://www.facebook.com",
     }],
-  }/* , {
+  } , {
     type: 1,
-    row: 1,
-    column: 4,
+    row: 3,
+    column: 5,
     id: "wb004",
-    shortcut: {
-      name: "IT之家",
-      icon: "ithome",
-      url: "https://www.ithome.com",
-    },
-  }, {
+    shortcuts: [{
+      id: "s006",
+      name: "Twitter",
+      icon: "twitter",
+      url: "https://www.twitter.com",
+    }],
+  }/*, {
     type: 1,
     row: 1,
     column: 5,
