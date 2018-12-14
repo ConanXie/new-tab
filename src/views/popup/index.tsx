@@ -4,13 +4,15 @@ import { AppContainer } from "react-hot-loader"
 import { Provider } from "mobx-react"
 import "typeface-roboto"
 import "../../styles"
+import "./styles"
 
 import App from "./App"
+import * as stores from "./stores"
 
 const renderApp = () => {
   render((
     <AppContainer>
-      <Provider>
+      <Provider {...stores}>
         <App />
       </Provider>
     </AppContainer>
