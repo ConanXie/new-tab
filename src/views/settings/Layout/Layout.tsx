@@ -60,7 +60,8 @@ const styles = (theme: Theme) => createStyles({
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen
-    })
+    }),
+    overflow: "hidden",
   },
   drawerPaperClose: {
     overflowX: "hidden",

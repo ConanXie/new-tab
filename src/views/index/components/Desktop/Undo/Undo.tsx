@@ -20,7 +20,7 @@ class Undo extends React.Component<PropsType> {
 
   /**
    * undo removed
-   * @param all is undo all removed
+   * @param all whether undo all of removed
    */
   public undo = (all?: boolean) => () => {
     this.props.desktopStore.undo(all)

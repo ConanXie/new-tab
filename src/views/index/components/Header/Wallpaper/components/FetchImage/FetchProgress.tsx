@@ -21,7 +21,7 @@ interface PropsType extends WithStyles<typeof styles> {
   progress: number
 }
 
-class FetchProgress extends React.Component<PropsType> {
+class FetchProgress extends React.PureComponent<PropsType> {
   public render() {
     const { fetching, progress, classes } = this.props
     return (

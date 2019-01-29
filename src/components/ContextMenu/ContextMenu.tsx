@@ -102,7 +102,7 @@ class ContextMenu extends React.Component<PropsType> {
                   <ListItemText primary={text} classes={{ primary: classes.text }} />
                 </MenuItem>
                 {index < menuStore.menus.length - 1 && (
-                  <Divider inset className={classes.divider} component="hr" />
+                  <Divider variant="inset" className={classes.divider} component="hr" />
                 )}
               </div>
             ))}
