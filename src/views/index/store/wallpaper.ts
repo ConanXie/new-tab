@@ -16,6 +16,7 @@ export const defaultWallpaperData = {
   wallpaperType: WallpaperType.Image,
   darkIcons: false,
   blurRadius: 0,
+  backgroundBrightness: 1,
 }
 
 export class WallpaperStore {
@@ -25,6 +26,7 @@ export class WallpaperStore {
   @observable public wallpaperType: WallpaperType
   @observable public darkIcons: boolean
   @observable public blurRadius: number
+  @observable public backgroundBrightness: number
   constructor(data: any) {
     const {
       wallpaper,
@@ -33,6 +35,7 @@ export class WallpaperStore {
       wallpaperType,
       darkIcons,
       blurRadius,
+      backgroundBrightness,
     } = data
 
     this.wallpaper = wallpaper || defaultWallpaperData.wallpaper
@@ -40,7 +43,10 @@ export class WallpaperStore {
     this.useWallpaper = useWallpaper === undefined ? defaultWallpaperData.useWallpaper : Boolean(useWallpaper)
     this.wallpaperType = wallpaperType || defaultWallpaperData.wallpaperType
     this.darkIcons = darkIcons === undefined ? defaultWallpaperData.darkIcons : Boolean(darkIcons)
-    this.blurRadius = Number(blurRadius) ? Number(blurRadius) : 0
+    this.blurRadius = Number(blurRadius) ? Number(blurRadius) : defaultWallpaperData.blurRadius
+    this.backgroundBrightness = Number(backgroundBrightness)
+      ? Number(backgroundBrightness)
+      : defaultWallpaperData.backgroundBrightness
   }
   @computed get wallpaperStyles() {
     const styles: React.CSSProperties = {}
@@ -52,6 +58,12 @@ export class WallpaperStore {
       } else if (this.wallpaperType === WallpaperType.Color) {
         styles.backgroundColor = this.color
       }
+    }
+    return styles
+  }
+  @computed get maskStyles() {
+    const styles: React.CSSProperties = {
+      backgroundColor: `rgba(0, 0, 0, ${1 - this.backgroundBrightness})`
     }
     return styles
   }
@@ -88,9 +100,13 @@ export class WallpaperStore {
   public toggleDarkIcons = () => {
     this.darkIcons = !this.darkIcons
   }
-  @action("toggle dark icons")
+  @action("handle background image blur radius change")
   public handleBlurChange = (radius: number) => {
     this.blurRadius = radius
+  }
+  @action("handle background image blur radius change")
+  public handleBackgroundBrightnessChange = (brightness: number) => {
+    this.backgroundBrightness = brightness
   }
 }
 

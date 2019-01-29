@@ -51,6 +51,7 @@ class Wallpaper extends React.Component<PropsType> {
       color,
       darkIcons,
       blurRadius,
+      backgroundBrightness,
       disabledImage,
       disabledColor,
       wallpaperSwitch,
@@ -59,6 +60,7 @@ class Wallpaper extends React.Component<PropsType> {
       handleColorChange,
       toggleDarkIcons,
       handleBlurChange,
+      handleBackgroundBrightnessChange,
     } = this.props.wallpaperStore
 
     return (
@@ -110,9 +112,10 @@ class Wallpaper extends React.Component<PropsType> {
           />
           <Divider />
           <Brightness
-            value={blurRadius}
-            onChange={handleBlurChange}
+            value={backgroundBrightness}
+            onChange={handleBackgroundBrightnessChange}
           />
+          <Divider />
         </List>
         <Snackbar
           open={this.state.snackbarOpen}

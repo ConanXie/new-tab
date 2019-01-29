@@ -36,10 +36,11 @@ export class Background extends React.Component<PropsType> {
     body.addEventListener("drop", this.handleDrop, false)
   }
   public render() {
+    const { wallpaperStyles, maskStyles } = this.props.wallpaperStore
     return (
       <React.Fragment>
-        <div id="bg" style={this.props.wallpaperStore.wallpaperStyles} />
-        <div id="mask" />
+        <div id="bg" style={wallpaperStyles} />
+        <div id="mask" style={maskStyles} />
       </React.Fragment>
     )
   }

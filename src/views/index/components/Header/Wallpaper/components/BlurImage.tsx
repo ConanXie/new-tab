@@ -18,5 +18,7 @@ export default (props: PropsType) => (
     icon={props.value ? <BlurOnIcon /> : <BlurOffIcon />}
     value={props.value}
     onChange={props.onChange}
-  />
+  >
+    {chrome.i18n.getMessage("wallpaper_blur")}
+  </SliderItem>
 )

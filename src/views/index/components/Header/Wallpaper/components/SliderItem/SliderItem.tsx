@@ -32,11 +32,15 @@ export interface PropsType extends ItemPropsType, WithStyles<typeof styles> {
   value: number
   icon: React.ReactNode
   id?: string
+  min?: number
+  max?: number
+  step?: number
+  children?: React.ReactNode
   onChange: (radius: number) => void
 }
 
 export default withStyles(styles)((props: PropsType) => {
-  const { disabled, value, icon, id, classes } = props
+  const { disabled, value, icon, id, classes, ...range } = props
 
   // tslint:disable-next-line:no-shadowed-variable
   const handleChange = (event: React.ChangeEvent, value: number) => props.onChange(value)
@@ -45,11 +49,14 @@ export default withStyles(styles)((props: PropsType) => {
     <div className={classes.root}>
       {icon}
       <div className={classes.sliderWrap}>
-        <Typography id={id} className={classes.label}>{chrome.i18n.getMessage("wallpaper_blur")}</Typography>
+        <Typography id={id} className={classes.label}>{props.children}</Typography>
         <Slider
           aria-labelledby={id}
           disabled={disabled}
           value={value}
+          min={range.min}
+          max={range.max}
+          step={range.step}
           onChange={handleChange}
         />
       </div>
