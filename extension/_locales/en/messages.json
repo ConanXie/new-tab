@@ -21,13 +21,13 @@
     "message": "Color Picker"
   },
   "website_edit_title": {
-    "message": "Edit website"
+    "message": "Edit shortcut"
   },
   "website_add_title": {
-    "message": "Add website"
+    "message": "Add shortcut"
   },
   "website_edit_name": {
-    "message": "Name"
+    "message": "Label"
   },
   "website_edit_url": {
     "message": "URL"
@@ -463,6 +463,9 @@
   },
   "wallpaper_blur": {
     "message": "Blur radius"
+  },
+  "wallpaper_background_brightness": {
+    "message": "Background brightness"
   },
   "wallpaper_dark_icons": {
     "message": "Dark icons"
