@@ -1,20 +1,28 @@
+import "./style"
+
 import * as React from "react"
+import * as Loadable from "react-loadable"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import AppBar from "@material-ui/core/AppBar"
 import Drawer from "@material-ui/core/Drawer"
-import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 
 import Toolbar from "./Toolbar"
 
-import "./style"
+const Wallpaper = Loadable({
+  loader: () => import("./Wallpaper"),
+  loading: () => null,
+})
 
 const styles = (theme: Theme) => createStyles({
   root: {
     backgroundColor: "transparent",
     boxShadow: "none"
+  },
+  drawerPaper: {
+    width: 360,
   },
   drawerMask: {
     "& > div:first-child": {
@@ -25,11 +33,13 @@ const styles = (theme: Theme) => createStyles({
 
 class Header extends React.Component<WithStyles<typeof styles>> {
   public state = {
-    wallpaperOpen: false
+    wallpaperOpen: false,
+    wallpaperLoaded: false,
   }
   private openWallpaperDrawer = () => {
     this.setState({
-      wallpaperOpen: true
+      wallpaperOpen: true,
+      wallpaperLoaded: true,
     })
   }
   private closeWallpaperDrawer = () => {
@@ -49,19 +59,12 @@ class Header extends React.Component<WithStyles<typeof styles>> {
           anchor="right"
           open={this.state.wallpaperOpen}
           onClose={this.closeWallpaperDrawer}
-          classes={{ modal: classes.drawerMask }}
+          classes={{
+            modal: classes.drawerMask,
+            paper: classes.drawerPaper,
+          }}
         >
-          <div className="wallpaper-drawer">
-            <LazilyLoad
-              modules={{
-                Wallpaper: () => importLazy(import("./Wallpaper"))
-              }}
-            >
-              {({ Wallpaper }) => (
-                <Wallpaper />
-              )}
-            </LazilyLoad>
-          </div>
+          {this.state.wallpaperLoaded && <Wallpaper />}
         </Drawer>
       </React.Fragment>
     )

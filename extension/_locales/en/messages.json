@@ -461,7 +461,7 @@
   "wallpaper_color_descr": {
     "message": "Set background with custom color"
   },
-  "wallpaper_blur_primary": {
+  "wallpaper_blur": {
     "message": "Blur radius"
   },
   "wallpaper_dark_icons": {

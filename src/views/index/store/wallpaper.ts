@@ -14,26 +14,25 @@ export const defaultWallpaperData = {
   color: deepOrange[500],
   useWallpaper: true,
   wallpaperType: WallpaperType.Image,
-  darkIcons: false
+  darkIcons: false,
+  blurRadius: 0,
 }
 
-interface WallpaperStyles {
-  backgroundImage?: string
-  backgroundColor?: string
-}
 export class WallpaperStore {
   @observable public wallpaper: string
   @observable public color: string
   @observable public useWallpaper: boolean
   @observable public wallpaperType: WallpaperType
   @observable public darkIcons: boolean
+  @observable public blurRadius: number
   constructor(data: any) {
     const {
       wallpaper,
       color,
       useWallpaper,
       wallpaperType,
-      darkIcons
+      darkIcons,
+      blurRadius,
     } = data
 
     this.wallpaper = wallpaper || defaultWallpaperData.wallpaper
@@ -41,12 +40,15 @@ export class WallpaperStore {
     this.useWallpaper = useWallpaper === undefined ? defaultWallpaperData.useWallpaper : Boolean(useWallpaper)
     this.wallpaperType = wallpaperType || defaultWallpaperData.wallpaperType
     this.darkIcons = darkIcons === undefined ? defaultWallpaperData.darkIcons : Boolean(darkIcons)
+    this.blurRadius = Number(blurRadius) ? Number(blurRadius) : 0
   }
   @computed get wallpaperStyles() {
-    const styles: WallpaperStyles = {}
+    const styles: React.CSSProperties = {}
     if (this.useWallpaper) {
       if (this.wallpaperType === WallpaperType.Image) {
         styles.backgroundImage = `url(${this.wallpaper})`
+        styles.filter = `blur(${this.blurRadius}px)`
+        styles.margin = `-${this.blurRadius * 2}px`
       } else if (this.wallpaperType === WallpaperType.Color) {
         styles.backgroundColor = this.color
       }
@@ -85,6 +87,10 @@ export class WallpaperStore {
   @action("toggle dark icons")
   public toggleDarkIcons = () => {
     this.darkIcons = !this.darkIcons
+  }
+  @action("toggle dark icons")
+  public handleBlurChange = (radius: number) => {
+    this.blurRadius = radius
   }
 }
 

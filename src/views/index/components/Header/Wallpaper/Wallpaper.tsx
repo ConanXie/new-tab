@@ -15,6 +15,8 @@ import FetchImage from "./components/FetchImage"
 import SelectColor from "./components/SelectColor"
 import SaveImage from "./components/SaveImage"
 import DarkIcons from "./components/DarkIcons"
+import BlurImage from "./components/BlurImage"
+import Brightness from "./components/Brightness"
 interface PropsType {
   wallpaperStore: WallpaperStore
 }
@@ -48,17 +50,19 @@ class Wallpaper extends React.Component<PropsType> {
       wallpaper,
       color,
       darkIcons,
+      blurRadius,
       disabledImage,
       disabledColor,
       wallpaperSwitch,
       changeWallpaperType,
       updateWallpaper,
       handleColorChange,
-      toggleDarkIcons
+      toggleDarkIcons,
+      handleBlurChange,
     } = this.props.wallpaperStore
 
     return (
-      <div>
+      <>
         <List>
           <WallpaperSwitch
             checked={useWallpaper}
@@ -99,6 +103,16 @@ class Wallpaper extends React.Component<PropsType> {
             checked={darkIcons}
           />
           <Divider />
+          <BlurImage
+            disabled={disabledImage}
+            value={blurRadius}
+            onChange={handleBlurChange}
+          />
+          <Divider />
+          <Brightness
+            value={blurRadius}
+            onChange={handleBlurChange}
+          />
         </List>
         <Snackbar
           open={this.state.snackbarOpen}
@@ -106,7 +120,7 @@ class Wallpaper extends React.Component<PropsType> {
           onClose={this.handleSnackbarClose}
           message={this.state.message}
         />
-      </div>
+      </>
     )
   }
 }
