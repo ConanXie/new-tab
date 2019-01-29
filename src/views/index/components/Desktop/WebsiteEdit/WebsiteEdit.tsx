@@ -9,15 +9,31 @@ import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
 import TextField from "@material-ui/core/TextField"
+import Avatar from "@material-ui/core/Avatar"
 
 import { WebsiteEditStore } from "../../../store/websiteEdit"
 import { inject, observer } from "mobx-react"
 
-const styles = (theme: Theme) => createStyles({
+const styles = ({ spacing }: Theme) => createStyles({
   dialog: {
-    width: "20vw",
-    minWidth: 230,
+    width: "30vw",
+    minWidth: 300,
     maxWidth: 320,
+  },
+  iconLabelWrap: {
+    display: "flex",
+    alignItems: "center",
+  },
+  avatar: {
+    display: "inline-block",
+    marginRight: spacing.unit * 2,
+    marginLeft: -spacing.unit / 2,
+    background: "none",
+    width: spacing.unit * 6,
+    height: spacing.unit * 6,
+  },
+  urlInput: {
+    marginLeft: spacing.unit * 8,
   },
 })
 
@@ -85,12 +101,14 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   public render() {
     const { name, url } = this.state
     const { open, id, info } = this.props.websiteEditStore
+    const { dialog, avatar, iconLabelWrap } = this.props.classes
+
     return (
       <Dialog
         open={open}
         onClose={this.handleClose}
         classes={{
-          paper: this.props.classes.dialog,
+          paper: dialog,
         }}
       >
         <form onSubmit={this.handleDone}>
@@ -98,18 +116,26 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
             {chrome.i18n.getMessage(id ? "website_edit_title" : "website_add_title")}
           </DialogTitle>
           <DialogContent>
-            <TextField
-              autoFocus
-              fullWidth
-              margin="dense"
-              defaultValue={info.name}
-              label={chrome.i18n.getMessage("website_edit_name")}
-              onChange={this.handleChange("name")}
-            />
+            <div className={iconLabelWrap}>
+              <Avatar
+                className={avatar}
+                src={chrome.runtime.getURL(`icons/${info.icon}.png`)}
+              />
+              <TextField
+                autoFocus
+                fullWidth
+                margin="dense"
+                variant="outlined"
+                defaultValue={info.name}
+                label={chrome.i18n.getMessage("website_edit_name")}
+                onChange={this.handleChange("name")}
+              />
+            </div>
             <br />
             <TextField
               fullWidth
               margin="dense"
+              variant="outlined"
               defaultValue={info.url || url}
               label={chrome.i18n.getMessage("website_edit_url")}
               onChange={this.handleChange("url")}
