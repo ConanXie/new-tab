@@ -189,7 +189,9 @@ class Desktop extends React.Component<PropsType> {
   } */
 
   public handleShortcutGrab = (shortcut: Shortcut, componentId: string) => (event: React.MouseEvent<HTMLElement>) => {
-    grab(event, shortcut, componentId, Env.Desktop)
+    if (event.button === 0) {
+      grab(event, shortcut, componentId, Env.Desktop)
+    }
   }
   // private prevent
   private showMenu = (event: React.MouseEvent<HTMLAnchorElement>, id: string, index: number = 0) => {

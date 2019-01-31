@@ -87,7 +87,7 @@ class About extends React.Component<WithStyles<typeof styles>> {
               <LogoIcon className={classes.logo} />
               <Typography variant="h6">Material Design New Tab</Typography>
             </header>
-            <Typography gutterBottom>Everyone's favorite extension</Typography>
+            <Typography gutterBottom>If you like Material Design, you may also like this extension.</Typography>
             <div className={classes.iconBtnWrap}>
               <Tooltip title={chrome.i18n.getMessage("settings_about_share")}>
                 <IconButton onClick={this.copyToClipboard}>
