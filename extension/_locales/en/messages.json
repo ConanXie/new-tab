@@ -453,7 +453,7 @@
     "message": "Select an image"
   },
   "wallpaper_disk_descr": {
-    "message": "Set wallpaper with a disk image file"
+    "message": "Set wallpaper with a image file"
   },
   "wallpaper_color": {
     "message": "Pick a color"
@@ -462,10 +462,10 @@
     "message": "Set background with custom color"
   },
   "wallpaper_blur": {
-    "message": "Blur radius"
+    "message": "Wallpaper blur level"
   },
   "wallpaper_background_brightness": {
-    "message": "Background brightness"
+    "message": "Background brightness level"
   },
   "wallpaper_dark_icons": {
     "message": "Dark icons"
