@@ -70,52 +70,44 @@ class Wallpaper extends React.Component<PropsType> {
             checked={useWallpaper}
             onChange={wallpaperSwitch}
           />
-          <Divider />
           <TypeMenu
             disabled={disabledImage && disabledColor}
             type={wallpaperType}
             onChange={changeWallpaperType}
           />
-          <Divider />
           <SelectImage
             disabled={disabledImage}
             onChange={updateWallpaper}
             onError={this.showMessage}
           />
-          <Divider />
           <FetchImage
             disabled={disabledImage}
             onChange={updateWallpaper}
             onError={this.showMessage}
           />
-          <Divider />
           <SaveImage
             disabled={disabledImage}
             url={wallpaper}
           />
-          <Divider />
+          <BlurImage
+            disabled={disabledImage}
+            value={blurRadius}
+            onChange={handleBlurChange}
+          />
           <SelectColor
             disabled={disabledColor}
             color={color}
             onChange={handleColorChange}
           />
           <Divider />
-          <DarkIcons
-            onChange={toggleDarkIcons}
-            checked={darkIcons}
-          />
-          <Divider />
-          <BlurImage
-            disabled={disabledImage}
-            value={blurRadius}
-            onChange={handleBlurChange}
-          />
-          <Divider />
           <Brightness
             value={backgroundBrightness}
             onChange={handleBackgroundBrightnessChange}
           />
-          <Divider />
+          <DarkIcons
+            onChange={toggleDarkIcons}
+            checked={darkIcons}
+          />
         </List>
         <Snackbar
           open={this.state.snackbarOpen}

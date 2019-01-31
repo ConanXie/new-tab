@@ -1,8 +1,8 @@
 import * as React from "react"
 
-import BrightnessHigh from "@material-ui/icons/BrightnessHigh"
-import BrightnessMedium from "@material-ui/icons/BrightnessMedium"
-import BrightnessLow from "@material-ui/icons/BrightnessLow"
+import BrightnessHigh from "@material-ui/icons/BrightnessHighOutlined"
+import BrightnessMedium from "@material-ui/icons/BrightnessMediumOutlined"
+import BrightnessLow from "@material-ui/icons/BrightnessLowOutlined"
 
 import SliderItem from "./SliderItem"
 import { ItemPropsType } from "./Item"
@@ -29,7 +29,6 @@ export default (props: PropsType) => {
   }
   return (
     <SliderItem
-      id="brightness-slider"
       disabled={disabled}
       icon={icon}
       value={value}

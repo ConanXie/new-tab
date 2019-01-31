@@ -23,6 +23,7 @@ const styles = (theme: Theme) => createStyles({
   },
   drawerPaper: {
     width: 360,
+    overflowX: "hidden",
   },
   drawerMask: {
     "& > div:first-child": {

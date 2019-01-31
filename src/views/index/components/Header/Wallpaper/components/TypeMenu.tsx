@@ -4,6 +4,9 @@ import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
+import ImageIcon from "@material-ui/icons/ImageOutlined"
+import ColorIcon from "@material-ui/icons/ColorLensOutlined"
+
 import Item, { ItemPropsType } from "./Item"
 import { WallpaperType } from "../../../../store/wallpaper"
 
@@ -68,11 +71,13 @@ class TypeMenu extends React.Component<WithStyles<typeof styles> & PropsType> {
     const { anchorEl } = this.state
     const { type, classes } = this.props
     const currentType = source.find(item => item.type === type)!.text
+    const icon = type === WallpaperType.Image ? <ImageIcon /> : <ColorIcon />
 
     return (
       <React.Fragment>
         <Item
           disabled={this.props.disabled}
+          icon={icon}
           primary={chrome.i18n.getMessage("wallpaper_type")}
           secondary={currentType}
           onClick={this.handleClickListItem}
