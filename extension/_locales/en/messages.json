@@ -32,6 +32,15 @@
   "website_edit_url": {
     "message": "URL"
   },
+  "website_edit_icon_reset": {
+    "message": "Reset size and position"
+  },
+  "website_edit_icon_help": {
+    "message": "Roll mouse wheel to zoom image and hold down the Alt key to zoom from center"
+  },
+  "website_edit_icon_select_file": {
+    "message": "Select"
+  },
   "nav_edit_input_forget_name": {
     "message": "Don't forget website name 🙂"
   },
@@ -471,7 +480,7 @@
     "message": "Dark icons"
   },
   "wallpaper_dark_icons_descr": {
-    "message": "Change the toolbar icons to a dark color"
+    "message": "Change the toolbar icons to dark"
   },
   "wallpaper_mask_primary": {
     "message": "Mask strength"
