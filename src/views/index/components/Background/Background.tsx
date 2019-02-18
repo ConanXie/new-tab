@@ -31,9 +31,9 @@ export class Background extends React.Component<PropsType> {
   }
   public componentDidMount() {
     const { body } = document
-    body.addEventListener("dragenter", this.handleDrag, false)
-    body.addEventListener("dragover", this.handleDrag, false)
-    body.addEventListener("drop", this.handleDrop, false)
+    body.addEventListener("dragenter", this.handleDrag)
+    body.addEventListener("dragover", this.handleDrag)
+    body.addEventListener("drop", this.handleDrop)
   }
   public render() {
     const { wallpaperStyles, maskStyles } = this.props.wallpaperStore

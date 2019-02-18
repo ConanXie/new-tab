@@ -43,7 +43,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
     const { screenX: moveScreenX, screenY: moveScreenY} = evt
     // begin grab
     if (!clone && (downScreenX !== moveScreenX || downScreenY !== moveScreenY)) {
-      el.removeEventListener("mousemove", handleMouseMove, false)
+      el.removeEventListener("mousemove", handleMouseMove)
       const offsetLeft = evt.clientX - left
       const offsetTop = evt.clientY - top
 
@@ -207,7 +207,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
           }
         }
       }
-      document.addEventListener("mousemove", moveClone, false)
+      document.addEventListener("mousemove", moveClone)
 
       /**
        * Resolve data after moving finished
@@ -299,24 +299,24 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
             tempOccupied.classList.remove("touched")
             tempOccupied = undefined
           }
-        }, false)
+        })
 
-        document.removeEventListener("mousemove", moveClone, false)
-        document.removeEventListener("mouseup", mouseUp, false)
+        document.removeEventListener("mousemove", moveClone)
+        document.removeEventListener("mouseup", mouseUp)
       }
-      document.addEventListener("mouseup", mouseUp, false)
+      document.addEventListener("mouseup", mouseUp)
 
       document.body.appendChild(clone)
     }
   }
-  el.addEventListener("mousemove", handleMouseMove, false)
+  el.addEventListener("mousemove", handleMouseMove)
 
   /** Remove all event listeners */
   const handleMouseUp = () => {
-    el.removeEventListener("mousemove", handleMouseMove, false)
-    document.removeEventListener("mouseup", handleMouseUp, false)
+    el.removeEventListener("mousemove", handleMouseMove)
+    document.removeEventListener("mouseup", handleMouseUp)
   }
-  document.addEventListener("mouseup", handleMouseUp, false)
+  document.addEventListener("mouseup", handleMouseUp)
 }
 
 export default grab
