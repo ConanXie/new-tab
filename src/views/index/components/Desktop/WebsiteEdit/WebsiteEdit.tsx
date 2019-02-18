@@ -164,7 +164,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
         <IconEditor
           open={iconEditorOpen}
           icon={info.icon}
-          onclose={this.handleIconEditorClose}
+          onClose={this.handleIconEditorClose}
         />
       </>
     )
