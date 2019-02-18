@@ -10,7 +10,6 @@ import ListItemText from "@material-ui/core/ListItemText"
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 import Switch from "@material-ui/core/Switch"
 import Divider from "@material-ui/core/Divider"
-import Checkbox from "@material-ui/core/Checkbox"
 import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 
@@ -172,7 +171,7 @@ class Theme extends React.Component<PropsType> {
                 secondary={chrome.i18n.getMessage("settings_night_mode_toolbar_secondary")}
               />
               <ListItemSecondaryAction>
-                <Checkbox checked={darkToolbar} color="primary" onChange={toggleDarkToolbar} />
+                <Switch checked={darkToolbar} color="primary" onChange={toggleDarkToolbar} />
               </ListItemSecondaryAction>
             </ListItem>
           </List>
