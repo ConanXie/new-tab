@@ -116,8 +116,6 @@ function ShortcutIcon(props: Props) {
 
   const preventImgDrag = (event: React.MouseEvent) => event.preventDefault()
 
-  const WIDTH = 272
-  const HEIGHT = 92
   let startX: number
   let startY: number
   const cropEl = React.useRef(null)
@@ -125,6 +123,11 @@ function ShortcutIcon(props: Props) {
     x: 0,
     y: 0,
     scale: 1,
+  })
+  const [image, setImage] = React.useState({
+    url: "",
+    width: 0,
+    height: 0,
   })
 
   const handleWheel = (event: WheelEvent) => {
@@ -214,6 +217,37 @@ function ShortcutIcon(props: Props) {
           })
           return
         }
+        if (/^blob/.test(image.url)) {
+          URL.revokeObjectURL(image.url)
+        }
+        const url = URL.createObjectURL(file)
+        const img = new Image()
+        img.src = url
+        img.onload = () => {
+          const { width, height } = img
+          setImage({
+            url,
+            width,
+            height,
+          })
+          let x
+          let y
+          let scale
+          if (width > height) {
+            y = 0
+            scale = SIZE / height
+            x = (SIZE - height * scale) / 2
+          } else {
+            x = 0
+            scale = SIZE / width
+            y = (SIZE - height * scale) / 2
+          }
+          setCrop({
+            x,
+            y,
+            scale,
+          })
+        }
       }
     }
   }
@@ -264,11 +298,11 @@ function ShortcutIcon(props: Props) {
                   style={{
                     top: crop.y + "px",
                     left: crop.x + "px",
-                    width: (WIDTH * crop.scale) + "px",
-                    height: (HEIGHT * crop.scale) + "px",
+                    width: (image.width * crop.scale) + "px",
+                    height: (image.height * crop.scale) + "px",
                   }}
                   onMouseDown={preventImgDrag}
-                  src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+                  src={image.url}
                   alt=""
                 />
                 <div className={classes.cropper} />

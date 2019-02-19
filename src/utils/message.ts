@@ -9,6 +9,9 @@ export function sendMessage(name: string, message: any, callback?: (response?: a
     name,
     message
   }, response => {
+    if (chrome.runtime.lastError) {
+      console.error(chrome.runtime.lastError.message)
+    }
     if (typeof callback === "function") {
       callback(response)
     }
