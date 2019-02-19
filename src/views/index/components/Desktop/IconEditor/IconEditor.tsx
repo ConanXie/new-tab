@@ -97,7 +97,7 @@ enum IconType {
 interface Props extends WithStyles<typeof styles> {
   icon: string
   open: boolean
-  onClose: (event: React.SyntheticEvent<{}>) => void
+  onClose: (event?: React.SyntheticEvent<{}>) => void
 }
 
 function ShortcutIcon(props: Props) {
@@ -124,11 +124,7 @@ function ShortcutIcon(props: Props) {
     y: 0,
     scale: 1,
   })
-  const [image, setImage] = React.useState({
-    url: "",
-    width: 0,
-    height: 0,
-  })
+  const [image, setImage] = React.useState(null as HTMLImageElement | null)
 
   const handleWheel = (event: WheelEvent) => {
     event.preventDefault()
@@ -217,39 +213,67 @@ function ShortcutIcon(props: Props) {
           })
           return
         }
-        if (/^blob/.test(image.url)) {
-          URL.revokeObjectURL(image.url)
-        }
         const url = URL.createObjectURL(file)
         const img = new Image()
         img.src = url
-        img.onload = () => {
-          const { width, height } = img
-          setImage({
-            url,
-            width,
-            height,
-          })
-          let x
-          let y
-          let scale
-          if (width > height) {
-            y = 0
-            scale = SIZE / height
-            x = (SIZE - height * scale) / 2
-          } else {
-            x = 0
-            scale = SIZE / width
-            y = (SIZE - height * scale) / 2
-          }
-          setCrop({
-            x,
-            y,
-            scale,
-          })
-        }
+        img.onload = () => setImage(img)
       }
     }
+  }
+
+  const resetImage = () => {
+    if (!image) {
+      return
+    }
+    const { width, height } = image
+    if (width <= 0 || height <= 0) {
+      return
+    }
+    let x
+    let y
+    let scale
+    if (width > height) {
+      y = 0
+      scale = SIZE / height
+      x = (SIZE - width * scale) / 2
+    } else {
+      x = 0
+      scale = SIZE / width
+      y = (SIZE - height * scale) / 2
+    }
+    setCrop({
+      x,
+      y,
+      scale,
+    })
+  }
+
+  React.useEffect(() => {
+    resetImage()
+    if (!open) {
+      setImage(null)
+    }
+    return () => {
+      if (image && /^blob/.test(image.src)) {
+        URL.revokeObjectURL(image.src)
+      }
+    }
+  }, [image, open])
+
+  const handleDone = () => {
+    if (type === IconType.Custom && image) {
+      const canvas = document.createElement("canvas")
+      canvas.width = SIZE
+      canvas.height = SIZE
+      const ctx = canvas.getContext("2d")!
+      ctx.save()
+      ctx.arc(SIZE / 2, SIZE / 2, ACTUAL_SIZE / 2, 0, Math.PI * 2)
+      ctx.clip()
+      ctx.drawImage(image, crop.x, crop.y, image.width * crop.scale, image.height * crop.scale)
+      const img = canvas.toDataURL("image/png")
+      console.log(img)
+    }
+    props.onClose()
   }
 
   return (
@@ -294,20 +318,25 @@ function ShortcutIcon(props: Props) {
                 onMouseDown={handleMouseDown}
                 ref={cropEl}
               >
-                <img
-                  style={{
-                    top: crop.y + "px",
-                    left: crop.x + "px",
-                    width: (image.width * crop.scale) + "px",
-                    height: (image.height * crop.scale) + "px",
-                  }}
-                  onMouseDown={preventImgDrag}
-                  src={image.url}
-                  alt=""
-                />
+                {image && (
+                  <img
+                    style={{
+                      top: crop.y + "px",
+                      left: crop.x + "px",
+                      width: (image.width * crop.scale) + "px",
+                      height: (image.height * crop.scale) + "px",
+                    }}
+                    onMouseDown={preventImgDrag}
+                    src={image.src}
+                    alt=""
+                  />
+                )}
                 <div className={classes.cropper} />
                 <Tooltip title={chrome.i18n.getMessage("website_edit_icon_reset")}>
-                  <AutorenewIcon className={classNames(classes.cropperIcons, classes.resetIcon)} />
+                  <AutorenewIcon
+                    className={classNames(classes.cropperIcons, classes.resetIcon)}
+                    onClick={resetImage}
+                  />
                 </Tooltip>
                 <Tooltip title={chrome.i18n.getMessage("website_edit_icon_help")}>
                   <HelpIcon className={classNames(classes.cropperIcons, classes.helpIcon)} />
@@ -335,7 +364,7 @@ function ShortcutIcon(props: Props) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button>{chrome.i18n.getMessage("button_done")}</Button>
+          <Button onClick={handleDone}>{chrome.i18n.getMessage("button_done")}</Button>
         </DialogActions>
       </Dialog>
       <Snackbar
