@@ -1,4 +1,5 @@
 import * as storage from "store2"
+import { parse } from "url"
 import { settingsStorage } from "utils/storage"
 import { onMessage, sendMessage } from "utils/message"
 import { base64toBlobURL } from "utils/fileConversions"
@@ -37,5 +38,24 @@ chrome.storage.local.get([wallpaper], result => {
   const base64: string = result[wallpaper]
   if (base64) {
     updateWallpaper(base64)
+  }
+})
+
+onMessage("getIcons", (url: string, sender, sendResponse) => {
+  const { hostname } = parse(url)
+  if (hostname) {
+    import("./icons").then(({ default: icons }) => {
+      let matched: string[] | undefined = icons[hostname]
+      if (!matched && hostname.indexOf(".") !== hostname.lastIndexOf(".")) {
+        const mainHost = /[^\.]+\.[^\.]+$/.exec(hostname)
+        if (mainHost) {
+          matched = icons[mainHost[0]]
+        }
+      }
+      if (!matched) {
+        matched = icons["*"]
+      }
+      sendResponse(matched)
+    })
   }
 })
