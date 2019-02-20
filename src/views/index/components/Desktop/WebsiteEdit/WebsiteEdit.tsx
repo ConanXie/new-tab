@@ -163,6 +163,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
         </Dialog>
         <IconEditor
           open={iconEditorOpen}
+          url={info.url}
           icon={info.icon}
           onClose={this.handleIconEditorClose}
         />

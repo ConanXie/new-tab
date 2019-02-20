@@ -24,6 +24,7 @@ import HelpIcon from "@material-ui/icons/HelpOutlineOutlined"
 import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternateOutlined"
 
 import { imageAccepts, imageSize } from "config"
+import { sendMessage } from "utils/message"
 
 const SIZE = 192
 const ACTUAL_SIZE = 174
@@ -87,6 +88,9 @@ const styles = (theme: Theme) => createStyles({
   input: {
     display: "none",
   },
+  iconSelected: {
+    border: "1px solid red",
+  },
 })
 
 enum IconType {
@@ -95,15 +99,14 @@ enum IconType {
 }
 
 interface Props extends WithStyles<typeof styles> {
+  url: string
   icon: string
   open: boolean
   onClose: (event?: React.SyntheticEvent<{}>) => void
 }
 
 function ShortcutIcon(props: Props) {
-  const { open, icon, classes } = props
-
-  const [type, setType] = React.useState(IconType.Custom)
+  const { open, icon, url, classes } = props
 
   const handleClose = (event: React.SyntheticEvent<{}>) => {
     props.onClose(event)
@@ -111,8 +114,18 @@ function ShortcutIcon(props: Props) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setType(event.target.value as IconType)
-    console.log(icon)
   }
+
+  const [type, setType] = React.useState(IconType.Official)
+  const [icons, setIcons] = React.useState([] as string[])
+
+  React.useEffect(() => {
+    if (open) {
+      sendMessage("getIcons", url, (officialIcons: string[]) => {
+        setIcons(officialIcons)
+      })
+    }
+  }, [open])
 
   const preventImgDrag = (event: React.MouseEvent) => event.preventDefault()
 
@@ -213,9 +226,9 @@ function ShortcutIcon(props: Props) {
           })
           return
         }
-        const url = URL.createObjectURL(file)
+        const src = URL.createObjectURL(file)
         const img = new Image()
-        img.src = url
+        img.src = src
         img.onload = () => setImage(img)
       }
     }
@@ -309,7 +322,16 @@ function ShortcutIcon(props: Props) {
             <FormHelperText>labelPlacement start</FormHelperText>
           </FormControl>
           {type === IconType.Official && (
-            <h2>ss</h2>
+            <div>
+              {icons.map(item => (
+                <img
+                  key={item}
+                  src={chrome.runtime.getURL(`icons/${item}.png`)}
+                  alt={item}
+                  className={classNames({ [classes.iconSelected]: icon === item })}
+                />
+              ))}
+            </div>
           )}
           {type === IconType.Custom && (
             <>
