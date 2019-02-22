@@ -1,5 +1,6 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
+import makeDumbProps from "utils/makeDumbProps"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
@@ -45,7 +46,7 @@ interface PropsType extends WithStyles<typeof styles> {
 
 interface StateType {
   synced: boolean
-  name: string
+  label: string
   url: string
   iconEditorOpen: boolean
 }
@@ -56,7 +57,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
 
   public state: StateType = {
     synced: false,
-    name: "",
+    label: "",
     url: "https://",
     iconEditorOpen: false,
   }
@@ -66,11 +67,11 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
    * @param prevState
    */
   public static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const { name, url } = nextProps.websiteEditStore.info
-    if (name && nextProps.websiteEditStore.open && !prevState.synced) {
+    const { label, url } = nextProps.websiteEditStore.info
+    if (label && nextProps.websiteEditStore.open && !prevState.synced) {
       return {
         synced: true,
-        name,
+        label,
         url,
       }
     }
@@ -78,9 +79,9 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   }
 
   /** record input value */
-  public handleChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  public handleChange = (label: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      [name as "name"]: event.target.value,
+      [label as "label"]: event.target.value,
     })
   }
 
@@ -94,7 +95,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   public handleDone = (event: React.FormEvent) => {
     event.preventDefault()
     this.handleClose()
-    this.props.websiteEditStore.saveInfo(this.state.name, this.state.url)
+    this.props.websiteEditStore.saveInfo(this.state.label, this.state.url)
   }
 
   public openIconEditor = (event: React.SyntheticEvent<{}>) => {
@@ -110,7 +111,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   }
 
   public render() {
-    const { name, url, iconEditorOpen } = this.state
+    const { label, url, iconEditorOpen } = this.state
     const { open, id, info } = this.props.websiteEditStore
     const { dialog, avatar, iconLabelWrap } = this.props.classes
 
@@ -131,7 +132,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
               <div className={iconLabelWrap}>
                 <Avatar
                   className={avatar}
-                  src={chrome.runtime.getURL(`icons/${info.icon}.png`)}
+                  src={chrome.runtime.getURL(`icons/google.png`)}
                   onClick={this.openIconEditor}
                 />
                 <TextField
@@ -139,7 +140,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
                   fullWidth
                   margin="dense"
                   variant="outlined"
-                  defaultValue={info.name}
+                  defaultValue={info.label}
                   label={chrome.i18n.getMessage("website_edit_name")}
                   onChange={this.handleChange("name")}
                 />
@@ -155,7 +156,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
               />
             </DialogContent>
             <DialogActions>
-              <Button type="submit" disabled={!name || !url}>
+              <Button type="submit" disabled={!label || !url}>
                 {chrome.i18n.getMessage("button_done")}
               </Button>
             </DialogActions>
@@ -164,7 +165,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
         <IconEditor
           open={iconEditorOpen}
           url={info.url}
-          icon={info.icon}
+          icon={"google"}
           onClose={this.handleIconEditorClose}
         />
       </>
@@ -172,4 +173,4 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   }
 }
 
-export default withStyles(styles)(WebsiteEdit)
+export default makeDumbProps(withStyles(styles)(WebsiteEdit))

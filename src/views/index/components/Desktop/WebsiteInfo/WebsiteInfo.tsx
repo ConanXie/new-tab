@@ -1,4 +1,6 @@
 import * as React from "react"
+import { inject, observer } from "mobx-react"
+import makeDumbProps from "utils/makeDumbProps"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
@@ -13,7 +15,6 @@ import DialogActions from "@material-ui/core/DialogActions"
 import Typography from "@material-ui/core/Typography"
 
 import { WebSiteInfoStore } from "../../../store/websiteInfo"
-import { inject, observer } from "mobx-react"
 
 const styles = ({ spacing }: Theme) => createStyles({
   title: {
@@ -55,9 +56,9 @@ class WebsiteInfo extends React.Component<PropsType> {
         <DialogTitle className={classes.title} disableTypography>
           <Avatar
             className={classes.avatar}
-            src={chrome.runtime.getURL(`icons/${info.icon}.png`)}
+            src={chrome.runtime.getURL(`icons/google.png`)}
           />
-          <Typography variant="h6">{info.name}</Typography>
+          <Typography variant="h6">{info.label}</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>{info.url}</DialogContentText>
@@ -72,4 +73,4 @@ class WebsiteInfo extends React.Component<PropsType> {
   }
 }
 
-export default withStyles(styles)(WebsiteInfo)
+export default makeDumbProps(withStyles(styles)(WebsiteInfo))

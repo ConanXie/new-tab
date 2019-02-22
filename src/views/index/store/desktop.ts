@@ -6,9 +6,9 @@ export interface Based {
 
 export interface Shortcut extends Based {
   index?: number
-  name: string
-  icon: string
+  label: string
   url: string
+  icon?: string
 }
 
 /**
@@ -21,8 +21,7 @@ export interface Desktop extends Based {
   type: ComponentType
   row: number
   column: number
-  name?: string
-  icon?: string
+  label?: string
   shortcuts?: Shortcut[]
 }
 
@@ -36,8 +35,7 @@ export class DesktopStore {
     id: "wb001",
     shortcuts: [{
       id: "s001",
-      name: "Bilibili",
-      icon: "bilibili",
+      label: "Bilibili",
       url: "https://www.bilibili.com",
     }],
   }, {
@@ -47,8 +45,7 @@ export class DesktopStore {
     id: "wb002",
     shortcuts: [{
       id: "s002",
-      name: "酷安",
-      icon: "coolapk",
+      label: "酷安",
       url: "https://www.coolapk.com",
     }],
   }, {
@@ -58,18 +55,15 @@ export class DesktopStore {
     id: "wb003",
     shortcuts: [{
       id: "s003",
-      name: "Google",
-      icon: "google",
+      label: "Google",
       url: "https://www.google.com",
     }, {
       id: "s004",
-      name: "Youtube",
-      icon: "youtube",
+      label: "Youtube",
       url: "https://www.youtube.com",
     }, {
       id: "s005",
-      name: "Facebook",
-      icon: "facebook",
+      label: "Facebook",
       url: "https://www.facebook.com",
     }],
   } , {
@@ -79,8 +73,7 @@ export class DesktopStore {
     id: "wb004",
     shortcuts: [{
       id: "s006",
-      name: "Twitter",
-      icon: "twitter",
+      label: "Twitter",
       url: "https://www.twitter.com",
     }],
   }/*, {
@@ -177,7 +170,7 @@ export class DesktopStore {
   @observable public removed: Desktop[] = []
 
   @computed public get latestRemovedName() {
-    return this.removed.length ? (this.removed[0].shortcuts![0].name) : ""
+    return this.removed.length ? (this.removed[0].shortcuts![0].label) : ""
   }
 
   @action("update area")
@@ -193,7 +186,7 @@ export class DesktopStore {
   public updateInfo = (id: string, index: number = 0, name: string, url: string) => {
     const component = this.data.find(item => item.id === id)
     if (component && component.shortcuts) {
-      component.shortcuts[index].name = name
+      component.shortcuts[index].label = name
       component.shortcuts[index].url = url
     }
   }

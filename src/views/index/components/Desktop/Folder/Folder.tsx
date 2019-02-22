@@ -23,14 +23,14 @@ class Folder extends React.Component<PropsType> {
       <div data-id={this.props.id} onClick={this.handleClick}>
         <div className="folder-wrap">
           <div ref={this.folderRef} className={classNames("folder", { two: shortcuts.length === 2 })}>
-            {shortcuts.map(({ icon, name }, index) => (
+            {shortcuts.map(({ label }, index) => (
               <div key={index}>
-                <img src={chrome.runtime.getURL(`icons/${icon}.png`)} alt={name} />
+                <img src={chrome.runtime.getURL(`icons/google.png`)} alt={label} />
               </div>
             ))}
           </div>
         </div>
-        <Typography className="shortcut-name" variant="subtitle1">{this.props.name}</Typography>
+        <Typography className="shortcut-name" variant="subtitle1">{this.props.label}</Typography>
       </div>
     )
   }

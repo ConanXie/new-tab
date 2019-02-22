@@ -1,11 +1,11 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
+import * as Loadable from "react-loadable"
 
 import EditIcon from "@material-ui/icons/Edit"
 import InfoIcon from "@material-ui/icons/InfoOutlined"
 import ClearIcon from "@material-ui/icons/Clear"
 
-import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import makeDumbProps from "utils/makeDumbProps"
 import grab, { Env } from "./Website/grab"
 import { DesktopStore, Shortcut } from "../../store/desktop"
@@ -20,6 +20,24 @@ import Undo from "./Undo"
 import Folder from "./Folder"
 import Wrap from "./Wrap"
 import FolderWindow from "./FolderWindow"
+
+const LazyComponent = Loadable.Map({
+  loading: () => null,
+  loader: {
+    WebsiteInfo: () => import("./WebsiteInfo"),
+    WebsiteEdit: () => import("./WebsiteEdit"),
+  },
+  render(loaded, props) {
+    const WebsiteInfo = loaded.WebsiteInfo.default
+    const WebsiteEdit = loaded.WebsiteEdit.default
+    return (
+      <>
+        <WebsiteInfo />
+        <WebsiteEdit />
+      </>
+    )
+  },
+})
 
 interface PropsType {
   desktopStore: DesktopStore
@@ -229,23 +247,15 @@ class Desktop extends React.Component<PropsType> {
               if (item.shortcuts!.length <= 1) {
                 const { id, shortcuts } = item
                 const {
-                  name,
+                  label,
                   url,
-                  icon,
                 } = shortcuts![0]
-                const src = chrome.runtime.getURL(`icons/${icon}.png`)
-                const meta = {
-                  row,
-                  column,
-                  name,
-                  url,
-                  src,
-                  id,
-                }
                 return (
                   <Wrap row={row} column={column} key={id}>
                     <Webiste
-                      meta={meta}
+                      id={id}
+                      label={label}
+                      url={url}
                       onMouseDown={this.handleShortcutGrab(shortcuts![0], id)}
                       onContextMenu={this.showMenu}
                     />
@@ -271,19 +281,7 @@ class Desktop extends React.Component<PropsType> {
             <DateTime />
           </Wrap>
         </div>
-        <LazilyLoad
-          modules={{
-            WebsiteInfo: () => importLazy(import("./WebsiteInfo")),
-            WebsiteEdit: () => importLazy(import("./WebsiteEdit")),
-          }}
-        >
-          {({ WebsiteInfo, WebsiteEdit }) => (
-            <React.Fragment>
-              <WebsiteInfo />
-              <WebsiteEdit />
-            </React.Fragment>
-          )}
-        </LazilyLoad>
+        <LazyComponent />
         <Undo open={this.state.undoOpen} onClose={this.closeUndo} />
         <FolderWindow
           open={folderOpen}

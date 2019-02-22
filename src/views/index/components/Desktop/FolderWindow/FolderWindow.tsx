@@ -66,12 +66,7 @@ class FolderWindow extends React.Component<PropsType> {
           style={{ gridTemplateColumns: `repeat(${folderStore.gridColumns}, 1fr)` }}
         >
           {folderStore.shortcuts.map((shortcut, index) => {
-            const meta = {
-              row: 0,
-              column: 0,
-              src: chrome.runtime.getURL(`icons/${shortcut.icon}.png`),
-              ...shortcut,
-            }
+            const { id, label, url } = shortcut
             return (
               <Wrap
                 grabbed={folderStore.tempShortcut === shortcut.id}
@@ -80,8 +75,10 @@ class FolderWindow extends React.Component<PropsType> {
                 key={Math.random()}
               >
                 <Website
-                  meta={meta}
-                  key={shortcut.id}
+                  id={id}
+                  label={label}
+                  url={url}
+                  key={id}
                   onMouseDown={this.handleGrab(index)}
                   onContextMenu={this.mock}
                 />
