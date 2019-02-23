@@ -56,8 +56,6 @@ interface PropsType {
 @observer
 class Desktop extends React.Component<PropsType> {
   public state = {
-    id: "",
-    index: 0,
     undoOpen: false,
     menus: [{
       icon: <EditIcon />,
@@ -79,6 +77,8 @@ class Desktop extends React.Component<PropsType> {
       }
     }],
   }
+  public id = ""
+  public index = 0
   private pageElement: React.RefObject<HTMLDivElement> = React.createRef()
   private handleMouseDown = (event: React.MouseEvent<HTMLAnchorElement>) => {
     switch (event.button) {
@@ -214,18 +214,19 @@ class Desktop extends React.Component<PropsType> {
   // private prevent
   private showMenu = (event: React.MouseEvent<HTMLAnchorElement>, id: string, index: number = 0) => {
     event.preventDefault()
-    this.setState({ id, index })
+    this.id = id
+    this.index = index
     this.props.menuStore.setPosition(event.clientX, event.clientY)
     this.props.menuStore.showMenu(this.state.menus)
   }
   public editWebsite = () => {
-    this.props.websiteEditStore.openDialog(this.state.id)
+    this.props.websiteEditStore.openDialog(this.id)
   }
   public showInfo = () => {
-    this.props.websiteInfoStore.openDialog(this.state.id)
+    this.props.websiteInfoStore.openDialog(this.id)
   }
   public removeWebsite = () => {
-    this.props.desktopStore.removeWebsite(this.state.id)
+    this.props.desktopStore.removeWebsite(this.id)
     this.setState({ undoOpen: true })
   }
   public closeUndo = () => {
