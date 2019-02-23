@@ -15,6 +15,7 @@ import Avatar from "@material-ui/core/Avatar"
 
 import IconEditor from "../IconEditor"
 import { WebsiteEditStore } from "../../../store/websiteEdit"
+import { ShortcutIconsStore } from "../../../store/shortcutIcons"
 
 const styles = ({ spacing }: Theme) => createStyles({
   dialog: {
@@ -42,6 +43,7 @@ const styles = ({ spacing }: Theme) => createStyles({
 
 interface PropsType extends WithStyles<typeof styles> {
   websiteEditStore: WebsiteEditStore
+  shortcutIconsStore: ShortcutIconsStore
 }
 
 interface StateType {
@@ -51,7 +53,7 @@ interface StateType {
   iconEditorOpen: boolean
 }
 
-@inject("websiteEditStore")
+@inject("websiteEditStore", "shortcutIconsStore")
 @observer
 class WebsiteEdit extends React.Component<PropsType, StateType> {
 
@@ -79,9 +81,9 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   }
 
   /** record input value */
-  public handleChange = (label: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  public handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      [label as "label"]: event.target.value,
+      [field as "label"]: event.target.value,
     })
   }
 
@@ -104,16 +106,20 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
     })
   }
 
-  public handleIconEditorClose = (event: React.SyntheticEvent<{}>) => {
+  public handleIconEditorClose = (icon?: string) => {
     this.setState({
       iconEditorOpen: false,
     })
+    if (icon) {
+      this.props.shortcutIconsStore.updateIcon(this.props.websiteEditStore.id, icon)
+    }
   }
 
   public render() {
     const { label, url, iconEditorOpen } = this.state
     const { open, id, info } = this.props.websiteEditStore
     const { dialog, avatar, iconLabelWrap } = this.props.classes
+    const icon = this.props.shortcutIconsStore.shortcutIcon(id, url)
 
     return (
       <>
@@ -132,7 +138,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
               <div className={iconLabelWrap}>
                 <Avatar
                   className={avatar}
-                  src={chrome.runtime.getURL(`icons/google.png`)}
+                  src={icon}
                   onClick={this.openIconEditor}
                 />
                 <TextField
@@ -142,7 +148,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
                   variant="outlined"
                   defaultValue={info.label}
                   label={chrome.i18n.getMessage("website_edit_name")}
-                  onChange={this.handleChange("name")}
+                  onChange={this.handleChange("label")}
                 />
               </div>
               <br />
@@ -165,7 +171,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
         <IconEditor
           open={iconEditorOpen}
           url={info.url}
-          icon={"google"}
+          icon={icon}
           onClose={this.handleIconEditorClose}
         />
       </>

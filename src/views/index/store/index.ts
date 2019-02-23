@@ -5,6 +5,7 @@ import desktopStore from "./desktop"
 import websiteInfoStore from "./websiteInfo"
 import websiteEditStore from "./websiteEdit"
 import folderStore from "./folder"
+import shortcutIconsStore from "./shortcutIcons"
 
 export {
   wallpaperStore,
@@ -14,4 +15,5 @@ export {
   websiteInfoStore,
   websiteEditStore,
   folderStore,
+  shortcutIconsStore,
 }

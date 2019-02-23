@@ -100,16 +100,16 @@ enum IconType {
 
 interface Props extends WithStyles<typeof styles> {
   url: string
-  icon: string
+  icon?: string
   open: boolean
-  onClose: (event?: React.SyntheticEvent<{}>) => void
+  onClose: (icon?: string) => void
 }
 
 function ShortcutIcon(props: Props) {
   const { open, icon, url, classes } = props
 
   const handleClose = (event: React.SyntheticEvent<{}>) => {
-    props.onClose(event)
+    props.onClose()
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -283,10 +283,10 @@ function ShortcutIcon(props: Props) {
       ctx.arc(SIZE / 2, SIZE / 2, ACTUAL_SIZE / 2, 0, Math.PI * 2)
       ctx.clip()
       ctx.drawImage(image, crop.x, crop.y, image.width * crop.scale, image.height * crop.scale)
-      const img = canvas.toDataURL("image/png")
-      console.log(img)
+      props.onClose(canvas.toDataURL("image/png"))
+    } else if (type === IconType.Official) {
+      props.onClose()
     }
-    props.onClose()
   }
 
   return (
@@ -386,7 +386,8 @@ function ShortcutIcon(props: Props) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDone}>{chrome.i18n.getMessage("button_done")}</Button>
+          <Button onClick={handleClose}>{chrome.i18n.getMessage("button_done")}</Button>
+          <Button onClick={handleDone}>{chrome.i18n.getMessage("button_cancel")}</Button>
         </DialogActions>
       </Dialog>
       <Snackbar

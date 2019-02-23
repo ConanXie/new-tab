@@ -5,11 +5,11 @@ import desktopStore from "./desktop"
 
 export class WebsiteEditStore extends WebSiteInfoStore {
   @action("save info")
-  public saveInfo = (name: string, url: string) => {
+  public saveInfo = (label: string, url: string) => {
     if (!/:\/\//.test(url)) {
       url = "https://" + url
     }
-    desktopStore.updateInfo(this.id, this.index, name, url)
+    desktopStore.updateInfo(this.id, this.index, label, url)
   }
 }
 
