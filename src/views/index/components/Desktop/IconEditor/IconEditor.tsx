@@ -9,27 +9,32 @@ import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
-// import Typography from "@material-ui/core/Typography"
-import Radio from "@material-ui/core/Radio"
-import RadioGroup from "@material-ui/core/RadioGroup"
-import FormHelperText from "@material-ui/core/FormHelperText"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import FormControl from "@material-ui/core/FormControl"
-import FormLabel from "@material-ui/core/FormLabel"
-// import IconButton from "@material-ui/core/IconButton"
 import Tooltip from "@material-ui/core/Tooltip"
 import Snackbar from "@material-ui/core/Snackbar"
+import ToggleButton from "@material-ui/lab/ToggleButton"
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup"
 import AutorenewIcon from "@material-ui/icons/AutorenewOutlined"
 import HelpIcon from "@material-ui/icons/HelpOutlineOutlined"
 import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternateOutlined"
+import DashboardIcon from "@material-ui/icons/DashboardOutlined"
+import CropIcon from "@material-ui/icons/CropOutlined"
 
 import { imageAccepts, imageSize } from "config"
 import { sendMessage } from "utils/message"
+import { isBase64 } from "utils/validate"
 
 const SIZE = 192
 const ACTUAL_SIZE = 174
 
 const styles = (theme: Theme) => createStyles({
+  dialog: {
+    width: 374,
+    minHeight: 450,
+  },
+  typeToggle: {
+    display: "flex",
+    margin: `${theme.spacing.unit / 2}px 0 ${theme.spacing.unit * 2}px`,
+  },
   cropperContainer: {
     position: "relative",
     overflow: "hidden",
@@ -83,18 +88,30 @@ const styles = (theme: Theme) => createStyles({
     top: 2,
   },
   addPhotoIcon: {
+    marginTop: theme.spacing.unit,
     marginRight: theme.spacing.unit,
   },
   input: {
     display: "none",
   },
+  iconsWrap: {
+    margin: -theme.spacing.unit,
+  },
+  icon: {
+    width: SIZE / 2,
+    height: SIZE / 2,
+    margin: theme.spacing.unit,
+    borderRadius: 4,
+    border: "1px solid transparent",
+    cursor: "pointer",
+  },
   iconSelected: {
-    border: "1px solid red",
+    borderColor: theme.palette.primary.main,
   },
 })
 
 enum IconType {
-  Official = "1",
+  BuiltIn = "1",
   Custom = "2",
 }
 
@@ -112,18 +129,35 @@ function ShortcutIcon(props: Props) {
     props.onClose()
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setType(event.target.value as IconType)
+  const handleTypeChange = (event: React.MouseEvent, value: IconType | null) => {
+    if (value) {
+      setType(value)
+    }
   }
 
-  const [type, setType] = React.useState(IconType.Official)
+  const [type, setType] = React.useState(IconType.BuiltIn)
   const [icons, setIcons] = React.useState([] as string[])
+  const [selectedIcon, setSelectedIcon] = React.useState("")
+  const [image, setImage] = React.useState(null as HTMLImageElement | null)
 
   React.useEffect(() => {
+    // Sync state
     if (open) {
-      sendMessage("getIcons", url, (officialIcons: string[]) => {
-        setIcons(officialIcons)
+      sendMessage("getIcons", url, (builtInIcons: string[]) => {
+        setIcons(builtInIcons)
       })
+      if (icon && isBase64(icon)) {
+        setType(IconType.Custom)
+        const img = new Image()
+        img.src = icon
+        img.onload = () => setImage(img)
+      } else {
+        setType(IconType.BuiltIn)
+        setSelectedIcon(icon || "")
+      }
+    } else {
+      setImage(null)
+      setSelectedIcon("")
     }
   }, [open])
 
@@ -137,14 +171,13 @@ function ShortcutIcon(props: Props) {
     y: 0,
     scale: 1,
   })
-  const [image, setImage] = React.useState(null as HTMLImageElement | null)
 
   const handleWheel = (event: WheelEvent) => {
     event.preventDefault()
     const step = 0.1
     const direction = event.deltaY < 0 ? 1 : -1
     const scale = crop.scale * (1 + direction * step)
-    if (scale < 0.1) {
+    if (!image || image.width * scale < 10) {
       return
     }
     let { offsetX, offsetY } = event
@@ -263,9 +296,6 @@ function ShortcutIcon(props: Props) {
 
   React.useEffect(() => {
     resetImage()
-    if (!open) {
-      setImage(null)
-    }
     return () => {
       if (image && /^blob/.test(image.src)) {
         URL.revokeObjectURL(image.src)
@@ -274,7 +304,9 @@ function ShortcutIcon(props: Props) {
   }, [image, open])
 
   const handleDone = () => {
-    if (type === IconType.Custom && image) {
+    if (type === IconType.BuiltIn && selectedIcon) {
+      props.onClose(selectedIcon)
+    } else if (type === IconType.Custom && image) {
       const canvas = document.createElement("canvas")
       canvas.width = SIZE
       canvas.height = SIZE
@@ -284,7 +316,7 @@ function ShortcutIcon(props: Props) {
       ctx.clip()
       ctx.drawImage(image, crop.x, crop.y, image.width * crop.scale, image.height * crop.scale)
       props.onClose(canvas.toDataURL("image/png"))
-    } else if (type === IconType.Official) {
+    } else {
       props.onClose()
     }
   }
@@ -293,44 +325,41 @@ function ShortcutIcon(props: Props) {
     <>
       <Dialog
         open={open}
+        classes={{
+          paper: classes.dialog,
+        }}
         onClose={handleClose}
       >
         <DialogTitle>Icon Editor</DialogTitle>
         <DialogContent>
-          {/* <img src={chrome.runtime.getURL(`icons/${icon}.png`)} alt=""/>
-          <div className="cropper">
-            <Typography variant="h4">{SIZE}x{SIZE}</Typography>
-          </div> */}
-          <FormControl>
-            <FormLabel>Type</FormLabel>
-            <RadioGroup
-              name="type"
-              value={type}
-              onChange={handleChange}
-            >
-              <FormControlLabel
-                label="Official icon"
-                value={IconType.Official}
-                control={<Radio color="primary" />}
-              />
-              <FormControlLabel
-                label="Custom icon"
-                value={IconType.Custom}
-                control={<Radio color="primary" />}
-              />
-            </RadioGroup>
-            <FormHelperText>labelPlacement start</FormHelperText>
-          </FormControl>
-          {type === IconType.Official && (
-            <div>
-              {icons.map(item => (
-                <img
-                  key={item}
-                  src={chrome.runtime.getURL(`icons/${item}.png`)}
-                  alt={item}
-                  className={classNames({ [classes.iconSelected]: icon === item })}
-                />
-              ))}
+          <div className={classes.typeToggle}>
+            <ToggleButtonGroup value={type} exclusive onChange={handleTypeChange}>
+              <ToggleButton value={IconType.BuiltIn}>
+                <Tooltip enterDelay={500} title="Built-in">
+                  <DashboardIcon />
+                </Tooltip>
+              </ToggleButton>
+              <ToggleButton value={IconType.Custom}>
+                <Tooltip enterDelay={500} title="Custom">
+                  <CropIcon />
+                </Tooltip>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+          {type === IconType.BuiltIn && (
+            <div className={classes.iconsWrap}>
+              {icons.map(item => {
+                return (
+                  <img
+                    key={item}
+                    src={chrome.runtime.getURL(`icons/${item}.png`)}
+                    alt={item}
+                    className={classNames(classes.icon, { [classes.iconSelected]: selectedIcon === item })}
+                    // tslint:disable-next-line: jsx-no-lambda
+                    onClick={() => setSelectedIcon(item)}
+                  />
+                )
+              })}
             </div>
           )}
           {type === IconType.Custom && (
@@ -354,13 +383,13 @@ function ShortcutIcon(props: Props) {
                   />
                 )}
                 <div className={classes.cropper} />
-                <Tooltip title={chrome.i18n.getMessage("website_edit_icon_reset")}>
+                <Tooltip enterDelay={500} title={chrome.i18n.getMessage("website_edit_icon_reset")}>
                   <AutorenewIcon
                     className={classNames(classes.cropperIcons, classes.resetIcon)}
                     onClick={resetImage}
                   />
                 </Tooltip>
-                <Tooltip title={chrome.i18n.getMessage("website_edit_icon_help")}>
+                <Tooltip enterDelay={500} title={chrome.i18n.getMessage("website_edit_icon_help")}>
                   <HelpIcon className={classNames(classes.cropperIcons, classes.helpIcon)} />
                 </Tooltip>
               </div>
@@ -377,8 +406,9 @@ function ShortcutIcon(props: Props) {
                   color="default"
                   size="small"
                   component="span"
+                  className={classes.addPhotoIcon}
                 >
-                  <AddPhotoIcon className={classes.addPhotoIcon} />
+                  <AddPhotoIcon />
                   {chrome.i18n.getMessage("website_edit_icon_select_file")}
                 </Button>
               </label>
@@ -386,8 +416,8 @@ function ShortcutIcon(props: Props) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{chrome.i18n.getMessage("button_done")}</Button>
-          <Button onClick={handleDone}>{chrome.i18n.getMessage("button_cancel")}</Button>
+          <Button onClick={handleClose}>{chrome.i18n.getMessage("button_cancel")}</Button>
+          <Button onClick={handleDone}>{chrome.i18n.getMessage("button_done")}</Button>
         </DialogActions>
       </Dialog>
       <Snackbar

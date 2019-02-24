@@ -15,6 +15,7 @@ import DialogActions from "@material-ui/core/DialogActions"
 import Typography from "@material-ui/core/Typography"
 
 import { WebSiteInfoStore } from "../../../store/websiteInfo"
+import { ShortcutIconsStore } from "../../../store/shortcutIcons"
 
 const styles = ({ spacing }: Theme) => createStyles({
   title: {
@@ -31,11 +32,12 @@ const styles = ({ spacing }: Theme) => createStyles({
 
 interface PropsType extends WithStyles<typeof styles> {
   open: boolean
-  onClose(): void
   websiteInfoStore: WebSiteInfoStore
+  shortcutIconsStore: ShortcutIconsStore
+  onClose(): void
 }
 
-@inject("websiteInfoStore")
+@inject("websiteInfoStore", "shortcutIconsStore")
 @observer
 class WebsiteInfo extends React.Component<PropsType> {
   public state = {}
@@ -47,6 +49,9 @@ class WebsiteInfo extends React.Component<PropsType> {
   public render() {
     const { classes } = this.props
     const { open, info } = this.props.websiteInfoStore
+    const { shortcutIcon, getURL } = this.props.shortcutIconsStore
+    const icon = info.id ? shortcutIcon(info.id, info.url) : ""
+    const iconURL = icon ? getURL(icon) : ""
 
     return (
       <Dialog
@@ -56,7 +61,7 @@ class WebsiteInfo extends React.Component<PropsType> {
         <DialogTitle className={classes.title} disableTypography>
           <Avatar
             className={classes.avatar}
-            src={chrome.runtime.getURL(`icons/google.png`)}
+            src={iconURL}
           />
           <Typography variant="h6">{info.label}</Typography>
         </DialogTitle>

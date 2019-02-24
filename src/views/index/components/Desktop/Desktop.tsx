@@ -250,13 +250,15 @@ class Desktop extends React.Component<PropsType> {
                 const {
                   label,
                   url,
+                  id: shortcutId,
                 } = shortcuts![0]
                 return (
                   <Wrap row={row} column={column} key={id}>
                     <Webiste
-                      id={id}
+                      id={shortcutId}
                       label={label}
                       url={url}
+                      itemId={id}
                       onMouseDown={this.handleShortcutGrab(shortcuts![0], id)}
                       onContextMenu={this.showMenu}
                     />

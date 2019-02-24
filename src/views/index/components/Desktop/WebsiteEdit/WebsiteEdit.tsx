@@ -16,6 +16,7 @@ import Avatar from "@material-ui/core/Avatar"
 import IconEditor from "../IconEditor"
 import { WebsiteEditStore } from "../../../store/websiteEdit"
 import { ShortcutIconsStore } from "../../../store/shortcutIcons"
+import { isBase64 } from "utils/validate"
 
 const styles = ({ spacing }: Theme) => createStyles({
   dialog: {
@@ -50,6 +51,7 @@ interface StateType {
   synced: boolean
   label: string
   url: string
+  newIcon: string
   iconEditorOpen: boolean
 }
 
@@ -61,6 +63,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
     synced: false,
     label: "",
     url: "https://",
+    newIcon: "",
     iconEditorOpen: false,
   }
   /**
@@ -75,6 +78,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
         synced: true,
         label,
         url,
+        newIcon: "",
       }
     }
     return null
@@ -98,6 +102,9 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
     event.preventDefault()
     this.handleClose()
     this.props.websiteEditStore.saveInfo(this.state.label, this.state.url)
+    if (this.state.newIcon) {
+      this.props.shortcutIconsStore.updateIcon(this.props.websiteEditStore.info.id, this.state.newIcon)
+    }
   }
 
   public openIconEditor = (event: React.SyntheticEvent<{}>) => {
@@ -107,19 +114,25 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   }
 
   public handleIconEditorClose = (icon?: string) => {
-    this.setState({
+    const state: any = {
       iconEditorOpen: false,
-    })
-    if (icon) {
-      this.props.shortcutIconsStore.updateIcon(this.props.websiteEditStore.id, icon)
     }
+    if (icon) {
+      state.newIcon = icon
+    }
+    this.setState(state)
   }
 
   public render() {
-    const { label, url, iconEditorOpen } = this.state
-    const { open, id, info } = this.props.websiteEditStore
+    const { label, url, newIcon, iconEditorOpen } = this.state
+    const { open, info } = this.props.websiteEditStore
+    const { id } = info
     const { dialog, avatar, iconLabelWrap } = this.props.classes
-    const icon = this.props.shortcutIconsStore.shortcutIcon(id, url)
+    const { shortcutIcon, getURL } = this.props.shortcutIconsStore
+    const icon = newIcon || shortcutIcon(id, url)
+    const iconURL = newIcon
+      ? isBase64(newIcon) ? newIcon : chrome.runtime.getURL(`icons/${newIcon}.png`)
+      : getURL(icon)
 
     return (
       <>
@@ -138,7 +151,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
               <div className={iconLabelWrap}>
                 <Avatar
                   className={avatar}
-                  src={icon}
+                  src={iconURL}
                   onClick={this.openIconEditor}
                 />
                 <TextField
