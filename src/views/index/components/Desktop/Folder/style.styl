@@ -12,17 +12,16 @@
     top 50%
     border-radius 50%
     transform translate(-50%, -50%) scale(0.7)
-    transition .15s transform ease-in
-  &::after
+    transition .15s transform ease-in, .15s opacity ease-in
     width 108%
     height 108%
     background-color rgba(255, 255, 255, 0.5)
+    opacity 0
 
 .touched .folder-wrap
   &::after
     transform translate(-50%, -50%) scale(.97)
-  .folder
-    // background-color #fff
+    opacity 1
 
 .folder
   overflow hidden

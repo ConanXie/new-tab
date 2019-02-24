@@ -1,7 +1,7 @@
-toolbar-height = 64px
 .desktop
-  height "calc(100vh - %s)" % toolbar-height
-  margin-top toolbar-height
+  box-sizing border-box
+  height 100vh
+  padding-top 64px
   overflow hidden
 
 flex-center()
@@ -50,6 +50,7 @@ flex-center()
     &.touched .shortcut-icon
       &::before
       &::after
+        opacity 1
         transform translate(-50%, -50%) scale(1)
     
   .shortcut-icon
@@ -70,7 +71,8 @@ flex-center()
       top 50%
       border-radius 50%
       transform translate(-50%, -50%) scale(0.7)
-      transition .15s transform ease-in
+      opacity 0
+      transition .15s transform ease-in, .15s opacity ease-in
     &::before
       width 96%
       height 96%
