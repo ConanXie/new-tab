@@ -25,7 +25,8 @@ const updateWallpaper = (base64: string) => {
   sendMessage("updateWallpaper", url)
 }
 
-onMessage("saveWallpaper", (base64: string) => {
+onMessage("saveWallpaper", (base64: string, sender, sendResponse) => {
+  sendResponse()
   chrome.storage.local.set({
     [wallpaper]: base64
   })
@@ -46,16 +47,22 @@ onMessage("getIcons", (url: string, sender, sendResponse) => {
   if (hostname) {
     import("./icons").then(({ default: icons }) => {
       let matched: string[] | undefined = icons[hostname]
-      if (!matched && hostname.indexOf(".") !== hostname.lastIndexOf(".")) {
-        const mainHost = /[^\.]+\.[^\.]+$/.exec(hostname)
-        if (mainHost) {
-          matched = icons[mainHost[0]]
-        }
-      }
       if (!matched) {
-        matched = icons["*"]
+        const reg = /\./g
+        let result
+        // tslint:disable-next-line: no-conditional-assignment
+        while (result = reg.exec(hostname)) {
+          const mainHost = hostname.slice(result.index + 1)
+          matched = icons[mainHost]
+          if (matched) {
+            break
+          }
+        }
+        matched = matched || icons["*"]
       }
       sendResponse(matched)
     })
+  } else {
+    sendResponse()
   }
 })

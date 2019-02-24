@@ -23,8 +23,12 @@ interface PropsType {
 @observer
 class App extends React.Component<PropsType> {
   public componentDidMount() {
-    onMessage("updateWallpaper", this.props.wallpaperStore.wallpaperUpdated)
+    onMessage("updateWallpaper", (url: string, sender, sendResponse) => {
+      sendResponse()
+      this.props.wallpaperStore.wallpaperUpdated(url)
+    })
   }
+
   public render() {
     return (
       <MuiThemeProvider theme={this.props.themeStore.theme}>
