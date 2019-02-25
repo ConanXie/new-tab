@@ -31,12 +31,18 @@ class Folder extends React.Component<PropsType> {
     return (
       <div data-id={this.props.id} onClick={this.handleClick}>
         <div className="folder-wrap">
-          <div ref={this.folderRef} className={classNames("folder", { two: shortcuts.length === 2 })}>
+          <div
+            ref={this.folderRef}
+            className={classNames("folder", {
+              two: shortcuts.length === 2,
+              three: shortcuts.length === 3,
+            })}
+          >
             {shortcuts.map(({ id, label, url }, index) => {
               const iconURL = getURL(shortcutIcon(id, url))
               return (
                 <div key={index}>
-                  <img src={iconURL} alt={label} />
+                  {iconURL && <img src={iconURL} alt={label} />}
                 </div>
               )
             })}
