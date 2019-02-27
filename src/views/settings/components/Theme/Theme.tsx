@@ -92,6 +92,7 @@ class Theme extends React.Component<PropsType> {
       nightModeText,
       nightTime,
       darkToolbar,
+      applyNightMode,
       toggleWhiteToolbar,
       toggleDarkToolbar,
     } = this.props.themeStore
@@ -110,12 +111,17 @@ class Theme extends React.Component<PropsType> {
               </ListItemSecondaryAction>
             </ListItem>
             <Divider />
-            <ListItem button onClick={toggleWhiteToolbar}>
+            <ListItem button disabled={applyNightMode && darkToolbar} onClick={toggleWhiteToolbar}>
               <ListItemText
                 primary={chrome.i18n.getMessage("settings_theme_white_toolbar")}
               />
               <ListItemSecondaryAction>
-                <Switch checked={whiteToolbar} color="primary" onChange={toggleWhiteToolbar} />
+                <Switch
+                  color="primary"
+                  checked={whiteToolbar}
+                  disabled={applyNightMode && darkToolbar}
+                  onChange={toggleWhiteToolbar}
+                />
               </ListItemSecondaryAction>
             </ListItem>
           </List>
@@ -165,13 +171,18 @@ class Theme extends React.Component<PropsType> {
               onClose={this.handleNightTimeChanged}
             />
             <Divider />
-            <ListItem button onClick={toggleDarkToolbar}>
+            <ListItem button disabled={!applyNightMode} onClick={toggleDarkToolbar}>
               <ListItemText
                 primary={chrome.i18n.getMessage("settings_night_mode_toolbar")}
                 secondary={chrome.i18n.getMessage("settings_night_mode_toolbar_secondary")}
               />
               <ListItemSecondaryAction>
-                <Switch checked={darkToolbar} color="primary" onChange={toggleDarkToolbar} />
+                <Switch
+                  color="primary"
+                  disabled={!applyNightMode}
+                  checked={darkToolbar}
+                  onChange={toggleDarkToolbar}
+                />
               </ListItemSecondaryAction>
             </ListItem>
           </List>
