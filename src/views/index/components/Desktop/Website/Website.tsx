@@ -13,17 +13,12 @@ interface PropsType {
   itemId: string
   shortcutIconsStore: ShortcutIconsStore
   onMouseDown(e: any): void
-  onContextMenu(e: any, id: string): void
 }
 
 @inject("shortcutIconsStore")
 @observer
 class Webiste extends React.Component<PropsType> {
   public state = { icon: "" }
-
-  public handleContextMenu = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    this.props.onContextMenu(event, this.props.itemId)
-  }
 
   public render() {
     const { id, url, label, itemId } = this.props
@@ -35,8 +30,8 @@ class Webiste extends React.Component<PropsType> {
         href={url}
         data-id={itemId}
         onMouseDown={this.props.onMouseDown}
-        onContextMenu={this.handleContextMenu}
         className="shortcut"
+        data-type="shortcut"
       >
         <div className="shortcut-icon">
           {iconURL && <img src={iconURL} alt={label} />}

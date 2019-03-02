@@ -1,6 +1,6 @@
 import { observable, action } from "mobx"
 
-interface MenuType {
+export interface MenuType {
   icon: any
   text: string
   onClick(e: any): void
