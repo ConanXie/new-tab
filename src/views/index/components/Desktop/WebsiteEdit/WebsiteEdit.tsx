@@ -62,8 +62,8 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   public state: StateType = {
     synced: false,
     label: "",
-    url: "https://",
-    newIcon: "",
+    url: "",
+    newIcon: "default",
     iconEditorOpen: false,
   }
   /**
@@ -72,23 +72,46 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
    * @param prevState
    */
   public static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const { label, url } = nextProps.websiteEditStore.info
-    if (label && nextProps.websiteEditStore.open && !prevState.synced) {
+    const { open, info } = nextProps.websiteEditStore
+    const { id, label, url } = info
+
+    if (open && !prevState.synced) {
       return {
         synced: true,
         label,
         url,
-        newIcon: "",
+        newIcon: !id ? "default" : "",
       }
     }
     return null
   }
 
-  /** record input value */
-  public handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  public handleLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      [field as "label"]: event.target.value,
+      label: event.target.value,
     })
+  }
+
+  public handleURLChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const url = event.target.value
+    this.setState({ url })
+    this.updateIcon(url)
+  }
+
+  public timer: NodeJS.Timeout
+  /**
+   * Retrieve icon from built-in icons while typing url
+   * only when adding and newIcon is't a custom icon
+   */
+  public updateIcon = (url: string) => {
+    if (!this.props.websiteEditStore.info.id && !isBase64(this.state.newIcon)) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.props.shortcutIconsStore.retrieveIcon(url, icon => {
+          this.setState({ newIcon: icon })
+        })
+      }, 300)
+    }
   }
 
   /** close dialog */
@@ -161,7 +184,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
                   variant="outlined"
                   defaultValue={info.label}
                   label={chrome.i18n.getMessage("website_edit_name")}
-                  onChange={this.handleChange("label")}
+                  onChange={this.handleLabelChange}
                 />
               </div>
               <br />
@@ -169,9 +192,9 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
                 fullWidth
                 margin="dense"
                 variant="outlined"
-                defaultValue={info.url || url}
+                defaultValue={url}
                 label={chrome.i18n.getMessage("website_edit_url")}
-                onChange={this.handleChange("url")}
+                onChange={this.handleURLChange}
               />
             </DialogContent>
             <DialogActions>
@@ -183,7 +206,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
         </Dialog>
         <IconEditor
           open={iconEditorOpen}
-          url={info.url}
+          url={url}
           icon={icon}
           onClose={this.handleIconEditorClose}
         />

@@ -6,12 +6,16 @@ export class WebSiteInfoStore {
   @observable public index: number = 0
   @observable public open: boolean = false
 
-  @computed get info() {
+  @computed get info(): Shortcut {
     const item = desktopStore.data.find(({ id }) => id === this.itemId)
     if (item) {
       return item.shortcuts![this.index]
     }
-    return {} as Shortcut
+    return {
+      id: "",
+      label: "",
+      url: "https://",
+    }
   }
 
   @action("open webiste dialog")

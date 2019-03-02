@@ -17,14 +17,18 @@ export class ShortcutIconsStore {
       if (icon) {
         return icon
       } else {
-        sendMessage("getIcons", url, (builtInIcons: string[]) => {
-          if (builtInIcons) {
-            this.icons![id] = builtInIcons[0]
-          }
-        })
+        this.retrieveIcon(url, builtIn => this.icons![id] = builtIn)
         return
       }
     }).get()
+  }
+
+  public retrieveIcon = (url: string, callback?: (icon: string) => void) => {
+    sendMessage("getIcons", url, (builtInIcons: string[]) => {
+      if (builtInIcons && callback) {
+        callback(builtInIcons[0])
+      }
+    })
   }
 
   public getURL = (icon?: string) => computed(() => {
