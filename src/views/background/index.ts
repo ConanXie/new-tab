@@ -43,26 +43,22 @@ chrome.storage.local.get([wallpaper], result => {
 })
 
 onMessage("getIcons", (url: string, sender, sendResponse) => {
-  const { hostname } = parse(url)
-  if (hostname) {
-    import("./icons").then(({ default: icons }) => {
-      let matched: string[] | undefined = icons[hostname]
-      if (!matched) {
-        const reg = /\./g
-        let result
-        // tslint:disable-next-line: no-conditional-assignment
-        while (result = reg.exec(hostname)) {
-          const mainHost = hostname.slice(result.index + 1)
-          matched = icons[mainHost]
-          if (matched) {
-            break
-          }
+  const hostname = parse(url).hostname as string
+  import("./icons").then(({ default: icons }) => {
+    let matched: string[] | undefined = icons[hostname]
+    if (!matched) {
+      const reg = /\./g
+      let result
+      // tslint:disable-next-line: no-conditional-assignment
+      while (result = reg.exec(hostname)) {
+        const mainHost = hostname.slice(result.index + 1)
+        matched = icons[mainHost]
+        if (matched) {
+          break
         }
-        matched = matched || icons["*"]
       }
-      sendResponse(matched)
-    })
-  } else {
-    sendResponse()
-  }
+      matched = matched || icons["*"]
+    }
+    sendResponse(matched)
+  })
 })
