@@ -85,7 +85,8 @@ class ContextMenu extends React.Component<PropsType> {
     }
   }
   public componentDidMount() {
-    document.addEventListener("click", this.props.menuStore.clearMenus, false)
+    document.addEventListener("click", this.props.menuStore.clearMenus)
+    window.addEventListener("blur", this.props.menuStore.clearMenus)
   }
   public render() {
     const { classes, menuStore } = this.props
