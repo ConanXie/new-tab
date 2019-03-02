@@ -1,4 +1,5 @@
 import { observable, action, computed } from "mobx"
+import * as shortid from "shortid"
 
 export interface Based {
   id: string
@@ -8,7 +9,6 @@ export interface Shortcut extends Based {
   index?: number
   label: string
   url: string
-  icon?: string
 }
 
 /**
@@ -168,9 +168,13 @@ export class DesktopStore {
     },
   }*/]
   @observable public removed: Desktop[] = []
+  public cachedLatestRemovedLabel = ""
 
-  @computed public get latestRemovedName() {
-    return this.removed.length ? (this.removed[0].shortcuts![0].label) : ""
+  @computed public get latestRemovedLabel() {
+    if (this.removed.length) {
+      this.cachedLatestRemovedLabel = this.removed[0].shortcuts![0].label
+    }
+    return this.cachedLatestRemovedLabel
   }
 
   @action("update area")
@@ -183,10 +187,10 @@ export class DesktopStore {
   }
 
   @action("update info")
-  public updateInfo = (id: string, index: number = 0, name: string, url: string) => {
+  public updateInfo = (id: string, index: number = 0, label: string, url: string) => {
     const component = this.data.find(item => item.id === id)
     if (component && component.shortcuts) {
-      component.shortcuts[index].label = name
+      component.shortcuts[index].label = label
       component.shortcuts[index].url = url
     }
   }
@@ -248,13 +252,12 @@ export class DesktopStore {
       const currentData = this.data[currentIndex]
       const targetData = this.data[targetIndex]
       const folderData: Desktop = {
-        id: Date.now().toString(),
+        id: shortid.generate(),
         type: 1,
         row: targetData.row,
         column: targetData.column,
         shortcuts: [...targetData.shortcuts!, ...currentData.shortcuts!],
       }
-      console.log(folderData)
       this.data.splice(targetIndex, 1)
       this.data.splice(targetIndex < currentIndex ? currentIndex - 1 : currentIndex, 1)
       this.data.push(folderData)

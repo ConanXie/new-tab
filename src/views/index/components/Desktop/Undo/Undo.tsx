@@ -38,7 +38,7 @@ class Undo extends React.Component<PropsType> {
       <Snackbar
         open={open}
         autoHideDuration={2000}
-        message={chrome.i18n.getMessage("website_removed_status", this.props.desktopStore.latestRemovedName)}
+        message={chrome.i18n.getMessage("website_removed_status", this.props.desktopStore.latestRemovedLabel)}
         onClose={this.handleSnackbarClose}
         action={
           <React.Fragment>
