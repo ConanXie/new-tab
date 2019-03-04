@@ -15,43 +15,45 @@ export enum Env {
 let env: Env
 
 /**
- * Grab shortcut when mousedown and move
+ * Grab shortcut on mousedown and move
  * @param event mouse event
  * @param shortcut data
  * @param componentId component id
  * @param initialEnv the initial environment of the shortcut
  */
 const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componentId: string, initialEnv: Env) => {
-  event.preventDefault()
+  event.persist()
   env = initialEnv
 
   const el = event.currentTarget
   const wrap = el.parentNode as HTMLElement
   const desktopEl = document.querySelector("#desktop") as HTMLElement
   const { top, left, width, height } = wrap.getBoundingClientRect()
-  const { clientWidth, clientHeight, offsetTop: pageOffsetTop } = desktopEl
-  const { screenX: downScreenX, screenY: downScreenY} = event
-  /** Shadow of shortcut */
+  const { clientWidth, clientHeight, offsetTop: desktopOffsetTop } = desktopEl
+  const { screenX: downScreenX, screenY: downScreenY } = event
+  /** Copy of shortcut */
   let clone: HTMLElement
-  /** For re-caclute the coords of the new shortcut in folder */
+  /** For re-cacluting the coords of the new shortcut in folder */
   let cloneEventRef: MouseEvent
   let folderWindow: HTMLElement | undefined
   let folderWindowPadding: number
 
   /** Grab the shortcut */
   const handleMouseMove = (evt: MouseEvent) => {
-    const { screenX: moveScreenX, screenY: moveScreenY} = evt
-    // begin grab
-    if (!clone && (downScreenX !== moveScreenX || downScreenY !== moveScreenY)) {
+    const { screenX: moveScreenX, screenY: moveScreenY } = evt
+    if (downScreenX !== moveScreenX || downScreenY !== moveScreenY) {
+      event.preventDefault()
+      evt.preventDefault()
       el.removeEventListener("mousemove", handleMouseMove)
-      const offsetLeft = evt.clientX - left
-      const offsetTop = evt.clientY - top
 
-      // Create a clone to following mouse moving
+      // Create a clone to follow mouse moving
       clone = wrap.cloneNode(true) as HTMLElement
       clone.classList.add("grabbing")
-      // Hide origin
+      // Hide original shortcut
       wrap.setAttribute("aria-grabbed", "true")
+
+      const offsetLeft = evt.clientX - left
+      const offsetTop = evt.clientY - top
 
       const translateX = evt.clientX - offsetLeft
       const translateY = evt.clientY - offsetTop
@@ -145,7 +147,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
                   let transform = `translate(${0}px, ${0}px)`
                   // only those shortcuts should be changed translate position which are between landing and origin
                   // others will be restored
-                  if ((forward && i >= landing && i < origin) || (!forward && i <= landing &&  i > origin)) {
+                  if ((forward && i >= landing && i < origin) || (!forward && i <= landing && i > origin)) {
                     transform = `translate(${trX}px, ${trY}px)`
                   }
                   child.style.transform = transform
@@ -161,7 +163,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
             folderWindow = undefined
           }
         } else if (env === Env.Desktop) {
-          y -= pageOffsetTop
+          y -= desktopOffsetTop
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
             unitWidth = clientWidth / desktopStore.columns
             unitHeight = clientHeight / desktopStore.rows
@@ -242,14 +244,14 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
           clone.style.transform = `translate(${transX + adjustLeft}px, ${transY + adjustTop}px)`
         } else if (env === Env.Desktop) {
           const x = e.clientX
-          const y = e.clientY - pageOffsetTop
+          const y = e.clientY - desktopOffsetTop
           unitWidth = clientWidth / desktopStore.columns
           unitHeight = clientHeight / desktopStore.rows
           const adjustLeft = (unitWidth - width) / 2
           const adjustTop = (unitHeight - height) / 2
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
             const transX = column * unitWidth
-            const transY = row * unitHeight + pageOffsetTop
+            const transY = row * unitHeight + desktopOffsetTop
             clone.style.transform = `translate(${transX + adjustLeft}px, ${transY + adjustTop}px)`
           } else {
             outerSpace = true
@@ -259,7 +261,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
             } else if (initialEnv === Env.Folder) {
               const { row: cRow, column: cColumn } = desktopStore.data.find(item => item.id === componentId)!
               const transX = (cColumn - 1) * unitWidth
-              const transY = (cRow - 1) * unitHeight + pageOffsetTop
+              const transY = (cRow - 1) * unitHeight + desktopOffsetTop
               clone.style.transform = `translate(${transX + adjustLeft}px, ${transY + adjustTop}px)`
             }
           }
@@ -312,11 +314,11 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
   el.addEventListener("mousemove", handleMouseMove)
 
   /** Remove all event listeners */
-  const handleMouseUp = () => {
+  const handleMouseUpOnDocument = () => {
     el.removeEventListener("mousemove", handleMouseMove)
-    document.removeEventListener("mouseup", handleMouseUp)
+    document.removeEventListener("mouseup", handleMouseUpOnDocument)
   }
-  document.addEventListener("mouseup", handleMouseUp)
+  document.addEventListener("mouseup", handleMouseUpOnDocument)
 }
 
 export default grab
