@@ -23,8 +23,8 @@
   "website_edit_title": {
     "message": "Edit shortcut"
   },
-  "website_add_title": {
-    "message": "Add shortcut"
+  "website_new_title": {
+    "message": "New shortcut"
   },
   "website_edit_name": {
     "message": "Label"
