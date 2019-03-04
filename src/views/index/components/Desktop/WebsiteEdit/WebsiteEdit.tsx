@@ -124,10 +124,8 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   public handleDone = (event: React.FormEvent) => {
     event.preventDefault()
     this.handleClose()
-    this.props.websiteEditStore.saveInfo(this.state.label, this.state.url)
-    if (this.state.newIcon) {
-      this.props.shortcutIconsStore.updateIcon(this.props.websiteEditStore.info.id, this.state.newIcon)
-    }
+    const { label, url, newIcon } = this.state
+    this.props.websiteEditStore.saveInfo(label, url, newIcon)
   }
 
   public openIconEditor = (event: React.SyntheticEvent<{}>) => {
@@ -168,7 +166,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
         >
           <form onSubmit={this.handleDone}>
             <DialogTitle>
-              {chrome.i18n.getMessage(id ? "website_edit_title" : "website_add_title")}
+              {chrome.i18n.getMessage(id ? "website_update_title" : "website_new_title")}
             </DialogTitle>
             <DialogContent>
               <div className={iconLabelWrap}>

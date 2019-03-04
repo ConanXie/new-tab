@@ -62,7 +62,7 @@ class Desktop extends React.Component<PropsType> {
   }
   public desktopMenus: MenuType[] = [{
     icon: <AddIcon />,
-    text: "Add shortcut",
+    text: "New shortcut",
     onClick: () => {
       this.id = ""
       this.editWebsite()
@@ -107,13 +107,13 @@ class Desktop extends React.Component<PropsType> {
     this.props.menuStore.showMenu(menus)
   }
   public editWebsite = () => {
-    this.props.websiteEditStore.openDialog(this.id)
+    this.props.websiteEditStore.openDialog(this.id, this.index)
   }
   public showInfo = () => {
-    this.props.websiteInfoStore.openDialog(this.id)
+    this.props.websiteInfoStore.openDialog(this.id, this.index)
   }
   public removeWebsite = () => {
-    this.props.desktopStore.removeWebsite(this.id)
+    this.props.desktopStore.removeWebsite(this.id, this.index)
     this.setState({ undoOpen: true })
   }
   public closeUndo = () => {
@@ -123,9 +123,13 @@ class Desktop extends React.Component<PropsType> {
     event.preventDefault()
     const path = event.composedPath() as HTMLElement[]
     for (const target of path) {
-      if (target.dataset && target.dataset.type === "shortcut") {
-        this.showMenu(event, this.shortcutMenus, target.dataset.id, 0)
-        return
+      const { dataset } = target
+      if (dataset) {
+        const { type, id, index } = dataset
+        if (type === "shortcut") {
+          this.showMenu(event, this.shortcutMenus, id, Number(index))
+          return
+        }
       }
       if (target === this.desktopElement.current) {
         this.showMenu(event, this.desktopMenus)
@@ -141,7 +145,7 @@ class Desktop extends React.Component<PropsType> {
   }
   public render() {
     const { columns, rows, data } = this.props.desktopStore
-    const { open: folderOpen, closeFolder, folderElement } = this.props.folderStore
+    const { open: folderOpen, closeFolder, openFolder, folderElement } = this.props.folderStore
     const styles: React.CSSProperties = {
       gridTemplateColumns: `repeat(${columns}, 1fr)`,
       gridAutoRows: `calc((100vh - 64px) / ${rows})`,
@@ -166,6 +170,7 @@ class Desktop extends React.Component<PropsType> {
                       label={label}
                       url={url}
                       itemId={id}
+                      index={0}
                       onMouseDown={this.handleShortcutGrab(shortcuts![0], id)}
                     />
                   </Wrap>
@@ -176,6 +181,7 @@ class Desktop extends React.Component<PropsType> {
                   <Wrap row={row} column={column} key={id}>
                     <Folder
                       {...item}
+                      onClick={openFolder}
                     />
                   </Wrap>
                 )

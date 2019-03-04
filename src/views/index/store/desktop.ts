@@ -21,6 +21,8 @@ export interface Desktop extends Based {
   type: ComponentType
   row: number
   column: number
+  rowEnd?: number
+  columnEnd?: number
   label?: string
   shortcuts?: Shortcut[]
 }
@@ -167,6 +169,26 @@ export class DesktopStore {
       url: "https://www.quora.com",
     },
   }*/]
+  @computed public get chessBoard() {
+    const arr: number[][] = []
+    for (let i = 0; i < this.rows; i++) {
+      arr[i] = []
+      for (let j = 0; j < this.columns; j++) {
+        arr[i][j] = 0
+      }
+    }
+    this.data.forEach(({ row, column, rowEnd, columnEnd, type }) => {
+      rowEnd = rowEnd || row
+      columnEnd = columnEnd || column
+      for (let i = row - 1; i < rowEnd; i++) {
+        for (let j = column - 1; j < columnEnd; j++) {
+          arr[i][j] = type
+        }
+      }
+    })
+    return arr
+  }
+
   @observable public removed: Desktop[] = []
   public cachedLatestRemovedLabel = ""
 
@@ -175,6 +197,17 @@ export class DesktopStore {
       this.cachedLatestRemovedLabel = this.removed[0].shortcuts![0].label
     }
     return this.cachedLatestRemovedLabel
+  }
+
+  @action("create shortcut")
+  public createShortcut = (id: string, label: string, url: string) => {
+    this.data.push({
+      type: 1,
+      id: shortid.generate(),
+      row: 4,
+      column: 2,
+      shortcuts: [{ id, label, url }],
+    })
   }
 
   @action("update area")
