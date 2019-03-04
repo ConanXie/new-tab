@@ -41,13 +41,11 @@ class FolderWindow extends React.Component<PropsType> {
     horizontal: "center",
   }
 
-  public mock = () => {
-    return
-  }
-
-  public handleGrab = (index: number) => (e: any) => {
-    const { id, shortcuts } = this.props.folderStore
-    grab(e, shortcuts[index], id, Env.Folder)
+  public handleGrab = (index: number) => (event: React.MouseEvent<HTMLElement>) => {
+    if (event.button === 0) {
+      const { id, shortcuts } = this.props.folderStore
+      grab(event, shortcuts[index], id, Env.Folder)
+    }
   }
 
   public render() {
@@ -79,8 +77,9 @@ class FolderWindow extends React.Component<PropsType> {
                   label={label}
                   url={url}
                   key={id}
+                  itemId={folderStore.id}
+                  index={index}
                   onMouseDown={this.handleGrab(index)}
-                  onContextMenu={this.mock}
                 />
               </Wrap>
             )
