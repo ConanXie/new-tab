@@ -137,7 +137,7 @@ class Folder extends React.Component<PropsType> {
           >
             {shortcuts.map(({ id, label, url }, index) => {
               const iconURL = getURL(shortcutIcon(id, url))
-              return (
+              return iconURL && (
                 <div key={index}>
                   <img src={iconURL} alt={label} />
                 </div>
