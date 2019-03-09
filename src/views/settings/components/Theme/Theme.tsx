@@ -34,7 +34,7 @@ const styles = ({ spacing, palette }: ThemeType) => createStyles({
   },
 })
 interface PropsType extends WithStyles<typeof styles> {
-  themeStore: ThemeStore
+  themeStore?: ThemeStore
 }
 
 @inject("themeStore")
@@ -52,7 +52,7 @@ class Theme extends React.Component<PropsType> {
     this.setState({ colorPickerOpen: false })
 
     if (color) {
-      this.props.themeStore.saveColor(color.toUpperCase())
+      this.props.themeStore!.saveColor(color.toUpperCase())
     }
   }
   public handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
@@ -63,7 +63,7 @@ class Theme extends React.Component<PropsType> {
   }
   public handleModeMenuClick = (value: NightModeStatus) => {
     this.setState({ anchorEl: null })
-    this.props.themeStore.changeNightMode(value)
+    this.props.themeStore!.changeNightMode(value)
   }
 
   public handleMenuItemClick = (value: NightModeStatus) => () => this.handleModeMenuClick(value)
@@ -80,7 +80,7 @@ class Theme extends React.Component<PropsType> {
   public handleNightTimeChanged = (times: string[]) => {
     this.setState({ nightTimeOpen: false })
     if (times) {
-      this.props.themeStore.setNightTime(times)
+      this.props.themeStore!.setNightTime(times)
     }
   }
 
@@ -95,7 +95,7 @@ class Theme extends React.Component<PropsType> {
       applyNightMode,
       toggleWhiteToolbar,
       toggleDarkToolbar,
-    } = this.props.themeStore
+    } = this.props.themeStore!
 
     return (
       <React.Fragment>
@@ -104,7 +104,7 @@ class Theme extends React.Component<PropsType> {
             <ListItem button onClick={this.openColorPicker}>
               <ListItemText
                 primary={chrome.i18n.getMessage("settings_theme_switch_label")}
-                secondary={this.props.themeStore.color}
+                secondary={color}
               />
               <ListItemSecondaryAction>
                 <div onClick={this.openColorPicker} className={this.props.classes.color} />

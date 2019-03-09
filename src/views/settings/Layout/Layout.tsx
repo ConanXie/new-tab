@@ -1,10 +1,11 @@
 import * as React from "react"
 import * as classNames from "classnames"
+import * as Loadable from "react-loadable"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import withTheme from "@material-ui/core/styles/withTheme"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import { Theme as MuiTheme } from "@material-ui/core/styles/createMuiTheme"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import IconButton from "@material-ui/core/IconButton"
@@ -20,9 +21,19 @@ import InfoIcon from "@material-ui/icons/Info"
 import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import SettingsList, { SettingsItemType } from "./SettingsList"
 
+const Theme = Loadable({
+  loader: () => import("../components/Theme"),
+  loading: () => null,
+})
+
+const About = Loadable({
+  loader: () => import("../components/About"),
+  loading: () => null,
+})
+
 const drawerWidth = 240
 
-const styles = (theme: Theme) => createStyles({
+const styles = (theme: MuiTheme) => createStyles({
   root: {
     flexGrow: 1,
     height: 430,
@@ -94,13 +105,13 @@ const styles = (theme: Theme) => createStyles({
   },
 })
 interface PropsType extends WithStyles<typeof styles> {
-  theme: Theme
+  theme: MuiTheme
 }
 
 class Layout extends React.Component<PropsType> {
   public state = {
     open: true,
-    Content: null as React.ComponentType | null,
+    loadComponent: "",
   }
   /**
    * Control Drawer display
@@ -117,22 +128,19 @@ class Layout extends React.Component<PropsType> {
   private readonly settings: SettingsItemType[] = [{
     icon: ColorLensIcon,
     text: chrome.i18n.getMessage("settings_theme_title"),
-    onClick: () => import("../components/Theme").then(this.loadContent)
+    onClick: () => this.setState({ loadComponent: "Theme" }),
   }]
   private readonly infoSettings: SettingsItemType[] = [{
     icon: InfoIcon,
     text: chrome.i18n.getMessage("settings_about_title"),
-    onClick: () => import("../components/About").then(this.loadContent)
+    onClick: () => this.setState({ loadComponent: "About" }),
   }]
-  private loadContent = (_: any) => {
-    this.setState({ Content: _.default })
-  }
   public componentDidMount() {
     this.settings[0].onClick()
   }
   public render() {
     const { classes, theme } = this.props
-    const { open, Content } = this.state
+    const { open, loadComponent } = this.state
     return (
       <div className={classes.layout}>
         <AppBar
@@ -172,7 +180,8 @@ class Layout extends React.Component<PropsType> {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          {Content && <Content />}
+          {loadComponent === "Theme" && <Theme />}
+          {loadComponent === "About" && <About />}
         </main>
 
         {/**

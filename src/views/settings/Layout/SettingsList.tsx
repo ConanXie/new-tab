@@ -6,9 +6,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 
 export interface SettingsItemType {
-  icon: React.ComponentType,
+  icon: React.ComponentType
   text: string
-  onClick(): Promise<void>
+  onClick: () => void
 }
 
 /**
