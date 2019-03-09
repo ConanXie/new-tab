@@ -1,4 +1,4 @@
-import { observable, computed, autorun, action } from "mobx"
+import { observable, computed, autorun, action, toJS } from "mobx"
 import { settingsStorage } from "utils/storage"
 import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
@@ -114,7 +114,7 @@ const persistence = settingsStorage.get("wallpaper", {})
 const wallpaperStore = new WallpaperStore(persistence)
 
 autorun(() => {
-  settingsStorage.set("wallpaper", wallpaperStore)
+  settingsStorage.set("wallpaper", toJS(wallpaperStore))
 })
 
 export default wallpaperStore

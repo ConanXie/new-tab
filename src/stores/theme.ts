@@ -1,4 +1,4 @@
-import { observable, computed, autorun, action } from "mobx"
+import { observable, computed, autorun, action, toJS } from "mobx"
 import { settingsStorage } from "utils/storage"
 import * as Color from "color"
 import createMuiTheme, { ThemeOptions } from "@material-ui/core/styles/createMuiTheme"
@@ -194,7 +194,7 @@ export class ThemeStore {
 const themeStore = new ThemeStore()
 
 autorun(() => {
-  settingsStorage.set("theme", themeStore)
+  settingsStorage.set("theme", toJS(themeStore))
 })
 
 export default themeStore

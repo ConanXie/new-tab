@@ -1,4 +1,4 @@
-import { observable, action, computed, autorun } from "mobx"
+import { observable, action, computed, autorun, toJS } from "mobx"
 import { sendMessage } from "utils/message"
 import { isBase64 } from "utils/validate"
 
@@ -46,7 +46,7 @@ const shortcutIconsStore = new ShortcutIconsStore();
 (window as any).shortcutIcons = shortcutIconsStore
 
 autorun(() => {
-  chrome.storage.local.set(shortcutIconsStore)
+  chrome.storage.local.set(toJS(shortcutIconsStore))
 })
 
 export default shortcutIconsStore
