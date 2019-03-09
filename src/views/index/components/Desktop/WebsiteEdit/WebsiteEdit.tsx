@@ -196,7 +196,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
               />
             </DialogContent>
             <DialogActions>
-              <Button type="submit" disabled={!label || !url}>
+              <Button color="primary" type="submit" disabled={!label || !url}>
                 {chrome.i18n.getMessage("button_done")}
               </Button>
             </DialogActions>

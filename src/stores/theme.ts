@@ -162,7 +162,7 @@ export class ThemeStore {
       },
       overrides: {
         MuiButton: {
-          root: {
+          textPrimary: {
             color: isLight ? `${colorTool.darken(lightDiff * 0.08)}` : color,
           },
         },

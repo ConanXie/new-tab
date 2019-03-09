@@ -31,7 +31,7 @@ const styles = ({ spacing, overrides }: Theme) => createStyles({
     height: 40,
     marginRight: spacing.unit,
     marginLeft: -spacing.unit / 4,
-    color: overrides!.MuiButton!.root!.color,
+    color: overrides!.MuiButton!.textPrimary!.color,
   },
   "@keyframes rotate": {
     from: {

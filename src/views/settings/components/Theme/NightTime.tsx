@@ -233,10 +233,10 @@ class NightTime extends React.Component<PropsType, StateType> {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose}>
+            <Button color="primary" onClick={this.handleClose}>
               {chrome.i18n.getMessage("button_cancel")}
             </Button>
-            <Button type="submit">
+            <Button color="primary" type="submit">
               {chrome.i18n.getMessage("button_done")}
             </Button>
           </DialogActions>

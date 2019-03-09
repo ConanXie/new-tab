@@ -40,10 +40,10 @@ class ColorPicker extends React.Component<PropsType> {
           <CirclePicker color={color} onChangeComplete={this.stageColor} />
         </DialogContent>
         <DialogActions>
-          <Button size="small" onClick={this.handleCancel}>
+          <Button color="primary" size="small" onClick={this.handleCancel}>
             {chrome.i18n.getMessage("button_cancel")}
           </Button>
-          <Button id="ok" size="small" onClick={this.handleOK} autoFocus>
+          <Button color="primary" id="ok" size="small" onClick={this.handleOK} autoFocus>
             {chrome.i18n.getMessage("button_done")}
           </Button>
         </DialogActions>

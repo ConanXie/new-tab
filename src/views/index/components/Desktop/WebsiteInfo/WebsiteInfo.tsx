@@ -69,7 +69,7 @@ class WebsiteInfo extends React.Component<PropsType> {
           <DialogContentText>{info.url}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose}>
+          <Button color="primary" onClick={this.handleClose}>
             {chrome.i18n.getMessage("button_close")}
           </Button>
         </DialogActions>

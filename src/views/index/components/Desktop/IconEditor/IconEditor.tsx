@@ -416,8 +416,8 @@ function ShortcutIcon(props: Props) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{chrome.i18n.getMessage("button_cancel")}</Button>
-          <Button onClick={handleDone}>{chrome.i18n.getMessage("button_done")}</Button>
+          <Button color="primary" onClick={handleClose}>{chrome.i18n.getMessage("button_cancel")}</Button>
+          <Button color="primary" onClick={handleDone}>{chrome.i18n.getMessage("button_done")}</Button>
         </DialogActions>
       </Dialog>
       <Snackbar
