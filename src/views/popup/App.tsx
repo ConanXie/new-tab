@@ -1,26 +1,18 @@
+import { hot } from "react-hot-loader/root"
 import * as React from "react"
+import { Provider, observer } from "mobx-react"
 
 import Drawer from "./components/Drawer"
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
 
-import { ThemeStore } from "stores/theme"
-import { inject, observer } from "mobx-react"
-import makeDumbProps from "utils/makeDumbProps"
+import * as store from "./stores"
 
-interface PropsType {
-  themeStore: ThemeStore
-}
+const App = () => (
+  <Provider {...store}>
+    <MuiThemeProvider theme={store.themeStore.theme}>
+    <Drawer />
+    </MuiThemeProvider>
+  </Provider>
+)
 
-@inject("themeStore")
-@observer
-class App extends React.Component<PropsType> {
-  public render() {
-    return (
-      <MuiThemeProvider theme={this.props.themeStore.theme}>
-        <Drawer />
-      </MuiThemeProvider>
-    )
-  }
-}
-
-export default makeDumbProps(App)
+export default hot(observer(App))

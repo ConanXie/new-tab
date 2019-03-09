@@ -1,5 +1,6 @@
+import { hot } from "react-hot-loader/root"
 import * as React from "react"
-import { inject, observer } from "mobx-react"
+import { Provider } from "mobx-react"
 
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
 
@@ -8,37 +9,28 @@ import Background from "./components/Background"
 import Desktop from "./components/Desktop"
 import ContextMenu from "components/ContextMenu"
 
-// import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import { onMessage } from "utils/message"
-import makeDumbProps from "utils/makeDumbProps"
 
-import { WallpaperStore } from "./store/wallpaper"
-import { ThemeStore } from "stores/theme"
+import * as store from "./store"
 
-interface PropsType {
-  wallpaperStore: WallpaperStore
-  themeStore: ThemeStore
-}
-@inject("wallpaperStore", "themeStore")
-@observer
-class App extends React.Component<PropsType> {
-  public componentDidMount() {
+const App = () => {
+  React.useEffect(() => {
     onMessage("updateWallpaper", (url: string, sender, sendResponse) => {
       sendResponse()
-      this.props.wallpaperStore.wallpaperUpdated(url)
+      store.wallpaperStore.wallpaperUpdated(url)
     })
-  }
+  }, [])
 
-  public render() {
-    return (
-      <MuiThemeProvider theme={this.props.themeStore.theme}>
+  return (
+    <Provider {...store}>
+      <MuiThemeProvider theme={store.themeStore.theme}>
         <Background />
         <Header />
         <Desktop />
         <ContextMenu />
       </MuiThemeProvider>
-    )
-  }
+    </Provider>
+  )
 }
 
-export default makeDumbProps(App)
+export default hot(App)
