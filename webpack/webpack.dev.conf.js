@@ -7,6 +7,11 @@ const port = 5001
 
 module.exports = merge(baseConfig, {
   mode: 'development',
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom'
+    }
+  },
   output: {
     publicPath: `http://localhost:${port}/`,
     filename: '[name].js'
@@ -27,13 +32,13 @@ module.exports = merge(baseConfig, {
     }]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.NamedModulesPlugin()
   ],
   devServer: {
     port,
-    hot: true,
     overlay: true,
     compress: true,
+    disableHostCheck: true,
     clientLogLevel: 'warning',
     stats: {
       assets: false,

@@ -1,5 +1,5 @@
 const path = require('path')
-const webpack = require('webpack')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const context = path.resolve(__dirname, '../src')
 
@@ -25,7 +25,10 @@ module.exports = {
     rules: [{
       test: /\.tsx?$/,
       exclude: /node_modules/,
-      loader: 'awesome-typescript-loader'
+      loader: 'babel-loader',
+      options: {
+        cacheDirectory: true
+      }
     }, {
       test: /\.(jpe?g|png|svg|gif)$/,
       loader: 'url-loader',
@@ -39,5 +42,11 @@ module.exports = {
         name: 'fonts/[name].[ext]'
       }
     }]
-  }
+  },
+  plugins: [
+    new ForkTsCheckerWebpackPlugin({
+      tsconfig: path.resolve(__dirname, '../tsconfig.json'),
+      tslint: path.resolve(__dirname, '../tslint.json')
+    })
+  ]
 }
