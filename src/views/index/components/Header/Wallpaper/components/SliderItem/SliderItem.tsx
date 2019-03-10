@@ -44,6 +44,7 @@ export default withStyles(styles)((props: PropsType) => {
         className={classes.listText}
         classes={{ secondary: classes.listSecondary }}
         primary={props.children}
+        secondaryTypographyProps={{ component: "div" }}
         secondary={
           <Slider
             disabled={disabled}
