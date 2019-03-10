@@ -60,8 +60,7 @@ for (let name in webpackConfig.entry) {
       removeAttributeQuotes: true
     },
     chunks,
-    chunksSortMode: 'dependency',
-    hash: true
+    chunksSortMode: 'dependency'
   }
   webpackConfig.plugins.push(new HtmlWebpackPlugin(config))
 }
