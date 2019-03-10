@@ -9,7 +9,7 @@ module.exports = {
             'chrome >= 69',
           ],
         },
-      }
+      },
     ],
     '@babel/preset-typescript',
     '@babel/preset-react',
@@ -17,16 +17,17 @@ module.exports = {
   plugins: [
     '@babel/plugin-syntax-dynamic-import',
     [
-      '@babel/plugin-proposal-decorators', {
+      '@babel/plugin-proposal-decorators',
+      {
         legacy: true,
-      }
+      },
     ],
     [
-      '@babel/plugin-proposal-class-properties', {
+      '@babel/plugin-proposal-class-properties',
+      {
         loose: true,
-      }
+      },
     ],
     'react-hot-loader/babel',
-    "react-loadable/babel",
   ],
 }
