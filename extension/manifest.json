@@ -15,7 +15,10 @@
     "default_icon": "logo/logo48.png",
     "default_popup": "popup.html"
   },
-  "options_page": "settings.html",
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
+  },
   "background": {
     "page": "background.html"
   },
