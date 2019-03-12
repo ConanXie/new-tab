@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 
 interface Modules {
   [name: string]: () => Promise<{}>
@@ -47,7 +47,7 @@ class LazilyLoad extends React.Component<PropsType> {
     const keys = Object.keys(modules)
 
     Promise.all(keys.map((key) => modules[key]()))
-      .then(values => (keys.reduce((agg, key, index) => {
+      .then(values => (keys.reduce((agg: any, key, index) => {
         agg[key] = values[index]
         return agg
       }, {})))
@@ -78,7 +78,7 @@ export const LazilyLoadFactory = (Component: React.SFC, modules: Modules) => {
   )
 }
 
-export const importLazy = (promise: Promise<{}>) => (
+export const importLazy = (promise: Promise<any>) => (
   promise.then((result: { default: string }) => result.default)
 )
 

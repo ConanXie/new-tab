@@ -1,5 +1,5 @@
 import { action } from "mobx"
-import * as shortid from "shortid"
+import shortid from "shortid"
 
 import { WebSiteInfoStore } from "./websiteInfo"
 import desktopStore from "./desktop"

@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 
 import { ChromePicker, CirclePicker, ColorResult } from "react-color"
 import Button from "@material-ui/core/Button"

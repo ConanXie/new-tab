@@ -1,4 +1,4 @@
-import * as storage from "store2"
+import storage from "store2"
 import { parse } from "url"
 import { settingsStorage } from "utils/storage"
 import { onMessage, sendMessage } from "utils/message"
@@ -45,14 +45,14 @@ chrome.storage.local.get([wallpaper], result => {
 onMessage("getIcons", (url: string, sender, sendResponse) => {
   const hostname = parse(url).hostname as string
   import("./icons").then(({ default: icons }) => {
-    let matched: string[] | undefined = icons[hostname]
+    let matched: string[] | undefined = (icons as any)[hostname]
     if (!matched) {
       const reg = /\./g
       let result
       // tslint:disable-next-line: no-conditional-assignment
       while (result = reg.exec(hostname)) {
         const mainHost = hostname.slice(result.index + 1)
-        matched = icons[mainHost]
+        matched = (icons as any)[mainHost]
         if (matched) {
           break
         }

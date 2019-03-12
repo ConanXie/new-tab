@@ -1,5 +1,5 @@
 import { hot } from "react-hot-loader/root"
-import * as React from "react"
+import React, { useEffect } from "react"
 import { Provider } from "mobx-react"
 
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
@@ -14,7 +14,7 @@ import { onMessage } from "utils/message"
 import * as store from "./store"
 
 const App = () => {
-  React.useEffect(() => {
+  useEffect(() => {
     onMessage("updateWallpaper", (url: string, sender, sendResponse) => {
       sendResponse()
       store.wallpaperStore.wallpaperUpdated(url)

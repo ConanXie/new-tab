@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 
 import BlurOnIcon from "@material-ui/icons/BlurOnOutlined"
 import BlurOffIcon from "@material-ui/icons/BlurOffOutlined"

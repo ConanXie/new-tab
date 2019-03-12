@@ -1,6 +1,6 @@
-import * as React from "react"
+import React from "react"
 import { inject, observer } from "mobx-react"
-import * as Loadable from "react-loadable"
+import Loadable from "react-loadable"
 
 import AddIcon from "@material-ui/icons/Add"
 import EditIcon from "@material-ui/icons/Edit"

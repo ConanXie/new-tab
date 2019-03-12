@@ -3,7 +3,7 @@ import { observable, action, computed } from "mobx"
 import desktopStore, { Shortcut } from "./desktop"
 
 export class FolderStore {
-  public folderElement: HTMLElement
+  public folderElement?: HTMLElement
 
   @observable public id: string = ""
   @observable public open: boolean = false

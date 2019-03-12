@@ -1,6 +1,6 @@
 import { observable, computed, autorun, action, toJS } from "mobx"
 import { settingsStorage } from "utils/storage"
-import * as Color from "color"
+import Color from "color"
 import createMuiTheme, { ThemeOptions } from "@material-ui/core/styles/createMuiTheme"
 import deepOrange from "@material-ui/core/colors/deepOrange"
 import grey from "@material-ui/core/colors/grey"
@@ -135,7 +135,7 @@ export class ThemeStore {
       darkToolbar,
     } = settings
     const colorTool = Color(color).hsl().round()
-    const lightDiff = colorTool["color"][2] - 90
+    const lightDiff = (colorTool as any)["color"][2] - 90
     const isLight = lightDiff > 0 && !applyNightMode
 
     const themeOptions: ThemeOptions = {

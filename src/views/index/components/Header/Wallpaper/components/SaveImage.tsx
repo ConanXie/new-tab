@@ -1,5 +1,5 @@
-import * as React from "react"
-import * as storage from "store2"
+import React from "react"
+import storage from "store2"
 
 import Item, { ItemPropsType } from "./Item"
 

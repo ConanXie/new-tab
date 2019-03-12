@@ -1,6 +1,6 @@
-import * as React from "react"
-import * as classNames from "classnames"
-import * as Loadable from "react-loadable"
+import React from "react"
+import classNames from "classnames"
+import Loadable from "react-loadable"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"

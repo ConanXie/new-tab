@@ -1,5 +1,5 @@
 import { hot } from "react-hot-loader/root"
-import * as React from "react"
+import React from "react"
 import { Provider, observer } from "mobx-react"
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
 import Layout from "./Layout"

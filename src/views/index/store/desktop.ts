@@ -1,5 +1,5 @@
 import { observable, action, computed } from "mobx"
-import * as shortid from "shortid"
+import shortid from "shortid"
 
 export interface Based {
   id: string

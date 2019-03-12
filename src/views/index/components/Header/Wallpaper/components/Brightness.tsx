@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 
 import BrightnessHigh from "@material-ui/icons/BrightnessHighOutlined"
 import BrightnessMedium from "@material-ui/icons/BrightnessMediumOutlined"

@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"

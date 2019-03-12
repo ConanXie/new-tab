@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
@@ -35,7 +35,7 @@ export default withStyles(styles)((props: PropsType) => {
   const { disabled, value, icon, classes, ...range } = props
 
   // tslint:disable-next-line:no-shadowed-variable
-  const handleChange = (event: React.ChangeEvent, value: number) => props.onChange(value)
+  const handleChange = (event: React.ChangeEvent<{}>, value: number) => props.onChange(value)
 
   return (
     <ListItem button disabled={disabled}>

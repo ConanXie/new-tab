@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { inject, observer } from "mobx-react"
 import makeDumbProps from "utils/makeDumbProps"
 
@@ -66,25 +66,6 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
     newIcon: "default",
     iconEditorOpen: false,
   }
-  /**
-   * sync website info from props for edit
-   * @param nextProps
-   * @param prevState
-   */
-  public static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const { open, info } = nextProps.websiteEditStore
-    const { id, label, url } = info
-
-    if (open && !prevState.synced) {
-      return {
-        synced: true,
-        label,
-        url,
-        newIcon: !id ? "default" : "",
-      }
-    }
-    return null
-  }
 
   public handleLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
@@ -98,14 +79,14 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
     this.updateIcon(url)
   }
 
-  public timer: NodeJS.Timeout
+  public timer?: NodeJS.Timeout
   /**
    * Retrieve icon from built-in icons while typing url
    * only when adding and newIcon is't a custom icon
    */
   public updateIcon = (url: string) => {
     if (!this.props.websiteEditStore.info.id && !isBase64(this.state.newIcon)) {
-      clearTimeout(this.timer)
+      clearTimeout(this.timer!)
       this.timer = setTimeout(() => {
         this.props.shortcutIconsStore.retrieveIcon(url, icon => {
           this.setState({ newIcon: icon })
@@ -142,6 +123,20 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
       state.newIcon = icon
     }
     this.setState(state)
+  }
+
+  public componentDidUpdate() {
+    const { open, info } = this.props.websiteEditStore
+    const { id, label, url } = info
+
+    if (open && !this.state.synced) {
+      this.setState({
+        synced: true,
+        label,
+        url,
+        newIcon: !id ? "default" : "",
+      })
+    }
   }
 
   public render() {

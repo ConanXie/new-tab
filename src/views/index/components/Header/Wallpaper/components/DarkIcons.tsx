@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 import Switch from "@material-ui/core/Switch"

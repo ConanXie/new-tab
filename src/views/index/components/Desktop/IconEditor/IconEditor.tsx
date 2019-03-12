@@ -1,5 +1,5 @@
-import * as React from "react"
-import * as classNames from "classnames"
+import React from "react"
+import classNames from "classnames"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
@@ -165,7 +165,7 @@ function ShortcutIcon(props: Props) {
 
   let startX: number
   let startY: number
-  const cropEl = React.useRef(null)
+  const cropEl: React.MutableRefObject<HTMLDivElement | null> = React.useRef(null)
   const [crop, setCrop] = React.useState({
     x: 0,
     y: 0,
@@ -218,13 +218,13 @@ function ShortcutIcon(props: Props) {
   React.useEffect(() => {
     setTimeout(() => {
       if (cropEl.current) {
-        (cropEl.current! as HTMLDivElement).addEventListener("wheel", handleWheel)
+        cropEl.current.addEventListener("wheel", handleWheel)
       }
     }, 0)
     return () => {
       setTimeout(() => {
         if (cropEl.current) {
-          (cropEl.current! as HTMLDivElement).removeEventListener("wheel", handleWheel)
+          cropEl.current.removeEventListener("wheel", handleWheel)
         }
       }, 0)
     }

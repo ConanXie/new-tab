@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 import { inject, observer } from "mobx-react"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
@@ -11,7 +11,6 @@ import ListItemText from "@material-ui/core/ListItemText"
 import Divider from "@material-ui/core/Divider"
 
 import { MenuStore } from "stores/menu"
-import makeDumbProps from "utils/makeDumbProps"
 
 const styles = createStyles({
   root: {
@@ -36,15 +35,7 @@ const styles = createStyles({
 })
 
 interface PropsType extends WithStyles<typeof styles> {
-  menuStore: MenuStore
-}
-
-interface PosStyleType {
-  top?: number | string
-  right?: number | string
-  left?: number | string
-  bottom?: number | string
-  visibility?: string
+  menuStore?: MenuStore
 }
 
 @inject("menuStore")
@@ -58,7 +49,7 @@ class ContextMenu extends React.Component<PropsType> {
     const wrap = this.contextmenuRef.current!
     const { clientWidth, clientHeight } = wrap
     const { top, left } = this.props.menuStore!
-    const style: PosStyleType = {
+    const style: React.CSSProperties = {
       visibility: "visible"
     }
     if (left + clientWidth > window.innerWidth) {
@@ -72,21 +63,18 @@ class ContextMenu extends React.Component<PropsType> {
       style.top = top + "px"
     }
     wrap.removeAttribute("style")
-    const properties = Object.keys(style)
-    for (const i of properties) {
-      wrap.style[i] = style[i]
-    }
+    Object.keys(style).forEach(prop => (wrap.style as any)[prop] = (style as any)[prop])
   }
   public componentDidUpdate() {
-    if (this.props.menuStore.menus.length) {
+    if (this.props.menuStore!.menus.length) {
       this.calcPosition()
     } else {
       this.contextmenuRef.current!.style.visibility = "hidden"
     }
   }
   public componentDidMount() {
-    document.addEventListener("click", this.props.menuStore.clearMenus)
-    window.addEventListener("blur", this.props.menuStore.clearMenus)
+    document.addEventListener("click", this.props.menuStore!.clearMenus)
+    window.addEventListener("blur", this.props.menuStore!.clearMenus)
   }
   public render() {
     const { classes, menuStore } = this.props
@@ -94,7 +82,7 @@ class ContextMenu extends React.Component<PropsType> {
       <div className="contextmenu" ref={this.contextmenuRef}>
         <Paper classes={{ root: classes.root }}>
           <MenuList>
-            {menuStore.menus.map(({ icon, text, onClick }, index) => (
+            {menuStore!.menus.map(({ icon, text, onClick }, index) => (
               <div key={text}>
                 <MenuItem classes={{ root: classes.menuItem }} onClick={onClick}>
                   <ListItemIcon className={classes.icon}>
@@ -102,7 +90,7 @@ class ContextMenu extends React.Component<PropsType> {
                   </ListItemIcon>
                   <ListItemText primary={text} classes={{ primary: classes.text }} />
                 </MenuItem>
-                {index < menuStore.menus.length - 1 && (
+                {index < menuStore!.menus.length - 1 && (
                   <Divider variant="inset" className={classes.divider} component="hr" />
                 )}
               </div>
@@ -114,4 +102,4 @@ class ContextMenu extends React.Component<PropsType> {
   }
 }
 
-export default makeDumbProps(withStyles(styles)(ContextMenu))
+export default withStyles(styles)(ContextMenu)
