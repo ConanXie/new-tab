@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "target": "es6",
-    "sourceMap": true,
-    "jsx": "react",
+    "target": "esnext",
     "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
+    "jsx": "react",
+    "noEmit": true,
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
@@ -19,7 +15,7 @@
     }
   },
   "include": [
-    "src/**/*"
+    "src"
   ],
   "exclude": [
     "node_modules"
