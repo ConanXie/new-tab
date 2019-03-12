@@ -4,16 +4,10 @@ import Color from "color"
 import createMuiTheme, { ThemeOptions } from "@material-ui/core/styles/createMuiTheme"
 import deepOrange from "@material-ui/core/colors/deepOrange"
 import grey from "@material-ui/core/colors/grey"
-import {
-  isWithinInterval,
-  format,
-  isValid,
-  isBefore,
-} from "date-fns"
-/* import isWithinInterval from "date-fns/isWithinInterval"
+import isWithinInterval from "date-fns/isWithinInterval"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
-import isBefore from "date-fns/isBefore" */
+import isBefore from "date-fns/isBefore"
 
 export enum NightModeStatus {
   Off,
