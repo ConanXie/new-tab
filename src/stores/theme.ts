@@ -187,8 +187,15 @@ export class ThemeStore {
 
 const themeStore = new ThemeStore()
 
+let firstrun = true
+
 autorun(() => {
-  settingsStorage.set("theme", toJS(themeStore))
+  const data = toJS(themeStore)
+  if (firstrun) {
+    firstrun = false
+  } else {
+    settingsStorage.set("theme", data)
+  }
 })
 
 export default themeStore

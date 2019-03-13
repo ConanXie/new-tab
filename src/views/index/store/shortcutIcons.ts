@@ -45,8 +45,15 @@ const shortcutIconsStore = new ShortcutIconsStore();
 // A hack to set shortcut icon immediately in DevTool Console
 (window as any).shortcutIcons = shortcutIconsStore
 
+let firstrun = true
+
 autorun(() => {
-  chrome.storage.local.set(toJS(shortcutIconsStore))
+  const data = toJS(shortcutIconsStore)
+  if (firstrun) {
+    firstrun = false
+  } else {
+    chrome.storage.local.set(data)
+  }
 })
 
 export default shortcutIconsStore

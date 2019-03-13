@@ -113,8 +113,15 @@ export class WallpaperStore {
 const persistence = settingsStorage.get("wallpaper", {})
 const wallpaperStore = new WallpaperStore(persistence)
 
+let firstrun = true
+
 autorun(() => {
-  settingsStorage.set("wallpaper", toJS(wallpaperStore))
+  const data = toJS(wallpaperStore)
+  if (firstrun) {
+    firstrun = false
+  } else {
+    settingsStorage.set("wallpaper", data)
+  }
 })
 
 export default wallpaperStore
