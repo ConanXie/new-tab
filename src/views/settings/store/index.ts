@@ -1,5 +1,1 @@
-import themeStore from "stores/theme"
-
-export {
-  themeStore
-}
+export { default as themeStore } from "store/theme"

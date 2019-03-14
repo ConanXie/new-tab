@@ -1,19 +1,8 @@
-import themeStore from "stores/theme"
-import menuStore from "stores/menu"
-import wallpaperStore from "./wallpaper"
-import desktopStore from "./desktop"
-import websiteInfoStore from "./websiteInfo"
-import websiteEditStore from "./websiteEdit"
-import folderStore from "./folder"
-import shortcutIconsStore from "./shortcutIcons"
-
-export {
-  wallpaperStore,
-  themeStore,
-  desktopStore,
-  menuStore,
-  websiteInfoStore,
-  websiteEditStore,
-  folderStore,
-  shortcutIconsStore,
-}
+export { default as themeStore } from "store/theme"
+export { default as menuStore } from "store/menu"
+export { default as wallpaperStore } from "./wallpaper"
+export { default as desktopStore } from "./desktop"
+export { default as websiteInfoStore } from "./websiteInfo"
+export { default as websiteEditStore } from "./websiteEdit"
+export { default as folderStore } from "./folder"
+export { default as shortcutIconsStore } from "./shortcutIcons"

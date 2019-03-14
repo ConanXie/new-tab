@@ -17,7 +17,7 @@ import ColorPicker from "components/ColorPicker"
 import Wrap from "../../Layout/SettingsWrap"
 import NightTime from "./NightTime"
 
-import { ThemeStore, nightModeMenu, NightModeStatus } from "stores/theme"
+import { ThemeStore, nightModeMenu, NightModeStatus } from "store/theme"
 
 const styles = ({ spacing, palette }: ThemeType) => createStyles({
   color: {

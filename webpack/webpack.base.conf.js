@@ -17,7 +17,7 @@ module.exports = {
       mobx: path.resolve(__dirname, '../node_modules/mobx/lib/mobx.es6.js'),
       config: path.join(context, 'config'),
       utils: path.join(context, 'utils'),
-      stores: path.join(context, 'stores'),
+      store: path.join(context, 'store'),
       components: path.join(context, 'components')
     }
   },

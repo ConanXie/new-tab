@@ -1,1 +1,1 @@
-export { default as themeStore } from "stores/theme"
+export { default as themeStore } from "store/theme"
