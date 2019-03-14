@@ -6,13 +6,11 @@
     "jsx": "react",
     "noEmit": true,
     "strict": true,
+    "noUnusedLocals": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": ["src/*"]
-    }
+    "baseUrl": "src"
   },
   "include": [
     "src"
