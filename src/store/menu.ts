@@ -1,7 +1,7 @@
 import { observable, action } from "mobx"
 
 export interface MenuType {
-  icon: any
+  icon: React.ReactElement
   text: string
   onClick(e: any): void
 }

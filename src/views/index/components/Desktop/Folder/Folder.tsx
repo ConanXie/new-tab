@@ -126,7 +126,7 @@ class Folder extends React.Component<PropsType> {
     const { shortcutIcon, getURL } = this.props.shortcutIconsStore
 
     return (
-      <div data-id={this.props.id} onMouseDown={this.handleMouseDown}>
+      <div data-id={this.props.id} data-type="folder" onMouseDown={this.handleMouseDown}>
         <div className="folder-wrap">
           <div
             ref={this.folderRef}

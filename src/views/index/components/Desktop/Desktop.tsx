@@ -6,6 +6,7 @@ import AddIcon from "@material-ui/icons/Add"
 import EditIcon from "@material-ui/icons/Edit"
 import InfoIcon from "@material-ui/icons/InfoOutlined"
 import ClearIcon from "@material-ui/icons/Clear"
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd"
 
 import makeDumbProps from "utils/makeDumbProps"
 import grab, { Env } from "./Website/grab"
@@ -68,6 +69,25 @@ class Desktop extends React.Component<PropsType> {
       this.editWebsite()
     }
   }]
+  public folderMenus: MenuType[] = [{
+    icon: <EditIcon />,
+    text: "Edit",
+    onClick: () => {
+      console.log("Edit")
+    },
+  }, {
+    icon: <PlaylistAddIcon />,
+    text: "Add new shortcut",
+    onClick: () => {
+      console.log("Add new shortcut")
+    },
+  }, {
+    icon: <ClearIcon />,
+    text: "Remove",
+    onClick: () => {
+      console.log("Remove")
+    },
+  }]
   public shortcutMenus: MenuType[] = [{
     icon: <EditIcon />,
     text: "Edit",
@@ -128,6 +148,9 @@ class Desktop extends React.Component<PropsType> {
         const { type, id, index } = dataset
         if (type === "shortcut") {
           this.showMenu(event, this.shortcutMenus, id, Number(index))
+          return
+        } else if (type === "folder") {
+          this.showMenu(event, this.folderMenus, id, Number(index))
           return
         }
       }
