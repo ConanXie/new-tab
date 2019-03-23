@@ -58,7 +58,7 @@ class ContextMenu extends React.Component<PropsType> {
       style.left = left + "px"
     }
     if (top + clientHeight > window.innerHeight) {
-      style.bottom = window.innerHeight - top + "px"
+      style.bottom = window.innerHeight - top + 1 + "px"
     } else {
       style.top = top + "px"
     }
@@ -76,6 +76,10 @@ class ContextMenu extends React.Component<PropsType> {
     document.addEventListener("click", this.props.menuStore!.clearMenus)
     window.addEventListener("blur", this.props.menuStore!.clearMenus)
   }
+  public componentWillUnmount() {
+    document.removeEventListener("click", this.props.menuStore!.clearMenus)
+    window.removeEventListener("blur", this.props.menuStore!.clearMenus)
+  }
   public render() {
     const { classes, menuStore } = this.props
     return (
@@ -83,7 +87,7 @@ class ContextMenu extends React.Component<PropsType> {
         <Paper classes={{ root: classes.root }}>
           <MenuList>
             {menuStore!.menus.map(({ icon, text, onClick }, index) => (
-              <div key={text}>
+              <div key={index}>
                 <MenuItem classes={{ root: classes.menuItem }} onClick={onClick}>
                   <ListItemIcon className={classes.icon}>
                     {icon}

@@ -13,8 +13,8 @@ export class MenuStore {
 
   @action("set position")
   public setPosition = (left: number, top: number) => {
-    this.left = left
-    this.top = top
+    this.left = left + 1
+    this.top = top + 1
   }
   @action("show menu")
   public showMenu = (menus: MenuType[]) => {
@@ -23,7 +23,7 @@ export class MenuStore {
 
   @action("clear menus")
   public clearMenus = () => {
-    this.menus = []
+    setTimeout(() => this.menus = [])
   }
 }
 
