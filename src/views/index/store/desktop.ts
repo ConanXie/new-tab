@@ -243,6 +243,15 @@ export class DesktopStore extends DesktopSettings {
   }
 
   @action
+  public updateFolder = (id: string, label: string) => {
+    const index = this.findIndexById(id)
+    if (index >= 0) {
+      const folder = this.data[index]
+      folder.label = label
+    }
+  }
+
+  @action
   public transferShortcut = (current: string, shortcutId: string, target: string) => {
     const currentIndex = this.findIndexById(current)
     const targetIndex = this.findIndexById(target)
@@ -284,6 +293,10 @@ export class DesktopStore extends DesktopSettings {
 
   public findIndexById = (id: string, origin: any[] = this.data) => {
     return origin.findIndex((item: any) => item.id === id)
+  }
+
+  public findById = (id: string, origin: any[] = this.data) => {
+    return origin.find((item: any) => item.id === id)
   }
 }
 

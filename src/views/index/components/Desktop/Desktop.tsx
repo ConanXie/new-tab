@@ -27,6 +27,7 @@ import Undo from "./Undo"
 import Folder from "./Folder"
 import Wrap from "./Wrap"
 import FolderWindow from "./FolderWindow"
+import FolderEditor from "./FolderEditor"
 
 const LazyComponent = Loadable.Map({
   loading: () => null,
@@ -67,6 +68,8 @@ interface PropsType {
 class Desktop extends React.Component<PropsType> {
   public state = {
     undoOpen: false,
+    folderEditorOpen: false,
+    folderLabel: "",
   }
   public desktopMenus: MenuType[] = [{
     icon: <AddIcon />,
@@ -98,7 +101,13 @@ class Desktop extends React.Component<PropsType> {
     icon: <EditIcon />,
     text: "Edit",
     onClick: () => {
-      console.log("Edit")
+      const folder = this.props.desktopStore.findById(this.id)
+      if (folder) {
+        this.setState({
+          folderEditorOpen: true,
+          folderLabel: folder.label
+        })
+      }
     },
   }, {
     icon: <PlaylistAddIcon />,
@@ -161,6 +170,12 @@ class Desktop extends React.Component<PropsType> {
   public removeWebsite = () => {
     this.props.desktopStore.removeWebsite(this.id, this.index)
     this.setState({ undoOpen: true })
+  }
+  public handleFolderEditDone = (label?: string) => {
+    if (label) {
+      this.props.desktopStore.updateFolder(this.id, label)
+    }
+    this.setState({ folderEditorOpen: false })
   }
   public closeUndo = () => {
     this.setState({ undoOpen: false })
@@ -251,6 +266,11 @@ class Desktop extends React.Component<PropsType> {
           open={folderOpen}
           anchorEl={folderElement}
           onClose={closeFolder}
+        />
+        <FolderEditor
+          open={this.state.folderEditorOpen}
+          label={this.state.folderLabel}
+          onClose={this.handleFolderEditDone}
         />
       </div>
     )
