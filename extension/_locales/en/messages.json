@@ -110,7 +110,7 @@
   "settings_search_title": {
     "message": "Search"
   },
-  "settings_theme_title": {
+  "settings_theme": {
     "message": "Theme"
   },
   "settings_theme_switch_label": {
@@ -155,6 +155,15 @@
   "settings_night_mode_toolbar_secondary": {
     "message": "Use dark theme for toolbar"
   },
+  "settings_desktop": {
+    "message": "Desktop"
+  },
+  "settings_desktop_toolbar": {
+    "message": "Toolbar on desktop"
+  },
+  "settings_desktop_toolbar_secondary": {
+    "message": "Access toolbar via context menu when off"
+  },
   "settings_weather_title": {
     "message": "Weather"
   },
@@ -194,7 +203,7 @@
   "settings_reset_warning": {
     "message": "It will reset to the default"
   },
-  "settings_about_title": {
+  "settings_about": {
     "message": "About"
   },
   "settings_about_share": {
