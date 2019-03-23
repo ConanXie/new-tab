@@ -9,7 +9,7 @@ export const defaultData = {
 }
 
 export class DesktopSettings {
-  @observable public toolbar?: boolean
+  @observable public toolbar = false
   @observable public columns = defaultData.columns
   @observable public rows = defaultData.rows
 
@@ -21,8 +21,10 @@ export class DesktopSettings {
           this.toolbar = toolbar !== undefined ? toolbar : defaultData.toolbar
           this.columns = columns !== undefined ? columns : defaultData.columns
           this.rows = rows !== undefined ? rows : defaultData.rows
-          persist()
+        } else {
+          this.toolbar = defaultData.toolbar
         }
+        persist()
       })
     }
   }

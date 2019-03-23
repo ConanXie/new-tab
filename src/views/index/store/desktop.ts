@@ -89,6 +89,8 @@ export class DesktopStore extends DesktopSettings {
         this.toolbar = toolbar !== undefined ? toolbar : desktopSettingsDefault.toolbar
         this.columns = columns !== undefined ? columns : desktopSettingsDefault.columns
         this.rows = rows !== undefined ? rows : desktopSettingsDefault.rows
+      } else {
+        this.toolbar = desktopSettingsDefault.toolbar
       }
       if (result[DESKTOP]) {
         this.data = result[DESKTOP]
