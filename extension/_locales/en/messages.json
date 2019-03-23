@@ -26,10 +26,10 @@
   "website_new_title": {
     "message": "New shortcut"
   },
-  "website_edit_name": {
+  "edit_label": {
     "message": "Label"
   },
-  "website_edit_url": {
+  "edit_url": {
     "message": "URL"
   },
   "website_edit_icon_reset": {
@@ -69,11 +69,14 @@
       }
     }
   },
-  "website_removed_undo": {
+  "removed_undo": {
     "message": "Undo"
   },
-  "website_removed_undo_all": {
+  "removed_undo_all": {
     "message": "Undo All"
+  },
+  "folder_edit_title": {
+    "message": "Edit folder"
   },
   "nav_classification_unclassified": {
     "message": "Uncategorized"
