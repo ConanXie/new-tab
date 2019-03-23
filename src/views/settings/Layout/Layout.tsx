@@ -15,14 +15,20 @@ import Divider from "@material-ui/core/Divider"
 import MenuIcon from "@material-ui/icons/Menu"
 import ChevronRightIcon from "@material-ui/icons/ChevronRight"
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
-import ColorLensIcon from "@material-ui/icons/ColorLens"
-import InfoIcon from "@material-ui/icons/Info"
+import ColorLensIcon from "@material-ui/icons/ColorLensOutlined"
+import ViewModuleIcon from "@material-ui/icons/ViewModuleOutlined"
+import InfoIcon from "@material-ui/icons/InfoOutlined"
 
 import LazilyLoad, { importLazy } from "utils/LazilyLoad"
 import SettingsList, { SettingsItemType } from "./SettingsList"
 
 const Theme = Loadable({
   loader: () => import("../components/Theme"),
+  loading: () => null,
+})
+
+const Desktop = Loadable({
+  loader: () => import("../components/Desktop"),
   loading: () => null,
 })
 
@@ -127,12 +133,16 @@ class Layout extends React.Component<PropsType> {
    */
   private readonly settings: SettingsItemType[] = [{
     icon: ColorLensIcon,
-    text: chrome.i18n.getMessage("settings_theme_title"),
+    text: chrome.i18n.getMessage("settings_theme"),
     onClick: () => this.setState({ loadComponent: "Theme" }),
+  }, {
+    icon: ViewModuleIcon,
+    text: chrome.i18n.getMessage("settings_desktop"),
+    onClick: () => this.setState({ loadComponent: "Desktop" }),
   }]
   private readonly infoSettings: SettingsItemType[] = [{
     icon: InfoIcon,
-    text: chrome.i18n.getMessage("settings_about_title"),
+    text: chrome.i18n.getMessage("settings_about"),
     onClick: () => this.setState({ loadComponent: "About" }),
   }]
   public componentDidMount() {
@@ -182,6 +192,7 @@ class Layout extends React.Component<PropsType> {
           <div className={classes.toolbar} />
           {loadComponent === "Theme" && <Theme />}
           {loadComponent === "About" && <About />}
+          {loadComponent === "Desktop" && <Desktop />}
         </main>
 
         {/**
