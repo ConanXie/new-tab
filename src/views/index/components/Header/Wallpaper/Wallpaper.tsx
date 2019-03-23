@@ -8,6 +8,7 @@ import Snackbar from "@material-ui/core/Snackbar"
 import makeDumbProps from "utils/makeDumbProps"
 
 import { WallpaperStore } from "../../../store/wallpaper"
+import { DesktopStore } from "../../../store/desktop"
 import WallpaperSwitch from "./components/WallpaperSwitch"
 import TypeMenu from "./components/TypeMenu"
 import SelectImage from "./components/SelectImage"
@@ -19,9 +20,11 @@ import BlurImage from "./components/BlurImage"
 import Brightness from "./components/Brightness"
 interface PropsType {
   wallpaperStore: WallpaperStore
+  desktopStore: DesktopStore
 }
 
-@inject("wallpaperStore") @observer
+@inject("wallpaperStore", "desktopStore")
+@observer
 class Wallpaper extends React.Component<PropsType> {
   public state = {
     snackbarOpen: false,
@@ -105,6 +108,7 @@ class Wallpaper extends React.Component<PropsType> {
             onChange={handleBackgroundBrightnessChange}
           />
           <DarkIcons
+            disabled={!this.props.desktopStore.toolbar}
             onChange={toggleDarkIcons}
             checked={darkIcons}
           />

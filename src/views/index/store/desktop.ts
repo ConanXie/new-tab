@@ -1,5 +1,8 @@
 import { observable, action, computed } from "mobx"
 import shortid from "shortid"
+import { DesktopSettings, DESKTOP_SETTINGS, defaultData as desktopSettingsDefault } from "store/desktopSettings"
+
+const DESKTOP = "DESKTOP"
 
 export interface Based {
   id: string
@@ -27,9 +30,7 @@ export interface Desktop extends Based {
   shortcuts?: Shortcut[]
 }
 
-export class DesktopStore {
-  @observable public columns = 8
-  @observable public rows = 5
+export class DesktopStore extends DesktopSettings {
   @observable public data: Desktop[] = [{
     type: 1,
     row: 1,
@@ -78,97 +79,21 @@ export class DesktopStore {
       label: "Twitter",
       url: "https://www.twitter.com",
     }],
-  }/*, {
-    type: 1,
-    row: 1,
-    column: 5,
-    id: "wb005",
-    shortcut: {
-      name: "京东",
-      icon: "jd",
-      url: "https://www.jd.com",
-    },
-  }, {
-    type: 1,
-    row: 2,
-    column: 1,
-    id: "wb007",
-    shortcut: {
-      name: "腾讯新闻",
-      icon: "qq_news",
-      url: "https://www.qq.com",
-    },
-  }, {
-    type: 1,
-    row: 2,
-    column: 2,
-    id: "wb008",
-    shortcut: {
-      name: "Steam",
-      icon: "steam",
-      url: "https://www.steam.com",
-    },
-  }, {
-    type: 1,
-    row: 2,
-    column: 3,
-    id: "wb009",
-    shortcut: {
-      name: "淘宝",
-      icon: "taobao",
-      url: "https://www.taobao.com",
-    },
-  }, {
-    type: 1,
-    row: 2,
-    column: 4,
-    id: "wb010",
-    shortcut: {
-      name: "贴吧",
-      icon: "tieba",
-      url: "https://tieba.baidu.com",
-    },
-  }, {
-    type: 1,
-    row: 2,
-    column: 6,
-    id: "wb011",
-    shortcut: {
-      name: "Youtube",
-      icon: "youtube",
-      url: "https://www.youtube.com",
-    },
-  }, {
-    type: 1,
-    row: 3,
-    column: 1,
-    id: "wb013",
-    shortcut: {
-      name: "Tmall",
-      icon: "tmall",
-      url: "https://www.tmall.com",
-    },
-  }, {
-    type: 1,
-    row: 3,
-    column: 3,
-    id: "wb015",
-    shortcut: {
-      name: "Twitter",
-      icon: "twitter",
-      url: "https://www.twitter.com",
-    },
-  }, {
-    type: 1,
-    row: 3,
-    column: 5,
-    id: "wb016",
-    shortcut: {
-      name: "Quora",
-      icon: "quora",
-      url: "https://www.quora.com",
-    },
-  }*/]
+  }]
+  constructor() {
+    super(false)
+    chrome.storage.local.get([DESKTOP, DESKTOP_SETTINGS], (result) => {
+      if (result[DESKTOP_SETTINGS]) {
+        const { toolbar, columns, rows } = result[DESKTOP_SETTINGS]
+        this.toolbar = toolbar !== undefined ? toolbar : desktopSettingsDefault.toolbar
+        this.columns = columns !== undefined ? columns : desktopSettingsDefault.columns
+        this.rows = rows !== undefined ? rows : desktopSettingsDefault.rows
+      }
+      if (result[DESKTOP]) {
+        this.data = result[DESKTOP]
+      }
+    })
+  }
   @computed public get chessBoard() {
     const arr: number[][] = []
     for (let i = 0; i < this.rows; i++) {

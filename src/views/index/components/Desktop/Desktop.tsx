@@ -1,12 +1,16 @@
 import React from "react"
 import { inject, observer } from "mobx-react"
 import Loadable from "react-loadable"
+import classNames from "classnames"
 
 import AddIcon from "@material-ui/icons/Add"
 import EditIcon from "@material-ui/icons/Edit"
 import InfoIcon from "@material-ui/icons/InfoOutlined"
 import ClearIcon from "@material-ui/icons/Clear"
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd"
+import WallpaperIcon from "@material-ui/icons/WallpaperOutlined"
+import WidgetsIcon from "@material-ui/icons/WidgetsOutlined"
+import SettingsIcon from "@material-ui/icons/SettingsOutlined"
 
 import makeDumbProps from "utils/makeDumbProps"
 import grab, { Env } from "./Website/grab"
@@ -14,6 +18,7 @@ import { DesktopStore, Shortcut } from "../../store/desktop"
 import { WebSiteInfoStore } from "../../store/websiteInfo"
 import { WebsiteEditStore } from "../../store/websiteEdit"
 import { FolderStore } from "../../store/folder"
+import { ToolbarStore } from "../../store/toolbar"
 import { MenuType, MenuStore } from "store/menu"
 // import WidgetWrap from "../Widgets/Wrap"
 import DateTime from "../Widgets/DateTime"
@@ -47,6 +52,7 @@ interface PropsType {
   websiteInfoStore: WebSiteInfoStore
   websiteEditStore: WebsiteEditStore
   folderStore: FolderStore
+  toolbarStore: ToolbarStore
 }
 
 @inject(
@@ -55,6 +61,7 @@ interface PropsType {
   "websiteInfoStore",
   "websiteEditStore",
   "folderStore",
+  "toolbarStore",
 )
 @observer
 class Desktop extends React.Component<PropsType> {
@@ -67,7 +74,25 @@ class Desktop extends React.Component<PropsType> {
     onClick: () => {
       this.id = ""
       this.editWebsite()
-    }
+    },
+  }]
+  public toolbarMenus: MenuType[] = [{
+    icon: <WallpaperIcon />,
+    text: "Wallpaper",
+    onClick: () => {
+      this.props.toolbarStore.loadAndOpenWallpaperDrawer()
+    },
+  }, {
+    icon: <WidgetsIcon />,
+    text: "Widgets",
+    // tslint:disable-next-line: no-empty
+    onClick: () => {},
+  }, {
+    icon: <SettingsIcon />,
+    text: "Settings",
+    onClick: () => {
+      location.href = "settings.html"
+    },
   }]
   public folderMenus: MenuType[] = [{
     icon: <EditIcon />,
@@ -155,7 +180,10 @@ class Desktop extends React.Component<PropsType> {
         }
       }
       if (target === this.desktopElement.current) {
-        this.showMenu(event, this.desktopMenus)
+        const menus = this.props.desktopStore.toolbar
+          ? this.desktopMenus
+          : [...this.desktopMenus, ...this.toolbarMenus]
+        this.showMenu(event, menus)
         return
       }
     }
@@ -167,14 +195,14 @@ class Desktop extends React.Component<PropsType> {
     document.removeEventListener("contextmenu", this.handleContextMenu)
   }
   public render() {
-    const { columns, rows, data } = this.props.desktopStore
+    const { toolbar, columns, rows, data } = this.props.desktopStore
     const { open: folderOpen, closeFolder, openFolder, folderElement } = this.props.folderStore
     const styles: React.CSSProperties = {
       gridTemplateColumns: `repeat(${columns}, 1fr)`,
-      gridAutoRows: `calc((100vh - 64px) / ${rows})`,
+      gridAutoRows: `calc((100vh - ${toolbar ? 64 : 0}px) / ${rows})`,
     }
     return (
-      <div className="desktop" ref={this.desktopElement}>
+      <div className={classNames("desktop", { toolbar })} ref={this.desktopElement}>
         <div className="page" id="desktop" ref={this.pageElement} style={styles}>
           {data.map(item => {
             const { row, column } = item
