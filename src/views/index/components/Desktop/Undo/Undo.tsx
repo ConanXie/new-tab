@@ -43,11 +43,11 @@ class Undo extends React.Component<PropsType> {
         action={
           <React.Fragment>
             <Button key="undo" color="secondary" size="small" onClick={this.undo()}>
-              {chrome.i18n.getMessage("website_removed_undo")}
+              {chrome.i18n.getMessage("removed_undo")}
             </Button>
             {this.props.desktopStore.removed.length > 1 && (
               <Button key="undoAll" color="secondary" size="small" onClick={this.undo(true)}>
-                {chrome.i18n.getMessage("website_removed_undo_all")}
+                {chrome.i18n.getMessage("removed_undo_all")}
               </Button>
             )}
           </React.Fragment>

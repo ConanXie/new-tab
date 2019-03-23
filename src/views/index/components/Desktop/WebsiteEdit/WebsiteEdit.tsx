@@ -176,7 +176,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
                   margin="dense"
                   variant="outlined"
                   defaultValue={info.label}
-                  label={chrome.i18n.getMessage("website_edit_name")}
+                  label={chrome.i18n.getMessage("edit_label")}
                   onChange={this.handleLabelChange}
                 />
               </div>
@@ -186,7 +186,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
                 margin="dense"
                 variant="outlined"
                 defaultValue={url}
-                label={chrome.i18n.getMessage("website_edit_url")}
+                label={chrome.i18n.getMessage("edit_url")}
                 onChange={this.handleURLChange}
               />
             </DialogContent>
