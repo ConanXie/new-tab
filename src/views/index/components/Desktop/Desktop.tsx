@@ -110,7 +110,8 @@ class Desktop extends React.Component<PropsType> {
     icon: <ClearIcon />,
     text: "Remove",
     onClick: () => {
-      console.log("Remove")
+      this.props.desktopStore.removeFolder(this.id)
+      this.setState({ undoOpen: true })
     },
   }]
   public shortcutMenus: MenuType[] = [{

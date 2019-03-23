@@ -118,13 +118,20 @@ export class DesktopStore extends DesktopSettings {
   }
 
   @observable public removed: Desktop[] = []
-  public cachedLatestRemovedLabel = ""
+  public cachedUndoMessage = ""
 
-  @computed public get latestRemovedLabel() {
+  @computed public get undoMessage() {
     if (this.removed.length) {
-      this.cachedLatestRemovedLabel = this.removed[0].shortcuts![0].label
+      const shortcuts = this.removed[0].shortcuts!
+      if (shortcuts!.length > 1) {
+        this.cachedUndoMessage = this.removed[0].label
+          ? chrome.i18n.getMessage("removed_shortcut_or_folder", this.removed[0].label)
+          : chrome.i18n.getMessage("removed_unamed_folder", [shortcuts![0].label, shortcuts!.length - 1])
+      } else {
+        this.cachedUndoMessage = chrome.i18n.getMessage("removed_shortcut_or_folder", shortcuts![0].label)
+      }
     }
-    return this.cachedLatestRemovedLabel
+    return this.cachedUndoMessage
   }
 
   @action("create shortcut")
@@ -179,7 +186,7 @@ export class DesktopStore extends DesktopSettings {
   public undo = (all = false) => {
     let needToUndo = this.removed
     if (!all) {
-      needToUndo = this.removed.splice(-1, 1)
+      needToUndo = this.removed.splice(0, 1)
     }
     needToUndo.forEach(item => {
       const i = this.findIndexById(item.id)
@@ -223,6 +230,15 @@ export class DesktopStore extends DesktopSettings {
       this.data.splice(targetIndex, 1)
       this.data.splice(targetIndex < currentIndex ? currentIndex - 1 : currentIndex, 1)
       this.data.push(folderData)
+    }
+  }
+
+  @action
+  public removeFolder = (id: string) => {
+    const index = this.findIndexById(id)
+    if (index >= 0) {
+      const rm = toJS(this.data.splice(index, 1)[0])
+      this.removed.unshift(rm)
     }
   }
 

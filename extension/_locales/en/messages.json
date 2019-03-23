@@ -47,12 +47,25 @@
   "nav_edit_input_forget_URL": {
     "message": "Don't forget website URL 🙂"
   },
-  "website_removed_status": {
-    "message": "$NAME$ was removed",
+  "removed_shortcut_or_folder": {
+    "message": "$LABEL$ was removed",
     "placeholders": {
-      "name": {
+      "LABEL": {
         "content": "$1",
         "example": "Youtube"
+      }
+    }
+  },
+  "removed_unamed_folder": {
+    "message": "$LABEL$ and $REST$ other shortcut(s) were removed",
+    "placeholders": {
+      "LABEL": {
+        "content": "$1",
+        "example": "Youtube"
+      },
+      "rest": {
+        "content": "$2",
+        "example": "3"
       }
     }
   },
