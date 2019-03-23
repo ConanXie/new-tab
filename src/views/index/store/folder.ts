@@ -1,18 +1,15 @@
 import { observable, action, computed } from "mobx"
 
-import desktopStore, { Shortcut } from "./desktop"
+import desktopStore, { Desktop, Shortcut } from "./desktop"
 
 export class FolderStore {
   public folderElement?: HTMLElement
 
   @observable public id: string = ""
   @observable public open: boolean = false
+  @observable public component?: Desktop
   @observable public tempShortcut: string = ""
   @observable public shortcuts: Shortcut[] = []
-
-  @computed get component() {
-    return desktopStore.data.find(item => item.id === this.id)
-  }
 
   @computed get gridColumns() {
     return Math.ceil(Math.sqrt(this.shortcuts.length))
@@ -25,17 +22,16 @@ export class FolderStore {
   @action("open folder")
   public openFolder = (id: string, element: HTMLElement, shortcut?: Shortcut) => {
     this.id = id
-    if (shortcut) {
-      this.saveTempShortcut(shortcut.id)
-    } else {
-      this.saveTempShortcut()
+    this.component = desktopStore.data.find(item => item.id === this.id)
+    if (this.component) {
+      this.saveTempShortcut(shortcut && shortcut.id)
+      this.syncShortcutsFromDesktop()
+      if (shortcut) {
+        this.pushShortcut(shortcut)
+      }
+      this.folderElement = element
+      this.open = true
     }
-    this.shortcuts = this.copyShortcuts()
-    if (shortcut) {
-      this.pushShortcut(shortcut)
-    }
-    this.folderElement = element
-    this.open = true
   }
 
   @action("close folder")
@@ -45,10 +41,8 @@ export class FolderStore {
 
   @action("copy shortcuts")
   public copyShortcuts = () => {
-
     if (this.component) {
-      const shortcuts = this.component.shortcuts as Shortcut[]
-      return shortcuts.filter(item => item.id !== this.tempShortcut)
+      return this.component.shortcuts!.filter(item => item.id !== this.tempShortcut)
     }
     return []
   }
@@ -73,8 +67,23 @@ export class FolderStore {
     const origin = this.shortcuts.findIndex(item => item.id === shortcutId)
     this.saveTempShortcut()
     this.shortcuts.splice(index, 0, this.shortcuts.splice(origin, 1)[0])
-    this.component!.shortcuts = this.shortcuts
+    if (this.component) {
+      this.component.shortcuts = this.shortcuts
+    }
   }
+
+  @action("sync shortcuts from desktop store")
+  public syncShortcutsFromDesktop = () => {
+    this.shortcuts = this.copyShortcuts()
+    if (this.updatePopoverPosition) {
+      this.updatePopoverPosition()
+    }
+    if (this.shortcuts.length <= 1) {
+      this.open = false
+    }
+  }
+
+  public updatePopoverPosition?: () => void
 }
 
 const folderStore = new FolderStore()

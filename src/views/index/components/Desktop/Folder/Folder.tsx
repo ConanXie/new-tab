@@ -13,7 +13,6 @@ interface PropsType extends Desktop {
   desktopStore: DesktopStore
   onMouseDown: (e: any) => void
   onClick: (id: string, element: HTMLDivElement) => void
-  onContextMenu: (e: any, id: string) => void
 }
 
 @inject("shortcutIconsStore", "desktopStore")

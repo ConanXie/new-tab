@@ -1,6 +1,7 @@
-import { observable, action, computed } from "mobx"
+import { observable, action, computed, toJS } from "mobx"
 import shortid from "shortid"
 import { DesktopSettings, DESKTOP_SETTINGS, defaultData as desktopSettingsDefault } from "store/desktopSettings"
+import folderStore from "./folder"
 
 const DESKTOP = "DESKTOP"
 
@@ -158,20 +159,22 @@ export class DesktopStore extends DesktopSettings {
     const i = this.findIndexById(id)
     if (i > -1) {
       const component = this.data[i]
+      let rm: Desktop
       if (this.data[i].shortcuts!.length <= 1) {
-        const rm = this.data.splice(i, 1)[0]
-        this.removed.unshift(rm)
+        rm = this.data.splice(i, 1)[0]
       } else {
-        const rm = { ...component }
+        rm = toJS(component)
         const shortcut = component.shortcuts!.splice(index, 1)[0]
         shortcut.index = index
         rm.shortcuts = [shortcut]
+        folderStore.syncShortcutsFromDesktop()
       }
+      this.removed.unshift(rm)
     }
   }
 
   @action("undo")
-  public undo = (all: boolean = false) => {
+  public undo = (all = false) => {
     let needToUndo = this.removed
     if (!all) {
       needToUndo = this.removed.splice(-1, 1)
@@ -183,13 +186,12 @@ export class DesktopStore extends DesktopSettings {
         const index = shortcut.index!
         delete shortcut.index
         this.data[i].shortcuts!.splice(index, 0, shortcut)
+        folderStore.syncShortcutsFromDesktop()
       } else {
         this.data.push(item)
       }
     })
     this.removed = []
-    /* setTimeout(() => {
-    }, 300) */
   }
 
   @action("get occupied")

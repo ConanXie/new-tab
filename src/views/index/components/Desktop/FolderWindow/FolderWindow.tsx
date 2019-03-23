@@ -5,7 +5,7 @@ import { observer, inject } from "mobx-react"
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
-import Popover, { PopoverOrigin } from "@material-ui/core/Popover"
+import Popover, { PopoverOrigin, PopoverActions } from "@material-ui/core/Popover"
 // import Typograph from "@material-ui/core/Typography"
 
 import { FolderStore } from "../../../store/folder"
@@ -48,6 +48,10 @@ class FolderWindow extends React.Component<PropsType> {
     }
   }
 
+  public extractAction = ({ updatePosition }: PopoverActions) => {
+    this.props.folderStore.updatePopoverPosition = updatePosition
+  }
+
   public render() {
     const { open, anchorEl, onClose, folderStore, classes } = this.props
 
@@ -58,6 +62,7 @@ class FolderWindow extends React.Component<PropsType> {
         onClose={onClose}
         anchorOrigin={this.origin}
         transformOrigin={this.origin}
+        action={this.extractAction}
       >
         <div
           className={classNames(["folder-window", classes.window])}
