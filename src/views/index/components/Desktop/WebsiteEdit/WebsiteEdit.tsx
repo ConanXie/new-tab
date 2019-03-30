@@ -140,7 +140,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
   }
 
   public render() {
-    const { label, url, newIcon, iconEditorOpen } = this.state
+    const { url, newIcon, iconEditorOpen } = this.state
     const { open, info } = this.props.websiteEditStore
     const { id } = info
     const { dialog, avatar, iconLabelWrap } = this.props.classes
@@ -191,7 +191,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
               />
             </DialogContent>
             <DialogActions>
-              <Button color="primary" type="submit" disabled={!label || !url}>
+              <Button color="primary" type="submit" disabled={!url}>
                 {chrome.i18n.getMessage("button_done")}
               </Button>
             </DialogActions>

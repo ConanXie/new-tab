@@ -71,7 +71,7 @@ function FolderEditor(props: Props) {
           <Button color="primary" onClick={handleClose}>
             {chrome.i18n.getMessage("button_cancel")}
           </Button>
-          <Button color="primary" type="submit" disabled={!label}>
+          <Button color="primary" type="submit">
             {chrome.i18n.getMessage("button_done")}
           </Button>
         </DialogActions>

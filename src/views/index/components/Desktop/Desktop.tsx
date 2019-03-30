@@ -171,10 +171,8 @@ class Desktop extends React.Component<PropsType> {
     this.props.desktopStore.removeWebsite(this.id, this.index)
     this.setState({ undoOpen: true })
   }
-  public handleFolderEditDone = (label?: string) => {
-    if (label) {
-      this.props.desktopStore.updateFolder(this.id, label)
-    }
+  public handleFolderEditDone = (label = "") => {
+    this.props.desktopStore.updateFolder(this.id, label)
     this.setState({ folderEditorOpen: false })
   }
   public closeUndo = () => {
