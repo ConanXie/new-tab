@@ -2,9 +2,9 @@ import { observable, action, computed } from "mobx"
 
 import desktopStore, { Shortcut } from "./desktop"
 export class WebSiteInfoStore {
-  @observable public itemId: string = ""
-  @observable public index: number = 0
-  @observable public open: boolean = false
+  @observable public itemId = ""
+  @observable public index = 0
+  @observable public open = false
 
   public defaultInfo: Shortcut = {
     id: "",
