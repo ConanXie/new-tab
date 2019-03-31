@@ -71,6 +71,11 @@ class Desktop extends React.Component<PropsType> {
     folderEditorOpen: false,
     folderLabel: "",
   }
+  public id = ""
+  public index = 0
+  public desktopElement: React.RefObject<HTMLDivElement> = React.createRef()
+  public pageElement: React.RefObject<HTMLDivElement> = React.createRef()
+
   public desktopMenus: MenuType[] = [{
     icon: <AddIcon />,
     text: "New shortcut",
@@ -142,18 +147,14 @@ class Desktop extends React.Component<PropsType> {
       this.removeWebsite()
     },
   }]
-  public id = ""
-  public index = 0
-  private desktopElement: React.RefObject<HTMLDivElement> = React.createRef()
-  private pageElement: React.RefObject<HTMLDivElement> = React.createRef()
 
   public handleShortcutGrab = (shortcut: Shortcut, componentId: string) => (event: React.MouseEvent<HTMLElement>) => {
     if (event.button === 0) {
       grab(event, shortcut, componentId, Env.Desktop)
     }
   }
-  // private prevent
-  private showMenu = (event: MouseEvent, menus: MenuType[], id?: string, index: number = 0) => {
+
+  public showMenu = (event: MouseEvent, menus: MenuType[], id?: string, index: number = 0) => {
     if (id) {
       this.id = id
       this.index = index
@@ -196,6 +197,7 @@ class Desktop extends React.Component<PropsType> {
         }
       }
       if (target === this.desktopElement.current) {
+        this.desktopMenus[0].disabled = this.props.desktopStore.isFilled
         const menus = this.props.desktopStore.toolbar
           ? this.desktopMenus
           : [...this.desktopMenus, ...this.toolbarMenus]
