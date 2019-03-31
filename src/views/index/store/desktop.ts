@@ -2,6 +2,7 @@ import { observable, action, computed, toJS } from "mobx"
 import shortid from "shortid"
 import { DesktopSettings, DESKTOP_SETTINGS, defaultData as desktopSettingsDefault } from "store/desktopSettings"
 import folderStore from "./folder"
+import menuStore from "store/menu"
 
 const DESKTOP = "DESKTOP"
 
@@ -70,7 +71,7 @@ export class DesktopStore extends DesktopSettings {
       label: "Facebook",
       url: "https://www.facebook.com",
     }],
-  } , {
+  }, {
     type: 1,
     row: 3,
     column: 5,
@@ -108,13 +109,18 @@ export class DesktopStore extends DesktopSettings {
     this.data.forEach(({ row, column, rowEnd, columnEnd, type }) => {
       rowEnd = rowEnd || row
       columnEnd = columnEnd || column
-      for (let i = row - 1; i < rowEnd; i++) {
-        for (let j = column - 1; j < columnEnd; j++) {
-          arr[i][j] = type
+      if (rowEnd <= this.rows && columnEnd <= this.columns) {
+        for (let i = row - 1; i < rowEnd; i++) {
+          for (let j = column - 1; j < columnEnd; j++) {
+            arr[i][j] = type
+          }
         }
       }
     })
     return arr
+  }
+  @computed public get isFilled() {
+    return this.chessBoard.every(m => m.every(n => !!n))
   }
 
   @observable public removed: Desktop[] = []
@@ -135,14 +141,36 @@ export class DesktopStore extends DesktopSettings {
   }
 
   @action("create shortcut")
-  public createShortcut = (id: string, label: string, url: string) => {
+  public createShortcut = (id: string, label: string, url: string, component?: string) => {
+    const { left, top } = menuStore
+    const [row, column] = this.findUsableArea(left, top)!
     this.data.push({
       type: 1,
       id: shortid.generate(),
-      row: 4,
-      column: 2,
+      row,
+      column,
       shortcuts: [{ id, label, url }],
     })
+  }
+
+  public findUsableArea = (left: number, top: number) => {
+    const desktopEl = document.querySelector("#desktop") as HTMLElement
+    const { clientWidth, clientHeight, offsetTop: desktopOffsetTop } = desktopEl
+    const unitWidth = clientWidth / this.columns
+    const unitHeight = clientHeight / this.rows
+    const row = Math.floor((top - desktopOffsetTop) / unitHeight)
+    const column = Math.floor(left / unitWidth)
+    if (this.chessBoard[row][column]) {
+      for (let i = 0; i < this.rows; i++) {
+        for (let j = 0; j < this.columns; j++) {
+          if (!this.chessBoard[i][j]) {
+            return [i + 1, j + 1]
+          }
+        }
+      }
+    } else {
+      return [row + 1, column + 1]
+    }
   }
 
   @action("update area")
