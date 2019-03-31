@@ -60,6 +60,7 @@ function FolderEditor(props: Props) {
         <DialogContent>
           <TextField
             fullWidth
+            autoFocus
             margin="dense"
             variant="outlined"
             defaultValue={label}
