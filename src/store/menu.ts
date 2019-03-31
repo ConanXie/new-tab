@@ -1,6 +1,7 @@
 import { observable, action } from "mobx"
 
 export interface MenuType {
+  disabled?: boolean
   icon: React.ReactElement
   text: string
   onClick(e: any): void

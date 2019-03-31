@@ -19,6 +19,9 @@ const styles = createStyles({
     "& > ul": {
       padding: 0,
     },
+    "& li": {
+      outline: "none",
+    },
   },
   menuItem: {
     paddingRight: 56,
@@ -86,9 +89,14 @@ class ContextMenu extends React.Component<PropsType> {
       <div className="contextmenu" ref={this.contextmenuRef}>
         <Paper classes={{ root: classes.root }}>
           <MenuList>
-            {menuStore!.menus.map(({ icon, text, onClick }, index) => (
-              <div key={index}>
-                <MenuItem classes={{ root: classes.menuItem }} onClick={onClick}>
+            {menuStore!.menus.map(({ disabled, icon, text, onClick }, index) => (
+              <li key={index}>
+                <MenuItem
+                  classes={{ root: classes.menuItem }}
+                  disabled={disabled}
+                  component="div"
+                  onClick={onClick}
+                >
                   <ListItemIcon className={classes.icon}>
                     {icon}
                   </ListItemIcon>
@@ -97,7 +105,7 @@ class ContextMenu extends React.Component<PropsType> {
                 {index < menuStore!.menus.length - 1 && (
                   <Divider variant="inset" className={classes.divider} component="hr" />
                 )}
-              </div>
+              </li>
             ))}
           </MenuList>
         </Paper>
