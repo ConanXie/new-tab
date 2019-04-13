@@ -47,7 +47,7 @@
   "nav_edit_input_forget_URL": {
     "message": "Don't forget website URL 🙂"
   },
-  "unamed_shortcut": {
+  "unnamed_shortcut": {
     "message": "A shortcut"
   },
   "removed_shortcut_or_folder": {
@@ -59,7 +59,7 @@
       }
     }
   },
-  "removed_unamed_folder": {
+  "removed_unnamed_folder": {
     "message": "$LABEL$ and $REST$ other shortcut(s) were removed",
     "placeholders": {
       "LABEL": {

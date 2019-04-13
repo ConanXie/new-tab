@@ -133,9 +133,9 @@ export class DesktopStore extends DesktopSettings {
       if (shortcuts!.length > 1) {
         this.cachedUndoMessage = this.removed[0].label
           ? getMessage("removed_shortcut_or_folder", this.removed[0].label)
-          : getMessage("removed_unamed_folder", [shortcuts![0].label || getMessage("unamed_shortcut"), shortcuts!.length - 1])
+          : getMessage("removed_unnamed_folder", [shortcuts![0].label || getMessage("unnamed_shortcut"), shortcuts!.length - 1])
       } else {
-        this.cachedUndoMessage = getMessage("removed_shortcut_or_folder", shortcuts![0].label || getMessage("unamed_shortcut"))
+        this.cachedUndoMessage = getMessage("removed_shortcut_or_folder", shortcuts![0].label || getMessage("unnamed_shortcut"))
       }
     }
     return this.cachedUndoMessage
