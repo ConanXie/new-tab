@@ -12,7 +12,7 @@ interface PropsType {
   children?: React.ReactNode
 }
 
-export default ({ row, column, rowEnd, columnEnd, grabbed, className, style, children }: PropsType) => {
+function Wrap({ row, column, rowEnd, columnEnd, grabbed, className, style, children }: PropsType) {
   const styles: React.CSSProperties = {
     gridArea: `${row} / ${column} / ${rowEnd || "auto"} / ${columnEnd || "auto"}`,
   }
@@ -26,3 +26,5 @@ export default ({ row, column, rowEnd, columnEnd, grabbed, className, style, chi
     </div>
   )
 }
+
+export default Wrap

@@ -10,7 +10,7 @@ interface PropsType extends ItemPropsType {
   onChange(): void
 }
 
-export default (props: PropsType) => (
+const DarkIcons = (props: PropsType) => (
   <Item
     disabled={props.disabled}
     primary={chrome.i18n.getMessage("wallpaper_dark_icons")}
@@ -22,3 +22,5 @@ export default (props: PropsType) => (
     </ListItemSecondaryAction>
   </Item>
 )
+
+export default DarkIcons

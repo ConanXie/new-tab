@@ -13,7 +13,7 @@ export class DesktopSettings {
   @observable public columns = defaultData.columns
   @observable public rows = defaultData.rows
 
-  constructor(self = true) {
+  public constructor(self = true) {
     if (self) {
       chrome.storage.local.get(DESKTOP_SETTINGS, (result) => {
         if (result[DESKTOP_SETTINGS]) {
@@ -24,6 +24,7 @@ export class DesktopSettings {
         } else {
           this.toolbar = defaultData.toolbar
         }
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         persist()
       })
     }

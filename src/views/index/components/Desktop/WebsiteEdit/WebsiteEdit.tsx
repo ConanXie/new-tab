@@ -109,7 +109,7 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
     this.props.websiteEditStore.saveInfo(label, url, newIcon)
   }
 
-  public openIconEditor = (event: React.SyntheticEvent<{}>) => {
+  public openIconEditor = () => {
     this.setState({
       iconEditorOpen: true,
     })

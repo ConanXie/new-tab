@@ -35,7 +35,7 @@ const LazyComponent = Loadable.Map({
     WebsiteInfo: () => import("./WebsiteInfo"),
     WebsiteEdit: () => import("./WebsiteEdit"),
   },
-  render(loaded, props) {
+  render(loaded) {
     const WebsiteInfo = loaded.WebsiteInfo.default
     const WebsiteEdit = loaded.WebsiteEdit.default
     return (

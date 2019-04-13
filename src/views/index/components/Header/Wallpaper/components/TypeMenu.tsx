@@ -24,14 +24,14 @@ const styles = createStyles({
   }
 })
 
-interface ITypeMenuItem {
+interface Props {
   selected: boolean
   value: number,
   label: string,
   onChange(v: number): void
 }
 
-export class TypeMenuItem extends React.Component<ITypeMenuItem> {
+export class TypeMenuItem extends React.Component<Props> {
   private handleClick = () => {
     this.props.onChange(this.props.value)
   }
@@ -89,7 +89,7 @@ class TypeMenu extends React.Component<WithStyles<typeof styles> & PropsType> {
           onClose={this.handleMenuClose}
           classes={{ paper: classes.paper }}
         >
-          {source.map((item, index) => (
+          {source.map((item) => (
             <TypeMenuItem
               key={item.text}
               selected={item.type === type}

@@ -82,7 +82,7 @@ export class DesktopStore extends DesktopSettings {
       url: "https://www.twitter.com",
     }],
   }]
-  constructor() {
+  public constructor() {
     super(false)
     chrome.storage.local.get([DESKTOP, DESKTOP_SETTINGS], (result) => {
       if (result[DESKTOP_SETTINGS]) {
@@ -151,6 +151,9 @@ export class DesktopStore extends DesktopSettings {
       column,
       shortcuts: [{ id, label, url }],
     })
+    if (component) {
+      console.log(component)
+    }
   }
 
   public findUsableArea = (left: number, top: number) => {

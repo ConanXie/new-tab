@@ -48,7 +48,7 @@ export class ThemeStore {
   @observable public nightMode: NightModeStatus
   @observable public nightTime: string[]
   @observable public darkToolbar: boolean
-  constructor() {
+  public constructor() {
     const persistence = settingsStorage.get("theme", {})
     const {
       color,
@@ -64,11 +64,11 @@ export class ThemeStore {
     this.darkToolbar = darkToolbar || defaultData.darkToolbar
   }
 
-  @computed get theme() {
+  @computed public get theme() {
     return ThemeStore.createTheme(this)
   }
 
-  @computed get applyNightMode(): boolean {
+  @computed public get applyNightMode(): boolean {
     switch (this.nightMode) {
       case 1:
         return true
@@ -92,7 +92,7 @@ export class ThemeStore {
     }
   }
 
-  @computed get nightModeText() {
+  @computed public get nightModeText() {
     return nightModeMenu.find(item => item.status === this.nightMode)!.text
   }
 
@@ -138,10 +138,8 @@ export class ThemeStore {
           "-apple-system",
           "BlinkMacSystemFont",
           "Roboto",
-          `"Helvetica Neue"`,
           "Arial",
           "sans-serif",
-          `"Microsoft Yahei"`,
           `"Apple Color Emoji"`,
           `"Segoe UI Emoji"`,
           `"Segoe UI Symbol"`,

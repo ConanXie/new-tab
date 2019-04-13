@@ -10,7 +10,7 @@ interface PropsType {
   onChange(): void
 }
 
-export default (props: PropsType) => (
+const WallpaperSwitch = (props: PropsType) => (
   <Item
     primary={chrome.i18n.getMessage("desktop_wallpaper_label")}
     onClick={props.onChange}
@@ -20,3 +20,5 @@ export default (props: PropsType) => (
     </ListItemSecondaryAction>
   </Item>
 )
+
+export default WallpaperSwitch

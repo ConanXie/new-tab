@@ -14,7 +14,7 @@ export interface SettingsItemType {
 /**
  * Settings item component in the drawer
  */
-export default (props: { items: SettingsItemType[] }) => (
+const SettingsList = (props: { items: SettingsItemType[] }) => (
   <List>
     {props.items.map(item => (
       <ListItem key={item.text} button onClick={item.onClick}>
@@ -26,3 +26,5 @@ export default (props: { items: SettingsItemType[] }) => (
     ))}
   </List>
 )
+
+export default SettingsList

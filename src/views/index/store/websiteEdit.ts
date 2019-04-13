@@ -24,6 +24,6 @@ export class WebsiteEditStore extends WebSiteInfoStore {
   }
 }
 
-const websiteEditStore  = new WebsiteEditStore()
+const websiteEditStore = new WebsiteEditStore()
 
 export default websiteEditStore

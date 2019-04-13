@@ -19,7 +19,7 @@ interface PropsType extends ItemPropsType {
   onChange: (radius: number) => void
 }
 
-export default (props: PropsType) => {
+function Brightness(props: PropsType) {
   const { disabled, value, onChange } = props
   let icon = <BrightnessMedium />
   if (value > BrightnessRange.High) {
@@ -40,3 +40,5 @@ export default (props: PropsType) => {
     </SliderItem>
   )
 }
+
+export default Brightness

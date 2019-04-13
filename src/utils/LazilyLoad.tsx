@@ -71,11 +71,14 @@ class LazilyLoad extends React.Component<PropsType> {
  * 高阶函数，用于组件内部懒加载其它组件
  */
 export const LazilyLoadFactory = (Component: React.SFC, modules: Modules) => {
-  return (props: {}) => (
-    <LazilyLoad modules={modules}>
-      {(mods) => <Component {...mods} {...props} />}
-    </LazilyLoad>
-  )
+  function LazyComponent(props: {}) {
+    return (
+      <LazilyLoad modules={modules}>
+        {(mods) => <Component {...mods} {...props} />}
+      </LazilyLoad>
+    )
+  }
+  return LazyComponent
 }
 
 export const importLazy = (promise: Promise<any>) => (

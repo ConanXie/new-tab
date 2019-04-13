@@ -12,7 +12,7 @@ export class WebSiteInfoStore {
     url: "https://",
   }
 
-  @computed get info(): Shortcut {
+  @computed public get info(): Shortcut {
     const item = desktopStore.data.find(({ id }) => id === this.itemId)
     return (item && this.index < item.shortcuts!.length && item.shortcuts![this.index]) || this.defaultInfo
   }

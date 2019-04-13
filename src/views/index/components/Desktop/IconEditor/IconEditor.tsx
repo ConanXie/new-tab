@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import classNames from "classnames"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
@@ -124,8 +124,12 @@ interface Props extends WithStyles<typeof styles> {
 
 function ShortcutIcon(props: Props) {
   const { open, icon, url, classes } = props
+  const [type, setType] = React.useState(IconType.BuiltIn)
+  const [icons, setIcons] = React.useState([] as string[])
+  const [selectedIcon, setSelectedIcon] = React.useState("")
+  const [image, setImage] = React.useState(null as HTMLImageElement | null)
 
-  const handleClose = (event: React.SyntheticEvent<{}>) => {
+  const handleClose = () => {
     props.onClose()
   }
 
@@ -134,11 +138,6 @@ function ShortcutIcon(props: Props) {
       setType(value)
     }
   }
-
-  const [type, setType] = React.useState(IconType.BuiltIn)
-  const [icons, setIcons] = React.useState([] as string[])
-  const [selectedIcon, setSelectedIcon] = React.useState("")
-  const [image, setImage] = React.useState(null as HTMLImageElement | null)
 
   React.useEffect(() => {
     // Sync state
@@ -159,7 +158,7 @@ function ShortcutIcon(props: Props) {
       setImage(null)
       setSelectedIcon("")
     }
-  }, [open])
+  }, [open, icon, url])
 
   const preventImgDrag = (event: React.MouseEvent) => event.preventDefault()
 
@@ -192,6 +191,19 @@ function ShortcutIcon(props: Props) {
     })
   }
 
+  const handleMouseMove = (event: MouseEvent) => {
+    setCrop({
+      ...crop,
+      x: crop.x + (event.pageX - startX),
+      y: crop.y + (event.pageY - startY),
+    })
+  }
+
+  const handleMouseUp = () => {
+    document.removeEventListener("mousemove", handleMouseMove)
+    document.removeEventListener("mouseup", handleMouseUp)
+  }
+
   const handleMouseDown = (event: React.MouseEvent) => {
     if (event.button === 0) {
       startX = event.pageX
@@ -201,30 +213,19 @@ function ShortcutIcon(props: Props) {
     }
   }
 
-  const handleMouseMove = (event: MouseEvent) => {
-    setCrop({
-      ...crop,
-      x: crop.x + (event.pageX - startX),
-      y: crop.y + (event.pageY - startY),
-    })
-  }
-
-  const handleMouseUp = (event: MouseEvent) => {
-    document.removeEventListener("mousemove", handleMouseMove)
-    document.removeEventListener("mouseup", handleMouseUp)
-  }
-
   // Passive wheel event can't be prevented if bound on React Element
   React.useEffect(() => {
+    let element: HTMLDivElement
     setTimeout(() => {
       if (cropEl.current) {
-        cropEl.current.addEventListener("wheel", handleWheel)
+        element = cropEl.current
+        element.addEventListener("wheel", handleWheel)
       }
     }, 0)
     return () => {
       setTimeout(() => {
-        if (cropEl.current) {
-          cropEl.current.removeEventListener("wheel", handleWheel)
+        if (element) {
+          element.removeEventListener("wheel", handleWheel)
         }
       }, 0)
     }
@@ -267,7 +268,7 @@ function ShortcutIcon(props: Props) {
     }
   }
 
-  const resetImage = () => {
+  const resetImage = useCallback(() => {
     if (!image) {
       return
     }
@@ -292,7 +293,7 @@ function ShortcutIcon(props: Props) {
       y,
       scale,
     })
-  }
+  }, [image])
 
   React.useEffect(() => {
     resetImage()
@@ -301,7 +302,7 @@ function ShortcutIcon(props: Props) {
         URL.revokeObjectURL(image.src)
       }
     }
-  }, [image, open])
+  }, [image, open, resetImage])
 
   const handleDone = () => {
     if (type === IconType.BuiltIn && selectedIcon) {

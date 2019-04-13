@@ -10,7 +10,7 @@ import * as store from "./store"
 const App = () => (
   <Provider {...store}>
     <MuiThemeProvider theme={store.themeStore.theme}>
-    <Drawer />
+      <Drawer />
     </MuiThemeProvider>
   </Provider>
 )

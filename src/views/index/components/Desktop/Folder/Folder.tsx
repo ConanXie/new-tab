@@ -33,7 +33,7 @@ class Folder extends React.Component<PropsType> {
     const { screenX: downScreenX, screenY: downScreenY } = event
     let clone: HTMLElement
 
-    const handleMouseUp = (evt: MouseEvent) => {
+    const handleMouseUp = () => {
       this.props.onClick(this.props.id, this.folderRef.current as HTMLDivElement)
     }
     const handleMouseMove = (evt: MouseEvent) => {

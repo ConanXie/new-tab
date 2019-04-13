@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -10,7 +9,7 @@ import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
 import TextField from "@material-ui/core/TextField"
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
   dialog: {
     width: "30vw",
     minWidth: 300,

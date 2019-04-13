@@ -78,7 +78,7 @@ class About extends React.Component<WithStyles<typeof styles>> {
   public render() {
     const { classes } = this.props
     const { snackbarOpen, message } = this.state
-    const { version_name, version } = chrome.runtime.getManifest()
+    const { version_name: versionName, version } = chrome.runtime.getManifest()
     return (
       <React.Fragment>
         <Wrap>
@@ -111,12 +111,12 @@ class About extends React.Component<WithStyles<typeof styles>> {
               button
               href={
                 chrome.i18n.getUILanguage() === "zh-CN"
-                ? "https://tab.xiejie.app/logs"
-                : "https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md"
+                  ? "https://tab.xiejie.app/logs"
+                  : "https://github.com/ConanXie/new-tab/blob/master/CHANGELOG.md"
               }
             >
               <ListItemText
-                primary={version_name || version}
+                primary={versionName || version}
                 secondary="Click here to read the changelog"
               />
             </ListItem>

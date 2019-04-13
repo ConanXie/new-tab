@@ -11,11 +11,11 @@ export class FolderStore {
   @observable public tempShortcut: string = ""
   @observable public shortcuts: Shortcut[] = []
 
-  @computed get gridColumns() {
+  @computed public get gridColumns() {
     return Math.ceil(Math.sqrt(this.shortcuts.length))
   }
 
-  @computed get gridRows() {
+  @computed public get gridRows() {
     return Math.ceil(this.shortcuts.length / this.gridColumns)
   }
 

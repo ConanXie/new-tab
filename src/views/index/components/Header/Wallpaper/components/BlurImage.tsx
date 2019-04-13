@@ -11,7 +11,7 @@ interface PropsType extends ItemPropsType {
   onChange: (radius: number) => void
 }
 
-export default (props: PropsType) => (
+const BlurImage = (props: PropsType) => (
   <SliderItem
     disabled={props.disabled}
     icon={props.value ? <BlurOnIcon /> : <BlurOffIcon />}
@@ -21,3 +21,5 @@ export default (props: PropsType) => (
     {chrome.i18n.getMessage("wallpaper_blur")}
   </SliderItem>
 )
+
+export default BlurImage

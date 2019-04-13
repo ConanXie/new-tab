@@ -2,8 +2,6 @@ import React from "react"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
-// import Typography from "@material-ui/core/Typography"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
@@ -11,7 +9,7 @@ import Slider from "@material-ui/lab/Slider"
 
 import { ItemPropsType } from "../Item"
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
   listText: {
     paddingRight: 0,
   },

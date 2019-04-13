@@ -27,7 +27,7 @@ export class WallpaperStore {
   @observable public darkIcons: boolean
   @observable public blurRadius: number
   @observable public backgroundBrightness: number
-  constructor(data: any) {
+  public constructor(data: any) {
     const {
       wallpaper,
       color,
@@ -48,7 +48,7 @@ export class WallpaperStore {
       ? Number(backgroundBrightness)
       : defaultWallpaperData.backgroundBrightness
   }
-  @computed get wallpaperStyles() {
+  @computed public get wallpaperStyles() {
     const styles: React.CSSProperties = {}
     if (this.useWallpaper) {
       if (this.wallpaperType === WallpaperType.Image) {
@@ -61,16 +61,16 @@ export class WallpaperStore {
     }
     return styles
   }
-  @computed get maskStyles() {
+  @computed public get maskStyles() {
     const styles: React.CSSProperties = {
       backgroundColor: `rgba(0, 0, 0, ${1 - this.backgroundBrightness})`
     }
     return styles
   }
-  @computed get disabledImage() {
+  @computed public get disabledImage() {
     return !this.useWallpaper || this.wallpaperType === WallpaperType.Color
   }
-  @computed get disabledColor() {
+  @computed public get disabledColor() {
     return !this.useWallpaper || this.wallpaperType === WallpaperType.Image
   }
   @action("wallpaper switch")

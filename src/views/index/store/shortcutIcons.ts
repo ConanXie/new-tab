@@ -4,7 +4,7 @@ import { isBase64 } from "utils/validate"
 
 export class ShortcutIconsStore {
   @observable public icons: { [key: string]: string } | null = null
-  constructor() {
+  public constructor() {
     chrome.storage.local.get("icons", ({ icons }) => this.icons = icons || {})
   }
 

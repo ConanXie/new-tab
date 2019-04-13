@@ -2,12 +2,11 @@ import React from "react"
 
 import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
   icon: {
     width: 24,
     height: 24,

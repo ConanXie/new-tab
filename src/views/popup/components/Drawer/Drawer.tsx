@@ -12,9 +12,7 @@ const styles = ({ palette }: Theme) => createStyles({
   },
 })
 
-interface PropsType extends WithStyles<typeof styles> {}
-
-class Drawer extends React.Component<PropsType> {
+class Drawer extends React.Component<WithStyles<typeof styles>> {
   public render() {
     const { classes } = this.props
     return (
