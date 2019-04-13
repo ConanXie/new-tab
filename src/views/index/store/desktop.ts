@@ -129,12 +129,13 @@ export class DesktopStore extends DesktopSettings {
   @computed public get undoMessage() {
     if (this.removed.length) {
       const shortcuts = this.removed[0].shortcuts!
+      const { getMessage } = chrome.i18n
       if (shortcuts!.length > 1) {
         this.cachedUndoMessage = this.removed[0].label
-          ? chrome.i18n.getMessage("removed_shortcut_or_folder", this.removed[0].label)
-          : chrome.i18n.getMessage("removed_unamed_folder", [shortcuts![0].label, shortcuts!.length - 1])
+          ? getMessage("removed_shortcut_or_folder", this.removed[0].label)
+          : getMessage("removed_unamed_folder", [shortcuts![0].label || getMessage("unamed_shortcut"), shortcuts!.length - 1])
       } else {
-        this.cachedUndoMessage = chrome.i18n.getMessage("removed_shortcut_or_folder", shortcuts![0].label)
+        this.cachedUndoMessage = getMessage("removed_shortcut_or_folder", shortcuts![0].label || getMessage("unamed_shortcut"))
       }
     }
     return this.cachedUndoMessage

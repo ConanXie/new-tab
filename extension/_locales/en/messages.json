@@ -47,6 +47,9 @@
   "nav_edit_input_forget_URL": {
     "message": "Don't forget website URL 🙂"
   },
+  "unamed_shortcut": {
+    "message": "A shortcut"
+  },
   "removed_shortcut_or_folder": {
     "message": "$LABEL$ was removed",
     "placeholders": {
