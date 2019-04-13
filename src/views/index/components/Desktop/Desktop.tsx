@@ -118,7 +118,7 @@ class Desktop extends React.Component<PropsType> {
     icon: <PlaylistAddIcon />,
     text: "Add new shortcut",
     onClick: () => {
-      console.log("Add new shortcut")
+      this.editWebsite()
     },
   }, {
     icon: <ClearIcon />,

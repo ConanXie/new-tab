@@ -16,7 +16,7 @@ export class WebsiteEditStore extends WebSiteInfoStore {
       desktopStore.updateInfo(this.itemId, this.index, label, url)
     } else {
       id = shortid.generate()
-      desktopStore.createShortcut(id, label, url)
+      desktopStore.createShortcut(id, label, url, this.itemId)
     }
     if (icon) {
       shortcutIconsStore.updateIcon(id, icon)

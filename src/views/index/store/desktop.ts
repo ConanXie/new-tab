@@ -142,17 +142,24 @@ export class DesktopStore extends DesktopSettings {
 
   @action("create shortcut")
   public createShortcut = (id: string, label: string, url: string, component?: string) => {
-    const { left, top } = menuStore
-    const [row, column] = this.findUsableArea(left, top)!
-    this.data.push({
-      type: 1,
-      id: shortid.generate(),
-      row,
-      column,
-      shortcuts: [{ id, label, url }],
-    })
+    const shortcut = { id, label, url }
     if (component) {
-      console.log(component)
+      // Add to folder
+      const folder = this.findById(component)
+      if (folder) {
+        folder.shortcuts.push(shortcut)
+      }
+    } else {
+      // Add to desktop
+      const { left, top } = menuStore
+      const [row, column] = this.findUsableArea(left, top)!
+      this.data.push({
+        type: 1,
+        id: shortid.generate(),
+        row,
+        column,
+        shortcuts: [shortcut],
+      })
     }
   }
 
