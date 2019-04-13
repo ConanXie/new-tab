@@ -14,7 +14,7 @@ import Website from "../Website"
 import Wrap from "../Wrap"
 import grab, { Env } from "../Website/grab"
 
-const styles = ({ spacing }: Theme) => createStyles({
+const styles = ({ spacing, typography }: Theme) => createStyles({
   window: {
     display: "grid",
     padding: spacing.unit,
@@ -22,6 +22,10 @@ const styles = ({ spacing }: Theme) => createStyles({
       padding: spacing.unit * 2,
       height: "auto",
       transition: "transform 0.2s cubic-bezier(0.333, 0, 0, 1)",
+    },
+    "& .shortcut-name": {
+      color: typography.subtitle1.color,
+      textShadow: "none",
     },
   },
 })
