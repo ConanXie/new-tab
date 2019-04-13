@@ -1,52 +1,55 @@
-const path = require('path')
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const baseConfig = require('./webpack.base.conf')
+const webpack = require("webpack")
+const merge = require("webpack-merge")
+const baseConfig = require("./webpack.base.conf")
 
 const port = 5001
 
 module.exports = merge(baseConfig, {
-  mode: 'development',
+  mode: "development",
   resolve: {
     alias: {
-      'react-dom': '@hot-loader/react-dom'
-    }
+      "react-dom": "@hot-loader/react-dom",
+    },
   },
   output: {
     publicPath: `http://localhost:${port}/`,
-    filename: '[name].js'
+    filename: "[name].js",
   },
   module: {
-    rules: [{
-      test: /\.(css|styl)$/,
-      use: [{
-        loader: 'style-loader',
-      }, {
-        loader: 'css-loader',
-        options: {
-          sourceMap: true
-        }
-      }, {
-        loader: 'stylus-loader'
-      }]
-    }]
+    rules: [
+      {
+        test: /\.(css|styl)$/,
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: "stylus-loader",
+          },
+        ],
+      },
+    ],
   },
-  plugins: [
-    new webpack.NamedModulesPlugin()
-  ],
+  plugins: [new webpack.NamedModulesPlugin()],
   devServer: {
     port,
     overlay: true,
     compress: true,
     disableHostCheck: true,
-    clientLogLevel: 'warning',
+    clientLogLevel: "warning",
     stats: {
       assets: false,
       timings: true,
       modules: false,
       version: false,
-      hash: false
-    }
+      hash: false,
+    },
   },
-  devtool: 'cheap-module-source-map'
+  devtool: "cheap-module-source-map",
 })

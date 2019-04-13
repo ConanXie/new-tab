@@ -1,49 +1,45 @@
-const path = require('path')
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require("path")
+const webpack = require("webpack")
+const merge = require("webpack-merge")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
-const baseConfig = require('./webpack.base.conf')
-const vendors = 'vendors'
-const automaticNameDelimiter = '~'
+const baseConfig = require("./webpack.base.conf")
+const vendors = "vendors"
+const automaticNameDelimiter = "~"
 
 const webpackConfig = merge(baseConfig, {
-  mode: 'production',
+  mode: "production",
   output: {
-    path: path.resolve(__dirname, '../extension'),
-    filename: '[name].js'
+    path: path.resolve(__dirname, "../extension"),
+    filename: "[name].js",
   },
   module: {
-    rules: [{
-      test: /\.(css|styl)$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        'css-loader',
-        'stylus-loader'
-      ]
-    }]
+    rules: [
+      {
+        test: /\.(css|styl)$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "stylus-loader"],
+      },
+    ],
   },
   optimization: {
-    minimizer: [
-      new TerserPlugin(),
-      new OptimizeCSSAssetsPlugin()
-    ],
+    minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin()],
     splitChunks: {
-      chunks: 'all',
-      automaticNameDelimiter
-    }
+      chunks: "all",
+      automaticNameDelimiter,
+    },
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
     new MiniCssExtractPlugin({
-      filename: '[name].css'
-    })
-  ]
+      filename: "[name].css",
+    }),
+  ],
 })
 
+// eslint-disable-next-line @typescript-eslint/no-use-before-define
 const allPermutations = chunkPermutaions(Object.keys(webpackConfig.entry))
 
 for (let name in webpackConfig.entry) {
@@ -51,27 +47,25 @@ for (let name in webpackConfig.entry) {
   chunks.push(name)
 
   const config = {
-    filename: name + '.html',
-    template: path.resolve(__dirname, '../index.html'),
+    filename: name + ".html",
+    template: path.resolve(__dirname, "../index.html"),
     inject: true,
     minify: {
       removeComments: true,
       collapseWhitespace: true,
-      removeAttributeQuotes: true
+      removeAttributeQuotes: true,
     },
     chunks,
-    chunksSortMode: 'dependency'
+    chunksSortMode: "dependency",
   }
   webpackConfig.plugins.push(new HtmlWebpackPlugin(config))
 }
 
 module.exports = webpackConfig
 
-
-
 /**
  * Get chunk permutations by entries for html-webpack-plugin injection
- * @param {Array} data 
+ * @param {Array} data
  */
 function chunkPermutaions(data) {
   data = data.sort()
@@ -81,6 +75,7 @@ function chunkPermutaions(data) {
     const base = data.slice(i, next)
     const others = data.slice(next)
     chunks.push(base)
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     permut(base, others)
   }
 
@@ -91,8 +86,8 @@ function chunkPermutaions(data) {
 
   /**
    * Generate permutations
-   * @param {Array} base 
-   * @param {Array} others 
+   * @param {Array} base
+   * @param {Array} others
    */
   function permut(base, others) {
     for (let i = 0; i < others.length; i++) {
