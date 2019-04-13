@@ -191,6 +191,9 @@ class WebsiteEdit extends React.Component<PropsType, StateType> {
               />
             </DialogContent>
             <DialogActions>
+              <Button color="primary" onClick={this.handleClose}>
+                {chrome.i18n.getMessage("button_cancel")}
+              </Button>
               <Button color="primary" type="submit" disabled={!url}>
                 {chrome.i18n.getMessage("button_done")}
               </Button>
