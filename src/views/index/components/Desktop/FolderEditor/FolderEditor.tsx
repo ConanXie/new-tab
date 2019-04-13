@@ -64,7 +64,7 @@ function FolderEditor(props: Props) {
             margin="dense"
             variant="outlined"
             defaultValue={label}
-            label={chrome.i18n.getMessage("edit_url")}
+            label={chrome.i18n.getMessage("edit_label")}
             onChange={handleLabelChange}
           />
         </DialogContent>
