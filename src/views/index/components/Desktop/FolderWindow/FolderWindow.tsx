@@ -17,9 +17,9 @@ import grab, { Env } from "../Website/grab"
 const styles = ({ spacing, typography }: Theme) => createStyles({
   window: {
     display: "grid",
-    padding: spacing.unit,
+    padding: spacing(1),
     "& > .wrap": {
-      padding: spacing.unit * 2,
+      padding: spacing(2),
       height: "auto",
       transition: "transform 0.2s cubic-bezier(0.333, 0, 0, 1)",
     },

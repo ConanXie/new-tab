@@ -24,13 +24,13 @@ const styles = ({ spacing, overrides }: Theme) => createStyles({
   header: {
     display: "flex",
     alignItems: "center",
-    marginBottom: spacing.unit,
+    marginBottom: spacing(1),
   },
   logo: {
     width: 40,
     height: 40,
-    marginRight: spacing.unit,
-    marginLeft: -spacing.unit / 4,
+    marginRight: spacing(1),
+    marginLeft: spacing(-0.25),
     color: overrides!.MuiButton!.textPrimary!.color,
   },
   "@keyframes rotate": {
@@ -43,7 +43,7 @@ const styles = ({ spacing, overrides }: Theme) => createStyles({
   },
   iconBtnWrap: {
     textAlign: "right",
-    margin: -spacing.unit * 2,
+    margin: spacing(-2),
   }
 })
 

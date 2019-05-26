@@ -5,8 +5,7 @@ import Loadable from "react-loadable"
 import { observer } from "mobx-react-lite"
 import classNames from "classnames"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
+import { makeStyles } from "@material-ui/styles"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import AppBar from "@material-ui/core/AppBar"
 import Drawer from "@material-ui/core/Drawer"
@@ -24,7 +23,7 @@ const Wallpaper = Loadable({
   loading: () => null,
 })
 
-const styles = ({ palette }: Theme) => createStyles({
+const useStyles = makeStyles(({ palette }: Theme) => ({
   root: {
     backgroundColor: "transparent",
     boxShadow: "none",
@@ -47,9 +46,10 @@ const styles = ({ palette }: Theme) => createStyles({
       backgroundColor: "transparent",
     },
   },
-})
+}))
 
-const Header = observer(({ classes }: WithStyles<typeof styles>) => {
+function Header() {
+  const classes = useStyles()
 
   function handleWallpaperIconClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.currentTarget.blur()
@@ -94,6 +94,6 @@ const Header = observer(({ classes }: WithStyles<typeof styles>) => {
       </Drawer>
     </>
   )
-})
+}
 
-export default withStyles(styles)(Header)
+export default observer(Header)

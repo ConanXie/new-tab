@@ -22,8 +22,8 @@ import { ThemeStore, nightModeMenu, NightModeStatus } from "store/theme"
 const styles = ({ spacing, palette }: ThemeType) => createStyles({
   color: {
     boxSizing: "border-box",
-    width: spacing.unit * 4,
-    height: spacing.unit * 4,
+    width: spacing(4),
+    height: spacing(4),
     marginRight: 12,
     border: "2px solid #bfbfbf",
     borderRadius: "50%",

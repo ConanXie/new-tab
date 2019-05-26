@@ -16,7 +16,7 @@ const styles = ({ spacing }: Theme) => createStyles({
   wrap: {
     display: "flex",
     "& > div:last-child": {
-      marginLeft: spacing.unit * 6,
+      marginLeft: spacing(6),
     }
   },
   timeSec: {
@@ -25,7 +25,7 @@ const styles = ({ spacing }: Theme) => createStyles({
   },
   timeTitle: {
     textAlign: "center",
-    marginBottom: spacing.unit * 2,
+    marginBottom: spacing(2),
   },
   inputRoot: {
     width: "2em",
@@ -35,7 +35,7 @@ const styles = ({ spacing }: Theme) => createStyles({
   },
   symbol: {
     marginTop: -4,
-    margin: `0 ${spacing.unit}px`,
+    margin: spacing(0, 1),
   },
 })
 

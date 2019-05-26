@@ -86,9 +86,9 @@ const styles = (theme: MuiTheme) => createStyles({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    width: theme.spacing.unit * 7,
+    width: theme.spacing(7),
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing.unit * 9
+      width: theme.spacing(9)
     }
   },
   toolbar: {
@@ -102,7 +102,7 @@ const styles = (theme: MuiTheme) => createStyles({
     boxSizing: "border-box",
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
     height: "100vh",
     overflow: "auto"
   },
@@ -214,4 +214,4 @@ class Layout extends React.Component<PropsType> {
   }
 }
 
-export default withTheme()(withStyles(styles)(Layout))
+export default withTheme(withStyles(styles)(Layout))

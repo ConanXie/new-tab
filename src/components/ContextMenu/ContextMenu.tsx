@@ -24,7 +24,7 @@ const styles = createStyles({
     },
   },
   menuItem: {
-    paddingRight: 56,
+    paddingRight: 72,
   },
   text: {
     fontSize: "0.9rem",
@@ -34,6 +34,7 @@ const styles = createStyles({
   },
   icon: {
     marginRight: 0,
+    minWidth: 40,
   },
 })
 

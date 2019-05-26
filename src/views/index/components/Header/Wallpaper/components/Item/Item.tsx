@@ -1,20 +1,10 @@
 import React from "react"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 
-const styles = () => createStyles({
-  icon: {
-    width: 24,
-    height: 24,
-    marginRight: 16,
-  },
-})
-
-interface PropsType extends WithStyles<typeof styles> {
+interface Props {
   disabled?: boolean
   primary: string
   secondary?: string
@@ -23,11 +13,11 @@ interface PropsType extends WithStyles<typeof styles> {
   onClick(...args: any[]): any
 }
 
-export default withStyles(styles)((props: PropsType) => {
-  const { disabled, primary, secondary, icon, classes } = props
+function Item(props: Props) {
+  const { disabled, primary, secondary, icon } = props
   return (
     <ListItem button disabled={disabled} onClick={props.onClick}>
-      <ListItemIcon className={classes.icon}>
+      <ListItemIcon>
         {icon || <></>}
       </ListItemIcon>
       <ListItemText
@@ -37,4 +27,6 @@ export default withStyles(styles)((props: PropsType) => {
       {props.children}
     </ListItem>
   )
-})
+}
+
+export default Item

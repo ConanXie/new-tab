@@ -8,7 +8,7 @@ import Paper from "@material-ui/core/Paper"
 const styles = ({ spacing }: Theme) => createStyles({
   root: {
     width: "680px",
-    margin:  `${spacing.unit * 3}px auto`,
+    margin:  `${spacing(3)}px auto`,
     "&:first-of-type": {
       marginTop: 0
     }

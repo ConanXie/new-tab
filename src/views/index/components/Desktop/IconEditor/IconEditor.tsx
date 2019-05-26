@@ -26,14 +26,14 @@ import { isBase64 } from "utils/validate"
 const SIZE = 192
 const ACTUAL_SIZE = 174
 
-const styles = (theme: Theme) => createStyles({
+const styles = ({ spacing, palette }: Theme) => createStyles({
   dialog: {
     width: 374,
     minHeight: 450,
   },
   typeToggle: {
     display: "flex",
-    margin: `${theme.spacing.unit / 2}px 0 ${theme.spacing.unit * 2}px`,
+    marginBottom: spacing(2),
   },
   cropperContainer: {
     position: "relative",
@@ -88,25 +88,25 @@ const styles = (theme: Theme) => createStyles({
     top: 2,
   },
   addPhotoIcon: {
-    marginTop: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginTop: spacing(1),
+    marginRight: spacing(1),
   },
   input: {
     display: "none",
   },
   iconsWrap: {
-    margin: -theme.spacing.unit,
+    margin: spacing(-1),
   },
   icon: {
     width: SIZE / 2,
     height: SIZE / 2,
-    margin: theme.spacing.unit,
+    margin: spacing(1),
     borderRadius: 4,
     border: "1px solid transparent",
     cursor: "pointer",
   },
   iconSelected: {
-    borderColor: theme.palette.primary.main,
+    borderColor: palette.primary.main,
   },
 })
 
@@ -334,7 +334,7 @@ function ShortcutIcon(props: Props) {
         <DialogTitle>Icon Editor</DialogTitle>
         <DialogContent>
           <div className={classes.typeToggle}>
-            <ToggleButtonGroup value={type} exclusive onChange={handleTypeChange}>
+            <ToggleButtonGroup size="small" value={type} exclusive onChange={handleTypeChange}>
               <ToggleButton value={IconType.BuiltIn}>
                 <Tooltip enterDelay={500} title="Built-in">
                   <DashboardIcon />

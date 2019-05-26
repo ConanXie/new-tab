@@ -24,8 +24,8 @@ const styles = ({ spacing }: Theme) => createStyles({
   },
   avatar: {
     display: "inline-block",
-    marginRight: spacing.unit * 2,
-    marginLeft: -spacing.unit / 2,
+    marginRight: spacing(2),
+    marginLeft: spacing(-0.5),
     background: "none",
   }
 })
