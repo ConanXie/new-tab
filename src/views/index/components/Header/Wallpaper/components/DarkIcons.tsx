@@ -18,7 +18,12 @@ const DarkIcons = (props: PropsType) => (
     onClick={props.onChange}
   >
     <ListItemSecondaryAction>
-      <Switch checked={props.checked} onClick={props.onChange} color="primary" />
+      <Switch
+        checked={props.checked}
+        disabled={props.disabled}
+        onClick={props.onChange}
+        color="primary"
+      />
     </ListItemSecondaryAction>
   </Item>
 )
