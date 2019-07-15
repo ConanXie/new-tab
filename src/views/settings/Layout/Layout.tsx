@@ -1,26 +1,62 @@
-import React from "react"
-import classNames from "classnames"
+import React, { useState } from "react"
+import { useSnackbar } from "notistack"
+import clsx from "clsx"
 import Loadable from "react-loadable"
+import Color from "color"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
-import withTheme from "@material-ui/core/styles/withTheme"
-import { Theme as MuiTheme } from "@material-ui/core/styles/createMuiTheme"
+import Button from "@material-ui/core/Button"
+import Typography from "@material-ui/core/Typography"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
-import IconButton from "@material-ui/core/IconButton"
-import Typography from "@material-ui/core/Typography"
 import Drawer from "@material-ui/core/Drawer"
 import Divider from "@material-ui/core/Divider"
-import MenuIcon from "@material-ui/icons/Menu"
-import ChevronRightIcon from "@material-ui/icons/ChevronRight"
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
+import List from "@material-ui/core/List"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemIcon from "@material-ui/core/ListItemIcon"
+import ListItemText from "@material-ui/core/ListItemText"
 import ColorLensIcon from "@material-ui/icons/ColorLensOutlined"
 import ViewModuleIcon from "@material-ui/icons/ViewModuleOutlined"
 import InfoIcon from "@material-ui/icons/InfoOutlined"
+import { makeStyles, withTheme, createStyles, Theme as MuiTheme } from "@material-ui/core/styles"
 
-import LazilyLoad, { importLazy } from "utils/LazilyLoad"
-import SettingsList, { SettingsItemType } from "./SettingsList"
+const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
+  createStyles({
+    layout: {},
+    appbar: {
+      boxShadow: "none",
+    },
+    drawerPaper: {
+      top: 64,
+      minWidth: 280,
+      borderRight: "none",
+    },
+    menuListItem: {
+      borderTopRightRadius: spacing(6),
+      borderBottomRightRadius: spacing(6),
+    },
+    menuActiveColor: {
+      color: (overrides!.MuiButton!.textPrimary as React.CSSProperties)!.color,
+    },
+    menuActiveBg: {
+      background: Color(palette.primary.main).alpha(0.2).toString(),
+    },
+    menuDivider: {
+      margin: `${spacing(1)}px 0`,
+    },
+    main: {
+      marginLeft: 280,
+      backgroundColor: palette.background.paper,
+    },
+    content: {
+      maxWidth: 1120,
+      paddingLeft: spacing(6),
+      paddingRight: spacing(6),
+      margin: "0 auto",
+      height: `calc(100vh - ${spacing(8)}px)`,
+      overflow: "auto",
+    },
+  })
+)
 
 const Theme = Loadable({
   loader: () => import("../components/Theme"),
@@ -37,181 +73,82 @@ const About = Loadable({
   loading: () => null,
 })
 
-const drawerWidth = 240
-
-const styles = (theme: MuiTheme) => createStyles({
-  root: {
-    flexGrow: 1,
-    height: 430,
-    zIndex: 1,
-    overflow: "hidden",
-    position: "relative",
-    display: "flex"
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36
-  },
-  hide: {
-    display: "none"
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    overflow: "hidden",
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9)
-    }
-  },
-  toolbar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar
-  },
-  content: {
-    boxSizing: "border-box",
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3),
-    height: "100vh",
-    overflow: "auto"
-  },
-  layout: {
-    display: "flex"
-  },
-})
-interface PropsType extends WithStyles<typeof styles> {
-  theme: MuiTheme
+interface SettingsMenu {
+  text: string
+  icon: React.ComponentType<any>
+  component: React.ComponentType<any>
 }
 
-class Layout extends React.Component<PropsType> {
-  public state = {
-    open: true,
-    loadComponent: "",
-  }
-  /**
-   * Control Drawer display
-   */
-  private handleDrawerOpen = () => {
-    this.setState({ open: true })
-  }
-  private handleDrawerClose = () => {
-    this.setState({ open: false })
-  }
-  /**
-   * Two-part settings
-   */
-  private readonly settings: SettingsItemType[] = [{
-    icon: ColorLensIcon,
+const settingsMenu: (SettingsMenu | undefined)[] = [
+  {
     text: chrome.i18n.getMessage("settings_theme"),
-    onClick: () => this.setState({ loadComponent: "Theme" }),
-  }, {
-    icon: ViewModuleIcon,
+    icon: ColorLensIcon,
+    component: Theme,
+  },
+  {
     text: chrome.i18n.getMessage("settings_desktop"),
-    onClick: () => this.setState({ loadComponent: "Desktop" }),
-  }]
-  private readonly infoSettings: SettingsItemType[] = [{
-    icon: InfoIcon,
+    icon: ViewModuleIcon,
+    component: Desktop,
+  },
+  undefined,
+  {
     text: chrome.i18n.getMessage("settings_about"),
-    onClick: () => this.setState({ loadComponent: "About" }),
-  }]
-  public componentDidMount() {
-    this.settings[0].onClick()
-  }
-  public render() {
-    const { classes, theme } = this.props
-    const { open, loadComponent } = this.state
-    return (
-      <div className={classes.layout}>
-        <AppBar
-          position="absolute"
-          className={classNames(classes.appBar, open && classes.appBarShift)}
-        >
-          <Toolbar disableGutters={!open}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-              {chrome.i18n.getMessage("settings_toolbar_title")}
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose)
-          }}
-          open={open}
-        >
-          <div className={classes.toolbar}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme && theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          </div>
-          <Divider />
-          <SettingsList items={this.settings} />
-          <Divider />
-          <SettingsList items={this.infoSettings} />
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          {loadComponent === "Theme" && <Theme />}
-          {loadComponent === "About" && <About />}
-          {loadComponent === "Desktop" && <Desktop />}
-        </main>
+    icon: InfoIcon,
+    component: About,
+  },
+]
 
-        {/**
-          * For an unknown reason,
-          * the ripple on List and Switch disappears directly when some theme settings change.
-          * Use the code below to lazily load a ripple Component could fix that bug.
-          */}
-        <LazilyLoad
-          modules={{
-            Fix: () => importLazy(import("./Fix"))
-          }}
-        >
-          {({ Fix }) => (
-            <Fix />
-          )}
-        </LazilyLoad>
-      </div>
-    )
-  }
+function Layout() {
+  const snackbar = useSnackbar()
+  const classes = useStyles()
+  const [current, setCurrent] = useState(0)
+
+  const Component = settingsMenu[current]!.component
+
+  return (
+    <div className={classes.layout}>
+      <AppBar position="static" className={classes.appbar}>
+        <Toolbar disableGutters={!open}>
+          <Typography variant="h6" color="inherit" noWrap>
+            {chrome.i18n.getMessage("settings_toolbar_title")}
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <List>
+          {settingsMenu.map((item, index) => {
+            if (!item) {
+              return <Divider className={classes.menuDivider} key={index} />
+            }
+            return (
+              <ListItem
+                key={index}
+                button
+                component="li"
+                className={clsx(classes.menuListItem, current === index && [classes.menuActiveColor, classes.menuActiveBg])}
+                onClick={() => setCurrent(index)}
+              >
+                <ListItemIcon>
+                  <item.icon className={clsx(current === index && classes.menuActiveColor)} />
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            )
+          })}
+        </List>
+      </Drawer>
+      <main className={classes.main}>
+        <div className={classes.content}>
+          {Component && <Component />}
+        </div>
+      </main>
+    </div>
+  )
 }
 
-export default withTheme(withStyles(styles)(Layout))
+export default withTheme(Layout)
