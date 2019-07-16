@@ -8,15 +8,15 @@ import SliderItem from "./SliderItem"
 import { ItemPropsType } from "./Item"
 
 enum BrightnessRange {
-  Min = 0.1,
-  Max = 1,
-  High = 0.8,
-  Low = 0.3,
+  Min = 10,
+  Max = 100,
+  High = 80,
+  Low = 30,
 }
 
 interface PropsType extends ItemPropsType {
   value: number
-  onChange: (radius: number) => void
+  onChange: (radius: number | number[]) => void
 }
 
 function Brightness(props: PropsType) {

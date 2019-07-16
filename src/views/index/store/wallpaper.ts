@@ -63,7 +63,7 @@ export class WallpaperStore {
   }
   @computed public get maskStyles() {
     const styles: React.CSSProperties = {
-      backgroundColor: `rgba(0, 0, 0, ${1 - this.backgroundBrightness})`
+      backgroundColor: `rgba(0, 0, 0, ${1 - this.backgroundBrightness / 100})`
     }
     return styles
   }
@@ -105,8 +105,8 @@ export class WallpaperStore {
     this.blurRadius = radius
   }
   @action("handle background image blur radius change")
-  public handleBackgroundBrightnessChange = (brightness: number) => {
-    this.backgroundBrightness = brightness
+  public handleBackgroundBrightnessChange = (brightness: number | number[]) => {
+    this.backgroundBrightness = brightness as number
   }
 }
 

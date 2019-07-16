@@ -5,7 +5,7 @@ import createStyles from "@material-ui/core/styles/createStyles"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
-import Slider from "@material-ui/lab/Slider"
+import Slider from "@material-ui/core/Slider"
 
 import { ItemPropsType } from "../Item"
 
@@ -14,8 +14,7 @@ const styles = () => createStyles({
     paddingRight: 0,
   },
   listSecondary: {
-    paddingTop: 10,
-    paddingBottom: 11,
+    display: "flex",
   },
 })
 
@@ -26,14 +25,14 @@ export interface PropsType extends ItemPropsType, WithStyles<typeof styles> {
   max?: number
   step?: number
   children?: React.ReactNode
-  onChange: (radius: number) => void
+  onChange: (value: number | number[]) => void
 }
 
 export default withStyles(styles)((props: PropsType) => {
   const { disabled, value, icon, classes, ...range } = props
 
   // tslint:disable-next-line:no-shadowed-variable
-  const handleChange = (event: React.ChangeEvent<{}>, value: number) => props.onChange(value)
+  const handleChange = (event: React.ChangeEvent<{}>, value: number | number[]) => props.onChange(value)
 
   return (
     <ListItem button disabled={disabled}>
