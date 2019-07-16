@@ -38,7 +38,7 @@ const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
       color: (overrides!.MuiButton!.textPrimary as React.CSSProperties)!.color,
     },
     menuActiveBg: {
-      background: Color(palette.primary.main).alpha(0.2).toString(),
+      background: Color(palette.primary.main).alpha(0.15).toString(),
     },
     menuDivider: {
       margin: `${spacing(1)}px 0`,
@@ -48,9 +48,9 @@ const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
       backgroundColor: palette.background.paper,
     },
     content: {
+      boxSizing: "border-box",
       maxWidth: 1120,
-      paddingLeft: spacing(6),
-      paddingRight: spacing(6),
+      padding: `${spacing(1)}px ${spacing(6)}px`,
       margin: "0 auto",
       height: `calc(100vh - ${spacing(8)}px)`,
       overflow: "auto",
