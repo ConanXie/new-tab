@@ -1,20 +1,21 @@
-import React from "react"
-import { observer, useObservable } from "mobx-react-lite"
+import React, { useState } from "react"
+import { observer, useLocalStore } from "mobx-react-lite"
 
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 import Switch from "@material-ui/core/Switch"
-// import Divider from "@material-ui/core/Divider"
+import Divider from "@material-ui/core/Divider"
 
 import Wrap from "../../Layout/SettingsWrap"
+import Grid from "./Grid"
 
 import { desktopSettings } from "../../store"
 
 const Desktop = observer(() => {
-
-  const { toolbar, toggleToolbar } = useObservable(desktopSettings)
+  const { toolbar, columns, rows, toggleToolbar } = useLocalStore(() => desktopSettings)
+  const [gridDialogOpen, setGridDialogOpen] = useState(false)
 
   return (
     <Wrap>
@@ -25,13 +26,17 @@ const Desktop = observer(() => {
             secondary={chrome.i18n.getMessage("settings_desktop_toolbar_secondary")}
           />
           <ListItemSecondaryAction>
-            <Switch
-              color="primary"
-              checked={toolbar}
-              onChange={toggleToolbar}
-            />
+            <Switch color="primary" checked={toolbar} onChange={toggleToolbar} />
           </ListItemSecondaryAction>
         </ListItem>
+        <Divider />
+        <ListItem button onClick={() => setGridDialogOpen(true)}>
+          <ListItemText
+            primary={chrome.i18n.getMessage("settings_desktop_grid")}
+            secondary={`${chrome.i18n.getMessage("settings_desktop_grid_columns")}: ${columns} ${chrome.i18n.getMessage("settings_desktop_grid_rows")}: ${rows}`}
+          />
+        </ListItem>
+        <Grid open={gridDialogOpen} onClose={() => setGridDialogOpen(false)} />
       </List>
     </Wrap>
   )

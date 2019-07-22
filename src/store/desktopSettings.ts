@@ -33,6 +33,11 @@ export class DesktopSettings {
   @action public toggleToolbar = () => {
     this.toolbar = !this.toolbar
   }
+
+  @action public updateGrid = (columns: number, rows: number) => {
+    this.columns = columns
+    this.rows = rows
+  }
 }
 
 const desktopSettings = new DesktopSettings()
