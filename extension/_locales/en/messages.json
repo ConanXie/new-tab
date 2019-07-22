@@ -162,6 +162,9 @@
       }
     }
   },
+  "settings_night_time": {
+    "message": "Night time"
+  },
   "settings_night_time_start": {
     "message": "Start time"
   },
@@ -182,6 +185,15 @@
   },
   "settings_desktop_toolbar_secondary": {
     "message": "Access toolbar via context menu when off"
+  },
+  "settings_desktop_grid": {
+    "message": "Desktop grid"
+  },
+  "settings_desktop_grid_columns": {
+    "message": "Columns"
+  },
+  "settings_desktop_grid_rows": {
+    "message": "Rows"
   },
   "settings_weather_title": {
     "message": "Weather"
