@@ -5,6 +5,7 @@ import createStyles from "@material-ui/core/styles/createStyles"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
+import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogActions from "@material-ui/core/DialogActions"
 import DialogContent from "@material-ui/core/DialogContent"
 import Input from "@material-ui/core/Input"
@@ -26,6 +27,7 @@ const styles = ({ spacing }: Theme) => createStyles({
   timeTitle: {
     textAlign: "center",
     marginBottom: spacing(2),
+    color: "rgba(0, 0, 0, 0.54)",
   },
   inputRoot: {
     width: "2em",
@@ -170,6 +172,7 @@ class NightTime extends React.Component<PropsType, StateType> {
 
     return (
       <Dialog open={open} onClose={this.handleClose}>
+        <DialogTitle>{chrome.i18n.getMessage("settings_night_time")}</DialogTitle>
         <form onSubmit={this.handleDone}>
           <DialogContent>
             <div className={classes.wrap}>
