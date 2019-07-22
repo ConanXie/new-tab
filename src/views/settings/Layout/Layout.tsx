@@ -1,10 +1,8 @@
 import React, { useState } from "react"
-import { useSnackbar } from "notistack"
 import clsx from "clsx"
 import Loadable from "react-loadable"
 import Color from "color"
 
-import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
@@ -21,7 +19,6 @@ import { makeStyles, withTheme, createStyles, Theme as MuiTheme } from "@materia
 
 const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
   createStyles({
-    layout: {},
     appbar: {
       boxShadow: "none",
     },
@@ -99,14 +96,13 @@ const settingsMenu: (SettingsMenu | undefined)[] = [
 ]
 
 function Layout() {
-  const snackbar = useSnackbar()
   const classes = useStyles()
   const [current, setCurrent] = useState(0)
 
   const Component = settingsMenu[current]!.component
 
   return (
-    <div className={classes.layout}>
+    <>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar disableGutters={!open}>
           <Typography variant="h6" color="inherit" noWrap>
@@ -147,7 +143,7 @@ function Layout() {
           {Component && <Component />}
         </div>
       </main>
-    </div>
+    </>
   )
 }
 
