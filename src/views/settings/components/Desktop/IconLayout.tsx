@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { observer, useLocalStore } from "mobx-react-lite"
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
@@ -9,6 +9,9 @@ import ListItemText from "@material-ui/core/ListItemText"
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 import Switch from "@material-ui/core/Switch"
 import Divider from "@material-ui/core/Divider"
+
+import ColorPicker from "components/ColorPicker"
+import SettingsTitle from "components/SettingsTitle"
 
 import { wallpaperStore, desktopSettings } from "../../store"
 
@@ -58,6 +61,15 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
     shortcutLabel: {
       marginTop: spacing(1),
     },
+    colorIndicator: {
+      boxSizing: "border-box",
+      width: spacing(4),
+      height: spacing(4),
+      marginRight: 12,
+      border: "2px solid #bfbfbf",
+      borderRadius: "50%",
+      outline: "none",
+    },
   }),
 )
 
@@ -75,15 +87,31 @@ const shortcuts = [
     label: "Amazon",
   },
   {
-    icon: "youtube_2",
+    icon: "youtube",
     label: "Youtube",
   },
 ]
 
 const IconLayout = observer(() => {
   const { wallpaperStyles } = useLocalStore(() => wallpaperStore)
-  const { shortcutLabel, shortcutColor, toggleShortcutLabel } = useLocalStore(() => desktopSettings)
+  const {
+    shortcutLabel,
+    shortcutLabelColor,
+    shortcutLabelShadow,
+    disabledLabelOptions,
+    toggleShortcutLabel,
+    saveShortcutLabelColor,
+    toggleShortcutLabelShadow,
+  } = useLocalStore(() => desktopSettings)
   const classes = useStyles()
+  const [colorPickerOpen, setColorPickerOpen] = useState(false)
+
+  function handleColorPickerClose(color?: string) {
+    setColorPickerOpen(false)
+    if (color) {
+      saveShortcutLabelColor(color)
+    }
+  }
 
   return (
     <>
@@ -100,7 +128,14 @@ const IconLayout = observer(() => {
                 <img src={chrome.runtime.getURL(`icons/${icon}.png`)} alt="" />
               </div>
               {shortcutLabel && (
-                <Typography className={classes.shortcutLabel} variant="subtitle1" style={{ color: shortcutColor }}>
+                <Typography
+                  className={classes.shortcutLabel}
+                  variant="subtitle1"
+                  style={{
+                    color: shortcutLabelColor,
+                    textShadow: shortcutLabelShadow ? `0 1px 2px rgba(0, 0, 0, 0.36)` : "",
+                  }}
+                >
                   {label}
                 </Typography>
               )}
@@ -108,6 +143,7 @@ const IconLayout = observer(() => {
           ))}
         </div>
       </div>
+      <SettingsTitle>{chrome.i18n.getMessage("settings_desktop_shortcut_title")}</SettingsTitle>
       <List>
         <ListItem button onClick={toggleShortcutLabel}>
           <ListItemText primary={chrome.i18n.getMessage("settings_desktop_shortcut_label")} />
@@ -115,7 +151,34 @@ const IconLayout = observer(() => {
             <Switch color="primary" checked={shortcutLabel} onChange={toggleShortcutLabel} />
           </ListItemSecondaryAction>
         </ListItem>
+        <Divider />
+        <ListItem button disabled={disabledLabelOptions} onClick={() => setColorPickerOpen(true)}>
+          <ListItemText
+            primary={chrome.i18n.getMessage("settings_desktop_shortcut_label_color")}
+            secondary={shortcutLabelColor}
+          />
+          <ListItemSecondaryAction>
+            <button
+              className={classes.colorIndicator}
+              style={{ backgroundColor: shortcutLabelColor }}
+              disabled={disabledLabelOptions}
+              onClick={() => setColorPickerOpen(true)}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
+        <Divider />
+        <ListItem button onClick={toggleShortcutLabelShadow}>
+          <ListItemText primary={chrome.i18n.getMessage("settings_desktop_shortcut_label_shadow")} />
+          <ListItemSecondaryAction>
+            <Switch color="primary" checked={shortcutLabelShadow} onChange={toggleShortcutLabelShadow} />
+          </ListItemSecondaryAction>
+        </ListItem>
       </List>
+      <ColorPicker
+        color={shortcutLabelColor}
+        open={colorPickerOpen}
+        onClose={handleColorPickerClose}
+      />
     </>
   )
 })
