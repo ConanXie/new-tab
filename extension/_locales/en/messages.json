@@ -195,6 +195,9 @@
   "settings_desktop_grid_rows": {
     "message": "Rows"
   },
+  "settings_desktop_shortcut_label": {
+    "message": "Label"
+  },
   "settings_weather_title": {
     "message": "Weather"
   },

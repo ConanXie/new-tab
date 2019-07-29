@@ -6,12 +6,16 @@ export const defaultData = {
   toolbar: true,
   columns: 8,
   rows: 5,
+  shortcutLabel: true,
+  shortcutColor: "#FFFFFF"
 }
 
 export class DesktopSettings {
   @observable public toolbar = false
   @observable public columns = defaultData.columns
   @observable public rows = defaultData.rows
+  @observable public shortcutLabel = defaultData.shortcutLabel
+  @observable public shortcutColor = defaultData.shortcutColor
 
   public constructor(self = true) {
     if (self) {
@@ -37,6 +41,10 @@ export class DesktopSettings {
   @action public updateGrid = (columns: number, rows: number) => {
     this.columns = columns
     this.rows = rows
+  }
+
+  @action public toggleShortcutLabel = () => {
+    this.shortcutLabel = !this.shortcutLabel
   }
 }
 
