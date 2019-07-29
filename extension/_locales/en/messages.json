@@ -195,8 +195,17 @@
   "settings_desktop_grid_rows": {
     "message": "Rows"
   },
+  "settings_desktop_shortcut_title": {
+    "message": "Icon layout"
+  },
   "settings_desktop_shortcut_label": {
     "message": "Label"
+  },
+  "settings_desktop_shortcut_label_color": {
+    "message": "Color"
+  },
+  "settings_desktop_shortcut_label_shadow": {
+    "message": "Shadow"
   },
   "settings_weather_title": {
     "message": "Weather"
