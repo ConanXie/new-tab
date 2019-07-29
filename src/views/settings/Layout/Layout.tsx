@@ -23,6 +23,7 @@ const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
       boxShadow: "none",
     },
     drawerPaper: {
+      zIndex: 0,
       top: 64,
       minWidth: 280,
       borderRight: "none",
