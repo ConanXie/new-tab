@@ -80,7 +80,7 @@ const Grid = observer<Props>(({ open, onClose }) => {
     if (open) {
       setValues({ ...values, columns, rows })
     }
-  }, [open])
+  }, [open]) // eslint-disable-line
 
   return (
     <Dialog open={open} onClose={onClose}>
