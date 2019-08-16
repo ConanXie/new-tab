@@ -18,7 +18,7 @@ export class WebSiteInfoStore {
   }
 
   @action("open webiste dialog")
-  public openDialog = (itemId: string = "", index: number = 0) => {
+  public openDialog = (itemId = "", index = 0) => {
     this.open = true
     this.itemId = itemId
     this.index = index

@@ -8,7 +8,7 @@ interface PropsType extends ItemPropsType {
 }
 
 class SaveImage extends React.Component<PropsType> {
-  private getSuffix(type: string = "image/jpeg") {
+  private getSuffix(type = "image/jpeg") {
     type = type.match(/image\/(\w+)/)![1]
     return type === "jpeg" ? "jpg" : type
   }

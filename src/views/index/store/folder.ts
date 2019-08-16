@@ -5,10 +5,10 @@ import desktopStore, { Desktop, Shortcut } from "./desktop"
 export class FolderStore {
   public folderElement?: HTMLElement
 
-  @observable public id: string = ""
-  @observable public open: boolean = false
+  @observable public id = ""
+  @observable public open = false
   @observable public component?: Desktop
-  @observable public tempShortcut: string = ""
+  @observable public tempShortcut = ""
   @observable public shortcuts: Shortcut[] = []
 
   @computed public get gridColumns() {
@@ -58,7 +58,7 @@ export class FolderStore {
   }
 
   @action("save temp shortcut")
-  public saveTempShortcut = (shortcutId: string = "") => {
+  public saveTempShortcut = (shortcutId = "") => {
     this.tempShortcut = shortcutId
   }
 

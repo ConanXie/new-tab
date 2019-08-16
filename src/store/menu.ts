@@ -8,8 +8,8 @@ export interface MenuType {
 }
 
 export class MenuStore {
-  @observable public top: number = 0
-  @observable public left: number = 0
+  @observable public top = 0
+  @observable public left = 0
   @observable public menus: MenuType[] = []
 
   @action("set position")

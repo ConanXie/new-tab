@@ -194,7 +194,7 @@ export class DesktopStore extends DesktopSettings {
   }
 
   @action("update info")
-  public updateInfo = (id: string, index: number = 0, label: string, url: string) => {
+  public updateInfo = (id: string, index = 0, label: string, url: string) => {
     const component = this.data.find(item => item.id === id)
     if (component && component.shortcuts) {
       component.shortcuts[index].label = label

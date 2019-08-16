@@ -78,7 +78,7 @@ const grab = (event: React.MouseEvent<HTMLElement>, shortcut: Shortcut, componen
        * @param e mousemove event
        * @param reCalc re-calculate the clone's position
        */
-      const moveClone = (e: MouseEvent, reCalc: boolean = false) => {
+      const moveClone = (e: MouseEvent, reCalc = false) => {
         e.preventDefault()
         cloneEventRef = e
         const transX = e.clientX - offsetLeft

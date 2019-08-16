@@ -154,7 +154,7 @@ class Desktop extends React.Component<PropsType> {
     }
   }
 
-  public showMenu = (event: MouseEvent, menus: MenuType[], id?: string, index: number = 0) => {
+  public showMenu = (event: MouseEvent, menus: MenuType[], id?: string, index = 0) => {
     if (id) {
       this.id = id
       this.index = index
