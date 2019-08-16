@@ -14,6 +14,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import ColorLensIcon from "@material-ui/icons/ColorLensOutlined"
 import ViewModuleIcon from "@material-ui/icons/ViewModuleOutlined"
+import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUncheckedOutlined"
 import InfoIcon from "@material-ui/icons/InfoOutlined"
 import { makeStyles, withTheme, createStyles, Theme as MuiTheme } from "@material-ui/core/styles"
 
@@ -66,6 +67,11 @@ const Desktop = Loadable({
   loading: () => null,
 })
 
+const Folders = Loadable({
+  loader: () => import("../components/Folders"),
+  loading: () => null,
+})
+
 const About = Loadable({
   loader: () => import("../components/About"),
   loading: () => null,
@@ -87,6 +93,11 @@ const settingsMenu: (SettingsMenu | undefined)[] = [
     text: chrome.i18n.getMessage("settings_desktop"),
     icon: ViewModuleIcon,
     component: Desktop,
+  },
+  {
+    text: chrome.i18n.getMessage("settings_folders"),
+    icon: RadioButtonUncheckedIcon,
+    component: Folders,
   },
   undefined,
   {

@@ -207,6 +207,9 @@
   "settings_desktop_shortcut_label_shadow": {
     "message": "Shadow"
   },
+  "settings_folders": {
+    "message": "Folders"
+  },
   "settings_weather_title": {
     "message": "Weather"
   },
