@@ -36,6 +36,7 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
       position: "relative",
       zIndex: 1,
       display: "grid",
+      gridTemplateColumns: "repeat(4, 1fr)",
       height: "100%",
     },
     shortcut: {
@@ -73,7 +74,7 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
   }),
 )
 
-const shortcuts = [
+export const shortcuts = [
   {
     icon: "google",
     label: "Google",
@@ -119,11 +120,7 @@ const IconLayout = observer(() => {
         <div className={classes.desktopBg} style={wallpaperStyles} />
         <div className={classes.wrapper}>
           {shortcuts.map(({ icon, label }, index) => (
-            <div
-              className={classes.shortcut}
-              style={{ gridArea: `1 / ${index + 1} / auto / auto` }}
-              key={index}
-            >
+            <div className={classes.shortcut} key={index}>
               <div className={classes.shortcutIcon}>
                 <img src={chrome.runtime.getURL(`icons/${icon}.png`)} alt="" />
               </div>
