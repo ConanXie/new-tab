@@ -27,7 +27,6 @@ const styles = ({ spacing }: Theme) => createStyles({
   timeTitle: {
     textAlign: "center",
     marginBottom: spacing(2),
-    color: "rgba(0, 0, 0, 0.54)",
   },
   inputRoot: {
     width: "2em",
