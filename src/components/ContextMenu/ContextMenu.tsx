@@ -14,7 +14,6 @@ import { MenuStore } from "store/menu"
 
 const styles = createStyles({
   root: {
-    borderRadius: 10,
     overflow: "hidden",
     "& > ul": {
       padding: 0,

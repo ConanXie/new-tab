@@ -144,7 +144,6 @@ export class ThemeStore {
           `"Segoe UI Emoji"`,
           `"Segoe UI Symbol"`,
         ].join(","),
-        useNextVariants: true,
       },
       palette: {
         type: applyNightMode ? "dark" : "light",
@@ -156,6 +155,11 @@ export class ThemeStore {
         MuiButton: {
           textPrimary: {
             color: isLight ? `${colorTool.darken(lightDiff * 0.08)}` : color,
+          },
+        },
+        MuiPaper: {
+          rounded: {
+            borderRadius: 16,
           },
         },
       },

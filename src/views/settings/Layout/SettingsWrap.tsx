@@ -11,7 +11,6 @@ const styles = ({ spacing, palette }: Theme) =>
       maxWidth: 840,
       margin: `${spacing(3)}px 0`,
       border: `1px solid ${palette.divider}`,
-      borderRadius: spacing(1),
       overflow: "hidden",
       "&:first-of-type": {
         marginTop: 0,
