@@ -210,6 +210,12 @@
   "settings_folders": {
     "message": "Folders"
   },
+  "settings_folders_window": {
+    "message": "Folders window"
+  },
+  "settings_folders_window_background_color": {
+    "message": "Background color"
+  },
   "settings_weather_title": {
     "message": "Weather"
   },
