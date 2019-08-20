@@ -1,5 +1,7 @@
 export { default as themeStore } from "store/theme"
 export { default as menuStore } from "store/menu"
+export { default as desktopSettings } from "store/desktopSettings"
+export { default as foldersSettings } from "store/foldersSettings"
 export { default as wallpaperStore } from "./wallpaper"
 export { default as desktopStore } from "./desktop"
 export { default as websiteInfoStore } from "./websiteInfo"

@@ -5,9 +5,7 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
 import Typography from "@material-ui/core/Typography"
 
-import Wrap from "../../Layout/SettingsWrap"
-
-import { wallpaperStore, folersSettings } from "../../store"
+import { wallpaperStore, foldersSettings } from "../../store"
 import { shortcuts } from "../Desktop/IconLayout"
 
 const useStyles = makeStyles(({ spacing }: Theme) =>
@@ -60,47 +58,43 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
     shortcutLabel: {
       marginTop: spacing(1),
     },
-  }),
+  })
 )
 
-const Folder = observer(() => {
+const FolderSimulation = observer(() => {
   const { wallpaperStyles } = useLocalStore(() => wallpaperStore)
-  const { shortcutLabel, shortcutLabelColor, shortcutLabelShadow } = useLocalStore(
-    () => folersSettings,
+  const { backgroundColor, shortcutLabel, shortcutLabelColor, shortcutLabelShadow } = useLocalStore(
+    () => foldersSettings,
   )
 
   const classes = useStyles()
 
   return (
-    <>
-      <Wrap>
-        <div className={classes.desktop}>
-          <div className={classes.desktopBg} style={wallpaperStyles} />
-          <Paper elevation={8} className={classes.folder}>
-            {shortcuts.map(({ icon, label }, index) => (
-              <div className={classes.shortcut} key={index}>
-                <div className={classes.shortcutIcon}>
-                  <img src={chrome.runtime.getURL(`icons/${icon}.png`)} alt="" />
-                </div>
-                {shortcutLabel && (
-                  <Typography
-                    className={classes.shortcutLabel}
-                    variant="subtitle1"
-                    style={{
-                      color: shortcutLabelColor,
-                      textShadow: shortcutLabelShadow ? `0 1px 2px rgba(0, 0, 0, 0.36)` : "",
-                    }}
-                  >
-                    {label}
-                  </Typography>
-                )}
-              </div>
-            ))}
-          </Paper>
-        </div>
-      </Wrap>
-    </>
+    <div className={classes.desktop}>
+      <div className={classes.desktopBg} style={wallpaperStyles} />
+      <Paper elevation={8} className={classes.folder} style={{ backgroundColor }}>
+        {shortcuts.map(({ icon, label }, index) => (
+          <div className={classes.shortcut} key={index}>
+            <div className={classes.shortcutIcon}>
+              <img src={chrome.runtime.getURL(`icons/${icon}.png`)} alt="" />
+            </div>
+            {shortcutLabel && (
+              <Typography
+                className={classes.shortcutLabel}
+                variant="subtitle1"
+                style={{
+                  color: shortcutLabelColor,
+                  textShadow: shortcutLabelShadow ? `0 1px 2px rgba(0, 0, 0, 0.36)` : "",
+                }}
+              >
+                {label}
+              </Typography>
+            )}
+          </div>
+        ))}
+      </Paper>
+    </div>
   )
 })
 
-export default Folder
+export default FolderSimulation
