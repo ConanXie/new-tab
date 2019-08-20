@@ -48,6 +48,22 @@ export class FoldersSettings {
       })
     }
   }
+
+  @action public saveBackgroundColor = (color: string) => {
+    this.backgroundColor = color.toUpperCase()
+  }
+
+  @action public saveShortcutLabelColor = (color: string) => {
+    this.shortcutLabelColor = color.toUpperCase()
+  }
+
+  @action public toggleShortcutLabel = () => {
+    this.shortcutLabel = !this.shortcutLabel
+  }
+
+  @action public toggleShortcutLabelShadow = () => {
+    this.shortcutLabelShadow = !this.shortcutLabelShadow
+  }
 }
 
 const foldersSettings = new FoldersSettings()
