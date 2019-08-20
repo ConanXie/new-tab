@@ -7,15 +7,19 @@ import Typography from "@material-ui/core/Typography"
 import makeDumbProps from "utils/makeDumbProps"
 import { Desktop, DesktopStore } from "../../../store/desktop"
 import { ShortcutIconsStore } from "../../../store/shortcutIcons"
+import { DesktopSettings } from "store/desktopSettings"
 
 interface PropsType extends Desktop {
   shortcutIconsStore: ShortcutIconsStore
   desktopStore: DesktopStore
+  desktopSettings: DesktopSettings
   onMouseDown: (e: any) => void
   onClick: (id: string, element: HTMLDivElement) => void
 }
 
-@inject("shortcutIconsStore", "desktopStore")
+const textShadow = "0 1px 2px rgba(0, 0, 0, 0.36)"
+
+@inject("shortcutIconsStore", "desktopStore", "desktopSettings")
 @observer
 class Folder extends React.Component<PropsType> {
   public folderRef: React.RefObject<HTMLDivElement> = React.createRef()
@@ -123,6 +127,10 @@ class Folder extends React.Component<PropsType> {
   public render() {
     const shortcuts = this.props.shortcuts!.slice(0, 4)
     const { shortcutIcon, getURL } = this.props.shortcutIconsStore
+    const style: React.CSSProperties = {
+      color: this.props.desktopSettings.shortcutLabelColor,
+      textShadow: this.props.desktopSettings.shortcutLabelShadow ? textShadow : undefined
+    }
 
     return (
       <div data-id={this.props.id} data-type="folder" onMouseDown={this.handleMouseDown}>
@@ -144,7 +152,7 @@ class Folder extends React.Component<PropsType> {
             })}
           </div>
         </div>
-        <Typography className="shortcut-name" variant="subtitle1">{this.props.label}</Typography>
+        <Typography className="shortcut-name" variant="subtitle1" style={style}>{this.props.label}</Typography>
       </div>
     )
   }

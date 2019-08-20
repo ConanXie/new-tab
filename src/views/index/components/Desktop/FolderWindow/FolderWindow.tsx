@@ -9,6 +9,7 @@ import Popover, { PopoverOrigin, PopoverActions } from "@material-ui/core/Popove
 // import Typograph from "@material-ui/core/Typography"
 
 import { FolderStore } from "../../../store/folder"
+import { FoldersSettings } from "store/foldersSettings"
 import makeDumbProps from "utils/makeDumbProps"
 import Website from "../Website"
 import Wrap from "../Wrap"
@@ -35,9 +36,10 @@ interface PropsType extends WithStyles<typeof styles> {
   anchorEl: HTMLElement
   onClose: (...args: any[]) => void
   folderStore: FolderStore
+  foldersSettings: FoldersSettings
 }
 
-@inject("folderStore")
+@inject("folderStore", "foldersSettings")
 @observer
 class FolderWindow extends React.Component<PropsType> {
   public readonly origin: PopoverOrigin = {
@@ -67,6 +69,7 @@ class FolderWindow extends React.Component<PropsType> {
         anchorOrigin={this.origin}
         transformOrigin={this.origin}
         action={this.extractAction}
+        PaperProps={{ style: { backgroundColor: this.props.foldersSettings.backgroundColor } }}
       >
         <div
           className={classNames(["folder-window", classes.window])}
@@ -82,6 +85,7 @@ class FolderWindow extends React.Component<PropsType> {
                 key={Math.random()}
               >
                 <Website
+                  inFolder
                   id={id}
                   label={label}
                   url={url}
