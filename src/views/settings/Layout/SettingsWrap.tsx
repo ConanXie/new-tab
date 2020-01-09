@@ -9,6 +9,7 @@ const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     root: {
       maxWidth: 840,
+      boxSizing: "border-box",
       margin: `${spacing(3)}px 0`,
       border: `1px solid ${palette.divider}`,
       overflow: "hidden",

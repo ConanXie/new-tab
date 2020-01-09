@@ -48,7 +48,7 @@ const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
     },
     content: {
       boxSizing: "border-box",
-      maxWidth: 1120,
+      maxWidth: 1168,
       padding: `${spacing(1)}px ${spacing(6)}px`,
       margin: "0 auto",
       height: `calc(100vh - ${spacing(8)}px)`,
