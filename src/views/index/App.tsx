@@ -2,7 +2,7 @@ import { hot } from "react-hot-loader/root"
 import React, { useEffect } from "react"
 import { Provider } from "mobx-react"
 
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
+import { MuiThemeProvider } from "@material-ui/core/styles"
 
 import Header from "./components/Header"
 import Background from "./components/Background"

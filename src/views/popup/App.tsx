@@ -3,7 +3,7 @@ import React from "react"
 import { Provider, observer } from "mobx-react"
 
 import Drawer from "./components/Drawer"
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
+import { MuiThemeProvider } from "@material-ui/core/styles"
 
 import * as store from "./store"
 

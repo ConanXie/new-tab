@@ -93,7 +93,7 @@ class Desktop extends React.Component<PropsType> {
   }, {
     icon: <WidgetsIcon />,
     text: "Widgets",
-    // tslint:disable-next-line: no-empty
+    // eslint-disable-next-line
     onClick: () => {},
   }, {
     icon: <SettingsIcon />,
