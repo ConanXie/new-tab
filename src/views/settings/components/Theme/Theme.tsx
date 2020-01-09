@@ -1,9 +1,7 @@
-import React from "react"
-import { inject, observer } from "mobx-react"
+import React, { useState } from "react"
+import { useLocalStore } from "mobx-react-lite"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
-import { Theme as ThemeType } from "@material-ui/core/styles/createMuiTheme"
+import { makeStyles, createStyles, Theme as MuiTheme } from "@material-ui/core/styles"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
@@ -17,180 +15,182 @@ import ColorPicker from "components/ColorPicker"
 import Wrap from "../../Layout/SettingsWrap"
 import NightTime from "./NightTime"
 
-import { ThemeStore, nightModeMenu, NightModeStatus } from "store/theme"
+import themeStore, { nightModeMenu, NightModeStatus } from "store/theme"
 
-const styles = ({ spacing, palette }: ThemeType) => createStyles({
-  color: {
-    boxSizing: "border-box",
-    width: spacing(4),
-    height: spacing(4),
-    marginRight: 12,
-    border: "2px solid #bfbfbf",
-    borderRadius: "50%",
-    backgroundColor: palette.primary.main,
-    cursor: "pointer",
-  },
-  paper: {
-    width: 200,
-  },
-})
-interface PropsType extends WithStyles<typeof styles> {
-  themeStore?: ThemeStore
-}
+const useStyles = makeStyles(({ spacing, palette }: MuiTheme) =>
+  createStyles({
+    color: {
+      boxSizing: "border-box",
+      width: spacing(4),
+      height: spacing(4),
+      marginRight: 12,
+      border: "2px solid #bfbfbf",
+      borderRadius: "50%",
+      backgroundColor: palette.primary.main,
+      cursor: "pointer",
+    },
+    paper: {
+      width: 200,
+    },
+  }),
+)
 
-@inject("themeStore")
-@observer
-class Theme extends React.Component<PropsType> {
-  public state = {
-    colorPickerOpen: false,
-    anchorEl: null,
-    nightTimeOpen: false,
+function Theme() {
+  const classes = useStyles()
+  const [colorPickerOpen, setColorPickerOpen] = useState(false)
+  const [nightTimeOpen, setNightTimeOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState()
+
+  const {
+    color,
+    whiteToolbar,
+    nightMode,
+    nightModeText,
+    nightTime,
+    darkToolbar,
+    applyNightMode,
+    toggleWhiteToolbar,
+    toggleDarkToolbar,
+    saveColor,
+    setNightTime,
+    changeNightMode,
+  } = useLocalStore(() => themeStore)
+
+  function openColorPicker() {
+    setColorPickerOpen(true)
   }
-  public openColorPicker = () => {
-    this.setState({ colorPickerOpen: true })
-  }
-  public closeColorPicker = (color?: string) => {
-    this.setState({ colorPickerOpen: false })
+
+  function closeColorPicker(color?: string) {
+    setColorPickerOpen(false)
 
     if (color) {
-      this.props.themeStore!.saveColor(color.toUpperCase())
+      saveColor(color.toUpperCase())
     }
   }
-  public handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
-    this.setState({ anchorEl: event.currentTarget })
-  }
-  public handleModeMenuClose = () => {
-    this.setState({ anchorEl: null })
-  }
-  public handleModeMenuClick = (value: NightModeStatus) => {
-    this.setState({ anchorEl: null })
-    this.props.themeStore!.changeNightMode(value)
+
+  function handleClickListItem(event: React.MouseEvent<HTMLElement>) {
+    setAnchorEl(event.currentTarget)
   }
 
-  public handleMenuItemClick = (value: NightModeStatus) => () => this.handleModeMenuClick(value)
+  function handleModeMenuClose() {
+    setAnchorEl(null)
+  }
+
+  function handleModeMenuClick(value: NightModeStatus) {
+    handleModeMenuClose()
+    changeNightMode(value)
+  }
+
+  const handleMenuItemClick = (value: NightModeStatus) => () => handleModeMenuClick(value)
 
   /**
    * open night time edit dialog
    */
-  public editNightTime = () => {
-    this.setState({ nightTimeOpen: true })
+  function editNightTime() {
+    setNightTimeOpen(true)
   }
+
   /**
    * change night time
+   * @param times start and end time
    */
-  public handleNightTimeChanged = (times: string[]) => {
-    this.setState({ nightTimeOpen: false })
+  function handleNightTimeChanged(times: string[]) {
+    setNightTimeOpen(false)
     if (times) {
-      this.props.themeStore!.setNightTime(times)
+      setNightTime(times)
     }
   }
 
-  public render() {
-    const {
-      color,
-      whiteToolbar,
-      nightMode,
-      nightModeText,
-      nightTime,
-      darkToolbar,
-      applyNightMode,
-      toggleWhiteToolbar,
-      toggleDarkToolbar,
-    } = this.props.themeStore!
-
-    return (
-      <React.Fragment>
-        <Wrap>
-          <List>
-            <ListItem button onClick={this.openColorPicker}>
-              <ListItemText
-                primary={chrome.i18n.getMessage("settings_theme_switch_label")}
-                secondary={color}
-              />
-              <ListItemSecondaryAction>
-                <div onClick={this.openColorPicker} className={this.props.classes.color} />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Divider />
-            <ListItem button disabled={applyNightMode && darkToolbar} onClick={toggleWhiteToolbar}>
-              <ListItemText
-                primary={chrome.i18n.getMessage("settings_theme_white_toolbar")}
-              />
-              <ListItemSecondaryAction>
-                <Switch
-                  color="primary"
-                  checked={whiteToolbar}
-                  disabled={applyNightMode && darkToolbar}
-                  onChange={toggleWhiteToolbar}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          </List>
-        </Wrap>
-        <ColorPicker
-          color={color}
-          open={this.state.colorPickerOpen}
-          onClose={this.closeColorPicker}
-        />
-        <Wrap>
-          <List>
-            <ListItem button onClick={this.handleClickListItem}>
-              <ListItemText
-                primary={chrome.i18n.getMessage("settings_night_mode_label")}
-                secondary={nightModeText}
-              />
-            </ListItem>
-            <Menu
-              anchorEl={this.state.anchorEl}
-              open={Boolean(this.state.anchorEl)}
-              onClose={this.handleModeMenuClose}
-              classes={{ paper: this.props.classes.paper }}
-            >
-              {nightModeMenu.map(({ status, text }) => (
-                <MenuItem
-                  key={status}
-                  selected={status === nightMode}
-                  onClick={this.handleMenuItemClick(status)}
-                >
-                  {text}
-                </MenuItem>
-              ))}
-            </Menu>
-            <Divider />
-            <ListItem button onClick={this.editNightTime} disabled={nightMode !== 2}>
-              <ListItemText
-                primary={chrome.i18n.getMessage("settings_night_mode_custom_primary")}
-                secondary={chrome.i18n.getMessage(
-                  "settings_night_mode_custom_secondary",
-                  `${nightTime[0]} – ${nightTime[1]}`
-                )}
-              />
-            </ListItem>
-            <NightTime
-              open={this.state.nightTimeOpen}
-              times={nightTime}
-              onClose={this.handleNightTimeChanged}
+  return (
+    <>
+      <Wrap>
+        <List>
+          <ListItem button onClick={openColorPicker}>
+            <ListItemText
+              primary={chrome.i18n.getMessage("settings_theme_switch_label")}
+              secondary={color}
             />
-            <Divider />
-            <ListItem button disabled={!applyNightMode} onClick={toggleDarkToolbar}>
-              <ListItemText
-                primary={chrome.i18n.getMessage("settings_night_mode_toolbar")}
-                secondary={chrome.i18n.getMessage("settings_night_mode_toolbar_secondary")}
+            <ListItemSecondaryAction>
+              <div onClick={openColorPicker} className={classes.color} />
+            </ListItemSecondaryAction>
+          </ListItem>
+          <Divider />
+          <ListItem button disabled={applyNightMode && darkToolbar} onClick={toggleWhiteToolbar}>
+            <ListItemText primary={chrome.i18n.getMessage("settings_theme_white_toolbar")} />
+            <ListItemSecondaryAction>
+              <Switch
+                color="primary"
+                checked={whiteToolbar}
+                disabled={applyNightMode && darkToolbar}
+                onChange={toggleWhiteToolbar}
               />
-              <ListItemSecondaryAction>
-                <Switch
-                  color="primary"
-                  disabled={!applyNightMode}
-                  checked={darkToolbar}
-                  onChange={toggleDarkToolbar}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          </List>
-        </Wrap>
-      </React.Fragment>
-    )
-  }
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+      </Wrap>
+      <ColorPicker
+        color={color}
+        open={colorPickerOpen}
+        onClose={closeColorPicker}
+      />
+      <Wrap>
+        <List>
+          <ListItem button onClick={handleClickListItem}>
+            <ListItemText
+              primary={chrome.i18n.getMessage("settings_night_mode_label")}
+              secondary={nightModeText}
+            />
+          </ListItem>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleModeMenuClose}
+            classes={{ paper: classes.paper }}
+          >
+            {nightModeMenu.map(({ status, text }) => (
+              <MenuItem
+                key={status}
+                selected={status === nightMode}
+                onClick={handleMenuItemClick(status)}
+              >
+                {text}
+              </MenuItem>
+            ))}
+          </Menu>
+          <Divider />
+          <ListItem button onClick={editNightTime} disabled={nightMode !== 2}>
+            <ListItemText
+              primary={chrome.i18n.getMessage("settings_night_mode_custom_primary")}
+              secondary={chrome.i18n.getMessage(
+                "settings_night_mode_custom_secondary",
+                `${nightTime[0]} – ${nightTime[1]}`,
+              )}
+            />
+          </ListItem>
+          <NightTime
+            open={nightTimeOpen}
+            times={nightTime}
+            onClose={handleNightTimeChanged}
+          />
+          <Divider />
+          <ListItem button disabled={!applyNightMode} onClick={toggleDarkToolbar}>
+            <ListItemText
+              primary={chrome.i18n.getMessage("settings_night_mode_toolbar")}
+              secondary={chrome.i18n.getMessage("settings_night_mode_toolbar_secondary")}
+            />
+            <ListItemSecondaryAction>
+              <Switch
+                color="primary"
+                disabled={!applyNightMode}
+                checked={darkToolbar}
+                onChange={toggleDarkToolbar}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+      </Wrap>
+    </>
+  )
 }
 
-export default withStyles(styles)(Theme)
+export default Theme

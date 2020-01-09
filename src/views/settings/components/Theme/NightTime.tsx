@@ -1,8 +1,6 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import { Theme, makeStyles, createStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -13,239 +11,208 @@ import Typography from "@material-ui/core/Typography"
 
 const defaultValue = "00"
 
-const styles = ({ spacing }: Theme) => createStyles({
-  wrap: {
-    display: "flex",
-    "& > div:last-child": {
-      marginLeft: spacing(6),
-    }
-  },
-  timeSec: {
-    display: "flex",
-    alignItems: "center",
-  },
-  timeTitle: {
-    textAlign: "center",
-    marginBottom: spacing(2),
-  },
-  inputRoot: {
-    width: "2em",
-  },
-  input: {
-    textAlign: "center",
-  },
-  symbol: {
-    marginTop: -4,
-    margin: spacing(0, 1),
-  },
-})
+enum TimePattern {
+  Hour,
+  Minute,
+}
 
-interface PropsType extends WithStyles<typeof styles> {
+const useStyles = makeStyles(({ spacing }: Theme) =>
+  createStyles({
+    wrap: {
+      display: "flex",
+      "& > div:last-child": {
+        marginLeft: spacing(6),
+      },
+    },
+    timeSec: {
+      display: "flex",
+      alignItems: "center",
+    },
+    timeTitle: {
+      textAlign: "center",
+      marginBottom: spacing(2),
+    },
+    inputRoot: {
+      width: "2em",
+    },
+    input: {
+      textAlign: "center",
+    },
+    symbol: {
+      marginTop: -4,
+      margin: spacing(0, 1),
+    },
+  }),
+)
+
+interface Props {
   times: string[]
   open: boolean
   onClose(times?: string[]): void
 }
 
-interface TimeType {
+interface TimeState {
   error: boolean
   value: string
 }
 
-interface StateType {
-  synced: boolean,
-  startHours: TimeType,
-  startMinutes: TimeType,
-  endHours: TimeType,
-  endMinutes: TimeType,
-}
+function NightTime(props: Props) {
+  const { times, open, onClose } = props
+  const classes = useStyles()
+  const [startHourState, setStartHourState] = useState<TimeState>({
+    error: false,
+    value: defaultValue,
+  })
+  const [startMinuteState, setStartMinuteState] = useState<TimeState>({
+    error: false,
+    value: defaultValue,
+  })
+  const [endHourState, setEndHourState] = useState<TimeState>({
+    error: false,
+    value: defaultValue,
+  })
+  const [endMinuteState, setEndMinuteState] = useState<TimeState>({
+    error: false,
+    value: defaultValue,
+  })
 
-class NightTime extends React.Component<PropsType, StateType> {
-
-  public state = {
-    synced: false,
-    startHours: {
-      error: false,
-      value: defaultValue,
-    },
-    startMinutes: {
-      error: false,
-      value: defaultValue,
-    },
-    endHours: {
-      error: false,
-      value: defaultValue,
-    },
-    endMinutes: {
-      error: false,
-      value: defaultValue,
-    },
-  }
-
-  /**
-   * sync time info from props for editing hours and minutes
-   * @param nextProps PropsType
-   * @param prevState StateType
-   */
-  public static getDerivedStateFromProps(nextProps: PropsType, prevState: StateType) {
-    const { times } = nextProps
-    if (!prevState.synced) {
+  useEffect(() => {
+    if (open) {
       const start = times[0].split(":")
       const end = times[1].split(":")
-      return {
-        synced: true,
-        startHours: {
-          value: start[0] || defaultValue,
-        },
-        startMinutes: {
-          value: start[1] || defaultValue,
-        },
-        endHours: {
-          value: end[0] || defaultValue,
-        },
-        endMinutes: {
-          value: end[1] || defaultValue,
-        },
-      }
+      setStartHourState({
+        error: false,
+        value: start[0] || defaultValue,
+      })
+      setStartMinuteState({
+        error: false,
+        value: start[1] || defaultValue,
+      })
+      setEndHourState({
+        error: false,
+        value: end[0] || defaultValue,
+      })
+      setEndMinuteState({
+        error: false,
+        value: end[1] || defaultValue,
+      })
     }
-    return null
+  }, [open, times])
+
+  const handleChange = (
+    setState: (value: React.SetStateAction<TimeState>) => void,
+    pattern: TimePattern,
+  ) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    const max = pattern === TimePattern.Hour ? 23 : 59
+    const isNumber = /^[0-5]?[0-9]$/.test(value)
+    const error = !isNumber || Number(value) > max
+    setState({
+      error,
+      value,
+    })
   }
 
-  /**
-   * close dialog
-   */
-  public handleClose = () => {
-    this.props.onClose()
-    this.setState({ synced: false })
+  function handleClose() {
+    onClose()
   }
 
-  public handleDone = (event: React.FormEvent) => {
-    event.preventDefault()
-    const {
-      startHours,
-      startMinutes,
-      endHours,
-      endMinutes,
-    } = this.state
-    if (!startHours.error
-      && !startMinutes.error
-      && !endHours.error
-      && !endMinutes.error
-    ) {
-      this.props.onClose([
-        `${this.padZero(startHours.value)}:${this.padZero(startMinutes.value)}`,
-        `${this.padZero(endHours.value)}:${this.padZero(endMinutes.value)}`
-      ])
-    }
-  }
-
-  public padZero = (value: number | string) => {
+  function padLeftZero(value: number | string) {
     value = Number(value)
     return value < 10 ? `0${value}` : String(value)
   }
 
-  /**
-   * record input value
-   */
-  public handleChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-    const max = /hour/i.test(name) ? 23 : 59
-    const isNumber = /^[0-5]?[0-9]$/.test(value)
-    const error = !isNumber || Number(value) > max
-    this.setState({
-      [name as "startHours"]: {
-        value,
-        error,
-      }
-    })
+  function handleDone(event: React.FormEvent) {
+    event.preventDefault()
+    if (
+      !startHourState.error &&
+      !startMinuteState.error &&
+      !endHourState.error &&
+      !endMinuteState.error
+    ) {
+      onClose([
+        `${padLeftZero(startHourState.value)}:${padLeftZero(startMinuteState.value)}`,
+        `${padLeftZero(endHourState.value)}:${padLeftZero(endMinuteState.value)}`,
+      ])
+    }
   }
 
-  public render() {
-    const {
-      startHours,
-      startMinutes,
-      endHours,
-      endMinutes,
-    } = this.state
-
-    const { open, classes } = this.props
-
-    return (
-      <Dialog open={open} onClose={this.handleClose}>
-        <DialogTitle>{chrome.i18n.getMessage("settings_night_time")}</DialogTitle>
-        <form onSubmit={this.handleDone}>
-          <DialogContent>
-            <div className={classes.wrap}>
-              <div>
-                <Typography className={classes.timeTitle}>
-                  {chrome.i18n.getMessage("settings_night_time_start")}
-                </Typography>
-                <div className={classes.timeSec}>
-                  <Input
-                    autoFocus
-                    error={startHours.error}
-                    defaultValue={startHours.value}
-                    onChange={this.handleChange("startHours")}
-                    margin="dense"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.input,
-                    }}
-                  />
-                  <Typography className={classes.symbol}>:</Typography>
-                  <Input
-                    error={startMinutes.error}
-                    margin="dense"
-                    defaultValue={startMinutes.value}
-                    onChange={this.handleChange("startMinutes")}
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.input,
-                    }}
-                  />
-                </div>
-              </div>
-              <div>
-                <Typography className={classes.timeTitle}>
-                  {chrome.i18n.getMessage("settings_night_time_end")}
-                </Typography>
-                <div className={classes.timeSec}>
-                  <Input
-                    error={endHours.error}
-                    defaultValue={endHours.value}
-                    onChange={this.handleChange("endHours")}
-                    margin="dense"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.input,
-                    }}
-                  />
-                  <Typography className={classes.symbol}>:</Typography>
-                  <Input
-                    error={endMinutes.error}
-                    margin="dense"
-                    defaultValue={endMinutes.value}
-                    onChange={this.handleChange("endMinutes")}
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.input,
-                    }}
-                  />
-                </div>
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>{chrome.i18n.getMessage("settings_night_time")}</DialogTitle>
+      <form onSubmit={handleDone}>
+        <DialogContent>
+          <div className={classes.wrap}>
+            <div>
+              <Typography className={classes.timeTitle}>
+                {chrome.i18n.getMessage("settings_night_time_start")}
+              </Typography>
+              <div className={classes.timeSec}>
+                <Input
+                  autoFocus
+                  error={startHourState.error}
+                  defaultValue={startHourState.value}
+                  onChange={handleChange(setStartHourState, TimePattern.Hour)}
+                  margin="dense"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.input,
+                  }}
+                />
+                <Typography className={classes.symbol}>:</Typography>
+                <Input
+                  error={startMinuteState.error}
+                  margin="dense"
+                  defaultValue={startMinuteState.value}
+                  onChange={handleChange(setStartMinuteState, TimePattern.Minute)}
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.input,
+                  }}
+                />
               </div>
             </div>
-          </DialogContent>
-          <DialogActions>
-            <Button color="primary" onClick={this.handleClose}>
-              {chrome.i18n.getMessage("button_cancel")}
-            </Button>
-            <Button color="primary" type="submit">
-              {chrome.i18n.getMessage("button_done")}
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    )
-  }
+            <div>
+              <Typography className={classes.timeTitle}>
+                {chrome.i18n.getMessage("settings_night_time_end")}
+              </Typography>
+              <div className={classes.timeSec}>
+                <Input
+                  error={endHourState.error}
+                  defaultValue={endHourState.value}
+                  onChange={handleChange(setEndHourState, TimePattern.Hour)}
+                  margin="dense"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.input,
+                  }}
+                />
+                <Typography className={classes.symbol}>:</Typography>
+                <Input
+                  error={endMinuteState.error}
+                  margin="dense"
+                  defaultValue={endMinuteState.value}
+                  onChange={handleChange(setEndMinuteState, TimePattern.Minute)}
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.input,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={handleClose}>
+            {chrome.i18n.getMessage("button_cancel")}
+          </Button>
+          <Button color="primary" type="submit">
+            {chrome.i18n.getMessage("button_done")}
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+  )
 }
 
-export default withStyles(styles)(NightTime)
+export default NightTime
