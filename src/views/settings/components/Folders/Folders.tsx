@@ -1,6 +1,6 @@
 import React from "react"
 
-import Wrap from "../../Layout/SettingsWrap"
+import Wrapper from "../../Layout/SettingsWrapper"
 import FolderSimulation from "./FolderSimulation"
 import FoldersWindow from "./FoldersWindow"
 import IconLayout from "./IconLayout"
@@ -8,11 +8,11 @@ import IconLayout from "./IconLayout"
 function Folders() {
   return (
     <>
-      <Wrap>
+      <Wrapper>
         <FolderSimulation />
         <FoldersWindow />
         <IconLayout />
-      </Wrap>
+      </Wrapper>
     </>
   )
 }

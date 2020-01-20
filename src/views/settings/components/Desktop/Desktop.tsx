@@ -8,7 +8,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 import Switch from "@material-ui/core/Switch"
 import Divider from "@material-ui/core/Divider"
 
-import Wrap from "../../Layout/SettingsWrap"
+import Wrapper from "../../Layout/SettingsWrapper"
 import Grid from "./Grid"
 import IconLayout from "./IconLayout"
 
@@ -20,7 +20,7 @@ const Desktop = observer(() => {
 
   return (
     <>
-      <Wrap>
+      <Wrapper>
         <List>
           <ListItem button onClick={toggleToolbar}>
             <ListItemText
@@ -40,10 +40,10 @@ const Desktop = observer(() => {
           </ListItem>
           <Grid open={gridDialogOpen} onClose={() => setGridDialogOpen(false)} />
         </List>
-      </Wrap>
-      <Wrap>
+      </Wrapper>
+      <Wrapper>
         <IconLayout />
-      </Wrap>
+      </Wrapper>
     </>
   )
 })

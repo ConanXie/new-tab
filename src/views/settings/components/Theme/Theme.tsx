@@ -12,7 +12,7 @@ import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 
 import ColorPicker from "components/ColorPicker"
-import Wrap from "../../Layout/SettingsWrap"
+import Wrapper from "../../Layout/SettingsWrapper"
 import NightTime from "./NightTime"
 
 import themeStore, { nightModeMenu, NightModeStatus } from "store/theme"
@@ -103,7 +103,7 @@ function Theme() {
 
   return (
     <>
-      <Wrap>
+      <Wrapper>
         <List>
           <ListItem button onClick={openColorPicker}>
             <ListItemText
@@ -127,13 +127,13 @@ function Theme() {
             </ListItemSecondaryAction>
           </ListItem>
         </List>
-      </Wrap>
+      </Wrapper>
       <ColorPicker
         color={color}
         open={colorPickerOpen}
         onClose={closeColorPicker}
       />
-      <Wrap>
+      <Wrapper>
         <List>
           <ListItem button onClick={handleClickListItem}>
             <ListItemText
@@ -188,7 +188,7 @@ function Theme() {
             </ListItemSecondaryAction>
           </ListItem>
         </List>
-      </Wrap>
+      </Wrapper>
     </>
   )
 }

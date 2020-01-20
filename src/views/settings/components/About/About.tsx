@@ -10,7 +10,7 @@ import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import { useSnackbar } from "notistack"
 
-import Wrap from "../../Layout/SettingsWrap"
+import Wrapper from "../../Layout/SettingsWrapper"
 import GitHubIcon from "./Icons/GitHub"
 import LogoIcon from "./Icons/Logo"
 
@@ -68,7 +68,7 @@ function About() {
 
   return (
     <>
-      <Wrap>
+      <Wrapper>
         <div className={classes.sec}>
           <header className={classes.header}>
             <LogoIcon className={classes.logo} />
@@ -90,8 +90,8 @@ function About() {
             </Tooltip>
           </div>
         </div>
-      </Wrap>
-      <Wrap>
+      </Wrapper>
+      <Wrapper>
         <List>
           <ListItem
             component="a"
@@ -108,7 +108,7 @@ function About() {
             />
           </ListItem>
         </List>
-      </Wrap>
+      </Wrapper>
     </>
   )
 }
