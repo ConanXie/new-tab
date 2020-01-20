@@ -1,24 +1,35 @@
 import { hot } from "react-hot-loader/root"
-import React from "react"
-import { observer } from "mobx-react"
+import React, { useRef } from "react"
+import { useObserver, useLocalStore } from "mobx-react"
 import { MuiThemeProvider } from "@material-ui/core/styles"
 import { SnackbarProvider } from "notistack"
 import Layout from "./Layout"
-import { themeStore } from "./store"
+import { themeStore as theme } from "./store"
 
-const App = () => (
-  <MuiThemeProvider theme={themeStore.theme}>
-    <SnackbarProvider
-      maxSnack={1}
-      dense
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "center",
-      }}
-    >
-      <Layout />
-    </SnackbarProvider>
-  </MuiThemeProvider>
-)
+function App() {
+  const themeStore = useLocalStore(() => theme)
+  const ref: any = useRef()
 
-export default hot(observer(App))
+  return useObserver(() => (
+    <MuiThemeProvider theme={themeStore.theme}>
+      <SnackbarProvider
+        maxSnack={1}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        autoHideDuration={2500}
+        ref={el => ref.current = el}
+        onClose={(event: any, reason: any) => {
+          if (reason === "clickaway") {
+            ref.current.closeSnackbar()
+          }
+        }}
+      >
+        <Layout />
+      </SnackbarProvider>
+    </MuiThemeProvider>
+  ))
+}
+
+export default hot(App)
