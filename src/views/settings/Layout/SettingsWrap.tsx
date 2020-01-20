@@ -1,13 +1,11 @@
 import React from "react"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import { Theme, makeStyles, createStyles } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
 
 import { WRAPPER_MAX_WIDTH } from "./Layout"
 
-const styles = ({ spacing, palette }: Theme) =>
+const useStyles = makeStyles(({ spacing, palette }: Theme) =>
   createStyles({
     root: {
       maxWidth: WRAPPER_MAX_WIDTH,
@@ -19,16 +17,21 @@ const styles = ({ spacing, palette }: Theme) =>
         marginTop: 0,
       },
     },
-  })
+  }),
+)
 
-interface PropsType extends WithStyles<typeof styles> {
+interface Props {
   children: React.ReactNode
 }
 
-const SettingsWrap = (props: PropsType) => (
-  <Paper elevation={0} component="section" className={props.classes.root}>
-    {props.children}
-  </Paper>
-)
+function SettingsWrapper(props: Props) {
+  const classes = useStyles()
 
-export default withStyles(styles)(SettingsWrap)
+  return (
+    <Paper elevation={0} component="section" className={classes.root}>
+      {props.children}
+    </Paper>
+  )
+}
+
+export default SettingsWrapper
