@@ -2,7 +2,9 @@ import React, { useState } from "react"
 import clsx from "clsx"
 import Loadable from "react-loadable"
 import Color from "color"
+import { observer } from "mobx-react"
 
+import { makeStyles, createStyles, Theme as MuiTheme } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
@@ -16,7 +18,9 @@ import ColorLensIcon from "@material-ui/icons/ColorLensOutlined"
 import ViewModuleIcon from "@material-ui/icons/ViewModuleOutlined"
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUncheckedOutlined"
 import InfoIcon from "@material-ui/icons/InfoOutlined"
-import { makeStyles, withTheme, createStyles, Theme as MuiTheme } from "@material-ui/core/styles"
+
+export const WRAPPER_MAX_WIDTH = 840
+export const NAV_WIDTH = 280
 
 const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
   createStyles({
@@ -26,35 +30,37 @@ const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
     drawerPaper: {
       zIndex: 0,
       top: 64,
-      minWidth: 280,
+      minWidth: NAV_WIDTH,
       borderRight: "none",
     },
-    menuListItem: {
+    navListItem: {
       borderTopRightRadius: spacing(6),
       borderBottomRightRadius: spacing(6),
     },
-    menuActiveColor: {
+    navActiveColor: {
       color: (overrides!.MuiButton!.textPrimary as React.CSSProperties)!.color,
     },
-    menuActiveBg: {
-      background: Color(palette.primary.main).alpha(0.15).toString(),
+    navActiveBg: {
+      background: Color(palette.primary.main)
+        .alpha(0.15)
+        .toString(),
     },
-    menuDivider: {
+    navDivider: {
       margin: `${spacing(1)}px 0`,
     },
     main: {
-      marginLeft: 280,
+      marginLeft: NAV_WIDTH,
       backgroundColor: palette.background.paper,
     },
     content: {
       boxSizing: "border-box",
-      maxWidth: 1168,
+      maxWidth: WRAPPER_MAX_WIDTH + NAV_WIDTH + spacing(6) * 2,
       padding: `${spacing(1)}px ${spacing(6)}px`,
       margin: "0 auto",
       height: `calc(100vh - ${spacing(8)}px)`,
       overflow: "auto",
     },
-  })
+  }),
 )
 
 const Theme = Loadable({
@@ -77,13 +83,13 @@ const About = Loadable({
   loading: () => null,
 })
 
-interface SettingsMenu {
+interface SettingsNav {
   text: string
   icon: React.ComponentType<any>
   component: React.ComponentType<any>
 }
 
-const settingsMenu: (SettingsMenu | undefined)[] = [
+const settingsNav: (SettingsNav | undefined)[] = [
   {
     text: chrome.i18n.getMessage("settings_theme"),
     icon: ColorLensIcon,
@@ -111,7 +117,7 @@ function Layout() {
   const classes = useStyles()
   const [current, setCurrent] = useState(0)
 
-  const Component = settingsMenu[current]!.component
+  const Component = settingsNav[current]!.component
 
   return (
     <>
@@ -129,20 +135,23 @@ function Layout() {
         }}
       >
         <List>
-          {settingsMenu.map((item, index) => {
+          {settingsNav.map((item, index) => {
             if (!item) {
-              return <Divider className={classes.menuDivider} key={index} />
+              return <Divider className={classes.navDivider} key={index} />
             }
             return (
               <ListItem
                 key={index}
                 button
                 component="li"
-                className={clsx(classes.menuListItem, current === index && [classes.menuActiveColor, classes.menuActiveBg])}
+                className={clsx(
+                  classes.navListItem,
+                  current === index && [classes.navActiveColor, classes.navActiveBg],
+                )}
                 onClick={() => setCurrent(index)}
               >
                 <ListItemIcon>
-                  <item.icon className={clsx(current === index && classes.menuActiveColor)} />
+                  <item.icon className={clsx(current === index && classes.navActiveColor)} />
                 </ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
@@ -151,12 +160,10 @@ function Layout() {
         </List>
       </Drawer>
       <main className={classes.main}>
-        <div className={classes.content}>
-          {Component && <Component />}
-        </div>
+        <div className={classes.content}>{Component && <Component />}</div>
       </main>
     </>
   )
 }
 
-export default withTheme(Layout)
+export default observer(Layout)

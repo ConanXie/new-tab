@@ -5,10 +5,12 @@ import createStyles from "@material-ui/core/styles/createStyles"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Paper from "@material-ui/core/Paper"
 
+import { WRAPPER_MAX_WIDTH } from "./Layout"
+
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     root: {
-      maxWidth: 840,
+      maxWidth: WRAPPER_MAX_WIDTH,
       boxSizing: "border-box",
       margin: `${spacing(3)}px 0`,
       border: `1px solid ${palette.divider}`,
