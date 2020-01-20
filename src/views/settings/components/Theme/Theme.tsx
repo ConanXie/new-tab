@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useLocalStore } from "mobx-react-lite"
+import { observer, useLocalStore } from "mobx-react"
 
 import { makeStyles, createStyles, Theme as MuiTheme } from "@material-ui/core/styles"
 import List from "@material-ui/core/List"
@@ -193,4 +193,4 @@ function Theme() {
   )
 }
 
-export default Theme
+export default observer(Theme)

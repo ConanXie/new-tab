@@ -35,7 +35,9 @@ const Desktop = observer(() => {
           <ListItem button onClick={() => setGridDialogOpen(true)}>
             <ListItemText
               primary={chrome.i18n.getMessage("settings_desktop_grid")}
-              secondary={`${chrome.i18n.getMessage("settings_desktop_grid_columns")}: ${columns} ${chrome.i18n.getMessage("settings_desktop_grid_rows")}: ${rows}`}
+              secondary={`${chrome.i18n.getMessage(
+                "settings_desktop_grid_columns",
+              )}: ${columns} ${chrome.i18n.getMessage("settings_desktop_grid_rows")}: ${rows}`}
             />
           </ListItem>
           <Grid open={gridDialogOpen} onClose={() => setGridDialogOpen(false)} />
