@@ -9,6 +9,8 @@ export const defaultData = {
   shortcutLabel: true,
   shortcutLabelColor: "#FFFFFF",
   shortcutLabelShadow: true,
+  acrylicContextMenu: false,
+  acrylicWallpaperDrawer: false,
 }
 
 export class DesktopSettings {
@@ -18,10 +20,12 @@ export class DesktopSettings {
   @observable public shortcutLabel = defaultData.shortcutLabel
   @observable public shortcutLabelColor = defaultData.shortcutLabelColor
   @observable public shortcutLabelShadow = defaultData.shortcutLabelShadow
+  @observable public acrylicContextMenu = defaultData.acrylicContextMenu
+  @observable public acrylicWallpaperDrawer = defaultData.acrylicWallpaperDrawer
 
   public constructor(self = true) {
     if (self) {
-      chrome.storage.local.get(DESKTOP_SETTINGS, result => {
+      chrome.storage.local.get(DESKTOP_SETTINGS, (result) => {
         if (result[DESKTOP_SETTINGS]) {
           const {
             toolbar,
@@ -30,6 +34,8 @@ export class DesktopSettings {
             shortcutLabel,
             shortcutLabelColor,
             shortcutLabelShadow,
+            acrylicContextMenu,
+            acrylicWallpaperDrawer,
           } = result[DESKTOP_SETTINGS]
           this.toolbar = toolbar !== undefined ? toolbar : defaultData.toolbar
           this.columns = columns !== undefined ? columns : defaultData.columns
@@ -42,6 +48,12 @@ export class DesktopSettings {
             shortcutLabelShadow !== undefined
               ? shortcutLabelShadow
               : defaultData.shortcutLabelShadow
+          this.acrylicContextMenu =
+            acrylicContextMenu !== undefined ? acrylicContextMenu : defaultData.acrylicContextMenu
+          this.acrylicWallpaperDrawer =
+            acrylicWallpaperDrawer !== undefined
+              ? acrylicWallpaperDrawer
+              : defaultData.acrylicWallpaperDrawer
         } else {
           this.toolbar = defaultData.toolbar
         }
@@ -74,6 +86,14 @@ export class DesktopSettings {
 
   @action public toggleShortcutLabelShadow = () => {
     this.shortcutLabelShadow = !this.shortcutLabelShadow
+  }
+
+  @action public toggleAcrylicContextMenu = () => {
+    this.acrylicContextMenu = !this.acrylicContextMenu
+  }
+
+  @action public toggleAcrylicWallpaperDrawer = () => {
+    this.acrylicWallpaperDrawer = !this.acrylicWallpaperDrawer
   }
 }
 
