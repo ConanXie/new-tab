@@ -207,6 +207,15 @@
   "settings_desktop_shortcut_label_shadow": {
     "message": "Shadow"
   },
+  "settings_desktop_effects": {
+    "message": "Effects"
+  },
+  "settings_desktop_acrylic_context_menu": {
+    "message": "Acrylic effect to context menu"
+  },
+  "settings_desktop_acrylic_wallpaper_drawer": {
+    "message": "Acrylic effect to wallpaper drawer"
+  },
   "settings_folders": {
     "message": "Folders"
   },
