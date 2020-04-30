@@ -16,7 +16,8 @@ import WallpaperIcon from "@material-ui/icons/WallpaperOutlined"
 import WidgetsIcon from "@material-ui/icons/WidgetsOutlined"
 import SettingsIcon from "@material-ui/icons/SettingsOutlined"
 
-import { desktopStore, toolbarStore, wallpaperStore } from "../../store"
+import { desktopStore, desktopSettings, toolbarStore, wallpaperStore } from "../../store"
+import { useAcrylic } from "../../../../styles/acrylic"
 
 const Wallpaper = Loadable({
   loader: () => import("./Wallpaper"),
@@ -40,6 +41,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   drawerPaper: {
     width: 360,
     overflowX: "hidden",
+    boxShadow: "none",
   },
   drawerMask: {
     "& > div:first-child": {
@@ -50,6 +52,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
 
 function Header() {
   const classes = useStyles()
+  const acrylic = useAcrylic()
 
   function handleWallpaperIconClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.currentTarget.blur()
@@ -87,7 +90,10 @@ function Header() {
         onClose={toolbarStore.closeWallpaperDrawer}
         classes={{
           modal: classes.drawerMask,
-          paper: classes.drawerPaper,
+          paper: classNames(
+            desktopSettings.acrylicWallpaperDrawer ? acrylic.root : null,
+            classes.drawerPaper,
+          ),
         }}
       >
         {toolbarStore.wallpaperDrawerLoaded && <Wallpaper />}
