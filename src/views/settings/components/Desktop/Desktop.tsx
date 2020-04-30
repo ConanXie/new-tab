@@ -13,9 +13,19 @@ import Grid from "./Grid"
 import IconLayout from "./IconLayout"
 
 import { desktopSettings } from "../../store"
+import SettingsTitle from "components/SettingsTitle"
 
 const Desktop = observer(() => {
-  const { toolbar, columns, rows, toggleToolbar } = useLocalStore(() => desktopSettings)
+  const {
+    toolbar,
+    columns,
+    rows,
+    toggleToolbar,
+    acrylicContextMenu,
+    acrylicWallpaperDrawer,
+    toggleAcrylicContextMenu,
+    toggleAcrylicWallpaperDrawer,
+  } = useLocalStore(() => desktopSettings)
   const [gridDialogOpen, setGridDialogOpen] = useState(false)
 
   return (
@@ -45,6 +55,36 @@ const Desktop = observer(() => {
       </Wrapper>
       <Wrapper>
         <IconLayout />
+      </Wrapper>
+      <Wrapper>
+        <SettingsTitle>{chrome.i18n.getMessage("settings_desktop_effects")}</SettingsTitle>
+        <List>
+          <ListItem button onClick={toggleAcrylicContextMenu}>
+            <ListItemText
+              primary={chrome.i18n.getMessage("settings_desktop_acrylic_context_menu")}
+            />
+            <ListItemSecondaryAction>
+              <Switch
+                color="primary"
+                checked={acrylicContextMenu}
+                onChange={toggleAcrylicContextMenu}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+          <Divider />
+          <ListItem button onClick={toggleAcrylicWallpaperDrawer}>
+            <ListItemText
+              primary={chrome.i18n.getMessage("settings_desktop_acrylic_wallpaper_drawer")}
+            />
+            <ListItemSecondaryAction>
+              <Switch
+                color="primary"
+                checked={acrylicWallpaperDrawer}
+                onChange={toggleAcrylicWallpaperDrawer}
+              />
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
       </Wrapper>
     </>
   )
