@@ -4,7 +4,8 @@ export const FOLDERS_SETTINGS = "folders-settings"
 
 export const defaultData = {
   backgroundColor: "#FFFFFF",
-  backgroundTransparency: "#FFFFFF",
+  backgroundOpacity: 1,
+  acrylicEffect: false,
   shortcutLabel: true,
   shortcutLabelColor: "#202020",
   shortcutLabelShadow: false,
@@ -12,28 +13,30 @@ export const defaultData = {
 
 export class FoldersSettings {
   @observable public backgroundColor = defaultData.backgroundColor
-  @observable public backgroundTransparency = defaultData.backgroundTransparency
+  @observable public backgroundOpacity = defaultData.backgroundOpacity
+  @observable public acrylicEffect = defaultData.acrylicEffect
   @observable public shortcutLabel = defaultData.shortcutLabel
   @observable public shortcutLabelColor = defaultData.shortcutLabelColor
   @observable public shortcutLabelShadow = defaultData.shortcutLabelShadow
 
   public constructor(self = true) {
     if (self) {
-      chrome.storage.local.get(FOLDERS_SETTINGS, result => {
+      chrome.storage.local.get(FOLDERS_SETTINGS, (result) => {
         if (result[FOLDERS_SETTINGS]) {
           const {
             backgroundColor,
-            backgroundTransparency,
+            backgroundOpacity,
+            acrylicEffect,
             shortcutLabel,
             shortcutLabelColor,
             shortcutLabelShadow,
-          } = result[FOLDERS_SETTINGS]
+          } = result[FOLDERS_SETTINGS] as typeof defaultData
           this.backgroundColor =
             backgroundColor !== undefined ? backgroundColor : defaultData.backgroundColor
-          this.backgroundTransparency =
-            backgroundTransparency !== undefined
-              ? backgroundTransparency
-              : defaultData.backgroundTransparency
+          this.backgroundOpacity =
+            backgroundOpacity !== undefined ? backgroundOpacity : defaultData.backgroundOpacity
+          this.acrylicEffect =
+            acrylicEffect !== undefined ? acrylicEffect : defaultData.acrylicEffect
           this.shortcutLabel =
             shortcutLabel !== undefined ? shortcutLabel : defaultData.shortcutLabel
           this.shortcutLabelColor =
@@ -63,6 +66,10 @@ export class FoldersSettings {
 
   @action public toggleShortcutLabelShadow = () => {
     this.shortcutLabelShadow = !this.shortcutLabelShadow
+  }
+
+  @action public toggleAcrylicEffect = () => {
+    this.acrylicEffect = !this.acrylicEffect
   }
 }
 
