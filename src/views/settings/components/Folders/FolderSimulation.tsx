@@ -1,5 +1,6 @@
 import React from "react"
 import { observer, useLocalStore } from "mobx-react-lite"
+import clsx from "clsx"
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
@@ -7,6 +8,7 @@ import Typography from "@material-ui/core/Typography"
 
 import { wallpaperStore, foldersSettings } from "../../store"
 import { shortcuts } from "../Desktop/IconLayout"
+import { useAcrylic } from "../../../../styles/acrylic"
 
 const useStyles = makeStyles(({ spacing }: Theme) =>
   createStyles({
@@ -33,6 +35,7 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
       display: "grid",
       gridTemplateColumns: "repeat(2, 1fr)",
       padding: spacing(1),
+      backgroundColor: (props: any) => props.backgroundColor,
     },
     shortcut: {
       display: "flex",
@@ -58,21 +61,26 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
     shortcutLabel: {
       marginTop: spacing(1),
     },
-  })
+  }),
 )
 
 const FolderSimulation = observer(() => {
+  const acrylic = useAcrylic()
   const { wallpaperStyles } = useLocalStore(() => wallpaperStore)
-  const { backgroundColor, shortcutLabel, shortcutLabelColor, shortcutLabelShadow } = useLocalStore(
-    () => foldersSettings,
-  )
+  const {
+    backgroundColor,
+    acrylicEffect,
+    shortcutLabel,
+    shortcutLabelColor,
+    shortcutLabelShadow,
+  } = useLocalStore(() => foldersSettings)
 
-  const classes = useStyles()
+  const classes = useStyles({ backgroundColor })
 
   return (
     <div className={classes.desktop}>
       <div className={classes.desktopBg} style={wallpaperStyles} />
-      <Paper elevation={8} className={classes.folder} style={{ backgroundColor }}>
+      <Paper elevation={8} className={clsx(acrylicEffect ? acrylic.root : null, classes.folder)}>
         {shortcuts.map(({ icon, label }, index) => (
           <div className={classes.shortcut} key={index}>
             <div className={classes.shortcutIcon}>

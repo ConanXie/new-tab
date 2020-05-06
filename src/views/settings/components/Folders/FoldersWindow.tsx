@@ -24,12 +24,12 @@ export const useStyles = makeStyles(({ spacing }: Theme) =>
       borderRadius: "50%",
       outline: "none",
     },
-  })
+  }),
 )
 
 const FoldersWindow = observer(() => {
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
-  const { backgroundColor, backgroundTransparency, saveBackgroundColor } = useLocalStore(() => foldersSettings)
+  const { backgroundColor, saveBackgroundColor } = useLocalStore(() => foldersSettings)
   const classes = useStyles()
 
   function handleColorPickerClose(color?: string) {

@@ -4,6 +4,7 @@ import Wrapper from "../../Layout/SettingsWrapper"
 import FolderSimulation from "./FolderSimulation"
 import FoldersWindow from "./FoldersWindow"
 import IconLayout from "./IconLayout"
+import WindowEffect from "./WindowEffect"
 
 function Folders() {
   return (
@@ -12,6 +13,7 @@ function Folders() {
         <FolderSimulation />
         <FoldersWindow />
         <IconLayout />
+        <WindowEffect />
       </Wrapper>
     </>
   )

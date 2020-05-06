@@ -71,6 +71,7 @@ const IconLayout = observer(() => {
             />
           </ListItemSecondaryAction>
         </ListItem>
+        <Divider />
       </List>
       <ColorPicker
         open={colorPickerOpen}
