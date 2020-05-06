@@ -225,6 +225,15 @@
   "settings_folders_window_background_color": {
     "message": "Background color"
   },
+  "settings_effect": {
+    "message": "Effect"
+  },
+  "settings_folders_acrylic": {
+    "message": "Acrylic effect to folder window"
+  },
+  "settings_folders_acrylic_secondary": {
+    "message": "Some of the settings above will be overridden"
+  },
   "settings_weather_title": {
     "message": "Weather"
   },
