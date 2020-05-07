@@ -39,7 +39,7 @@ function Theme() {
   const classes = useStyles()
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
   const [nightTimeOpen, setNightTimeOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState()
+  const [anchorEl, setAnchorEl] = useState<EventTarget & HTMLElement>()
 
   const {
     color,
@@ -73,7 +73,7 @@ function Theme() {
   }
 
   function handleModeMenuClose() {
-    setAnchorEl(null)
+    setAnchorEl(undefined)
   }
 
   function handleModeMenuClick(value: NightModeStatus) {
