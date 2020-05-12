@@ -219,6 +219,12 @@
   "settings_folders": {
     "message": "Folders"
   },
+  "settings_folders_night_mode": {
+    "message": "Follow night mode"
+  },
+  "settings_folders_night_mode_ignore": {
+    "message": "Some custom styles will be ignored in night mode"
+  },
   "settings_folders_window": {
     "message": "Folders window"
   },
