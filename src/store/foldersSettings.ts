@@ -3,6 +3,7 @@ import { observable, computed, action, autorun, toJS } from "mobx"
 export const FOLDERS_SETTINGS = "folders-settings"
 
 export const defaultData = {
+  followNightMode: true,
   backgroundColor: "#FFFFFF",
   backgroundOpacity: 1,
   acrylicEffect: false,
@@ -12,6 +13,7 @@ export const defaultData = {
 }
 
 export class FoldersSettings {
+  @observable public followNightMode = defaultData.followNightMode
   @observable public backgroundColor = defaultData.backgroundColor
   @observable public backgroundOpacity = defaultData.backgroundOpacity
   @observable public acrylicEffect = defaultData.acrylicEffect
@@ -24,6 +26,7 @@ export class FoldersSettings {
       chrome.storage.local.get(FOLDERS_SETTINGS, (result) => {
         if (result[FOLDERS_SETTINGS]) {
           const {
+            followNightMode,
             backgroundColor,
             backgroundOpacity,
             acrylicEffect,
@@ -31,6 +34,8 @@ export class FoldersSettings {
             shortcutLabelColor,
             shortcutLabelShadow,
           } = result[FOLDERS_SETTINGS] as typeof defaultData
+          this.followNightMode =
+            followNightMode !== undefined ? followNightMode : defaultData.followNightMode
           this.backgroundColor =
             backgroundColor !== undefined ? backgroundColor : defaultData.backgroundColor
           this.backgroundOpacity =
@@ -50,6 +55,10 @@ export class FoldersSettings {
         persist()
       })
     }
+  }
+
+  @action public toggleFollowNightMode = () => {
+    this.followNightMode = !this.followNightMode
   }
 
   @action public saveBackgroundColor = (color: string) => {
