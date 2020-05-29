@@ -26,6 +26,7 @@ const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
   createStyles({
     appbar: {
       boxShadow: "none",
+      backgroundColor: palette.background.paper,
     },
     drawerPaper: {
       zIndex: 0,
@@ -123,7 +124,7 @@ function Layout() {
     <>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar disableGutters={!open}>
-          <Typography variant="h6" color="inherit" noWrap>
+          <Typography variant="h6" color="textPrimary" noWrap>
             {chrome.i18n.getMessage("settings_toolbar_title")}
           </Typography>
         </Toolbar>

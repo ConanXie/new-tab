@@ -1,12 +1,15 @@
 import React, { useState } from "react"
 import { observer, useLocalStore } from "mobx-react"
 
-import { makeStyles, createStyles, Theme as MuiTheme } from "@material-ui/core/styles"
+import {
+  makeStyles,
+  createStyles,
+  Theme as MuiTheme,
+} from "@material-ui/core/styles"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
-import Switch from "@material-ui/core/Switch"
 import Divider from "@material-ui/core/Divider"
 import Menu from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
@@ -43,14 +46,10 @@ function Theme() {
 
   const {
     color,
-    whiteToolbar,
     nightMode,
     nightModeText,
     nightTime,
-    darkToolbar,
     applyNightMode,
-    toggleWhiteToolbar,
-    toggleDarkToolbar,
     saveColor,
     setNightTime,
     changeNightMode,
@@ -81,7 +80,8 @@ function Theme() {
     changeNightMode(value)
   }
 
-  const handleMenuItemClick = (value: NightModeStatus) => () => handleModeMenuClick(value)
+  const handleMenuItemClick = (value: NightModeStatus) => () =>
+    handleModeMenuClick(value)
 
   /**
    * open night time edit dialog
@@ -112,18 +112,6 @@ function Theme() {
             />
             <ListItemSecondaryAction>
               <div onClick={openColorPicker} className={classes.color} />
-            </ListItemSecondaryAction>
-          </ListItem>
-          <Divider />
-          <ListItem button disabled={applyNightMode && darkToolbar} onClick={toggleWhiteToolbar}>
-            <ListItemText primary={chrome.i18n.getMessage("settings_theme_white_toolbar")} />
-            <ListItemSecondaryAction>
-              <Switch
-                color="primary"
-                checked={whiteToolbar}
-                disabled={applyNightMode && darkToolbar}
-                onChange={toggleWhiteToolbar}
-              />
             </ListItemSecondaryAction>
           </ListItem>
         </List>
@@ -160,7 +148,9 @@ function Theme() {
           <Divider />
           <ListItem button onClick={editNightTime} disabled={nightMode !== 2}>
             <ListItemText
-              primary={chrome.i18n.getMessage("settings_night_mode_custom_primary")}
+              primary={chrome.i18n.getMessage(
+                "settings_night_mode_custom_primary",
+              )}
               secondary={chrome.i18n.getMessage(
                 "settings_night_mode_custom_secondary",
                 `${nightTime[0]} – ${nightTime[1]}`,
@@ -172,21 +162,6 @@ function Theme() {
             times={nightTime}
             onClose={handleNightTimeChanged}
           />
-          <Divider />
-          <ListItem button disabled={!applyNightMode} onClick={toggleDarkToolbar}>
-            <ListItemText
-              primary={chrome.i18n.getMessage("settings_night_mode_toolbar")}
-              secondary={chrome.i18n.getMessage("settings_night_mode_toolbar_secondary")}
-            />
-            <ListItemSecondaryAction>
-              <Switch
-                color="primary"
-                disabled={!applyNightMode}
-                checked={darkToolbar}
-                onChange={toggleDarkToolbar}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
         </List>
       </Wrapper>
     </>

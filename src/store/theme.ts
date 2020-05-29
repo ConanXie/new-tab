@@ -44,24 +44,18 @@ const defaultData = {
 
 export class ThemeStore {
   @observable public color: string
-  @observable public whiteToolbar: boolean
   @observable public nightMode: NightModeStatus
   @observable public nightTime: string[]
-  @observable public darkToolbar: boolean
   public constructor() {
     const persistence = settingsStorage.get("theme", {})
     const {
       color,
-      whiteToolbar,
       nightMode,
       nightTime,
-      darkToolbar,
     } = persistence
     this.color = color || defaultData.color
-    this.whiteToolbar = whiteToolbar || defaultData.whiteToolbar
     this.nightMode = nightMode || defaultData.nightMode
     this.nightTime = nightTime || defaultData.nightTime
-    this.darkToolbar = darkToolbar || defaultData.darkToolbar
   }
 
   @computed public get theme() {
@@ -101,11 +95,6 @@ export class ThemeStore {
     this.color = color
   }
 
-  @action("toggle white toolbar")
-  public toggleWhiteToolbar = () => {
-    this.whiteToolbar = !this.whiteToolbar
-  }
-
   @action("change night mode")
   public changeNightMode = (mode: NightModeStatus) => {
     this.nightMode = mode
@@ -116,17 +105,10 @@ export class ThemeStore {
     this.nightTime = nightTime
   }
 
-  @action("toggle dark toolbar")
-  public toggleDarkToolbar = () => {
-    this.darkToolbar = !this.darkToolbar
-  }
-
   private static createTheme(settings: ThemeStore) {
     const {
       color,
-      whiteToolbar,
       applyNightMode,
-      darkToolbar,
     } = settings
     const colorTool = Color(color).hsl().round()
     const lightDiff = (colorTool as any)["color"][2] - 90
@@ -163,24 +145,6 @@ export class ThemeStore {
           },
         },
       },
-    }
-
-    if (whiteToolbar) {
-      themeOptions.overrides!.MuiAppBar = {
-        colorPrimary: {
-          backgroundColor: "#fff",
-          color: grey[800]
-        },
-      }
-    }
-
-    if (applyNightMode && darkToolbar) {
-      themeOptions.overrides!.MuiAppBar = {
-        colorPrimary: {
-          backgroundColor: grey[800],
-          color: grey[50]
-        },
-      }
     }
 
     return createMuiTheme(themeOptions)
