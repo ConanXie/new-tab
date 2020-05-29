@@ -2,27 +2,18 @@
   <img src="extension/logo/logo128.png" width="64" alt="LOGO" />
 </div>
 
-# [Material Design New Tab](https://tab.xiejie.co)
+# Material Design New Tab
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-v1.8.7-blue.svg)](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
 [![Powered by](https://img.shields.io/badge/Powered%20by-material--ui-green.svg)](http://www.material-ui.com)
 
 A Chrome new tab page extension with **Material Design**.
 
-![Screenshot](https://lh3.googleusercontent.com/gDaDhxRdfd39Etou9ry-X8Lm8KH9qi5hxea8yZs7Y_zCRjMrEMb1-qbXKqYtG4Bq3PGffxTF=s640-h400-e365)
-
-## [Install from the Chrome Web Store](https://chrome.google.com/webstore/detail/material-design-new-tab/kgfodmcknjlgkbgkkafogbdaibkfgdgo)
+<img src="docs/images/screenshot.01.png" alt="screenshot" width="640"/>
 
 ## Features
-- Switchable search engines
-- Manage your favorite websites
-- Personalized desktop
-- Weather information
-- Chrome apps and bookmarks
-- Customizable settings
-
-## Browser Support
-- Chrome 50+
+- Shortcuts management
+- Personalized background
+- Magical widgets (TODO)
 
 ## Feedback
 Please create an issue if you have any questions or suggestions about it.
@@ -31,10 +22,6 @@ Please create an issue if you have any questions or suggestions about it.
 Special thanks to those who make this extension support more languages.
 - **Russian** @Руслан Чешневский
 - **Bulgarian** @Martin Minchev
-
-## Donation
-If you find the extension useful, you can buy me a cup of coffee.  
-The `DONATE` button at settings page.💖
 
 ## License
 [MIT](LICENSE)  
