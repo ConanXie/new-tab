@@ -1,8 +1,7 @@
 import React, { useCallback } from "react"
 import classNames from "classnames"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
+import { makeStyles, createStyles } from "@material-ui/core/styles"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
@@ -26,7 +25,7 @@ import { isBase64 } from "utils/validate"
 const SIZE = 192
 const ACTUAL_SIZE = 174
 
-const styles = ({ spacing, palette }: Theme) => createStyles({
+const useStyles = makeStyles(({ spacing, palette }: Theme) => createStyles({
   dialog: {
     width: 374,
     minHeight: 450,
@@ -108,26 +107,27 @@ const styles = ({ spacing, palette }: Theme) => createStyles({
   iconSelected: {
     borderColor: palette.primary.main,
   },
-})
+}))
 
 enum IconType {
   BuiltIn = "1",
   Custom = "2",
 }
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   url: string
   icon?: string
   open: boolean
   onClose: (icon?: string) => void
 }
 
-function ShortcutIcon(props: Props) {
-  const { open, icon, url, classes } = props
+const ShortcutIcon: React.FunctionComponent<Props> = (props: Props) => {
+  const { open, icon, url } = props
   const [type, setType] = React.useState(IconType.BuiltIn)
   const [icons, setIcons] = React.useState([] as string[])
   const [selectedIcon, setSelectedIcon] = React.useState("")
   const [image, setImage] = React.useState(null as HTMLImageElement | null)
+  const classes = useStyles()
 
   const handleClose = () => {
     props.onClose()
@@ -431,4 +431,4 @@ function ShortcutIcon(props: Props) {
   )
 }
 
-export default withStyles(styles)(ShortcutIcon)
+export default ShortcutIcon

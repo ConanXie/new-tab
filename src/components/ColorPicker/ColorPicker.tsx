@@ -10,10 +10,10 @@ import DialogTitle from "@material-ui/core/DialogTitle"
 interface Props {
   color: string
   open: boolean
-  onClose(color?: string): void
+  onClose: (color?: string) => void
 }
 
-function ColorPicker({ color: initColor, open, onClose }: Props) {
+function ColorPicker({ open, color: initColor, onClose }: Props) {
   const [color, setColor] = useState("")
 
   useEffect(() => {

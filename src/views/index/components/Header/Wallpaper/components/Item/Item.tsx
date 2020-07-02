@@ -10,7 +10,7 @@ interface Props {
   secondary?: string
   icon?: React.ReactElement<any>
   children?: React.ReactNode
-  onClick(...args: any[]): any
+  onClick: (...args: any[]) => any
 }
 
 function Item(props: Props) {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
+import { withStyles, makeStyles, createStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
@@ -9,23 +8,24 @@ import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
 import TextField from "@material-ui/core/TextField"
 
-const styles = () => createStyles({
+const useStyles = makeStyles(() => createStyles({
   dialog: {
     width: "30vw",
     minWidth: 300,
     maxWidth: 320,
   },
-})
+}))
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   open: boolean
   label: string
   onClose: (label?: string) => void
 }
 
 function FolderEditor(props: Props) {
-  const { open, classes, onClose } = props
+  const { open, onClose } = props
   const [label, setLabel] = useState("")
+  const classes = useStyles()
 
   useEffect(() => {
     if (open) {
@@ -80,4 +80,4 @@ function FolderEditor(props: Props) {
   )
 }
 
-export default withStyles(styles)(FolderEditor)
+export default FolderEditor

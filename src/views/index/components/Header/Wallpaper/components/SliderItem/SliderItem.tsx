@@ -31,8 +31,7 @@ export interface PropsType extends ItemPropsType, WithStyles<typeof styles> {
 export default withStyles(styles)((props: PropsType) => {
   const { disabled, value, icon, classes, ...range } = props
 
-  // tslint:disable-next-line:no-shadowed-variable
-  const handleChange = (event: React.ChangeEvent<{}>, value: number | number[]) => props.onChange(value)
+  const handleChange = (event: React.ChangeEvent<any>, value: number | number[]) => props.onChange(value)
 
   return (
     <ListItem button disabled={disabled}>

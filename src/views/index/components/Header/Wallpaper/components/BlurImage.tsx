@@ -8,7 +8,7 @@ import { ItemPropsType } from "./Item"
 
 interface PropsType extends ItemPropsType {
   value: number
-  onChange: (radius: number) => void
+  onChange: (radius: number | number[]) => void
 }
 
 const BlurImage = (props: PropsType) => (

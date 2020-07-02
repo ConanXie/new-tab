@@ -48,7 +48,7 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
 interface Props {
   times: string[]
   open: boolean
-  onClose(times?: string[]): void
+  onClose: (times?: string[]) => void
 }
 
 interface TimeState {

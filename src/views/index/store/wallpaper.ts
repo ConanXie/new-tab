@@ -101,8 +101,8 @@ export class WallpaperStore {
     this.darkIcons = !this.darkIcons
   }
   @action("handle background image blur radius change")
-  public handleBlurChange = (radius: number) => {
-    this.blurRadius = radius
+  public handleBlurChange = (radius: number | number[]) => {
+    this.blurRadius = Array.isArray(radius) ? radius[0] : radius
   }
   @action("handle background image blur radius change")
   public handleBackgroundBrightnessChange = (brightness: number | number[]) => {
