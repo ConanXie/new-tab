@@ -1,101 +1,106 @@
 import React from "react"
-import classNames from "classnames"
-import { observer, inject } from "mobx-react"
+import clsx from "clsx"
+import { observer, useLocalStore } from "mobx-react"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Popover, { PopoverOrigin } from "@material-ui/core/Popover"
-// import Typograph from "@material-ui/core/Typography"
 
-import { FolderStore } from "../../../store/folder"
-import { FoldersSettings } from "store/foldersSettings"
-import makeDumbProps from "utils/makeDumbProps"
+import folderStore from "../../../store/folder"
+import foldersSettings from "store/foldersSettings"
 import Website from "../Website"
 import Wrap from "../Wrap"
 import grab, { Env } from "../Website/grab"
+import { useAcrylic } from "../../../../../styles/acrylic"
 
-const styles = ({ spacing, typography }: Theme) => createStyles({
-  window: {
-    display: "grid",
-    padding: spacing(1),
-    "& > .wrap": {
-      padding: spacing(2),
-      height: "auto",
-      transition: "transform 0.2s cubic-bezier(0.333, 0, 0, 1)",
-    },
-    "& .shortcut-name": {
-      color: typography.subtitle1.color,
-      textShadow: "none",
-    },
-  },
-})
+const origin: PopoverOrigin = {
+  vertical: "center",
+  horizontal: "center",
+}
 
-interface PropsType extends WithStyles<typeof styles> {
+const useStyles = makeStyles(({ spacing, palette }: Theme) =>
+  createStyles({
+    window: {
+      display: "grid",
+      padding: spacing(1),
+      "& > .wrap": {
+        padding: spacing(2),
+        height: "auto",
+        transition: "transform 0.2s cubic-bezier(0.333, 0, 0, 1)",
+      },
+      "& .shortcut-name": {
+        color: `${palette.text.primary} !important`,
+        textShadow: "none",
+      },
+    },
+  }),
+)
+
+interface Props {
   open: boolean
   anchorEl: HTMLElement
   onClose: (...args: any[]) => void
-  folderStore: FolderStore
-  foldersSettings: FoldersSettings
 }
 
-@inject("folderStore", "foldersSettings")
-@observer
-class FolderWindow extends React.Component<PropsType> {
-  public readonly origin: PopoverOrigin = {
-    vertical: "center",
-    horizontal: "center",
-  }
+const FolderWindow: React.FunctionComponent<Props> = (props: Props) => {
+  const { open, anchorEl, onClose } = props
+  const classes = useStyles()
+  const { tempShortcut, id, shortcuts } = useLocalStore(() => folderStore)
+  const { backgroundColor, acrylicEffect } = useLocalStore(() => foldersSettings)
+  const acrylic = useAcrylic()
 
-  public handleGrab = (index: number) => (event: React.MouseEvent<HTMLElement>) => {
+  const handleGrab = (index: number) => (
+    event: React.MouseEvent<HTMLElement>,
+  ) => {
     if (event.button === 0) {
-      const { id, shortcuts } = this.props.folderStore
       grab(event, shortcuts[index], id, Env.Folder)
     }
   }
 
-  public render() {
-    const { open, anchorEl, onClose, folderStore, classes } = this.props
-
-    return (
-      <Popover
-        open={open}
-        anchorEl={anchorEl}
-        onClose={onClose}
-        anchorOrigin={this.origin}
-        transformOrigin={this.origin}
-        PaperProps={{ style: { backgroundColor: this.props.foldersSettings.backgroundColor } }}
+  return (
+    <Popover
+      open={open}
+      anchorEl={anchorEl}
+      onClose={onClose}
+      anchorOrigin={origin}
+      transformOrigin={origin}
+      classes={{
+        paper: clsx(acrylicEffect ? acrylic.root : null),
+      }}
+      PaperProps={{
+        style: { backgroundColor },
+      }}
+    >
+      <div
+        className={clsx(["folder-window", classes.window])}
+        style={{
+          gridTemplateColumns: `repeat(${folderStore.gridColumns}, 1fr)`,
+        }}
       >
-        <div
-          className={classNames(["folder-window", classes.window])}
-          style={{ gridTemplateColumns: `repeat(${folderStore.gridColumns}, 1fr)` }}
-        >
-          {folderStore.shortcuts.map((shortcut, index) => {
-            const { id, label, url } = shortcut
-            return (
-              <Wrap
-                grabbed={folderStore.tempShortcut === shortcut.id}
-                row={0}
-                column={0}
-                key={Math.random()}
-              >
-                <Website
-                  inFolder
-                  id={id}
-                  label={label}
-                  url={url}
-                  key={id}
-                  itemId={folderStore.id}
-                  index={index}
-                  onMouseDown={this.handleGrab(index)}
-                />
-              </Wrap>
-            )
-          })}
-        </div>
-      </Popover>
-    )
-  }
+        {folderStore.shortcuts.map((shortcut, index) => {
+          const { id, label, url } = shortcut
+          return (
+            <Wrap
+              grabbed={tempShortcut === shortcut.id}
+              row={0}
+              column={0}
+              key={Math.random()}
+            >
+              <Website
+                inFolder
+                id={id}
+                label={label}
+                url={url}
+                key={id}
+                itemId={folderStore.id}
+                index={index}
+                onMouseDown={handleGrab(index)}
+              />
+            </Wrap>
+          )
+        })}
+      </div>
+    </Popover>
+  )
 }
 
-export default makeDumbProps(withStyles(styles)(FolderWindow))
+export default observer(FolderWindow)
