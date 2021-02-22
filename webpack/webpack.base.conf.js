@@ -25,7 +25,6 @@ module.exports = {
       ".gif",
     ],
     alias: {
-      mobx: path.resolve(__dirname, "../node_modules/mobx/lib/mobx.es6.js"),
       config: path.join(context, "config"),
       utils: path.join(context, "utils"),
       store: path.join(context, "store"),
