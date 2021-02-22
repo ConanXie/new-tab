@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FC } from "react"
 
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
@@ -48,7 +48,7 @@ const useStyles = makeStyles(({ spacing, overrides }: Theme) =>
 
 const share = "https://chrome.google.com/webstore/detail/kgfodmcknjlgkbgkkafogbdaibkfgdgo/"
 
-function About() {
+const About: FC = () => {
   const classes = useStyles()
   const { version_name: versionName, version } = chrome.runtime.getManifest()
   const { enqueueSnackbar } = useSnackbar()

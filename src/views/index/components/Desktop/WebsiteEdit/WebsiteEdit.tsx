@@ -1,9 +1,7 @@
-import React from "react"
-import { inject, observer } from "mobx-react"
-import makeDumbProps from "utils/makeDumbProps"
+import React, { FC, useEffect, useRef, useState } from "react"
+import { observer } from "mobx-react-lite"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import createStyles from "@material-ui/core/styles/createStyles"
+import { makeStyles, createStyles } from "@material-ui/core/styles"
 import { Theme } from "@material-ui/core/styles/createMuiTheme"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
@@ -14,201 +12,167 @@ import TextField from "@material-ui/core/TextField"
 import Avatar from "@material-ui/core/Avatar"
 
 import IconEditor from "../IconEditor"
-import { WebsiteEditStore } from "../../../store/websiteEdit"
-import { ShortcutIconsStore } from "../../../store/shortcutIcons"
+import { websiteEditStore, shortcutIconsStore } from "../../../store"
 import { isBase64 } from "utils/validate"
 
-const styles = ({ spacing }: Theme) => createStyles({
-  dialog: {
-    width: "30vw",
-    minWidth: 300,
-    maxWidth: 320,
-  },
-  iconLabelWrap: {
-    display: "flex",
-    alignItems: "center",
-  },
-  avatar: {
-    display: "inline-block",
-    marginRight: spacing(2),
-    marginLeft: spacing(-0.5),
-    background: "none",
-    width: spacing(6),
-    height: spacing(6),
-    cursor: "pointer",
-  },
-  urlInput: {
-    marginLeft: spacing(8),
-  },
-})
+const useStyles = makeStyles(({ spacing }: Theme) =>
+  createStyles({
+    dialog: {
+      width: "30vw",
+      minWidth: 300,
+      maxWidth: 320,
+    },
+    iconLabelWrap: {
+      display: "flex",
+      alignItems: "center",
+    },
+    avatar: {
+      display: "inline-block",
+      marginRight: spacing(2),
+      marginLeft: spacing(-0.5),
+      background: "none",
+      width: spacing(6),
+      height: spacing(6),
+      cursor: "pointer",
+    },
+    urlInput: {
+      marginLeft: spacing(8),
+    },
+  }),
+)
 
-interface PropsType extends WithStyles<typeof styles> {
-  websiteEditStore: WebsiteEditStore
-  shortcutIconsStore: ShortcutIconsStore
-}
+const WebsiteEdit: FC = () => {
+  const [synced, setSynced] = useState(false)
+  const [label, setLabel] = useState("")
+  const [url, setUrl] = useState("")
+  const [newIcon, setNewIcon] = useState("")
+  const [iconEditorOpen, setIconEditorOpen] = useState(false)
 
-interface StateType {
-  synced: boolean
-  label: string
-  url: string
-  newIcon: string
-  iconEditorOpen: boolean
-}
+  const classes = useStyles()
 
-@inject("websiteEditStore", "shortcutIconsStore")
-@observer
-class WebsiteEdit extends React.Component<PropsType, StateType> {
-
-  public state: StateType = {
-    synced: false,
-    label: "",
-    url: "",
-    newIcon: "default",
-    iconEditorOpen: false,
+  const handleLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLabel(event.target.value)
   }
 
-  public handleLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      label: event.target.value,
-    })
-  }
-
-  public handleURLChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleURLChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const url = event.target.value
-    this.setState({ url })
-    this.updateIcon(url)
+    setUrl(url)
+    updateIcon(url)
   }
 
-  public timer?: NodeJS.Timeout
+  const timerRef = useRef<NodeJS.Timeout>()
   /**
    * Retrieve icon from built-in icons while typing url
    * only when adding and newIcon is't a custom icon
    */
-  public updateIcon = (url: string) => {
-    if (!this.props.websiteEditStore.info.id && !isBase64(this.state.newIcon)) {
-      clearTimeout(this.timer!)
-      this.timer = setTimeout(() => {
-        this.props.shortcutIconsStore.retrieveIcon(url, icon => {
-          this.setState({ newIcon: icon })
+  const updateIcon = (url: string) => {
+    if (!websiteEditStore.info.id && !isBase64(newIcon)) {
+      clearTimeout(timerRef.current!)
+      timerRef.current = setTimeout(() => {
+        shortcutIconsStore.retrieveIcon(url, (icon) => {
+          setNewIcon(icon)
         })
       }, 300)
     }
   }
 
   /** close dialog */
-  public handleClose = () => {
-    this.setState({ synced: false })
-    this.props.websiteEditStore.closeDialog()
+  const handleClose = () => {
+    setSynced(false)
+    websiteEditStore.closeDialog()
   }
 
   /** save shortcut */
-  public handleDone = (event: React.FormEvent) => {
+  const handleDone = (event: React.FormEvent) => {
     event.preventDefault()
-    this.handleClose()
-    const { label, url, newIcon } = this.state
-    this.props.websiteEditStore.saveInfo(label, url, newIcon)
+    handleClose()
+    websiteEditStore.saveInfo(label, url, newIcon)
   }
 
-  public openIconEditor = () => {
-    this.setState({
-      iconEditorOpen: true,
-    })
+  const openIconEditor = () => {
+    setIconEditorOpen(true)
   }
 
-  public handleIconEditorClose = (icon?: string) => {
-    const state: any = {
-      iconEditorOpen: false,
-    }
+  const handleIconEditorClose = (icon?: string) => {
+    setIconEditorOpen(false)
     if (icon) {
-      state.newIcon = icon
+      setNewIcon(icon)
     }
-    this.setState(state)
   }
 
-  public componentDidUpdate() {
-    const { open, info } = this.props.websiteEditStore
+  useEffect(() => {
+    const { open, info } = websiteEditStore
     const { id, label, url } = info
 
-    if (open && !this.state.synced) {
-      this.setState({
-        synced: true,
-        label,
-        url,
-        newIcon: !id ? "default" : "",
-      })
+    if (open && !synced) {
+      setSynced(true)
+      setLabel(label)
+      setUrl(url)
+      setNewIcon(!id ? "default" : "")
     }
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [websiteEditStore.open, synced])
 
-  public render() {
-    const { url, newIcon, iconEditorOpen } = this.state
-    const { open, info } = this.props.websiteEditStore
-    const { id } = info
-    const { dialog, avatar, iconLabelWrap } = this.props.classes
-    const { shortcutIcon, getURL } = this.props.shortcutIconsStore
-    const icon = newIcon || shortcutIcon(id, url)
-    const iconURL = newIcon
-      ? isBase64(newIcon) ? newIcon : chrome.runtime.getURL(`icons/${newIcon}.png`)
-      : getURL(icon)
+  const { open, info } = websiteEditStore
+  const { id } = info
+  const { dialog, avatar, iconLabelWrap } = classes
+  const { shortcutIcon, getURL } = shortcutIconsStore
+  const icon = newIcon || shortcutIcon(id, url)
+  const iconURL = newIcon
+    ? isBase64(newIcon)
+      ? newIcon
+      : chrome.runtime.getURL(`icons/${newIcon}.png`)
+    : getURL(icon)
 
-    return (
-      <>
-        <Dialog
-          open={open}
-          onClose={this.handleClose}
-          classes={{
-            paper: dialog,
-          }}
-        >
-          <form onSubmit={this.handleDone}>
-            <DialogTitle>
-              {chrome.i18n.getMessage(id ? "website_update_title" : "website_new_title")}
-            </DialogTitle>
-            <DialogContent>
-              <div className={iconLabelWrap}>
-                <Avatar
-                  className={avatar}
-                  src={iconURL}
-                  onClick={this.openIconEditor}
-                />
-                <TextField
-                  autoFocus
-                  fullWidth
-                  margin="dense"
-                  variant="outlined"
-                  defaultValue={info.label}
-                  label={chrome.i18n.getMessage("edit_label")}
-                  onChange={this.handleLabelChange}
-                />
-              </div>
-              <br />
+  return (
+    <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        classes={{
+          paper: dialog,
+        }}
+      >
+        <form onSubmit={handleDone}>
+          <DialogTitle>
+            {chrome.i18n.getMessage(id ? "website_update_title" : "website_new_title")}
+          </DialogTitle>
+          <DialogContent>
+            <div className={iconLabelWrap}>
+              <Avatar className={avatar} src={iconURL} onClick={openIconEditor} />
               <TextField
+                autoFocus
                 fullWidth
                 margin="dense"
                 variant="outlined"
-                defaultValue={url}
-                label={chrome.i18n.getMessage("edit_url")}
-                onChange={this.handleURLChange}
+                defaultValue={info.label}
+                label={chrome.i18n.getMessage("edit_label")}
+                onChange={handleLabelChange}
               />
-            </DialogContent>
-            <DialogActions>
-              <Button color="primary" onClick={this.handleClose}>
-                {chrome.i18n.getMessage("button_cancel")}
-              </Button>
-              <Button color="primary" type="submit" disabled={!url}>
-                {chrome.i18n.getMessage("button_done")}
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-        <IconEditor
-          open={iconEditorOpen}
-          url={url}
-          icon={icon}
-          onClose={this.handleIconEditorClose}
-        />
-      </>
-    )
-  }
+            </div>
+            <br />
+            <TextField
+              fullWidth
+              margin="dense"
+              variant="outlined"
+              defaultValue={url}
+              label={chrome.i18n.getMessage("edit_url")}
+              onChange={handleURLChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button color="primary" onClick={handleClose}>
+              {chrome.i18n.getMessage("button_cancel")}
+            </Button>
+            <Button color="primary" type="submit" disabled={!url}>
+              {chrome.i18n.getMessage("button_done")}
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+      <IconEditor open={iconEditorOpen} url={url} icon={icon} onClose={handleIconEditorClose} />
+    </>
+  )
 }
 
-export default makeDumbProps(withStyles(styles)(WebsiteEdit))
+export default observer(WebsiteEdit)

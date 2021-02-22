@@ -1,4 +1,8 @@
-import { observable, computed, autorun, action, toJS } from "mobx"
+import {
+  autorun,
+  toJS,
+  makeAutoObservable,
+} from "mobx"
 import { settingsStorage } from "utils/storage"
 import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
@@ -20,14 +24,17 @@ export const defaultWallpaperData = {
 }
 
 export class WallpaperStore {
-  @observable public wallpaper: string
-  @observable public color: string
-  @observable public useWallpaper: boolean
-  @observable public wallpaperType: WallpaperType
-  @observable public darkIcons: boolean
-  @observable public blurRadius: number
-  @observable public backgroundBrightness: number
-  public constructor(data: any) {
+  wallpaper: string
+  color: string
+  useWallpaper: boolean
+  wallpaperType: WallpaperType
+  darkIcons: boolean
+  blurRadius: number
+  backgroundBrightness: number
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  constructor(data: any) {
+    makeAutoObservable(this, {}, { autoBind: true })
+
     const {
       wallpaper,
       color,
@@ -40,7 +47,8 @@ export class WallpaperStore {
 
     this.wallpaper = wallpaper || defaultWallpaperData.wallpaper
     this.color = color || defaultWallpaperData.color
-    this.useWallpaper = useWallpaper === undefined ? defaultWallpaperData.useWallpaper : Boolean(useWallpaper)
+    this.useWallpaper =
+      useWallpaper === undefined ? defaultWallpaperData.useWallpaper : Boolean(useWallpaper)
     this.wallpaperType = wallpaperType || defaultWallpaperData.wallpaperType
     this.darkIcons = darkIcons === undefined ? defaultWallpaperData.darkIcons : Boolean(darkIcons)
     this.blurRadius = Number(blurRadius) ? Number(blurRadius) : defaultWallpaperData.blurRadius
@@ -48,7 +56,7 @@ export class WallpaperStore {
       ? Number(backgroundBrightness)
       : defaultWallpaperData.backgroundBrightness
   }
-  @computed public get wallpaperStyles() {
+  get wallpaperStyles(): React.CSSProperties {
     const styles: React.CSSProperties = {}
     if (this.useWallpaper) {
       if (this.wallpaperType === WallpaperType.Image) {
@@ -61,51 +69,43 @@ export class WallpaperStore {
     }
     return styles
   }
-  @computed public get maskStyles() {
+  get maskStyles(): React.CSSProperties {
     const styles: React.CSSProperties = {
-      backgroundColor: `rgba(0, 0, 0, ${1 - this.backgroundBrightness / 100})`
+      backgroundColor: `rgba(0, 0, 0, ${1 - this.backgroundBrightness / 100})`,
     }
     return styles
   }
-  @computed public get disabledImage() {
+  get disabledImage(): boolean {
     return !this.useWallpaper || this.wallpaperType === WallpaperType.Color
   }
-  @computed public get disabledColor() {
+  get disabledColor(): boolean {
     return !this.useWallpaper || this.wallpaperType === WallpaperType.Image
   }
-  @action("wallpaper switch")
-  public wallpaperSwitch = () => {
+  wallpaperSwitch(): void {
     this.useWallpaper = !this.useWallpaper
   }
-  @action("update wallpaper -- image")
-  public updateWallpaper = async (file: File | Blob) => {
+  async updateWallpaper(file: File | Blob): Promise<void> {
     // Save base64 data to storage
     const base64 = await toBase64(file)
     sendMessage("saveWallpaper", base64)
   }
-  @action("wallpaper updated -- image")
-  public wallpaperUpdated = (url: string) => {
+  wallpaperUpdated(url: string): void {
     this.wallpaperType = WallpaperType.Image
     this.wallpaper = url
   }
-  @action("change wallpaper type")
-  public changeWallpaperType = (value: number) => {
+  changeWallpaperType(value: number): void {
     this.wallpaperType = value
   }
-  @action("handle background color change")
-  public handleColorChange = (color: string) => {
+  handleColorChange(color: string): void {
     this.color = color
   }
-  @action("toggle dark icons")
-  public toggleDarkIcons = () => {
+  toggleDarkIcons(): void {
     this.darkIcons = !this.darkIcons
   }
-  @action("handle background image blur radius change")
-  public handleBlurChange = (radius: number | number[]) => {
+  handleBlurChange(radius: number | number[]): void {
     this.blurRadius = Array.isArray(radius) ? radius[0] : radius
   }
-  @action("handle background image blur radius change")
-  public handleBackgroundBrightnessChange = (brightness: number | number[]) => {
+  handleBackgroundBrightnessChange(brightness: number | number[]): void {
     this.backgroundBrightness = brightness as number
   }
 }

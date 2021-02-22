@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { FC, useCallback } from "react"
 import classNames from "classnames"
 
 import { makeStyles, createStyles } from "@material-ui/core/styles"
@@ -121,7 +121,7 @@ interface Props {
   onClose: (icon?: string) => void
 }
 
-const ShortcutIcon: React.FunctionComponent<Props> = (props: Props) => {
+const ShortcutIcon: FC<Props> = (props) => {
   const { open, icon, url } = props
   const [type, setType] = React.useState(IconType.BuiltIn)
   const [icons, setIcons] = React.useState([] as string[])

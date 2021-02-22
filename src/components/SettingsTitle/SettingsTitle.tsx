@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react"
+import React, { FC, ReactNode } from "react"
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
@@ -20,7 +20,7 @@ interface Props {
   children?: ReactNode
 }
 
-function SettingsTitle({ primary, secondary, children }: Props) {
+const SettingsTitle: FC<Props> = ({ primary, secondary, children }) => {
   const classes = useStyles()
 
   return (

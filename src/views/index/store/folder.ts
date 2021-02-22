@@ -1,28 +1,31 @@
-import { observable, action, computed } from "mobx"
+import { makeAutoObservable } from "mobx"
 
 import desktopStore, { Desktop, Shortcut } from "./desktop"
 
 export class FolderStore {
-  public folderElement?: HTMLElement
+  folderElement?: HTMLElement
 
-  @observable public id = ""
-  @observable public open = false
-  @observable public component?: Desktop
-  @observable public tempShortcut = ""
-  @observable public shortcuts: Shortcut[] = []
+  id = ""
+  open = false
+  component?: Desktop
+  tempShortcut = ""
+  shortcuts: Shortcut[] = []
 
-  @computed public get gridColumns() {
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true })
+  }
+
+  get gridColumns(): number {
     return Math.ceil(Math.sqrt(this.shortcuts.length))
   }
 
-  @computed public get gridRows() {
+  get gridRows(): number {
     return Math.ceil(this.shortcuts.length / this.gridColumns)
   }
 
-  @action("open folder")
-  public openFolder = (id: string, element: HTMLElement, shortcut?: Shortcut) => {
+  openFolder(id: string, element: HTMLElement, shortcut?: Shortcut): void {
     this.id = id
-    this.component = desktopStore.data.find(item => item.id === this.id)
+    this.component = desktopStore.data.find((item) => item.id === this.id)
     if (this.component) {
       this.saveTempShortcut(shortcut && shortcut.id)
       this.syncShortcutsFromDesktop()
@@ -34,22 +37,19 @@ export class FolderStore {
     }
   }
 
-  @action("close folder")
-  public closeFolder = () => {
+  closeFolder(): void {
     this.open = false
   }
 
-  @action("copy shortcuts")
-  public copyShortcuts = () => {
+  copyShortcuts(): Shortcut[] {
     if (this.component) {
-      return this.component.shortcuts!.filter(item => item.id !== this.tempShortcut)
+      return this.component.shortcuts!.filter((item) => item.id !== this.tempShortcut)
     }
     return []
   }
 
-  @action("push shortcut")
-  public pushShortcut = (shortcut: Shortcut) => {
-    const index = this.shortcuts.findIndex(item => item.id === shortcut.id)
+  pushShortcut(shortcut: Shortcut): void {
+    const index = this.shortcuts.findIndex((item) => item.id === shortcut.id)
     if (index === -1) {
       this.shortcuts.push(shortcut)
     } else {
@@ -57,14 +57,12 @@ export class FolderStore {
     }
   }
 
-  @action("save temp shortcut")
-  public saveTempShortcut = (shortcutId = "") => {
+  saveTempShortcut(shortcutId = ""): void {
     this.tempShortcut = shortcutId
   }
 
-  @action("sync shortcuts to desktop store")
-  public syncShortcuts = (shortcutId: string, index: number) => {
-    const origin = this.shortcuts.findIndex(item => item.id === shortcutId)
+  syncShortcuts(shortcutId: string, index: number): void {
+    const origin = this.shortcuts.findIndex((item) => item.id === shortcutId)
     this.saveTempShortcut()
     this.shortcuts.splice(index, 0, this.shortcuts.splice(origin, 1)[0])
     if (this.component) {
@@ -72,8 +70,7 @@ export class FolderStore {
     }
   }
 
-  @action("sync shortcuts from desktop store")
-  public syncShortcutsFromDesktop = () => {
+  syncShortcutsFromDesktop(): void {
     this.shortcuts = this.copyShortcuts()
     if (this.updatePopoverPosition) {
       this.updatePopoverPosition()
@@ -83,7 +80,7 @@ export class FolderStore {
     }
   }
 
-  public updatePopoverPosition?: () => void
+  updatePopoverPosition?: () => void
 }
 
 const folderStore = new FolderStore()

@@ -1,6 +1,10 @@
-import { observable, action, computed, toJS } from "mobx"
+import { toJS, observable, computed, makeObservable, action } from "mobx"
 import shortid from "shortid"
-import { DesktopSettings, DESKTOP_SETTINGS, defaultData as desktopSettingsDefault } from "store/desktopSettings"
+import {
+  DesktopSettings,
+  DESKTOP_SETTINGS,
+  defaultData as desktopSettingsDefault,
+} from "store/desktopSettings"
 import folderStore from "./folder"
 import menuStore from "store/menu"
 
@@ -33,72 +37,107 @@ export interface Desktop extends Based {
 }
 
 export class DesktopStore extends DesktopSettings {
-  @observable public data: Desktop[] = [{
-    type: 1,
-    row: 1,
-    column: 1,
-    id: "wb001",
-    shortcuts: [{
-      id: "s001",
-      label: "Bilibili",
-      url: "https://www.bilibili.com",
-    }],
-  }, {
-    type: 1,
-    row: 1,
-    column: 2,
-    id: "wb002",
-    shortcuts: [{
-      id: "s002",
-      label: "酷安",
-      url: "https://www.coolapk.com",
-    }],
-  }, {
-    type: 1,
-    row: 2,
-    column: 4,
-    id: "wb003",
-    shortcuts: [{
-      id: "s003",
-      label: "Google",
-      url: "https://www.google.com",
-    }, {
-      id: "s004",
-      label: "Youtube",
-      url: "https://www.youtube.com",
-    }, {
-      id: "s005",
-      label: "Facebook",
-      url: "https://www.facebook.com",
-    }],
-  }, {
-    type: 1,
-    row: 3,
-    column: 5,
-    id: "wb004",
-    shortcuts: [{
-      id: "s006",
-      label: "Twitter",
-      url: "https://www.twitter.com",
-    }],
-  }]
-  public constructor() {
+  data: Desktop[] = [
+    {
+      type: 1,
+      row: 1,
+      column: 1,
+      id: "wb001",
+      shortcuts: [
+        {
+          id: "s001",
+          label: "Bilibili",
+          url: "https://www.bilibili.com",
+        },
+      ],
+    },
+    {
+      type: 1,
+      row: 1,
+      column: 2,
+      id: "wb002",
+      shortcuts: [
+        {
+          id: "s002",
+          label: "酷安",
+          url: "https://www.coolapk.com",
+        },
+      ],
+    },
+    {
+      type: 1,
+      row: 2,
+      column: 4,
+      id: "wb003",
+      shortcuts: [
+        {
+          id: "s003",
+          label: "Google",
+          url: "https://www.google.com",
+        },
+        {
+          id: "s004",
+          label: "Youtube",
+          url: "https://www.youtube.com",
+        },
+        {
+          id: "s005",
+          label: "Facebook",
+          url: "https://www.facebook.com",
+        },
+      ],
+    },
+    {
+      type: 1,
+      row: 3,
+      column: 5,
+      id: "wb004",
+      shortcuts: [
+        {
+          id: "s006",
+          label: "Twitter",
+          url: "https://www.twitter.com",
+        },
+      ],
+    },
+  ]
+  constructor() {
     super(false)
-    chrome.storage.local.get([DESKTOP, DESKTOP_SETTINGS], (result) => {
-      if (result[DESKTOP_SETTINGS]) {
-        const { toolbar, columns, rows } = result[DESKTOP_SETTINGS]
-        this.toolbar = toolbar !== undefined ? toolbar : desktopSettingsDefault.toolbar
-        this.columns = columns !== undefined ? columns : desktopSettingsDefault.columns
-        this.rows = rows !== undefined ? rows : desktopSettingsDefault.rows
-      } else {
-        this.toolbar = desktopSettingsDefault.toolbar
-      }
-      if (result[DESKTOP]) {
-        this.data = result[DESKTOP]
-      }
-    })
+
+    makeObservable(
+      this,
+      {
+        data: observable,
+        toolbar: observable,
+        columns: observable,
+        rows: observable,
+        shortcutLabel: observable,
+        shortcutLabelColor: observable,
+        shortcutLabelShadow: observable,
+        acrylicContextMenu: observable,
+        acrylicWallpaperDrawer: observable,
+        chessBoard: computed,
+        isFilled: computed,
+        undoMessage: computed,
+        createShortcut: action,
+        findUsableArea: action,
+        updateArea: action,
+        updateInfo: action,
+        removeWebsite: action,
+        undo: action,
+        createFolder: action,
+        removeFolder: action,
+        updateFolder: action,
+        transferShortcut: action,
+        createShortcutComponent: action,
+        retrieveCallback: action,
+      },
+      { autoBind: true },
+    )
+
+    chrome.storage.local.get([DESKTOP, DESKTOP_SETTINGS], this.retrieveCallback)
   }
-  @computed public get chessBoard() {
+  get chessBoard(): number[][] {
     const arr: number[][] = []
     for (let i = 0; i < this.rows; i++) {
       arr[i] = []
@@ -119,35 +158,56 @@ export class DesktopStore extends DesktopSettings {
     })
     return arr
   }
-  @computed public get isFilled() {
-    return this.chessBoard.every(m => m.every(n => !!n))
+  get isFilled(): boolean {
+    return this.chessBoard.every((m) => m.every((n) => !!n))
   }
 
-  @observable public removed: Desktop[] = []
-  public cachedUndoMessage = ""
+  removed: Desktop[] = []
+  cachedUndoMessage = ""
 
-  @computed public get undoMessage() {
+  get undoMessage(): string {
     if (this.removed.length) {
       const shortcuts = this.removed[0].shortcuts!
       const { getMessage } = chrome.i18n
       if (shortcuts!.length > 1) {
-        this.cachedUndoMessage = this.removed[0].label
-          ? getMessage("removed_shortcut_or_folder", this.removed[0].label)
-          : getMessage("removed_unnamed_folder", [shortcuts![0].label || getMessage("unnamed_shortcut"), shortcuts!.length - 1])
+        if (this.removed[0].label) {
+          this.cachedUndoMessage = getMessage("removed_shortcut_or_folder", this.removed[0].label)
+        } else {
+          this.cachedUndoMessage = getMessage("removed_unnamed_folder", [
+            shortcuts![0].label || getMessage("unnamed_shortcut"),
+            shortcuts!.length - 1,
+          ])
+        }
       } else {
-        this.cachedUndoMessage = getMessage("removed_shortcut_or_folder", shortcuts![0].label || getMessage("unnamed_shortcut"))
+        this.cachedUndoMessage = getMessage(
+          "removed_shortcut_or_folder",
+          shortcuts![0].label || getMessage("unnamed_shortcut"),
+        )
       }
     }
     return this.cachedUndoMessage
   }
 
-  @action("create shortcut")
-  public createShortcut = (id: string, label: string, url: string, component?: string) => {
-    const shortcut = { id, label, url }
+  retrieveCallback(result: { [key: string]: any }): void {
+    if (result[DESKTOP_SETTINGS]) {
+      const { toolbar, columns, rows } = result[DESKTOP_SETTINGS]
+      this.toolbar = toolbar !== undefined ? toolbar : desktopSettingsDefault.toolbar
+      this.columns = columns !== undefined ? columns : desktopSettingsDefault.columns
+      this.rows = rows !== undefined ? rows : desktopSettingsDefault.rows
+    } else {
+      this.toolbar = desktopSettingsDefault.toolbar
+    }
+    if (result[DESKTOP]) {
+      this.data = result[DESKTOP]
+    }
+  }
+
+  createShortcut(id: string, label: string, url: string, component?: string): void {
+    const shortcut: Shortcut = { id, label, url }
     if (component) {
       // Add to folder
       const folder = this.findById(component)
-      if (folder) {
+      if (folder && folder.shortcuts) {
         folder.shortcuts.push(shortcut)
       }
     } else {
@@ -164,7 +224,7 @@ export class DesktopStore extends DesktopSettings {
     }
   }
 
-  public findUsableArea = (left: number, top: number) => {
+  findUsableArea(left: number, top: number): number[] | undefined {
     const desktopEl = document.querySelector("#desktop") as HTMLElement
     const { clientWidth, clientHeight, offsetTop: desktopOffsetTop } = desktopEl
     const unitWidth = clientWidth / this.columns
@@ -184,26 +244,23 @@ export class DesktopStore extends DesktopSettings {
     }
   }
 
-  @action("update area")
-  public updateArea = (id: string, row: number, column: number) => {
-    const component = this.data.find(item => item.id === id)
+  updateArea(id: string, row: number, column: number): void {
+    const component = this.data.find((item) => item.id === id)
     if (component) {
       component.row = row
       component.column = column
     }
   }
 
-  @action("update info")
-  public updateInfo = (id: string, index = 0, label: string, url: string) => {
-    const component = this.data.find(item => item.id === id)
+  updateInfo(id: string, index = 0, label: string, url: string): void {
+    const component = this.data.find((item) => item.id === id)
     if (component && component.shortcuts) {
       component.shortcuts[index].label = label
       component.shortcuts[index].url = url
     }
   }
 
-  @action("remove website")
-  public removeWebsite = (id: string, index = 0) => {
+  removeWebsite(id: string, index = 0): void {
     const i = this.findIndexById(id)
     if (i > -1) {
       const component = this.data[i]
@@ -221,13 +278,12 @@ export class DesktopStore extends DesktopSettings {
     }
   }
 
-  @action("undo")
-  public undo = (all = false) => {
+  undo(all = false): void {
     let needToUndo = this.removed
     if (!all) {
       needToUndo = this.removed.splice(0, 1)
     }
-    needToUndo.forEach(item => {
+    needToUndo.forEach((item) => {
       const i = this.findIndexById(item.id)
       if (i > -1) {
         const shortcut = item.shortcuts![0]
@@ -242,17 +298,15 @@ export class DesktopStore extends DesktopSettings {
     this.removed = []
   }
 
-  @action("get occupied")
-  public getOccupied = (row: number, column: number) => {
-    return this.data.find(item => row === item.row && column === item.column)
+  getOccupied(row: number, column: number): Desktop | undefined {
+    return this.data.find((item) => row === item.row && column === item.column)
   }
 
-  @action("create a folder")
   /**
    * @param current The id of the grabbed shortcut
    * @param target The id of the target shortcut
    */
-  public createFolder = (current: string, target: string) => {
+  createFolder(current: string, target: string): void {
     // console.log(current, target)
     const currentIndex = this.findIndexById(current)
     const targetIndex = this.findIndexById(target)
@@ -272,8 +326,7 @@ export class DesktopStore extends DesktopSettings {
     }
   }
 
-  @action
-  public removeFolder = (id: string) => {
+  removeFolder(id: string): void {
     const index = this.findIndexById(id)
     if (index >= 0) {
       const rm = toJS(this.data.splice(index, 1)[0])
@@ -281,8 +334,7 @@ export class DesktopStore extends DesktopSettings {
     }
   }
 
-  @action
-  public updateFolder = (id: string, label: string) => {
+  updateFolder(id: string, label: string): void {
     const index = this.findIndexById(id)
     if (index >= 0) {
       const folder = this.data[index]
@@ -290,20 +342,19 @@ export class DesktopStore extends DesktopSettings {
     }
   }
 
-  @action
-  public transferShortcut = (current: string, shortcutId: string, target: string) => {
+  transferShortcut(current: string, shortcutId: string, target: string): void {
     const currentIndex = this.findIndexById(current)
     const targetIndex = this.findIndexById(target)
     if (currentIndex > -1 && targetIndex > -1) {
       const { shortcuts } = this.data[currentIndex]
-      const shortcutIndex = shortcuts!.findIndex(item => item.id === shortcutId)
+      const shortcutIndex = shortcuts!.findIndex((item) => item.id === shortcutId)
       if (shortcutIndex > -1) {
         const shortcut = shortcuts!.splice(shortcutIndex, 1)[0]
         const targetFolder = this.data[targetIndex].shortcuts
         if (!shortcuts!.length) {
           this.data.splice(currentIndex, 1)
         }
-        const checkIndex = targetFolder!.findIndex(item => item.id === shortcutId)
+        const checkIndex = targetFolder!.findIndex((item) => item.id === shortcutId)
         if (checkIndex === -1) {
           targetFolder!.push(shortcut)
         }
@@ -311,12 +362,11 @@ export class DesktopStore extends DesktopSettings {
     }
   }
 
-  @action
-  public createShortcutComponent = (current: string, shortcutId: string, row: number, column: number) => {
+  createShortcutComponent(current: string, shortcutId: string, row: number, column: number): void {
     const currentIndex = this.findIndexById(current)
     if (currentIndex > -1) {
       const { shortcuts } = this.data[currentIndex]
-      const shortcutIndex = shortcuts!.findIndex(item => item.id === shortcutId)
+      const shortcutIndex = shortcuts!.findIndex((item) => item.id === shortcutId)
       if (shortcutIndex > -1) {
         const shortcut = shortcuts!.splice(shortcutIndex, 1)
         this.data.push({
@@ -330,12 +380,12 @@ export class DesktopStore extends DesktopSettings {
     }
   }
 
-  public findIndexById = (id: string, origin: any[] = this.data) => {
+  findIndexById(id: string, origin: any[] = this.data): number {
     return origin.findIndex((item: any) => item.id === id)
   }
 
-  public findById = (id: string, origin: any[] = this.data) => {
-    return origin.find((item: any) => item.id === id)
+  findById(id: string, origin: Desktop[] = this.data): Desktop | undefined {
+    return origin.find((item) => item.id === id)
   }
 }
 

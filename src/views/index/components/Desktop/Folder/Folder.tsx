@@ -1,30 +1,22 @@
-import React from "react"
+import React, { FC, useRef } from "react"
 import classNames from "classnames"
-import { inject, observer } from "mobx-react"
+import { observer } from "mobx-react-lite"
 
 import Typography from "@material-ui/core/Typography"
 
-import makeDumbProps from "utils/makeDumbProps"
-import { Desktop, DesktopStore } from "../../../store/desktop"
-import { ShortcutIconsStore } from "../../../store/shortcutIcons"
-import { DesktopSettings } from "store/desktopSettings"
+import { desktopStore, shortcutIconsStore, desktopSettings } from "../../../store"
+import { Desktop } from "../../../store/desktop"
 
-interface PropsType extends Desktop {
-  shortcutIconsStore: ShortcutIconsStore
-  desktopStore: DesktopStore
-  desktopSettings: DesktopSettings
-  onMouseDown: (e: any) => void
+interface Props extends Desktop {
   onClick: (id: string, element: HTMLDivElement) => void
 }
 
 const textShadow = "0 1px 2px rgba(0, 0, 0, 0.36)"
 
-@inject("shortcutIconsStore", "desktopStore", "desktopSettings")
-@observer
-class Folder extends React.Component<PropsType> {
-  public folderRef: React.RefObject<HTMLDivElement> = React.createRef()
+const Folder: FC<Props> = (props) => {
+  const folderRef = useRef<HTMLDivElement>(null)
 
-  public handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (event.button !== 0) {
       return
     }
@@ -38,10 +30,10 @@ class Folder extends React.Component<PropsType> {
     let clone: HTMLElement
 
     const handleMouseUp = () => {
-      this.props.onClick(this.props.id, this.folderRef.current as HTMLDivElement)
+      props.onClick(props.id, folderRef.current as HTMLDivElement)
     }
     const handleMouseMove = (evt: MouseEvent) => {
-      const { chessBoard } = this.props.desktopStore
+      const { chessBoard } = desktopStore
       const { screenX: moveScreenX, screenY: moveScreenY } = evt
       if (downScreenX !== moveScreenX || downScreenY !== moveScreenY) {
         event.preventDefault()
@@ -78,8 +70,8 @@ class Folder extends React.Component<PropsType> {
           let restricted = true
           const x = e.clientX
           const y = e.clientY - desktopOffsetTop
-          const columnSize = clientWidth / this.props.desktopStore.columns
-          const rowSize = clientHeight / this.props.desktopStore.rows
+          const columnSize = clientWidth / desktopStore.columns
+          const rowSize = clientHeight / desktopStore.rows
           const column = Math.ceil(x / columnSize) - 1
           const row = Math.ceil(y / rowSize) - 1
 
@@ -90,7 +82,9 @@ class Folder extends React.Component<PropsType> {
             clone.style.transform = `translate(${transX}px, ${transY}px)`
           }
           if (restricted) {
-            const { row: cRow, column: cColumn } = this.props.desktopStore.data.find(item => item.id === this.props.id)!
+            const { row: cRow, column: cColumn } = desktopStore.data.find(
+              (item) => item.id === props.id,
+            )!
             const transX = (cColumn - 1) * columnSize
             const transY = (cRow - 1) * rowSize + desktopOffsetTop
             clone.style.transform = `translate(${transX}px, ${transY}px)`
@@ -101,7 +95,7 @@ class Folder extends React.Component<PropsType> {
             document.body.removeChild(clone)
 
             if (!restricted) {
-              this.props.desktopStore.updateArea(this.props.id, row + 1, column + 1)
+              desktopStore.updateArea(props.id, row + 1, column + 1)
             }
           })
 
@@ -124,38 +118,40 @@ class Folder extends React.Component<PropsType> {
     document.addEventListener("mouseup", handleMouseUpOnDocument)
   }
 
-  public render() {
-    const shortcuts = this.props.shortcuts!.slice(0, 4)
-    const { shortcutIcon, getURL } = this.props.shortcutIconsStore
-    const style: React.CSSProperties = {
-      color: this.props.desktopSettings.shortcutLabelColor,
-      textShadow: this.props.desktopSettings.shortcutLabelShadow ? textShadow : undefined
-    }
+  const shortcuts = props.shortcuts!.slice(0, 4)
+  const { shortcutIcon, getURL } = shortcutIconsStore
+  const style: React.CSSProperties = {
+    color: desktopSettings.shortcutLabelColor,
+    textShadow: desktopSettings.shortcutLabelShadow ? textShadow : undefined,
+  }
 
-    return (
-      <div data-id={this.props.id} data-type="folder" onMouseDown={this.handleMouseDown}>
-        <div className="folder-wrap">
-          <div
-            ref={this.folderRef}
-            className={classNames("folder", {
-              two: shortcuts.length === 2,
-              three: shortcuts.length === 3,
-            })}
-          >
-            {shortcuts.map(({ id, label, url }, index) => {
-              const iconURL = getURL(shortcutIcon(id, url))
-              return iconURL && (
+  return (
+    <div data-id={props.id} data-type="folder" onMouseDown={handleMouseDown}>
+      <div className="folder-wrap">
+        <div
+          ref={folderRef}
+          className={classNames("folder", {
+            two: shortcuts.length === 2,
+            three: shortcuts.length === 3,
+          })}
+        >
+          {shortcuts.map(({ id, label, url }, index) => {
+            const iconURL = getURL(shortcutIcon(id, url))
+            return (
+              iconURL && (
                 <div key={index}>
                   <img src={iconURL} alt={label} />
                 </div>
               )
-            })}
-          </div>
+            )
+          })}
         </div>
-        <Typography className="shortcut-name" variant="subtitle1" style={style}>{this.props.label}</Typography>
       </div>
-    )
-  }
+      <Typography className="shortcut-name" variant="subtitle1" style={style}>
+        {props.label}
+      </Typography>
+    </div>
+  )
 }
 
-export default makeDumbProps(Folder)
+export default observer(Folder)

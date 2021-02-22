@@ -1,4 +1,4 @@
-import { observable, action } from "mobx"
+import { makeAutoObservable } from "mobx"
 
 export interface MenuType {
   disabled?: boolean
@@ -8,23 +8,25 @@ export interface MenuType {
 }
 
 export class MenuStore {
-  @observable public top = 0
-  @observable public left = 0
-  @observable public menus: MenuType[] = []
+  top = 0
+  left = 0
+  menus: MenuType[] = []
 
-  @action("set position")
-  public setPosition = (left: number, top: number) => {
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true })
+  }
+
+  setPosition(left: number, top: number): void {
     this.left = left + 1
     this.top = top + 1
   }
-  @action("show menu")
-  public showMenu = (menus: MenuType[]) => {
+
+  showMenu(menus: MenuType[]): void {
     this.menus = menus
   }
 
-  @action("clear menus")
-  public clearMenus = () => {
-    setTimeout(() => this.menus = [])
+  clearMenus(): void {
+    setTimeout(() => this.showMenu([]))
   }
 }
 

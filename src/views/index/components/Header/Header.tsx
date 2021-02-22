@@ -1,7 +1,6 @@
 import "./style"
 
-import React from "react"
-import Loadable from "react-loadable"
+import React, { Suspense } from "react"
 import { observer } from "mobx-react-lite"
 import classNames from "classnames"
 
@@ -19,10 +18,7 @@ import SettingsIcon from "@material-ui/icons/SettingsOutlined"
 import { desktopStore, desktopSettings, toolbarStore, wallpaperStore } from "../../store"
 import { useAcrylic } from "../../../../styles/acrylic"
 
-const Wallpaper = Loadable({
-  loader: () => import("./Wallpaper"),
-  loading: () => null,
-})
+const Wallpaper = React.lazy(() => import("./Wallpaper"))
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   root: {
@@ -96,7 +92,11 @@ function Header() {
           ),
         }}
       >
-        {toolbarStore.wallpaperDrawerLoaded && <Wallpaper />}
+        {toolbarStore.wallpaperDrawerLoaded && (
+          <Suspense fallback>
+            <Wallpaper />
+          </Suspense>
+        )}
       </Drawer>
     </>
   )

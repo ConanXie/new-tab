@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FC } from "react"
 
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
@@ -24,7 +24,7 @@ interface Props {
   children: React.ReactNode
 }
 
-function SettingsWrapper(props: Props) {
+const SettingsWrapper: FC<Props> = (props) => {
   const classes = useStyles()
 
   return (

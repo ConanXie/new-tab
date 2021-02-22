@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FC } from "react"
 import { useLocalStore, observer } from "mobx-react"
 
 import List from "@material-ui/core/List"
@@ -11,7 +11,7 @@ import SettingsTitle from "components/SettingsTitle"
 
 import { foldersSettings } from "../../store"
 
-function WindowEffect() {
+const WindowEffect: FC = () => {
   const { acrylicEffect, toggleAcrylicEffect } = useLocalStore(() => foldersSettings)
 
   return (

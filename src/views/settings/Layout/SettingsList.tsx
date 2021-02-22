@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FC } from "react"
 
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
@@ -11,12 +11,16 @@ export interface SettingsItemType {
   onClick: () => void
 }
 
+interface Props {
+  items: SettingsItemType[]
+}
+
 /**
  * Settings item component in the drawer
  */
-const SettingsList = (props: { items: SettingsItemType[] }) => (
+const SettingsList: FC<Props> = (props) => (
   <List>
-    {props.items.map(item => (
+    {props.items.map((item) => (
       <ListItem key={item.text} button onClick={item.onClick}>
         <ListItemIcon>
           <item.icon />

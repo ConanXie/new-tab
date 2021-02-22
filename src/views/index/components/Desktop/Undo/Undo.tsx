@@ -1,60 +1,56 @@
 import React from "react"
-import { inject, observer } from "mobx-react"
-import makeDumbProps from "utils/makeDumbProps"
+import { observer } from "mobx-react-lite"
 
 import Snackbar from "@material-ui/core/Snackbar"
 import Button from "@material-ui/core/Button"
+// import Button from "./Button"
 
-import { DesktopStore } from "../../../store/desktop"
+import { desktopStore } from "../../../store"
+import Typography from "@material-ui/core/Typography"
 
-interface PropsType {
+interface Props {
   open: boolean
   onClose(): void
-  desktopStore: DesktopStore
 }
 
-@inject("desktopStore")
-@observer
-class Undo extends React.Component<PropsType> {
-  public state = {}
+const Undo = observer(({ open, onClose }: Props) => {
+
+  function handleSnackbarClose() {
+    onClose()
+  }
 
   /**
    * undo removed
    * @param all whether undo all of removed
    */
-  public undo = (all?: boolean) => () => {
-    this.props.desktopStore.undo(all)
-    this.handleSnackbarClose()
+  const undo = (all?: boolean) => () => {
+    desktopStore.undo(all)
+    handleSnackbarClose()
   }
 
-  public handleSnackbarClose = () => {
-    this.props.onClose()
-  }
+  console.log(desktopStore.undoMessage)
 
-  public render() {
-    const { open } = this.props
-
-    return (
-      <Snackbar
-        open={open}
-        autoHideDuration={2000}
-        message={this.props.desktopStore.undoMessage}
-        onClose={this.handleSnackbarClose}
-        action={
-          <React.Fragment>
-            <Button key="undo" color="secondary" size="small" onClick={this.undo()}>
-              {chrome.i18n.getMessage("removed_undo")}
+  return (
+    <Snackbar
+      open={open}
+      autoHideDuration={2000}
+      message={desktopStore.undoMessage}
+      onClose={handleSnackbarClose}
+      action={
+        // <Button>武汉</Button>
+        <>
+          <Button key="undo" color="secondary" size="small" onClick={undo()}>
+            {chrome.i18n.getMessage("removed_undo")}
+          </Button>
+          {desktopStore.removed.length > 1 && (
+            <Button key="undoAll" color="secondary" size="small" onClick={undo(true)}>
+              {chrome.i18n.getMessage("removed_undo_all")}
             </Button>
-            {this.props.desktopStore.removed.length > 1 && (
-              <Button key="undoAll" color="secondary" size="small" onClick={this.undo(true)}>
-                {chrome.i18n.getMessage("removed_undo_all")}
-              </Button>
-            )}
-          </React.Fragment>
-        }
-      />
-    )
-  }
-}
+          )}
+        </>
+      }
+    />
+  )
+})
 
-export default makeDumbProps(Undo)
+export default Undo

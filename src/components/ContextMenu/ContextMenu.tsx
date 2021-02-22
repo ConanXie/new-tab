@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react"
-import { observer, useLocalStore } from "mobx-react"
+import { observer } from "mobx-react-lite"
 import classNames from "classnames"
 
 import { makeStyles, createStyles } from "@material-ui/core/styles"
@@ -45,7 +45,7 @@ const useStyles = makeStyles(() =>
 
 function ContextMenu() {
   const contextMenuRef = useRef<HTMLDivElement>(null)
-  const { menus, clearMenus, top, left } = useLocalStore(() => menuStore)
+  const { menus, top, left, clearMenus } = menuStore
 
   const classes = useStyles()
   const acrylic = useAcrylic()

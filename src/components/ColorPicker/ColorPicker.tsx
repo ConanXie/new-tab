@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, FC } from "react"
 
 import { ChromePicker, CirclePicker, ColorResult } from "react-color"
 import Button from "@material-ui/core/Button"
@@ -13,7 +13,7 @@ interface Props {
   onClose: (color?: string) => void
 }
 
-function ColorPicker({ open, color: initColor, onClose }: Props) {
+const ColorPicker: FC<Props> = ({ open, color: initColor, onClose }) => {
   const [color, setColor] = useState("")
 
   useEffect(() => {

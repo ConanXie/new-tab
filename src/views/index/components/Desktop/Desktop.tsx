@@ -1,7 +1,5 @@
-import React from "react"
-import { inject, observer } from "mobx-react"
-import Loadable from "react-loadable"
-import classNames from "classnames"
+import React, { FC, Suspense, useEffect, useMemo, useRef, useState } from "react"
+import clsx from "clsx"
 
 import AddIcon from "@material-ui/icons/Add"
 import EditIcon from "@material-ui/icons/Edit"
@@ -12,14 +10,17 @@ import WallpaperIcon from "@material-ui/icons/WallpaperOutlined"
 import WidgetsIcon from "@material-ui/icons/WidgetsOutlined"
 import SettingsIcon from "@material-ui/icons/SettingsOutlined"
 
-import makeDumbProps from "utils/makeDumbProps"
 import grab, { Env } from "./Website/grab"
-import { DesktopStore, Shortcut } from "../../store/desktop"
-import { WebSiteInfoStore } from "../../store/websiteInfo"
-import { WebsiteEditStore } from "../../store/websiteEdit"
-import { FolderStore } from "../../store/folder"
-import { ToolbarStore } from "../../store/toolbar"
-import { MenuType, MenuStore } from "store/menu"
+import { Shortcut } from "../../store/desktop"
+import {
+  toolbarStore,
+  desktopStore,
+  menuStore,
+  websiteEditStore,
+  websiteInfoStore,
+  folderStore,
+} from "../../store"
+import { MenuType } from "store/menu"
 // import WidgetWrap from "../Widgets/Wrap"
 import DateTime from "../Widgets/DateTime"
 import Webiste from "./Website"
@@ -28,160 +29,160 @@ import Folder from "./Folder"
 import Wrap from "./Wrap"
 import FolderWindow from "./FolderWindow"
 import FolderEditor from "./FolderEditor"
+import { observer } from "mobx-react-lite"
 
-const LazyComponent = Loadable.Map({
-  loading: () => null,
-  loader: {
-    WebsiteInfo: () => import("./WebsiteInfo"),
-    WebsiteEdit: () => import("./WebsiteEdit"),
-  },
-  render(loaded) {
-    const WebsiteInfo = loaded.WebsiteInfo.default
-    const WebsiteEdit = loaded.WebsiteEdit.default
-    return (
-      <>
-        <WebsiteInfo />
-        <WebsiteEdit />
-      </>
-    )
-  },
-})
+const WebsiteInfo = React.lazy(() => import("./WebsiteInfo"))
+const WebsiteEdit = React.lazy(() => import("./WebsiteEdit"))
 
-interface PropsType {
-  desktopStore: DesktopStore
-  menuStore: MenuStore
-  websiteInfoStore: WebSiteInfoStore
-  websiteEditStore: WebsiteEditStore
-  folderStore: FolderStore
-  toolbarStore: ToolbarStore
-}
+const Desktop: FC = () => {
+  const [undoOpen, setUndoOpen] = useState(false)
+  const [folderEditorOpen, setFolderEditorOpen] = useState(false)
+  const [folderLabel, setFolderLabel] = useState("")
 
-@inject(
-  "desktopStore",
-  "menuStore",
-  "websiteInfoStore",
-  "websiteEditStore",
-  "folderStore",
-  "toolbarStore",
-)
-@observer
-class Desktop extends React.Component<PropsType> {
-  public state = {
-    undoOpen: false,
-    folderEditorOpen: false,
-    folderLabel: "",
-  }
-  public id = ""
-  public index = 0
-  public desktopElement: React.RefObject<HTMLDivElement> = React.createRef()
-  public pageElement: React.RefObject<HTMLDivElement> = React.createRef()
+  const currentItem = useRef({
+    id: "",
+    index: 0,
+  })
 
-  public desktopMenus: MenuType[] = [{
-    icon: <AddIcon />,
-    text: "New shortcut",
-    onClick: () => {
-      this.id = ""
-      this.editWebsite()
-    },
-  }]
-  public toolbarMenus: MenuType[] = [{
-    icon: <WallpaperIcon />,
-    text: "Wallpaper",
-    onClick: () => {
-      this.props.toolbarStore.loadAndOpenWallpaperDrawer()
-    },
-  }, {
-    icon: <WidgetsIcon />,
-    text: "Widgets",
-    // eslint-disable-next-line
-    onClick: () => {},
-  }, {
-    icon: <SettingsIcon />,
-    text: "Settings",
-    onClick: () => {
-      location.href = "settings.html"
-    },
-  }]
-  public folderMenus: MenuType[] = [{
-    icon: <EditIcon />,
-    text: "Edit",
-    onClick: () => {
-      const folder = this.props.desktopStore.findById(this.id)
-      if (folder) {
-        this.setState({
-          folderEditorOpen: true,
-          folderLabel: folder.label
-        })
-      }
-    },
-  }, {
-    icon: <PlaylistAddIcon />,
-    text: "Add new shortcut",
-    onClick: () => {
-      this.editWebsite()
-    },
-  }, {
-    icon: <ClearIcon />,
-    text: "Remove",
-    onClick: () => {
-      this.props.desktopStore.removeFolder(this.id)
-      this.setState({ undoOpen: true })
-    },
-  }]
-  public shortcutMenus: MenuType[] = [{
-    icon: <EditIcon />,
-    text: "Edit",
-    onClick: () => {
-      this.editWebsite()
-    }
-  }, {
-    icon: <InfoIcon />,
-    text: "Shortcut info",
-    onClick: () => {
-      this.showInfo()
-    }
-  }, {
-    icon: <ClearIcon />,
-    text: "Remove",
-    onClick: () => {
-      this.removeWebsite()
-    },
-  }]
+  const desktopElement = useRef<HTMLDivElement>(null)
+  const pageElement = useRef<HTMLDivElement>(null)
 
-  public handleShortcutGrab = (shortcut: Shortcut, componentId: string) => (event: React.MouseEvent<HTMLElement>) => {
+  const desktopMenus: MenuType[] = useMemo(
+    () => [
+      {
+        icon: <AddIcon />,
+        text: "New shortcut",
+        onClick: () => {
+          currentItem.current.id = ""
+          editWebsite()
+        },
+      },
+    ],
+    [],
+  )
+  const toolbarMenus: MenuType[] = useMemo(
+    () => [
+      {
+        icon: <WallpaperIcon />,
+        text: "Wallpaper",
+        onClick: () => {
+          toolbarStore.loadAndOpenWallpaperDrawer()
+        },
+      },
+      {
+        icon: <WidgetsIcon />,
+        text: "Widgets",
+        // eslint-disable-next-line
+        onClick: () => {},
+      },
+      {
+        icon: <SettingsIcon />,
+        text: "Settings",
+        onClick: () => {
+          location.href = "settings.html"
+        },
+      },
+    ],
+    [],
+  )
+
+  const folderMenus: MenuType[] = useMemo(
+    () => [
+      {
+        icon: <EditIcon />,
+        text: "Edit",
+        onClick: () => {
+          const folder = desktopStore.findById(currentItem.current.id)
+          if (folder) {
+            setFolderEditorOpen(true)
+            setFolderLabel(folder.label!)
+          }
+        },
+      },
+      {
+        icon: <PlaylistAddIcon />,
+        text: "Add new shortcut",
+        onClick: () => {
+          editWebsite()
+        },
+      },
+      {
+        icon: <ClearIcon />,
+        text: "Remove",
+        onClick: () => {
+          desktopStore.removeFolder(currentItem.current.id)
+          setUndoOpen(true)
+        },
+      },
+    ],
+    [],
+  )
+
+  const shortcutMenus: MenuType[] = useMemo(
+    () => [
+      {
+        icon: <EditIcon />,
+        text: "Edit",
+        onClick: () => {
+          editWebsite()
+        },
+      },
+      {
+        icon: <InfoIcon />,
+        text: "Shortcut info",
+        onClick: () => {
+          showInfo()
+        },
+      },
+      {
+        icon: <ClearIcon />,
+        text: "Remove",
+        onClick: () => {
+          removeWebsite()
+        },
+      },
+    ],
+    [],
+  )
+
+  const handleShortcutGrab = (shortcut: Shortcut, componentId: string) => (
+    event: React.MouseEvent<HTMLElement>,
+  ) => {
     if (event.button === 0) {
       grab(event, shortcut, componentId, Env.Desktop)
     }
   }
 
-  public showMenu = (event: MouseEvent, menus: MenuType[], id?: string, index = 0) => {
+  const showMenu = (event: MouseEvent, menus: MenuType[], id?: string, index = 0) => {
     if (id) {
-      this.id = id
-      this.index = index
+      currentItem.current.id = id
+      currentItem.current.index = index
     }
-    this.props.menuStore.setPosition(event.clientX, event.clientY)
-    this.props.menuStore.showMenu(menus)
+    menuStore.setPosition(event.clientX, event.clientY)
+    menuStore.showMenu(menus)
   }
-  public editWebsite = () => {
-    this.props.websiteEditStore.openDialog(this.id, this.index)
+
+  const editWebsite = () => {
+    websiteEditStore.openDialog(currentItem.current.id, currentItem.current.index)
   }
-  public showInfo = () => {
-    this.props.websiteInfoStore.openDialog(this.id, this.index)
+
+  const showInfo = () => {
+    websiteInfoStore.openDialog(currentItem.current.id, currentItem.current.index)
   }
-  public removeWebsite = () => {
-    this.props.desktopStore.removeWebsite(this.id, this.index)
-    this.setState({ undoOpen: true })
+  const removeWebsite = () => {
+    desktopStore.removeWebsite(currentItem.current.id, currentItem.current.index)
+    setUndoOpen(true)
   }
-  public handleFolderEditDone = (label?: string) => {
+  const handleFolderEditDone = (label?: string) => {
     if (label !== undefined) {
-      this.props.desktopStore.updateFolder(this.id, label)
+      desktopStore.updateFolder(currentItem.current.id, label)
     }
-    this.setState({ folderEditorOpen: false })
+    setFolderEditorOpen(false)
   }
-  public closeUndo = () => {
-    this.setState({ undoOpen: false })
+  const closeUndo = () => {
+    setUndoOpen(false)
   }
-  public handleContextMenu = (event: MouseEvent) => {
+  const handleContextMenu = (event: MouseEvent) => {
     event.preventDefault()
     const path = event.composedPath() as HTMLElement[]
     for (const target of path) {
@@ -189,94 +190,82 @@ class Desktop extends React.Component<PropsType> {
       if (dataset) {
         const { type, id, index } = dataset
         if (type === "shortcut") {
-          this.showMenu(event, this.shortcutMenus, id, Number(index))
+          showMenu(event, shortcutMenus, id, Number(index))
           return
         } else if (type === "folder") {
-          this.showMenu(event, this.folderMenus, id, Number(index))
+          showMenu(event, folderMenus, id, Number(index))
           return
         }
       }
-      if (target === this.desktopElement.current) {
-        this.desktopMenus[0].disabled = this.props.desktopStore.isFilled
-        const menus = this.props.desktopStore.toolbar
-          ? this.desktopMenus
-          : [...this.desktopMenus, ...this.toolbarMenus]
-        this.showMenu(event, menus)
+      if (target === desktopElement.current) {
+        desktopMenus[0].disabled = desktopStore.isFilled
+        const menus = desktopStore.toolbar ? desktopMenus : [...desktopMenus, ...toolbarMenus]
+        showMenu(event, menus)
         return
       }
     }
   }
-  public componentDidMount() {
-    document.addEventListener("contextmenu", this.handleContextMenu)
+  useEffect(() => {
+    document.addEventListener("contextmenu", handleContextMenu)
+
+    return () => document.removeEventListener("contextmenu", handleContextMenu)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const { toolbar, columns, rows, data } = desktopStore
+  const { open: folderOpen, closeFolder, openFolder, folderElement } = folderStore
+  const styles: React.CSSProperties = {
+    gridTemplateColumns: `repeat(${columns}, 1fr)`,
+    gridAutoRows: `calc((100vh - ${toolbar ? 64 : 0}px) / ${rows})`,
   }
-  public componentWillUnmount() {
-    document.removeEventListener("contextmenu", this.handleContextMenu)
-  }
-  public render() {
-    const { toolbar, columns, rows, data } = this.props.desktopStore
-    const { open: folderOpen, closeFolder, openFolder, folderElement } = this.props.folderStore
-    const styles: React.CSSProperties = {
-      gridTemplateColumns: `repeat(${columns}, 1fr)`,
-      gridAutoRows: `calc((100vh - ${toolbar ? 64 : 0}px) / ${rows})`,
-    }
-    return (
-      <div className={classNames("desktop", { toolbar })} ref={this.desktopElement}>
-        <div className="page" id="desktop" ref={this.pageElement} style={styles}>
-          {data.map(item => {
-            const { row, column } = item
-            if (item.type === 1) {
-              if (item.shortcuts!.length <= 1) {
-                const { id, shortcuts } = item
-                const {
-                  label,
-                  url,
-                  id: shortcutId,
-                } = shortcuts![0]
-                return (
-                  <Wrap row={row} column={column} key={id}>
-                    <Webiste
-                      id={shortcutId}
-                      label={label}
-                      url={url}
-                      itemId={id}
-                      index={0}
-                      onMouseDown={this.handleShortcutGrab(shortcuts![0], id)}
-                    />
-                  </Wrap>
-                )
-              } else {
-                const { id } = item
-                return (
-                  <Wrap row={row} column={column} key={id}>
-                    <Folder
-                      {...item}
-                      onClick={openFolder}
-                    />
-                  </Wrap>
-                )
-              }
+
+  return (
+    <div className={clsx("desktop", { toolbar })} ref={desktopElement}>
+      <div className="page" id="desktop" ref={pageElement} style={styles}>
+        {data.map((item) => {
+          const { row, column } = item
+          if (item.type === 1) {
+            if (item.shortcuts!.length <= 1) {
+              const { id, shortcuts } = item
+              const { label, url, id: shortcutId } = shortcuts![0]
+              return (
+                <Wrap row={row} column={column} key={id}>
+                  <Webiste
+                    id={shortcutId}
+                    label={label}
+                    url={url}
+                    itemId={id}
+                    index={0}
+                    onMouseDown={handleShortcutGrab(shortcuts![0], id)}
+                  />
+                </Wrap>
+              )
+            } else {
+              const { id } = item
+              return (
+                <Wrap row={row} column={column} key={id}>
+                  <Folder {...item} onClick={openFolder} />
+                </Wrap>
+              )
             }
-            return null
-          })}
-          <Wrap className="widget-wrap" row={1} column={4} rowEnd={2} columnEnd={6}>
-            <DateTime />
-          </Wrap>
-        </div>
-        <LazyComponent />
-        <Undo open={this.state.undoOpen} onClose={this.closeUndo} />
-        <FolderWindow
-          open={folderOpen}
-          anchorEl={folderElement}
-          onClose={closeFolder}
-        />
-        <FolderEditor
-          open={this.state.folderEditorOpen}
-          label={this.state.folderLabel}
-          onClose={this.handleFolderEditDone}
-        />
+          }
+          return null
+        })}
+        <Wrap className="widget-wrap" row={1} column={4} rowEnd={2} columnEnd={6}>
+          <DateTime />
+        </Wrap>
       </div>
-    )
-  }
+      <Suspense fallback={null}>
+        <>
+          <WebsiteInfo />
+          <WebsiteEdit />
+        </>
+      </Suspense>
+      <Undo open={undoOpen} onClose={closeUndo} />
+      <FolderWindow open={folderOpen} anchorEl={folderElement!} onClose={closeFolder} />
+      <FolderEditor open={folderEditorOpen} label={folderLabel} onClose={handleFolderEditDone} />
+    </div>
+  )
 }
 
-export default makeDumbProps(Desktop)
+export default observer(Desktop)

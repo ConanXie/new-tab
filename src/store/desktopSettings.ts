@@ -1,4 +1,4 @@
-import { observable, computed, action, autorun, toJS } from "mobx"
+import { autorun, toJS, makeAutoObservable } from "mobx"
 
 export const DESKTOP_SETTINGS = "desktop-settings"
 
@@ -14,85 +14,84 @@ export const defaultData = {
 }
 
 export class DesktopSettings {
-  @observable public toolbar = false
-  @observable public columns = defaultData.columns
-  @observable public rows = defaultData.rows
-  @observable public shortcutLabel = defaultData.shortcutLabel
-  @observable public shortcutLabelColor = defaultData.shortcutLabelColor
-  @observable public shortcutLabelShadow = defaultData.shortcutLabelShadow
-  @observable public acrylicContextMenu = defaultData.acrylicContextMenu
-  @observable public acrylicWallpaperDrawer = defaultData.acrylicWallpaperDrawer
+  toolbar = false
+  columns = defaultData.columns
+  rows = defaultData.rows
+  shortcutLabel = defaultData.shortcutLabel
+  shortcutLabelColor = defaultData.shortcutLabelColor
+  shortcutLabelShadow = defaultData.shortcutLabelShadow
+  acrylicContextMenu = defaultData.acrylicContextMenu
+  acrylicWallpaperDrawer = defaultData.acrylicWallpaperDrawer
 
-  public constructor(self = true) {
+  constructor(self = true) {
     if (self) {
-      chrome.storage.local.get(DESKTOP_SETTINGS, (result) => {
-        if (result[DESKTOP_SETTINGS]) {
-          const {
-            toolbar,
-            columns,
-            rows,
-            shortcutLabel,
-            shortcutLabelColor,
-            shortcutLabelShadow,
-            acrylicContextMenu,
-            acrylicWallpaperDrawer,
-          } = result[DESKTOP_SETTINGS]
-          this.toolbar = toolbar !== undefined ? toolbar : defaultData.toolbar
-          this.columns = columns !== undefined ? columns : defaultData.columns
-          this.rows = rows !== undefined ? rows : defaultData.rows
-          this.shortcutLabel =
-            shortcutLabel !== undefined ? shortcutLabel : defaultData.shortcutLabel
-          this.shortcutLabelColor =
-            shortcutLabelColor !== undefined ? shortcutLabelColor : defaultData.shortcutLabelColor
-          this.shortcutLabelShadow =
-            shortcutLabelShadow !== undefined
-              ? shortcutLabelShadow
-              : defaultData.shortcutLabelShadow
-          this.acrylicContextMenu =
-            acrylicContextMenu !== undefined ? acrylicContextMenu : defaultData.acrylicContextMenu
-          this.acrylicWallpaperDrawer =
-            acrylicWallpaperDrawer !== undefined
-              ? acrylicWallpaperDrawer
-              : defaultData.acrylicWallpaperDrawer
-        } else {
-          this.toolbar = defaultData.toolbar
-        }
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        persist()
-      })
+      makeAutoObservable(this, {}, { autoBind: true })
+      chrome.storage.local.get(DESKTOP_SETTINGS, this.retrieveCallback)
     }
   }
 
-  @computed public get disabledLabelOptions() {
+  get disabledLabelOptions(): boolean {
     return !this.shortcutLabel
   }
 
-  @action public toggleToolbar = () => {
+  retrieveCallback(result: { [key: string]: any }): void {
+    if (result[DESKTOP_SETTINGS]) {
+      const {
+        toolbar,
+        columns,
+        rows,
+        shortcutLabel,
+        shortcutLabelColor,
+        shortcutLabelShadow,
+        acrylicContextMenu,
+        acrylicWallpaperDrawer,
+      } = result[DESKTOP_SETTINGS]
+      this.toolbar = toolbar !== undefined ? toolbar : defaultData.toolbar
+      this.columns = columns !== undefined ? columns : defaultData.columns
+      this.rows = rows !== undefined ? rows : defaultData.rows
+      this.shortcutLabel = shortcutLabel !== undefined ? shortcutLabel : defaultData.shortcutLabel
+      this.shortcutLabelColor =
+        shortcutLabelColor !== undefined ? shortcutLabelColor : defaultData.shortcutLabelColor
+      this.shortcutLabelShadow =
+        shortcutLabelShadow !== undefined ? shortcutLabelShadow : defaultData.shortcutLabelShadow
+      this.acrylicContextMenu =
+        acrylicContextMenu !== undefined ? acrylicContextMenu : defaultData.acrylicContextMenu
+      this.acrylicWallpaperDrawer =
+        acrylicWallpaperDrawer !== undefined
+          ? acrylicWallpaperDrawer
+          : defaultData.acrylicWallpaperDrawer
+    } else {
+      this.toolbar = defaultData.toolbar
+    }
+    persist()
+  }
+
+  toggleToolbar(): void {
     this.toolbar = !this.toolbar
   }
 
-  @action public updateGrid = (columns: number, rows: number) => {
+  updateGrid(columns: number, rows: number): void {
     this.columns = columns
     this.rows = rows
   }
 
-  @action public toggleShortcutLabel = () => {
+  toggleShortcutLabel(): void {
     this.shortcutLabel = !this.shortcutLabel
   }
 
-  @action public saveShortcutLabelColor = (color: string) => {
+  saveShortcutLabelColor(color: string): void {
     this.shortcutLabelColor = color.toUpperCase()
   }
 
-  @action public toggleShortcutLabelShadow = () => {
+  toggleShortcutLabelShadow(): void {
     this.shortcutLabelShadow = !this.shortcutLabelShadow
   }
 
-  @action public toggleAcrylicContextMenu = () => {
+  toggleAcrylicContextMenu(): void {
     this.acrylicContextMenu = !this.acrylicContextMenu
   }
 
-  @action public toggleAcrylicWallpaperDrawer = () => {
+  toggleAcrylicWallpaperDrawer(): void {
     this.acrylicWallpaperDrawer = !this.acrylicWallpaperDrawer
   }
 }

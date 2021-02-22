@@ -1,30 +1,40 @@
-import { observable, action, computed } from "mobx"
+import { makeAutoObservable } from "mobx"
 
 import desktopStore, { Shortcut } from "./desktop"
 export class WebSiteInfoStore {
-  @observable public itemId = ""
-  @observable public index = 0
-  @observable public open = false
+  itemId = ""
+  index = 0
+  open = false
 
-  public defaultInfo: Shortcut = {
+  defaultInfo: Shortcut = {
     id: "",
     label: "",
     url: "https://",
   }
 
-  @computed public get info(): Shortcut {
-    const item = desktopStore.data.find(({ id }) => id === this.itemId)
-    return (item && this.index < item.shortcuts!.length && item.shortcuts![this.index]) || this.defaultInfo
+  constructor(self = true) {
+    if (self) {
+      makeAutoObservable(this, {}, { autoBind: true })
+    }
   }
 
-  @action("open webiste dialog")
-  public openDialog = (itemId = "", index = 0) => {
+  get info(): Shortcut {
+    const item = desktopStore.data.find(({ id }) => id === this.itemId)
+    return (
+      (item && this.index < item.shortcuts!.length && item.shortcuts![this.index]) ||
+      this.defaultInfo
+    )
+  }
+
+  openDialog(itemId = "", index = 0): void {
     this.open = true
     this.itemId = itemId
     this.index = index
   }
-  @action("close webiste dialog")
-  public closeDialog = () => this.open = false
+
+  closeDialog(): void {
+    this.open = false
+  }
 }
 
 const websiteInfoStore = new WebSiteInfoStore()

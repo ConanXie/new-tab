@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, FC } from "react"
 import clsx from "clsx"
 import Loadable from "react-loadable"
 import Color from "color"
@@ -114,7 +114,7 @@ const settingsNav: (SettingsNav | undefined)[] = [
   },
 ]
 
-function Layout() {
+const Layout: FC = () => {
   const classes = useStyles()
   const [current, setCurrent] = useState(0)
 

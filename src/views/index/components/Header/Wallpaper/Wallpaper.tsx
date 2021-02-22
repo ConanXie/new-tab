@@ -23,9 +23,7 @@ interface PropsType {
   desktopStore: DesktopStore
 }
 
-@inject("wallpaperStore", "desktopStore")
-@observer
-class Wallpaper extends React.Component<PropsType> {
+const Wallpaper = inject("wallpaperStore", "desktopStore")(observer(class Wallpaper extends React.Component<PropsType> {
   public state = {
     snackbarOpen: false,
     message: ""
@@ -122,6 +120,6 @@ class Wallpaper extends React.Component<PropsType> {
       </>
     )
   }
-}
+}));
 
 export default makeDumbProps(Wallpaper)

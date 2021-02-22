@@ -1,4 +1,4 @@
-import { observable, computed, action, autorun, toJS } from "mobx"
+import { autorun, toJS, makeAutoObservable } from "mobx"
 
 export const FOLDERS_SETTINGS = "folders-settings"
 
@@ -13,71 +13,70 @@ export const defaultData = {
 }
 
 export class FoldersSettings {
-  @observable public followNightMode = defaultData.followNightMode
-  @observable public backgroundColor = defaultData.backgroundColor
-  @observable public backgroundOpacity = defaultData.backgroundOpacity
-  @observable public acrylicEffect = defaultData.acrylicEffect
-  @observable public shortcutLabel = defaultData.shortcutLabel
-  @observable public shortcutLabelColor = defaultData.shortcutLabelColor
-  @observable public shortcutLabelShadow = defaultData.shortcutLabelShadow
+  followNightMode = defaultData.followNightMode
+  backgroundColor = defaultData.backgroundColor
+  backgroundOpacity = defaultData.backgroundOpacity
+  acrylicEffect = defaultData.acrylicEffect
+  shortcutLabel = defaultData.shortcutLabel
+  shortcutLabelColor = defaultData.shortcutLabelColor
+  shortcutLabelShadow = defaultData.shortcutLabelShadow
 
-  public constructor(self = true) {
+  constructor(self = true) {
+    makeAutoObservable(this, {}, { autoBind: true })
+
     if (self) {
-      chrome.storage.local.get(FOLDERS_SETTINGS, (result) => {
-        if (result[FOLDERS_SETTINGS]) {
-          const {
-            followNightMode,
-            backgroundColor,
-            backgroundOpacity,
-            acrylicEffect,
-            shortcutLabel,
-            shortcutLabelColor,
-            shortcutLabelShadow,
-          } = result[FOLDERS_SETTINGS] as typeof defaultData
-          this.followNightMode =
-            followNightMode !== undefined ? followNightMode : defaultData.followNightMode
-          this.backgroundColor =
-            backgroundColor !== undefined ? backgroundColor : defaultData.backgroundColor
-          this.backgroundOpacity =
-            backgroundOpacity !== undefined ? backgroundOpacity : defaultData.backgroundOpacity
-          this.acrylicEffect =
-            acrylicEffect !== undefined ? acrylicEffect : defaultData.acrylicEffect
-          this.shortcutLabel =
-            shortcutLabel !== undefined ? shortcutLabel : defaultData.shortcutLabel
-          this.shortcutLabelColor =
-            shortcutLabelColor !== undefined ? shortcutLabelColor : defaultData.shortcutLabelColor
-          this.shortcutLabelShadow =
-            shortcutLabelShadow !== undefined
-              ? shortcutLabelShadow
-              : defaultData.shortcutLabelShadow
-        }
-        // eslint-disable-next-line
-        persist()
-      })
+      chrome.storage.local.get(FOLDERS_SETTINGS, this.retrieveCallback)
     }
   }
 
-  @action public toggleFollowNightMode = () => {
+  retrieveCallback(result: { [key: string]: any }): void {
+    if (result[FOLDERS_SETTINGS]) {
+      const {
+        followNightMode,
+        backgroundColor,
+        backgroundOpacity,
+        acrylicEffect,
+        shortcutLabel,
+        shortcutLabelColor,
+        shortcutLabelShadow,
+      } = result[FOLDERS_SETTINGS] as typeof defaultData
+      this.followNightMode =
+        followNightMode !== undefined ? followNightMode : defaultData.followNightMode
+      this.backgroundColor =
+        backgroundColor !== undefined ? backgroundColor : defaultData.backgroundColor
+      this.backgroundOpacity =
+        backgroundOpacity !== undefined ? backgroundOpacity : defaultData.backgroundOpacity
+      this.acrylicEffect = acrylicEffect !== undefined ? acrylicEffect : defaultData.acrylicEffect
+      this.shortcutLabel = shortcutLabel !== undefined ? shortcutLabel : defaultData.shortcutLabel
+      this.shortcutLabelColor =
+        shortcutLabelColor !== undefined ? shortcutLabelColor : defaultData.shortcutLabelColor
+      this.shortcutLabelShadow =
+        shortcutLabelShadow !== undefined ? shortcutLabelShadow : defaultData.shortcutLabelShadow
+    }
+    persist()
+  }
+
+  toggleFollowNightMode(): void {
     this.followNightMode = !this.followNightMode
   }
 
-  @action public saveBackgroundColor = (color: string) => {
+  saveBackgroundColor(color: string): void {
     this.backgroundColor = color.toUpperCase()
   }
 
-  @action public saveShortcutLabelColor = (color: string) => {
+  saveShortcutLabelColor(color: string): void {
     this.shortcutLabelColor = color.toUpperCase()
   }
 
-  @action public toggleShortcutLabel = () => {
+  toggleShortcutLabel(): void {
     this.shortcutLabel = !this.shortcutLabel
   }
 
-  @action public toggleShortcutLabelShadow = () => {
+  toggleShortcutLabelShadow(): void {
     this.shortcutLabelShadow = !this.shortcutLabelShadow
   }
 
-  @action public toggleAcrylicEffect = () => {
+  toggleAcrylicEffect(): void {
     this.acrylicEffect = !this.acrylicEffect
   }
 }

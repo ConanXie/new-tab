@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, FC } from "react"
 
-import { withStyles, makeStyles, createStyles } from "@material-ui/core/styles"
+import { makeStyles, createStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
 import TextField from "@material-ui/core/TextField"
+import { observer } from "mobx-react-lite"
 
 const useStyles = makeStyles(() => createStyles({
   dialog: {
@@ -22,7 +23,7 @@ interface Props {
   onClose: (label?: string) => void
 }
 
-function FolderEditor(props: Props) {
+const FolderEditor: FC<Props> = (props) => {
   const { open, onClose } = props
   const [label, setLabel] = useState("")
   const classes = useStyles()
@@ -80,4 +81,4 @@ function FolderEditor(props: Props) {
   )
 }
 
-export default FolderEditor
+export default observer(FolderEditor)

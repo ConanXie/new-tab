@@ -1,15 +1,19 @@
-import { observable, action } from "mobx"
+import { makeAutoObservable } from "mobx"
 
 export class ToolbarStore {
-  @observable public wallpaperDrawerOpen = false
-  @observable public wallpaperDrawerLoaded = false
+  wallpaperDrawerOpen = false
+  wallpaperDrawerLoaded = false
 
-  @action public loadAndOpenWallpaperDrawer = () => {
+  loadAndOpenWallpaperDrawer(): void {
     this.wallpaperDrawerLoaded = true
     this.wallpaperDrawerOpen = true
   }
-  @action public closeWallpaperDrawer = () => {
+  closeWallpaperDrawer(): void {
     this.wallpaperDrawerOpen = false
+  }
+
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true })
   }
 }
 

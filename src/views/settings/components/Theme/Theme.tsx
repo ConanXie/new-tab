@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { FC, useState } from "react"
 import { observer, useLocalStore } from "mobx-react"
 
 import {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(({ spacing, palette }: MuiTheme) =>
   }),
 )
 
-function Theme() {
+const Theme: FC = () => {
   const classes = useStyles()
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
   const [nightTimeOpen, setNightTimeOpen] = useState(false)
@@ -49,7 +49,6 @@ function Theme() {
     nightMode,
     nightModeText,
     nightTime,
-    applyNightMode,
     saveColor,
     setNightTime,
     changeNightMode,
@@ -94,7 +93,7 @@ function Theme() {
    * change night time
    * @param times start and end time
    */
-  function handleNightTimeChanged(times: string[]) {
+  function handleNightTimeChanged(times?: string[]) {
     setNightTimeOpen(false)
     if (times) {
       setNightTime(times)

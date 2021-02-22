@@ -1,6 +1,6 @@
-import React from "react"
+import React, { FC } from "react"
 import clsx from "clsx"
-import { observer, useLocalStore } from "mobx-react"
+import { observer } from "mobx-react-lite"
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Popover, { PopoverOrigin } from "@material-ui/core/Popover"
@@ -41,16 +41,14 @@ interface Props {
   onClose: (...args: any[]) => void
 }
 
-const FolderWindow: React.FunctionComponent<Props> = (props: Props) => {
+const FolderWindow: FC<Props> = (props) => {
   const { open, anchorEl, onClose } = props
   const classes = useStyles()
-  const { tempShortcut, id, shortcuts } = useLocalStore(() => folderStore)
-  const { backgroundColor, acrylicEffect } = useLocalStore(() => foldersSettings)
+  const { tempShortcut, id, shortcuts } = folderStore
+  const { backgroundColor, acrylicEffect } = foldersSettings
   const acrylic = useAcrylic()
 
-  const handleGrab = (index: number) => (
-    event: React.MouseEvent<HTMLElement>,
-  ) => {
+  const handleGrab = (index: number) => (event: React.MouseEvent<HTMLElement>) => {
     if (event.button === 0) {
       grab(event, shortcuts[index], id, Env.Folder)
     }
@@ -79,12 +77,7 @@ const FolderWindow: React.FunctionComponent<Props> = (props: Props) => {
         {folderStore.shortcuts.map((shortcut, index) => {
           const { id, label, url } = shortcut
           return (
-            <Wrap
-              grabbed={tempShortcut === shortcut.id}
-              row={0}
-              column={0}
-              key={Math.random()}
-            >
+            <Wrap grabbed={tempShortcut === shortcut.id} row={0} column={0} key={Math.random()}>
               <Website
                 inFolder
                 id={id}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, FC } from "react"
 
 import { Theme, makeStyles, createStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
@@ -56,7 +56,7 @@ interface TimeState {
   value: string
 }
 
-function NightTime(props: Props) {
+const NightTime: FC<Props> = (props) => {
   const { times, open, onClose } = props
   const classes = useStyles()
   const [startHourState, setStartHourState] = useState<TimeState>({

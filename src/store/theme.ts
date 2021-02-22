@@ -1,9 +1,8 @@
-import { observable, computed, autorun, action, toJS } from "mobx"
+import { autorun, toJS, makeAutoObservable } from "mobx"
 import { settingsStorage } from "utils/storage"
 import Color from "color"
-import createMuiTheme, { ThemeOptions } from "@material-ui/core/styles/createMuiTheme"
+import createMuiTheme, { ThemeOptions, Theme } from "@material-ui/core/styles/createMuiTheme"
 import deepOrange from "@material-ui/core/colors/deepOrange"
-import grey from "@material-ui/core/colors/grey"
 import isWithinInterval from "date-fns/isWithinInterval"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
@@ -20,49 +19,49 @@ export interface NightMode {
   text: string
 }
 
-export const nightModeMenu: NightMode[] = [{
-  status: NightModeStatus.On,
-  text: chrome.i18n.getMessage("settings_night_mode_on"),
-}, {
-  status: NightModeStatus.Off,
-  text: chrome.i18n.getMessage("settings_night_mode_off"),
-}, {
-  status: NightModeStatus.Custom,
-  text: chrome.i18n.getMessage("settings_night_mode_custom"),
-}]
+export const nightModeMenu: NightMode[] = [
+  {
+    status: NightModeStatus.On,
+    text: chrome.i18n.getMessage("settings_night_mode_on"),
+  },
+  {
+    status: NightModeStatus.Off,
+    text: chrome.i18n.getMessage("settings_night_mode_off"),
+  },
+  {
+    status: NightModeStatus.Custom,
+    text: chrome.i18n.getMessage("settings_night_mode_custom"),
+  },
+]
 
 const defaultData = {
   color: deepOrange[500],
   whiteToolbar: false,
   nightMode: NightModeStatus.Off,
   darkToolbar: false,
-  nightTime: [
-    "18:30",
-    "5:00",
-  ],
+  nightTime: ["18:30", "5:00"],
 }
 
 export class ThemeStore {
-  @observable public color: string
-  @observable public nightMode: NightModeStatus
-  @observable public nightTime: string[]
-  public constructor() {
+  color: string
+  nightMode: NightModeStatus
+  nightTime: string[]
+
+  constructor() {
     const persistence = settingsStorage.get("theme", {})
-    const {
-      color,
-      nightMode,
-      nightTime,
-    } = persistence
+    const { color, nightMode, nightTime } = persistence
     this.color = color || defaultData.color
     this.nightMode = nightMode || defaultData.nightMode
     this.nightTime = nightTime || defaultData.nightTime
+
+    makeAutoObservable(this, {}, { autoBind: true })
   }
 
-  @computed public get theme() {
+  get theme(): Theme {
     return ThemeStore.createTheme(this)
   }
 
-  @computed public get applyNightMode(): boolean {
+  get applyNightMode(): boolean {
     switch (this.nightMode) {
       case 1:
         return true
@@ -86,30 +85,24 @@ export class ThemeStore {
     }
   }
 
-  @computed public get nightModeText() {
-    return nightModeMenu.find(item => item.status === this.nightMode)!.text
+  get nightModeText(): string {
+    return nightModeMenu.find((item) => item.status === this.nightMode)!.text
   }
 
-  @action("save theme color")
-  public saveColor = (color: string) => {
+  saveColor(color: string): void {
     this.color = color
   }
 
-  @action("change night mode")
-  public changeNightMode = (mode: NightModeStatus) => {
+  changeNightMode(mode: NightModeStatus): void {
     this.nightMode = mode
   }
 
-  @action("set night time")
-  public setNightTime = (nightTime: string[]) => {
+  setNightTime(nightTime: string[]): void {
     this.nightTime = nightTime
   }
 
   private static createTheme(settings: ThemeStore) {
-    const {
-      color,
-      applyNightMode,
-    } = settings
+    const { color, applyNightMode } = settings
     const colorTool = Color(color).hsl().round()
     const lightDiff = (colorTool as any)["color"][2] - 90
     const isLight = lightDiff > 0 && !applyNightMode

@@ -1,49 +1,42 @@
-import React from "react"
-import { inject, observer } from "mobx-react"
+import React, { FC, useEffect } from "react"
+import { observer } from "mobx-react-lite"
 
 import { imageAccepts, imageSize } from "config"
-import makeDumbProps from "utils/makeDumbProps"
-import { WallpaperStore } from "../../store/wallpaper"
+import { wallpaperStore } from "../../store"
 
-interface PropsType {
-  wallpaperStore: WallpaperStore
-}
-
-@inject("wallpaperStore")
-@observer
-export class Background extends React.Component<PropsType> {
-  private handleDrag = (event: DragEvent) => {
+const Background: FC = () => {
+  const handleDrag = (event: DragEvent) => {
     event.preventDefault()
   }
-  private handleDrop = async (event: DragEvent) => {
+  const handleDrop = async (event: DragEvent) => {
     event.stopPropagation()
     event.preventDefault()
     const file = event.dataTransfer!.files[0]
-    const { useWallpaper, updateWallpaper } = this.props.wallpaperStore
+    const { useWallpaper, updateWallpaper } = wallpaperStore
     if (file && useWallpaper) {
       const { type, size } = file
-      const matched = imageAccepts.find(item => item === type)
+      const matched = imageAccepts.find((item) => item === type)
       if (!matched || size > imageSize) {
         return
       }
       updateWallpaper(file)
     }
   }
-  public componentDidMount() {
+
+  useEffect(() => {
     const { body } = document
-    body.addEventListener("dragenter", this.handleDrag)
-    body.addEventListener("dragover", this.handleDrag)
-    body.addEventListener("drop", this.handleDrop)
-  }
-  public render() {
-    const { wallpaperStyles, maskStyles } = this.props.wallpaperStore
-    return (
-      <React.Fragment>
-        <div id="bg" style={wallpaperStyles} />
-        <div id="mask" style={maskStyles} />
-      </React.Fragment>
-    )
-  }
+    body.addEventListener("dragenter", handleDrag)
+    body.addEventListener("dragover", handleDrag)
+    body.addEventListener("drop", handleDrop)
+  }, [])
+
+  const { wallpaperStyles, maskStyles } = wallpaperStore
+  return (
+    <>
+      <div id="bg" style={wallpaperStyles} />
+      <div id="mask" style={maskStyles} />
+    </>
+  )
 }
 
-export default makeDumbProps(Background)
+export default observer(Background)
