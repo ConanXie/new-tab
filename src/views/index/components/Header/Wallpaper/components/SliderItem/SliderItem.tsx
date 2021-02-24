@@ -1,24 +1,26 @@
-import React from "react"
+import React, { FC } from "react"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
+import makeStyles from "@material-ui/core/styles/makeStyles"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import Slider from "@material-ui/core/Slider"
 
-import { ItemPropsType } from "../Item"
+import { ItemProps } from "../Item"
 
-const styles = () => createStyles({
-  listText: {
-    paddingRight: 0,
-  },
-  listSecondary: {
-    display: "flex",
-  },
-})
+const useStyles = makeStyles(() =>
+  createStyles({
+    listText: {
+      paddingRight: 0,
+    },
+    listSecondary: {
+      display: "flex",
+    },
+  }),
+)
 
-export interface PropsType extends ItemPropsType, WithStyles<typeof styles> {
+export interface Props extends ItemProps {
   value: number
   icon: React.ReactElement<any>
   min?: number
@@ -28,10 +30,12 @@ export interface PropsType extends ItemPropsType, WithStyles<typeof styles> {
   onChange: (value: number | number[]) => void
 }
 
-export default withStyles(styles)((props: PropsType) => {
-  const { disabled, value, icon, classes, ...range } = props
+const SliderItem: FC<Props> = (props: Props) => {
+  const classes = useStyles()
+  const { disabled, value, icon, ...range } = props
 
-  const handleChange = (event: React.ChangeEvent<any>, value: number | number[]) => props.onChange(value)
+  const handleChange = (event: React.ChangeEvent<any>, value: number | number[]) =>
+    props.onChange(value)
 
   return (
     <ListItem button disabled={disabled}>
@@ -54,4 +58,6 @@ export default withStyles(styles)((props: PropsType) => {
       />
     </ListItem>
   )
-})
+}
+
+export default SliderItem

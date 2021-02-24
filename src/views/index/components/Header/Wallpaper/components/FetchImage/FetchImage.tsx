@@ -1,79 +1,81 @@
-import React from "react"
+import React, { FC, useMemo, useState } from "react"
 
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 import createStyles from "@material-ui/core/styles/createStyles"
+import makeStyles from "@material-ui/core/styles/makeStyles"
 
 import FetchProgress from "./FetchProgress"
 
-import Item, { ItemPropsType, ItemMethods } from "../Item"
+import Item, { ItemProps, ItemMethods } from "../Item"
 
-const styles = createStyles({
-  wrap: {
-    position: "relative"
-  }
-})
+const useStyles = makeStyles(() =>
+  createStyles({
+    wrap: {
+      position: "relative",
+    },
+  }),
+)
 
-interface StateType {
-  fetching: boolean,
-  completed: number
-}
+const max = 100
+const diff = 100
 
-class FetchImage extends React.Component<WithStyles<typeof styles> & ItemPropsType & ItemMethods, StateType> {
-  private url = `https://tab.xiejie.app/api/wallpaper/${screen.width}x${screen.height}`
-  public readonly max = 100
-  public readonly diff = 10
-  public state = {
-    fetching: false,
-    completed: 0
-  }
-  private startFetch = () => {
-    if (this.state.fetching) {
-      this.props.onError(chrome.i18n.getMessage("desktop_msg_fetching"))
+const FetchImage: FC<ItemProps & ItemMethods> = (props) => {
+  const url = useMemo(
+    () => `https://tab.xiejie.app/api/wallpaper/${screen.width}x${screen.height}`,
+    [],
+  )
+
+  const [fetching, setFetching] = useState(false)
+  const [completed, setCompleted] = useState(0)
+
+  const startFetch = () => {
+    if (fetching) {
+      props.onError(chrome.i18n.getMessage("desktop_msg_fetching"))
       return
     }
-    this.setState({ fetching: true })
-    this.fetchImage()
+    setFetching(true)
+    fetchImage()
   }
-  public async fetchImage() {
+
+  const fetchImage = async () => {
     try {
       // Get real URI of the image
-      const res = await fetch(this.url)
+      const res = await fetch(url)
       const data = await res.json()
-      this.setState({ completed: 3 })
+      setCompleted(3)
       // Get image file
-      const imageBlob = await this.getImage(data.result[0].url)
-      this.endFetch()
+      const imageBlob = await getImage(data.result[0].url)
+      endFetch()
       // update wallpaper
-      this.props.onChange(imageBlob)
+      props.onChange(imageBlob)
     } catch (error) {
       // TODO: Send a log to server
-      this.props.onError(chrome.i18n.getMessage("desktop_msg_fetch_failed"))
+      props.onError(chrome.i18n.getMessage("desktop_msg_fetch_failed"))
       // restore progress state
-      this.endFetch()
+      endFetch()
     }
   }
   /**
    * Get image via XHR
    */
-  public getImage(url: string): Promise<Blob> {
+  const getImage = (url: string): Promise<Blob> => {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
       xhr.open("GET", url, true)
       xhr.responseType = "blob"
-      xhr.onload = event => {
+      xhr.onload = (event) => {
         if (xhr.status === 200) {
           resolve(xhr.response)
         } else {
           reject(event)
         }
       }
-      xhr.onerror = event => reject(event)
+      xhr.onerror = (event) => reject(event)
       let completed = 0
       xhr.onprogress = ({ loaded, total }) => {
-        const progress = Math.round(loaded / total * this.max)
-        if (progress - completed > this.diff) {
+        const progress = Math.round((loaded / total) * max)
+        if (progress - completed > diff) {
           completed = progress
-          this.setState({ completed: Math.min(completed, this.max) })
+          setCompleted(Math.min(completed, max))
         }
       }
       xhr.onerror = () => {
@@ -82,27 +84,25 @@ class FetchImage extends React.Component<WithStyles<typeof styles> & ItemPropsTy
       xhr.send()
     })
   }
-  private endFetch = () => {
-    this.setState({
-      fetching: false,
-      completed: 0
-    })
+
+  const endFetch = () => {
+    setFetching(false)
+    setCompleted(0)
   }
-  public render() {
-    const { classes } = this.props
-    const { fetching, completed } = this.state
-    return (
-      <div className={classes.wrap}>
-        <Item
-          disabled={this.props.disabled}
-          primary={chrome.i18n.getMessage("wallpaper_random")}
-          secondary={chrome.i18n.getMessage("wallpaper_random_descr")}
-          onClick={this.startFetch}
-        />
-        <FetchProgress fetching={fetching} progress={completed} />
-      </div>
-    )
-  }
+
+  const classes = useStyles()
+
+  return (
+    <div className={classes.wrap}>
+      <Item
+        disabled={props.disabled}
+        primary={chrome.i18n.getMessage("wallpaper_random")}
+        secondary={chrome.i18n.getMessage("wallpaper_random_descr")}
+        onClick={startFetch}
+      />
+      <FetchProgress fetching={fetching} progress={completed} />
+    </div>
+  )
 }
 
-export default withStyles(styles)(FetchImage)
+export default FetchImage

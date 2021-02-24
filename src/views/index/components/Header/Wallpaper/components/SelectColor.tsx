@@ -1,45 +1,38 @@
-import React from "react"
+import React, { FC, useState } from "react"
 
 import ColorPicker from "components/ColorPicker"
 
-import Item, { ItemPropsType } from "./Item"
+import Item, { ItemProps } from "./Item"
 
-interface PropsType extends ItemPropsType {
+interface Props extends ItemProps {
   color: string
   onChange(value: string): void
 }
 
-class SelectColor extends React.Component<PropsType> {
-  public state = {
-    open: false
+const SelectColor: FC<Props> = (props) => {
+  const [open, setOpen] = useState(false)
+
+  const openColorPicker = () => {
+    setOpen(true)
   }
-  private openColorPicker = () => {
-    this.setState({ open: true })
-  }
-  private closeColorPicker = (color?: string) => {
-    this.setState({ open: false })
+  const closeColorPicker = (color?: string) => {
+    setOpen(false)
 
     if (color) {
-      this.props.onChange(color)
+      props.onChange(color)
     }
   }
-  public render() {
-    return (
-      <React.Fragment>
-        <Item
-          disabled={this.props.disabled}
-          primary={chrome.i18n.getMessage("wallpaper_color")}
-          secondary={this.props.color}
-          onClick={this.openColorPicker}
-        />
-        <ColorPicker
-          color={this.props.color}
-          open={this.state.open}
-          onClose={this.closeColorPicker}
-        />
-      </React.Fragment>
-    )
-  }
+  return (
+    <>
+      <Item
+        disabled={props.disabled}
+        primary={chrome.i18n.getMessage("wallpaper_color")}
+        secondary={props.color}
+        onClick={openColorPicker}
+      />
+      <ColorPicker color={props.color} open={open} onClose={closeColorPicker} />
+    </>
+  )
 }
 
 export default SelectColor

@@ -5,6 +5,6 @@ export interface ItemMethods {
   onChange(f: File | Blob): void
 }
 
-export interface ItemPropsType {
+export interface ItemProps {
   disabled?: boolean
 }

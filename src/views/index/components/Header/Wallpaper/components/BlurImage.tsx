@@ -1,17 +1,17 @@
-import React from "react"
+import React, { FC } from "react"
 
 import BlurOnIcon from "@material-ui/icons/BlurOnOutlined"
 import BlurOffIcon from "@material-ui/icons/BlurOffOutlined"
 
 import SliderItem from "./SliderItem"
-import { ItemPropsType } from "./Item"
+import { ItemProps } from "./Item"
 
-interface PropsType extends ItemPropsType {
+interface Props extends ItemProps {
   value: number
   onChange: (radius: number | number[]) => void
 }
 
-const BlurImage = (props: PropsType) => (
+const BlurImage: FC<Props> = (props) => (
   <SliderItem
     disabled={props.disabled}
     icon={props.value ? <BlurOnIcon /> : <BlurOffIcon />}

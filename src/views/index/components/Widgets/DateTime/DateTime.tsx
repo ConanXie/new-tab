@@ -1,32 +1,29 @@
-import React from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import format from "date-fns/format"
 
-class DateTime extends React.Component {
-  public timer: any
-  public state = {
-    time: "",
+const DateTime: FC = () => {
+  const timerRef = useRef<NodeJS.Timeout>()
+  const [time, setTime] = useState("")
+  
+  const updateTime = () => {
+    setTime(format(new Date(), "HH:mm"))
   }
-  public updateTime = () => {
-    this.setState({
-      time: format(new Date(), "HH:mm")
-    })
-  }
-  public componentDidMount() {
+
+  useEffect(() => {
     const milliseconds = new Date().getMilliseconds()
-    this.updateTime()
-    this.timer = setTimeout(() => {
-      this.updateTime()
-      this.timer = setInterval(this.updateTime, 1000)
+    updateTime()
+
+    setTimeout(() => {
+      updateTime()
+      timerRef.current = setInterval(updateTime, 1000)
     }, 1000 - milliseconds)
-  }
-  public componentWillUnmount() {
-    clearInterval(this.timer)
-  }
-  public render() {
-    return (
-      <h1>{this.state.time}</h1>
-    )
-  }
+
+    return () => clearInterval(timerRef.current!)
+  }, [])
+
+  return (
+    <h1>{time}</h1>
+  )
 }
 
 export default DateTime

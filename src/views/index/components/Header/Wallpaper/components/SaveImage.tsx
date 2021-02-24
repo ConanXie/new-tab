@@ -1,35 +1,33 @@
-import React from "react"
+import React, { FC } from "react"
 import storage from "store2"
 
-import Item, { ItemPropsType } from "./Item"
+import Item, { ItemProps } from "./Item"
 
-interface PropsType extends ItemPropsType {
+interface Props extends ItemProps {
   url: string
 }
 
-class SaveImage extends React.Component<PropsType> {
-  private getSuffix(type = "image/jpeg") {
+const SaveImage: FC<Props> = (props) => {
+  const getSuffix = (type = "image/jpeg") => {
     type = type.match(/image\/(\w+)/)![1]
     return type === "jpeg" ? "jpg" : type
   }
-  private saveCurrentWallpaper = () => {
-    const suffix = this.getSuffix(storage.get("image.type"))
+  const saveCurrentWallpaper = () => {
+    const suffix = getSuffix(storage.get("image.type"))
     const filename = `mdnt-bg.${suffix}`
     chrome.downloads.download({
-      url: this.props.url,
+      url: props.url,
       filename,
     })
   }
-  public render() {
-    return (
-      <Item
-        disabled={this.props.disabled}
-        primary={chrome.i18n.getMessage("wallpaper_download")}
-        secondary={chrome.i18n.getMessage("wallpaper_download_descr")}
-        onClick={this.saveCurrentWallpaper}
-      />
-    )
-  }
+  return (
+    <Item
+      disabled={props.disabled}
+      primary={chrome.i18n.getMessage("wallpaper_download")}
+      secondary={chrome.i18n.getMessage("wallpaper_download_descr")}
+      onClick={saveCurrentWallpaper}
+    />
+  )
 }
 
 export default SaveImage

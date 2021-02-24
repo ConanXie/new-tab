@@ -1,11 +1,11 @@
-import React from "react"
+import React, { FC } from "react"
 
 import BrightnessHigh from "@material-ui/icons/BrightnessHighOutlined"
 import BrightnessMedium from "@material-ui/icons/BrightnessMediumOutlined"
 import BrightnessLow from "@material-ui/icons/BrightnessLowOutlined"
 
 import SliderItem from "./SliderItem"
-import { ItemPropsType } from "./Item"
+import { ItemProps } from "./Item"
 
 enum BrightnessRange {
   Min = 10,
@@ -14,12 +14,12 @@ enum BrightnessRange {
   Low = 30,
 }
 
-interface PropsType extends ItemPropsType {
+interface Props extends ItemProps {
   value: number
   onChange: (radius: number | number[]) => void
 }
 
-function Brightness(props: PropsType) {
+const Brightness: FC<Props> = (props) => {
   const { disabled, value, onChange } = props
   let icon = <BrightnessMedium />
   if (value > BrightnessRange.High) {

@@ -1,16 +1,16 @@
-import React from "react"
+import React, { FC } from "react"
 
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 import Switch from "@material-ui/core/Switch"
 
-import Item, { ItemPropsType } from "./Item"
+import Item, { ItemProps } from "./Item"
 
-interface PropsType extends ItemPropsType {
+interface Props extends ItemProps {
   checked: boolean
   onChange(): void
 }
 
-const DarkIcons = (props: PropsType) => (
+const DarkIcons: FC<Props> = (props: Props) => (
   <Item
     disabled={props.disabled}
     primary={chrome.i18n.getMessage("wallpaper_dark_icons")}
