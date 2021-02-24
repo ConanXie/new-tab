@@ -116,6 +116,7 @@ export class DesktopStore extends DesktopSettings {
         shortcutLabelShadow: observable,
         acrylicContextMenu: observable,
         acrylicWallpaperDrawer: observable,
+        removed: observable,
         chessBoard: computed,
         isFilled: computed,
         undoMessage: computed,

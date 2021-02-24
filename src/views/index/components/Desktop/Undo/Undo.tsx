@@ -6,7 +6,6 @@ import Button from "@material-ui/core/Button"
 // import Button from "./Button"
 
 import { desktopStore } from "../../../store"
-import Typography from "@material-ui/core/Typography"
 
 interface Props {
   open: boolean
@@ -28,8 +27,6 @@ const Undo = observer(({ open, onClose }: Props) => {
     handleSnackbarClose()
   }
 
-  console.log(desktopStore.undoMessage)
-
   return (
     <Snackbar
       open={open}
@@ -37,7 +34,6 @@ const Undo = observer(({ open, onClose }: Props) => {
       message={desktopStore.undoMessage}
       onClose={handleSnackbarClose}
       action={
-        // <Button>武汉</Button>
         <>
           <Button key="undo" color="secondary" size="small" onClick={undo()}>
             {chrome.i18n.getMessage("removed_undo")}
