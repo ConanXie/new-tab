@@ -20,7 +20,7 @@ export const defaultWallpaperData = {
   wallpaperType: WallpaperType.Image,
   darkIcons: false,
   blurRadius: 0,
-  backgroundBrightness: 1,
+  backgroundBrightness: 100,
 }
 
 export class WallpaperStore {
