@@ -2,7 +2,7 @@ const path = require("path")
 const webpack = require("webpack")
 const { merge } = require("webpack-merge")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
@@ -25,26 +25,26 @@ const webpackConfig = merge(baseConfig, {
     ],
   },
   optimization: {
-    minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin()],
+    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
     splitChunks: {
       chunks: "all",
-      automaticNameDelimiter,
+      // automaticNameDelimiter,
     },
   },
   plugins: [
-    new webpack.HashedModuleIdsPlugin(),
+    new webpack.ids.HashedModuleIdsPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].css",
     }),
   ],
 })
 
-// eslint-disable-next-line @typescript-eslint/no-use-before-define
-const allPermutations = chunkPermutaions(Object.keys(webpackConfig.entry))
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// const allPermutations = chunkPermutaions(Object.keys(webpackConfig.entry))
 
 for (let name in webpackConfig.entry) {
-  const chunks = allPermutations.filter(item => item.match(name))
-  chunks.push(name)
+  // const chunks = allPermutations.filter(item => item.match(name))
+  // chunks.push(name)
 
   const config = {
     filename: name + ".html",
@@ -55,8 +55,7 @@ for (let name in webpackConfig.entry) {
       collapseWhitespace: true,
       removeAttributeQuotes: true,
     },
-    chunks,
-    chunksSortMode: "dependency",
+    chunks: [name],
   }
   webpackConfig.plugins.push(new HtmlWebpackPlugin(config))
 }
@@ -67,6 +66,7 @@ module.exports = webpackConfig
  * Get chunk permutations by entries for html-webpack-plugin injection
  * @param {Array} data
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function chunkPermutaions(data) {
   data = data.sort()
   const chunks = []
@@ -79,7 +79,7 @@ function chunkPermutaions(data) {
     permut(base, others)
   }
 
-  return chunks.map(item => {
+  return chunks.map((item) => {
     item.unshift(vendors)
     return item.join(automaticNameDelimiter)
   })

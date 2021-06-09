@@ -1,4 +1,5 @@
 const path = require("path")
+const ESLintPlugin = require("eslint-webpack-plugin")
 
 const context = path.resolve(__dirname, "../src")
 
@@ -35,15 +36,6 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "eslint-loader",
-        enforce: "pre",
-        include: [path.resolve(__dirname, "../src")],
-        options: {
-          formatter: require("eslint-friendly-formatter"),
-        },
-      },
-      {
-        test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: "babel-loader",
         options: {
@@ -66,4 +58,9 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new ESLintPlugin({
+      extensions: ["js", "ts", "tsx"],
+    }),
+  ],
 }
