@@ -4,7 +4,7 @@
  * @param type content type
  * @param sliceSize default 512
  */
-export function base64toBlobURL(data: string, type = "", sliceSize = 512) {
+export function base64toBlobURL(data: string, type = "", sliceSize = 512): string {
   const byteCharacters = atob(data)
   const byteArrays = []
   for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {

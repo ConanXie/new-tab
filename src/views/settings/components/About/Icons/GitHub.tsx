@@ -1,7 +1,7 @@
-import React from "react"
+import React, { FC } from "react"
 import SvgIcon from "@material-ui/core/SvgIcon"
 
-const GitHub = (props: any) => (
+const GitHub: FC = (props) => (
   <SvgIcon {...props}>
     <path
       // eslint-disable-next-line max-len

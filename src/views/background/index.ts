@@ -6,7 +6,7 @@ import { base64toBlobURL } from "utils/fileConversions"
 const wallpaper = "wallpaper"
 
 const updateWallpaper = (base64: string) => {
-  const type = base64.match(/:([\w\/]+);/)![1]
+  const type = base64.match(/:([\w/]+);/)![1]
   const sign = ";base64,"
   const code = base64.substr(base64.indexOf(sign) + sign.length)
   const url = base64toBlobURL(code, type)
@@ -48,6 +48,7 @@ onMessage("getIcons", (url: string, sender, sendResponse) => {
     if (!matched) {
       const reg = /\./g
       let result
+      // eslint-disable-next-line no-cond-assign
       while (result = reg.exec(hostname)) {
         const mainHost = hostname.slice(result.index + 1)
         matched = (icons as any)[mainHost]

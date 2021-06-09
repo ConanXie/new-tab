@@ -65,7 +65,7 @@ export class ThemeStore {
     switch (this.nightMode) {
       case 1:
         return true
-      case 2:
+      case 2: {
         const now = new Date()
         const date = format(now, "yyyy/MM/dd")
         const start = new Date(`${date} ${this.nightTime[0]}:00`)
@@ -79,6 +79,7 @@ export class ThemeStore {
         } else {
           return !isWithinInterval(now, { start: end, end: start })
         }
+      }
       case 0:
       default:
         return false
