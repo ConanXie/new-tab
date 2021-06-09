@@ -6,7 +6,15 @@
       "version": "detect"
     }
   },
-  "extends": ["plugin:@typescript-eslint/recommended", "plugin:react/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
+  ],
+  "env": {
+    "node": true,
+    "browser": true
+  },
   "rules": {
     "semi": ["error", "never"],
     "no-var": "error",
