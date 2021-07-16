@@ -150,6 +150,9 @@
   "settings_night_mode_custom": {
     "message": "Custom"
   },
+  "settings_night_mode_based": {
+    "message": "Based on System"
+  },
   "settings_night_mode_custom_primary": {
     "message": "Customize night mode time"
   },

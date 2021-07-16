@@ -12,6 +12,7 @@ export enum NightModeStatus {
   Off,
   On,
   Custom,
+  BasedOnSystem,
 }
 
 export interface NightMode {
@@ -32,6 +33,10 @@ export const nightModeMenu: NightMode[] = [
     status: NightModeStatus.Custom,
     text: chrome.i18n.getMessage("settings_night_mode_custom"),
   },
+  {
+    status: NightModeStatus.BasedOnSystem,
+    text: chrome.i18n.getMessage("settings_night_mode_based"),
+  },
 ]
 
 const defaultData = {
@@ -42,10 +47,17 @@ const defaultData = {
   nightTime: ["18:30", "5:00"],
 }
 
+const colorSchemeMedia = window.matchMedia("(prefers-color-scheme: dark)")
+
+const detectColorScheme = (e: MediaQueryListEvent) => {
+  themeStore.setSystemDark(e.matches)
+}
+
 export class ThemeStore {
   color: string
   nightMode: NightModeStatus
   nightTime: string[]
+  isSystemDark: boolean
 
   constructor() {
     const persistence = settingsStorage.get("theme", {})
@@ -53,6 +65,7 @@ export class ThemeStore {
     this.color = color || defaultData.color
     this.nightMode = nightMode || defaultData.nightMode
     this.nightTime = nightTime || defaultData.nightTime
+    this.isSystemDark = colorSchemeMedia.matches
 
     makeAutoObservable(this, {}, { autoBind: true })
   }
@@ -62,10 +75,13 @@ export class ThemeStore {
   }
 
   get applyNightMode(): boolean {
+    if (this.nightMode !== NightModeStatus.BasedOnSystem) {
+      colorSchemeMedia.removeEventListener("change", detectColorScheme)
+    }
     switch (this.nightMode) {
-      case 1:
+      case NightModeStatus.On:
         return true
-      case 2: {
+      case NightModeStatus.Custom: {
         const now = new Date()
         const date = format(now, "yyyy/MM/dd")
         const start = new Date(`${date} ${this.nightTime[0]}:00`)
@@ -80,7 +96,10 @@ export class ThemeStore {
           return !isWithinInterval(now, { start: end, end: start })
         }
       }
-      case 0:
+      case NightModeStatus.BasedOnSystem:
+        colorSchemeMedia.addEventListener("change", detectColorScheme)
+        return colorSchemeMedia.matches
+      case NightModeStatus.Off:
       default:
         return false
     }
@@ -102,8 +121,12 @@ export class ThemeStore {
     this.nightTime = nightTime
   }
 
+  setSystemDark(isSystemDark: boolean): void {
+    this.isSystemDark = isSystemDark
+  }
+
   private static createTheme(settings: ThemeStore) {
-    const { color, applyNightMode } = settings
+    const { color, applyNightMode, nightMode, isSystemDark } = settings
     const colorTool = Color(color).hsl().round()
     const lightDiff = (colorTool as any)["color"][2] - 90
     const isLight = lightDiff > 0 && !applyNightMode
@@ -122,7 +145,10 @@ export class ThemeStore {
         ].join(","),
       },
       palette: {
-        type: applyNightMode ? "dark" : "light",
+        type:
+          (nightMode === NightModeStatus.BasedOnSystem && isSystemDark) || applyNightMode
+            ? "dark"
+            : "light",
         primary: {
           main: color,
         },
