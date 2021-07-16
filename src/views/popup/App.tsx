@@ -3,15 +3,15 @@ import React from "react"
 import { Provider, observer } from "mobx-react"
 
 import Drawer from "./components/Drawer"
-import { MuiThemeProvider } from "@material-ui/core/styles"
+import { ThemeProvider } from "@material-ui/core/styles"
 
 import * as store from "./store"
 
 const App = () => (
   <Provider {...store}>
-    <MuiThemeProvider theme={store.themeStore.theme}>
+    <ThemeProvider theme={store.themeStore.theme}>
       <Drawer />
-    </MuiThemeProvider>
+    </ThemeProvider>
   </Provider>
 )
 

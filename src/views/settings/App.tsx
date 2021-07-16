@@ -1,7 +1,7 @@
 import { hot } from "react-hot-loader/root"
 import React, { useRef } from "react"
 import { useObserver, useLocalStore } from "mobx-react"
-import { MuiThemeProvider } from "@material-ui/core/styles"
+import { ThemeProvider } from "@material-ui/core/styles"
 import { SnackbarProvider } from "notistack"
 import Layout from "./Layout"
 import { themeStore as theme } from "./store"
@@ -11,7 +11,7 @@ function App() {
   const ref: any = useRef()
 
   return useObserver(() => (
-    <MuiThemeProvider theme={themeStore.theme}>
+    <ThemeProvider theme={themeStore.theme}>
       <SnackbarProvider
         maxSnack={1}
         anchorOrigin={{
@@ -28,7 +28,7 @@ function App() {
       >
         <Layout />
       </SnackbarProvider>
-    </MuiThemeProvider>
+    </ThemeProvider>
   ))
 }
 

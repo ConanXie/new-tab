@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite"
 import classNames from "classnames"
 
 import { makeStyles } from "@material-ui/styles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import { Theme } from "@material-ui/core/styles"
 import AppBar from "@material-ui/core/AppBar"
 import Drawer from "@material-ui/core/Drawer"
 import Toolbar from "@material-ui/core/Toolbar"

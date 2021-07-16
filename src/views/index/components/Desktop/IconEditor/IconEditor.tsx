@@ -2,7 +2,7 @@ import React, { FC, useCallback } from "react"
 import classNames from "classnames"
 
 import { makeStyles, createStyles } from "@material-ui/core/styles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import { Theme } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"

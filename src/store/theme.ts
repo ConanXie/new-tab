@@ -1,7 +1,7 @@
 import { autorun, toJS, makeAutoObservable } from "mobx"
 import { settingsStorage } from "utils/storage"
 import Color from "color"
-import createMuiTheme, { ThemeOptions, Theme } from "@material-ui/core/styles/createMuiTheme"
+import { createTheme, ThemeOptions, Theme } from "@material-ui/core/styles"
 import deepOrange from "@material-ui/core/colors/deepOrange"
 import isWithinInterval from "date-fns/isWithinInterval"
 import format from "date-fns/format"
@@ -141,7 +141,7 @@ export class ThemeStore {
       },
     }
 
-    return createMuiTheme(themeOptions)
+    return createTheme(themeOptions)
   }
 }
 

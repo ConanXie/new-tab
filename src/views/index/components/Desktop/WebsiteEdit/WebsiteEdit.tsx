@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 
 import { makeStyles, createStyles } from "@material-ui/core/styles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import { Theme } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import DialogTitle from "@material-ui/core/DialogTitle"

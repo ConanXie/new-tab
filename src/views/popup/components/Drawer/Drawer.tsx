@@ -2,7 +2,7 @@ import React, { FC } from "react"
 
 import Typography from "@material-ui/core/Typography"
 import { makeStyles, createStyles } from "@material-ui/core/styles"
-import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import { Theme } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(({ palette }: Theme) =>
   createStyles({

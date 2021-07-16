@@ -2,7 +2,7 @@ import { hot } from "react-hot-loader/root"
 import React, { useEffect } from "react"
 import { Provider } from "mobx-react"
 
-import { MuiThemeProvider } from "@material-ui/core/styles"
+import { ThemeProvider } from "@material-ui/core/styles"
 
 import Header from "./components/Header"
 import Background from "./components/Background"
@@ -23,12 +23,12 @@ const App = () => {
 
   return (
     <Provider {...store}>
-      <MuiThemeProvider theme={store.themeStore.theme}>
+      <ThemeProvider theme={store.themeStore.theme}>
         <Background />
         <Header />
         <Desktop />
         <ContextMenu />
-      </MuiThemeProvider>
+      </ThemeProvider>
     </Provider>
   )
 }
