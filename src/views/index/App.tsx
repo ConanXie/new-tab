@@ -2,12 +2,11 @@ import { hot } from "react-hot-loader/root"
 import React, { useEffect } from "react"
 import { Provider } from "mobx-react"
 
-import { ThemeProvider } from "@material-ui/core/styles"
-
 import Header from "./components/Header"
 import Background from "./components/Background"
 import Desktop from "./components/Desktop"
 import ContextMenu from "components/ContextMenu"
+import Theme from "components/Theme"
 
 import { onMessage } from "utils/message"
 
@@ -23,12 +22,12 @@ const App = () => {
 
   return (
     <Provider {...store}>
-      <ThemeProvider theme={store.themeStore.theme}>
+      <Theme>
         <Background />
         <Header />
         <Desktop />
         <ContextMenu />
-      </ThemeProvider>
+      </Theme>
     </Provider>
   )
 }
