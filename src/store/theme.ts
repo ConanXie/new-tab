@@ -42,12 +42,11 @@ export const nightModeMenu: NightMode[] = [
 const defaultData = {
   color: deepOrange[500],
   whiteToolbar: false,
-  nightMode: NightModeStatus.Off,
-  darkToolbar: false,
+  nightMode: NightModeStatus.BasedOnSystem,
   nightTime: ["18:30", "5:00"],
 }
 
-const colorSchemeMedia = window.matchMedia("(prefers-color-scheme: dark)")
+const darkSchemeMedia = window.matchMedia("(prefers-color-scheme: dark)")
 
 const detectColorScheme = (e: MediaQueryListEvent) => {
   themeStore.setSystemDark(e.matches)
@@ -65,7 +64,7 @@ export class ThemeStore {
     this.color = color || defaultData.color
     this.nightMode = nightMode || defaultData.nightMode
     this.nightTime = nightTime || defaultData.nightTime
-    this.isSystemDark = colorSchemeMedia.matches
+    this.isSystemDark = darkSchemeMedia.matches
 
     makeAutoObservable(this, {}, { autoBind: true })
   }
@@ -76,7 +75,7 @@ export class ThemeStore {
 
   get applyNightMode(): boolean {
     if (this.nightMode !== NightModeStatus.BasedOnSystem) {
-      colorSchemeMedia.removeEventListener("change", detectColorScheme)
+      darkSchemeMedia.removeEventListener("change", detectColorScheme)
     }
     switch (this.nightMode) {
       case NightModeStatus.On:
@@ -97,8 +96,9 @@ export class ThemeStore {
         }
       }
       case NightModeStatus.BasedOnSystem:
-        colorSchemeMedia.addEventListener("change", detectColorScheme)
-        return colorSchemeMedia.matches
+        darkSchemeMedia.addEventListener("change", detectColorScheme)
+        this.setSystemDark(darkSchemeMedia.matches)
+        return darkSchemeMedia.matches
       case NightModeStatus.Off:
       default:
         return false
@@ -146,7 +146,8 @@ export class ThemeStore {
       },
       palette: {
         type:
-          (nightMode === NightModeStatus.BasedOnSystem && isSystemDark) || applyNightMode
+          (nightMode === NightModeStatus.BasedOnSystem && isSystemDark) ||
+          (nightMode !== NightModeStatus.BasedOnSystem && applyNightMode)
             ? "dark"
             : "light",
         primary: {
