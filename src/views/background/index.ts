@@ -13,7 +13,7 @@ const updateWallpaper = (base64: string) => {
   // Save image type
   storage("image.type", type)
   // Update wallpaper data in localStorage
-  settingsStorage.transact(wallpaper, data => {
+  settingsStorage.transact(wallpaper, (data) => {
     if (!data || typeof data !== "object") {
       data = {}
     }
@@ -27,14 +27,14 @@ const updateWallpaper = (base64: string) => {
 onMessage("saveWallpaper", (base64: string, sender, sendResponse) => {
   sendResponse()
   chrome.storage.local.set({
-    [wallpaper]: base64
+    [wallpaper]: base64,
   })
   updateWallpaper(base64)
 })
 
 // Initialize wallpaper
 // Get base64 image data from storage and convert to blob url
-chrome.storage.local.get([wallpaper], result => {
+chrome.storage.local.get([wallpaper], (result) => {
   const base64: string = result[wallpaper]
   if (base64) {
     updateWallpaper(base64)
@@ -42,14 +42,21 @@ chrome.storage.local.get([wallpaper], result => {
 })
 
 onMessage("getIcons", (url: string, sender, sendResponse) => {
-  const { hostname } = new URL(url)
+  let hostname: string
+  try {
+    hostname = new URL(url).hostname
+  } catch (error) {
+    sendResponse()
+    return
+  }
+
   import("./icons").then(({ default: icons }) => {
     let matched: string[] | undefined = (icons as any)[hostname]
     if (!matched) {
       const reg = /\./g
       let result
       // eslint-disable-next-line no-cond-assign
-      while (result = reg.exec(hostname)) {
+      while ((result = reg.exec(hostname))) {
         const mainHost = hostname.slice(result.index + 1)
         matched = (icons as any)[mainHost]
         if (matched) {
