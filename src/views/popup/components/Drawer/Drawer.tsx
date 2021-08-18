@@ -7,7 +7,7 @@ import { Theme } from "@material-ui/core/styles"
 const useStyles = makeStyles(({ palette }: Theme) =>
   createStyles({
     drawer: {
-      minHeight: "100%",
+      height: "100%",
       background: palette.background.default,
     },
   }),
