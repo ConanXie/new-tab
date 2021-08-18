@@ -1,7 +1,11 @@
 import React, { FC } from "react"
 import SvgIcon from "@material-ui/core/SvgIcon"
 
-const Logo: FC = (props) => (
+interface Props {
+  className?: string
+}
+
+const Logo: FC<Props> = (props) => (
   <SvgIcon {...props}>
     <path
       d={`M19.4,3.1c1.2,1.3,2.2,2.8,2.6,4.5c0,0.1,0,0.3-0.1,0.3L16,11.4c-0.1,0.1-0.2,0.1-0.3,0l-2.5-1.5\
