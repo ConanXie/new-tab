@@ -5,7 +5,7 @@ import {
   DESKTOP_SETTINGS,
   defaultData as desktopSettingsDefault,
 } from "store/desktopSettings"
-import folderStore from "./folder"
+// import folderStore from "./folder"
 import menuStore from "store/menu"
 
 const DESKTOP = "DESKTOP"
@@ -273,7 +273,7 @@ export class DesktopStore extends DesktopSettings {
         const shortcut = component.shortcuts!.splice(index, 1)[0]
         shortcut.index = index
         rm.shortcuts = [shortcut]
-        folderStore.syncShortcutsFromDesktop()
+        // folderStore.syncShortcutsFromDesktop()
       }
       this.removed.unshift(rm)
     }
@@ -291,7 +291,7 @@ export class DesktopStore extends DesktopSettings {
         const index = shortcut.index!
         delete shortcut.index
         this.data[i].shortcuts!.splice(index, 0, shortcut)
-        folderStore.syncShortcutsFromDesktop()
+        // folderStore.syncShortcutsFromDesktop()
       } else {
         this.data.push(item)
       }

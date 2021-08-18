@@ -18,7 +18,6 @@ import {
   menuStore,
   websiteEditStore,
   websiteInfoStore,
-  folderStore,
 } from "../../store"
 import { MenuType } from "store/menu"
 // import WidgetWrap from "../Widgets/Wrap"
@@ -27,7 +26,6 @@ import Webiste from "./Website"
 import Undo from "./Undo"
 import Folder from "./Folder"
 import Wrap from "./Wrap"
-import FolderWindow from "./FolderWindow"
 import FolderEditor from "./FolderEditor"
 import { observer } from "mobx-react-lite"
 
@@ -213,7 +211,7 @@ const Desktop: FC = () => {
   }, [])
 
   const { toolbar, columns, rows, data } = desktopStore
-  const { open: folderOpen, closeFolder, openFolder, folderElement } = folderStore
+  // const { open: folderOpen, closeFolder, openFolder, folderElement } = folderStore
   const styles: React.CSSProperties = {
     gridTemplateColumns: `repeat(${columns}, 1fr)`,
     gridAutoRows: `calc((100vh - ${toolbar ? 64 : 0}px) / ${rows})`,
@@ -244,7 +242,7 @@ const Desktop: FC = () => {
               const { id } = item
               return (
                 <Wrap row={row} column={column} key={id}>
-                  <Folder {...item} onClick={openFolder} />
+                  <Folder {...item} />
                 </Wrap>
               )
             }
@@ -262,7 +260,6 @@ const Desktop: FC = () => {
         </>
       </Suspense>
       <Undo open={undoOpen} onClose={closeUndo} />
-      <FolderWindow open={folderOpen} anchorEl={folderElement!} onClose={closeFolder} />
       <FolderEditor open={folderEditorOpen} label={folderLabel} onClose={handleFolderEditDone} />
     </div>
   )

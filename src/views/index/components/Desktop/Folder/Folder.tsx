@@ -1,23 +1,133 @@
-import React, { FC, useRef } from "react"
-import classNames from "classnames"
-import { observer } from "mobx-react-lite"
+import React, { FC, useCallback, useMemo, useRef, useState } from "react"
+import clsx from "clsx"
+import { toJS } from "mobx"
+import { observer, useLocalObservable } from "mobx-react"
 
 import Typography from "@material-ui/core/Typography"
 
-import { desktopStore, shortcutIconsStore, desktopSettings } from "../../../store"
+import { desktopStore, shortcutIconsStore, desktopSettings, folderStore } from "../../../store"
 import { Desktop } from "../../../store/desktop"
+import Wrap from "../Wrap"
+import { useAcrylic } from "styles/acrylic"
+import Website from "../Website"
+import grab, { Env } from "../Website/grab"
+import { useEffect } from "react"
 
 interface Props extends Desktop {
-  onClick: (id: string, element: HTMLDivElement) => void
+  // onClick: (id: string, element: HTMLDivElement) => void
+  className?: string
+  style?: React.CSSProperties
 }
 
-const textShadow = "0 1px 2px rgba(0, 0, 0, 0.36)"
-
 const Folder: FC<Props> = (props) => {
+  const { className, style: propsStyle, shortcuts = [] } = props
+
+  // state of folder opening
+  const [open, setOpen] = useState(false)
+
+  const [onTransition, setOnTransition] = useState(false)
+
   const folderRef = useRef<HTMLDivElement>(null)
 
+  const columns = useMemo(() => Math.ceil(Math.sqrt(shortcuts.length)), [shortcuts])
+
+  const rows = useMemo(() => Math.ceil(shortcuts.length / columns), [shortcuts, columns])
+
+  const acrylic = useAcrylic()
+
+  const folderState = useLocalObservable(() => folderStore)
+
+  const desktopSettingsState = useLocalObservable(() => desktopSettings)
+
+  const labelStyle: React.CSSProperties = useMemo<React.CSSProperties>(
+    () => ({
+      color: desktopSettingsState.shortcutLabelColor,
+    }),
+    [desktopSettingsState],
+  )
+
+  // dynamic styles of folder container
+  const folderStyles = useMemo<React.CSSProperties>(() => {
+    const style: React.CSSProperties = {}
+
+    if (open) {
+      style.position = "absolute"
+      style.margin = "0"
+      style.width = `calc(min(max(5.5vw, 48px), 96px) * ${columns} / 0.85 + 4px)`
+      style.height = `calc((min(max(5.5vw, 48px), 96px) + 20px) * ${rows} / 0.85 + 4px)`
+      style.borderRadius = "16px"
+      style.borderColor = "transparent"
+      style.boxShadow = `0 2px 8px 0 rgba(0, 0, 0, 0.35)`
+    }
+
+    return style
+  }, [open, columns, rows])
+
+  // dynamic styles of grid container
+  const gridStyles: React.CSSProperties = useMemo(() => {
+    const style: React.CSSProperties = {
+      gridTemplateColumns: `repeat(${columns}, 1fr)`,
+    }
+    if (shortcuts.length > 3 && !open) {
+      style.width = `${columns * 50}%`
+      style.height = `${rows * 50}%`
+    }
+    return style
+  }, [shortcuts, rows, columns, open])
+
+  // calculate classname of grid
+  const gridClassName = useMemo(() => {
+    switch (shortcuts.length) {
+      case 1:
+        return "count-one"
+      case 2:
+        return "count-two"
+      case 3:
+        return "count-three"
+      default:
+        return "count-four"
+    }
+  }, [shortcuts])
+
+  const handleDocumentClick = useCallback(
+    (event: MouseEvent) => {
+      // click area out of folder to close folder
+      const path = event.composedPath()
+      if (path.indexOf(folderRef.current!) === -1) {
+        folderState.closeFolder()
+        setOnTransition(true)
+
+        // clear listener
+        document.removeEventListener("click", handleDocumentClick)
+      }
+    },
+    [folderState],
+  )
+
+  useEffect(() => {
+    setOpen(folderState.id === props.id)
+  }, [folderState.id, props.id])
+
+  function handleFolderClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    event.stopPropagation()
+
+    // put opening in next event loop which after document click
+    // for opening anothor folder immediately
+    setTimeout(() => folderState.openFolder(props.id), 0)
+
+    setOnTransition(true)
+
+    document.addEventListener("click", handleDocumentClick)
+  }
+
+  const handleGrab = (index: number) => (event: React.MouseEvent<HTMLElement>) => {
+    if (event.button === 0) {
+      grab(event, toJS(shortcuts)[index], folderState.id, Env.Folder)
+    }
+  }
+
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (event.button !== 0) {
+    if (event.button !== 0 || open) {
       return
     }
     event.persist()
@@ -30,7 +140,7 @@ const Folder: FC<Props> = (props) => {
     let clone: HTMLElement
 
     const handleMouseUp = () => {
-      props.onClick(props.id, folderRef.current as HTMLDivElement)
+      handleFolderClick(event)
     }
     const handleMouseMove = (evt: MouseEvent) => {
       const { chessBoard } = desktopStore
@@ -118,39 +228,46 @@ const Folder: FC<Props> = (props) => {
     document.addEventListener("mouseup", handleMouseUpOnDocument)
   }
 
-  const shortcuts = props.shortcuts!.slice(0, 4)
-  const { shortcutIcon, getURL } = shortcutIconsStore
-  const style: React.CSSProperties = {
-    color: desktopSettings.shortcutLabelColor,
-    textShadow: desktopSettings.shortcutLabelShadow ? textShadow : undefined,
-  }
-
   return (
-    <div data-id={props.id} data-type="folder" onMouseDown={handleMouseDown}>
-      <div className="folder-wrap">
-        <div
-          ref={folderRef}
-          className={classNames("folder", {
-            two: shortcuts.length === 2,
-            three: shortcuts.length === 3,
-          })}
-        >
-          {shortcuts.map(({ id, label, url }, index) => {
-            const iconURL = getURL(shortcutIcon(id, url))
-            return (
-              iconURL && (
-                <div key={index}>
-                  <img src={iconURL} alt={label} />
-                </div>
-              )
-            )
-          })}
+    <>
+      <div
+        ref={folderRef}
+        data-id={props.id}
+        data-type="folder"
+        className={clsx("folder", { open, "on-transition": onTransition }, className, acrylic.root)}
+        style={{ ...propsStyle, ...folderStyles }}
+        onMouseDown={handleMouseDown}
+        onTransitionEnd={() => setOnTransition(false)}
+      >
+        <div className={clsx("folder-grid", gridClassName)} style={gridStyles}>
+          {shortcuts.map(({ id, label, url }, index) => (
+            <div key={id}>
+              <span>
+                <Wrap grabbed={folderState.tempShortcutId === id} row={0} column={0}>
+                  <Website
+                    inFolder
+                    id={id}
+                    label={label}
+                    url={url}
+                    key={id}
+                    itemId={folderState.id}
+                    index={index}
+                    onMouseDown={handleGrab(index)}
+                  />
+                </Wrap>
+              </span>
+            </div>
+          ))}
         </div>
       </div>
-      <Typography className="shortcut-name" variant="subtitle1" style={style}>
+      <Typography
+        className={clsx("shortcut-name", { shadow: desktopSettingsState.shortcutLabelShadow })}
+        variant="subtitle1"
+        style={labelStyle}
+      >
         {props.label}
       </Typography>
-    </div>
+    </>
   )
 }
 

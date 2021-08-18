@@ -38,7 +38,7 @@ const grab = (
   const { screenX: downScreenX, screenY: downScreenY } = event
   /** Copy of shortcut */
   let clone: HTMLElement
-  /** For re-cacluting the coords of the new shortcut in folder */
+  /** For re-calculating the coords of the new shortcut in folder */
   let cloneEventRef: MouseEvent
   let folderWindow: HTMLElement | undefined
   let folderWindowPadding: number
@@ -54,6 +54,10 @@ const grab = (
       // Create a clone to follow mouse moving
       clone = wrap.cloneNode(true) as HTMLElement
       clone.classList.add("grabbing")
+      if (initialEnv === Env.Folder) {
+        clone.classList.add("from-folder")
+      }
+
       // Hide original shortcut
       wrap.setAttribute("aria-grabbed", "true")
 
@@ -62,9 +66,11 @@ const grab = (
 
       const translateX = evt.clientX - offsetLeft
       const translateY = evt.clientY - offsetTop
+
       clone.style.width = width + "px"
       clone.style.height = height + "px"
       clone.style.transform = `translate(${translateX}px, ${translateY}px)`
+
       let column: number
       let row: number
       let unitWidth: number
@@ -98,12 +104,12 @@ const grab = (
 
         if (env === Env.Folder) {
           if (!folderWindow) {
-            folderWindow = document.querySelector(".folder-window") as HTMLElement
+            folderWindow = document.querySelector(".folder.open .folder-grid") as HTMLElement
             const padding =
               window.getComputedStyle(folderWindow, null).getPropertyValue("padding") || "0"
             folderWindowPadding = parseInt(padding, 10)
           }
-          /** Ignore calclute before folder window transition finished */
+          /** Ignore calculate before folder window transition finished */
           if (enterFolderTimer) {
             return
           }
@@ -171,8 +177,8 @@ const grab = (
             }
           } else {
             env = Env.Desktop
-            folderStore.saveTempShortcut(shortcut.id)
-            folderStore.closeFolder()
+            // folderStore.saveTempShortcut(shortcut.id)
+            // folderStore.closeFolder()
             folderWindow = undefined
           }
         } else if (env === Env.Desktop) {
@@ -205,11 +211,7 @@ const grab = (
                       clearTimeout(timer)
                     }
                     timer = setTimeout(() => {
-                      folderStore.openFolder(
-                        folderId,
-                        occupiedEl.querySelector(".folder") as HTMLElement,
-                        shortcut,
-                      )
+                      folderStore.openFolder(folderId, shortcut)
                       origin = lastLanding = folderStore.shortcuts.length - 1
                       env = Env.Folder
                       // auto calculate coords
@@ -244,7 +246,7 @@ const grab = (
             clearTimeout(enterFolderTimer)
           }
           const { gridColumns, gridRows, shortcuts } = folderStore
-          folderWindow = document.querySelector(".folder-window") as HTMLElement
+          folderWindow = document.querySelector(".folder.open .folder-grid") as HTMLElement
           const padding =
             window.getComputedStyle(folderWindow, null).getPropertyValue("padding") || "0"
           folderWindowPadding = parseInt(padding, 10)

@@ -44,7 +44,7 @@ interface Props {
 const FolderWindow: FC<Props> = (props) => {
   const { open, anchorEl, onClose } = props
   const classes = useStyles()
-  const { tempShortcut, id, shortcuts } = folderStore
+  const { tempShortcutId, id, shortcuts } = folderStore
   const { backgroundColor, acrylicEffect } = foldersSettings
   const acrylic = useAcrylic()
 
@@ -77,7 +77,7 @@ const FolderWindow: FC<Props> = (props) => {
         {folderStore.shortcuts.map((shortcut, index) => {
           const { id, label, url } = shortcut
           return (
-            <Wrap grabbed={tempShortcut === shortcut.id} row={0} column={0} key={Math.random()}>
+            <Wrap grabbed={tempShortcutId === shortcut.id} row={0} column={0} key={Math.random()}>
               <Website
                 inFolder
                 id={id}

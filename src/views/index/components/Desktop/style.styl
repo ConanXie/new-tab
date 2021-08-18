@@ -2,6 +2,7 @@
   box-sizing border-box
   height 100vh
   overflow hidden
+
   &.toolbar
     padding-top 64px
 
@@ -21,51 +22,61 @@ flex-center()
   overflow hidden
 
 .wrap
+  --shortcut-size 'min(max(5.5vw, 48px), 96px)' % null
+  --shortname-font-size 'max(min(16px, 1vw), 12px)' % null
+  --shortname-height calc(var(--shortname-font-size) * 1.75)
+  position relative
   height 100%
   flex-center()
   user-select none
-  &[aria-grabbed=true] {
+
+  &[aria-grabbed=true]
     visibility hidden
-  }
 
   &.grabbing
     position absolute
     top 0
     left 0
     z-index 2000
-    .shortcut
+
+    .shortcut,
     .folder
       cursor grabbing
+
     .shortcut-name
       visibility hidden
+
+  &.from-folder
+    .shortcut-name
+      display none
+
   &.grabbed
-    transition transform .2s cubic-bezier(0.333, 0, 0, 1)
+    transition transform 0.2s cubic-bezier(0.333, 0, 0, 1)
 
   .shortcut
     flex-center()
     flex-direction column
     text-decoration none
     opacity 1
-    transition .2s opacity ease-in-out
+    transition 0.2s opacity ease-in-out
+
     &:hover
       opacity 1
+
     &.touched .shortcut-icon
-      &::before
+      &::before,
       &::after
         opacity 1
         transform translate(-50%, -50%) scale(1)
 
   .shortcut-icon
     position relative
-    width 5.5vw
-    height 5.5vw
-    max-width 96px
-    max-height 96px
-    min-width 48px
-    min-height 48px
-    &::before
+    width var(--shortcut-size)
+    height var(--shortcut-size)
+
+    &::before,
     &::after
-      content ""
+      content ''
       z-index -1
       display block
       position absolute
@@ -74,11 +85,13 @@ flex-center()
       border-radius 50%
       transform translate(-50%, -50%) scale(0.7)
       opacity 0
-      transition .15s transform ease-in, .15s opacity ease-in
+      transition 0.15s transform ease-in, 0.15s opacity ease-in
+
     &::before
       width 96%
       height 96%
       background-color #fff
+
     &::after
       width 110%
       height 110%
@@ -90,21 +103,20 @@ flex-center()
       height 100%
       object-fit cover
 
-
   .shortcut-name
     max-width 8em
-    margin-top 6px
-    min-height calc(1em * 1.75)
+    min-height var(--shortname-height)
+    font-size var(--shortname-font-size)
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
 
+    &.shadow
+      text-shadow 0 1px 2px rgba(0, 0, 0, 0.36)
 
 .widget-wrap
   // flex-center()
-
   h1
-    // font normal 100px "Product Sans Thin"
-    font normal 100px "Product Sans Light"
-    // font 300 100px "Roboto"
+    font-weight normal
+    font-size 100px
     color #fff
