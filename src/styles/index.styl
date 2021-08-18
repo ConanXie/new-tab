@@ -16,14 +16,14 @@ td
 
 @font-face
   font-family Weather
-  src url(../fonts/Weather.woff2)
+  src url('../fonts/Weather.woff2')
 
 html
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
 
 body
-  font 16px Roboto, Arial, sans-serif
+  font 16px -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'
   overflow hidden
 
 input
@@ -34,7 +34,8 @@ input
   height 100vh
   overflow auto
 
-#bg, #mask
+#bg,
+#mask
   position absolute
   top 0
   right 0
@@ -45,15 +46,16 @@ input
 #bg
   background-size cover
   background-position center
-  transition background-image 0.3s cubic-bezier(0.215, 0.610, 0.355, 1)
+  transition background-image 0.3s cubic-bezier(0.215, 0.61, 0.355, 1)
 
 .chrome-picker
   margin 0 auto
   box-shadow none !important
   background-color transparent !important
+
   input
     background-color rgba(255, 255, 255, 0.5) !important
-    box-shadow: rgba(180, 180, 180, 0.5) 0px 0px 0px 1px inset !important
+    box-shadow rgba(180, 180, 180, 0.5) 0px 0px 0px 1px inset !important
 
 ::-webkit-scrollbar
   width 0
