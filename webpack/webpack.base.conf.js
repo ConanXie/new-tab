@@ -29,6 +29,7 @@ module.exports = {
       config: path.join(context, "config"),
       utils: path.join(context, "utils"),
       store: path.join(context, "store"),
+      styles: path.join(context, "styles"),
       components: path.join(context, "components"),
     },
   },
