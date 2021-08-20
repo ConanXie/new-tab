@@ -2,12 +2,12 @@ transition-single(property)
   return property 285ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
 
 transition-all()
-  properties = left top right bottom width height padding-bottom border border-radius margin transform opacity font-size align-items justify-content
+  properties = left top right bottom width height padding-bottom border border-radius margin transform opacity font-size
   value = ''
 
   for property, index in properties
     if (index)
-      value += ', ' + transition-single(property)
+      value += ',' + transition-single(property)
     else
       value += transition-single(property)
 
@@ -21,8 +21,8 @@ transition-all()
   left 50%
   top calc(50% - var(--shortname-height) / 2)
   transform translate(-50%, -50%)
-  width calc(var(--shortcut-size) * 0.90625)
-  height calc(var(--shortcut-size) * 0.90625)
+  width calc(var(--shortcut-size) * (174 / 192))
+  height calc(var(--shortcut-size) * (174 / 192))
   border 2px solid rgba(255, 255, 255, 0.8)
   border-radius 50%
   user-select none
@@ -31,16 +31,28 @@ transition-all()
   overflow hidden
   box-sizing border-box
 
-.folder
-  &.on-transition.open + .shortcut-name
-    opacity 0
-
   &.on-transition
     transition var(--transition), border 185ms linear 185ms
     z-index 999
 
     &.open
       transition var(--transition), border 0ms
+
+      + .shortcut-name
+        opacity 0
+
+  &.open
+    z-index 999
+
+    .folder-grid
+      width 100%
+      margin 0
+
+      > div > span
+        transform translateY(calc((var(--shortname-height) * -1 / 2)))
+
+      .shortcut-name
+        opacity 1
 
   .folder-grid,
   .folder-grid > div,
@@ -49,115 +61,84 @@ transition-all()
   .shortcut-name
     transition var(--transition)
 
-.folder .folder-grid
-  width 150%
-  height 100%
-  margin 0 -25%
-  display grid
+  .folder-grid
+    width 150%
+    height 100%
+    margin 0 -25%
+    display grid
 
-.folder.open
-  z-index 999
+    > div
+      position relative
+      left 0
+      top 0
+      display flex
+      align-items center
+      justify-content center
 
-.folder.open .folder-grid
-  width 100%
-  margin 0
+      > span
+        display block
+        position relative
+        width 85%
+        height 0
+        padding-bottom 85%
+        transform translateY(0)
 
-.folder .folder-grid > div
-  position relative
-  left 0
-  top 0
-  display flex
-  align-items center
-  justify-content center
+    .shortcut-name
+      position absolute
+      bottom calc(var(--shortname-height) * -1)
+      opacity 0
 
-.folder .folder-grid > div > span
-  display block
-  position relative
-  width 85%
-  height 0
-  padding-bottom 85%
-  transform translateY(0)
+  .wrap
+    position absolute
+    left 0
+    top 0
+    right 0
+    bottom 0
+    font-size 0
 
-.folder.open .folder-grid > div > span
-  transform translateY(-10px)
+  .shortcut-icon
+    position relative
+    width 100%
+    height 100%
 
-.folder .wrap
-  position absolute
-  left 0
-  top 0
-  right 0
-  bottom 0
-  font-size 0
+    &::before,
+    &::after
+      display none
 
-.folder .shortcut-icon
-  position relative
-  width 100%
-  height 100%
+  &:not(.open)
+    .folder-grid
+      // count triple
+      &.count-triple
+        width 140%
+        margin 0 -20%
 
-  &::before,
-  &::after
-    display none
+        > div
+          &:nth-child(1)
+            top 4%
+            left 4%
 
-.folder .folder-grid .shortcut-name
-  position absolute
-  bottom calc(var(--shortname-height) * -1)
-  opacity 0
+          &:nth-child(2)
+            top 4%
+            left -4%
 
-.folder.open .folder-grid .shortcut-name
-  opacity 1
+          &:nth-child(3)
+            top 4%
+            left 51%
 
-.folder .folder-grid .item-wrapper
-  position absolute
-  top 0
-  left 0
-  right 0
-  bottom 0
-  display flex
-  align-items center
-  justify-content center
-  font-size 18px
+          > span
+            width 80%
+            padding-bottom 80%
 
-.folder::before,
-.folder .folder-grid .item-wrapper::before
-  position absolute
-  top 50%
-  left 50%
-  transform translate(-50%, -50%)
-  width 2px
-  height 2px
-  background #fff
+      // count quadra
+      &.count-quadra
+        margin 0
 
-/* count three */
-.folder:not(.open) .folder-grid.count-three
-  width 140%
-  margin 0 -20%
+        > div > span
+          width 90%
+          padding-bottom 90%
 
-.folder:not(.open) .folder-grid.count-three > div > span
-  width 80%
-  padding-bottom 80%
+    .shortcut
+      pointer-events none
 
-.folder:not(.open) .folder-grid.count-three > div:nth-child(1)
-  top 4%
-  left 4%
-
-.folder:not(.open) .folder-grid.count-three > div:nth-child(2)
-  top 4%
-  left -4%
-
-.folder:not(.open) .folder-grid.count-three > div:nth-child(3)
-  top 4%
-  left 51%
-
-/* count four */
-.folder:not(.open) .folder-grid.count-four
-  margin 0
-
-.folder:not(.open) .folder-grid.count-four > div > span
-  width 90%
-  padding-bottom 90%
-
-.folder:not(.open) .shortcut
-  pointer-events none
-
-.folder + .shortcut-name
-  margin-top calc(var(--shortcut-size))
+  + .shortcut-name
+    margin-top var(--shortcut-size)

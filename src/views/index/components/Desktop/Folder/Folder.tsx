@@ -5,7 +5,7 @@ import { observer, useLocalObservable } from "mobx-react"
 
 import Typography from "@material-ui/core/Typography"
 
-import { desktopStore, shortcutIconsStore, desktopSettings, folderStore } from "../../../store"
+import { desktopStore, desktopSettings, folderStore } from "../../../store"
 import { Desktop } from "../../../store/desktop"
 import Wrap from "../Wrap"
 import { useAcrylic } from "styles/acrylic"
@@ -81,11 +81,11 @@ const Folder: FC<Props> = (props) => {
       case 1:
         return "count-one"
       case 2:
-        return "count-two"
+        return "count-double"
       case 3:
-        return "count-three"
+        return "count-triple"
       default:
-        return "count-four"
+        return "count-quadra"
     }
   }, [shortcuts])
 

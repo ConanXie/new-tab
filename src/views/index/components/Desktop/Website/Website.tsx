@@ -3,11 +3,7 @@ import { observer } from "mobx-react-lite"
 
 import Typography from "@material-ui/core/Typography"
 
-import {
-  shortcutIconsStore,
-  foldersSettings,
-  desktopSettings,
-} from "../../../store"
+import { shortcutIconsStore, foldersSettings, desktopSettings, themeStore } from "../../../store"
 
 interface Props {
   id: string
@@ -28,19 +24,18 @@ const Webiste: FC<Props> = (props) => {
   const iconURL = icon || getURL(shortcutIcon(id, url))
   const style: React.CSSProperties = {
     color: inFolder
-      ? foldersSettings.shortcutLabelColor
+      ? foldersSettings.followNightMode
+        ? themeStore.theme.palette.text.primary
+        : foldersSettings.shortcutLabelColor
       : desktopSettings.shortcutLabelColor,
-    textShadow: inFolder
-      ? foldersSettings.shortcutLabelShadow
-        ? textShadow
-        : undefined
-      : desktopSettings.shortcutLabelShadow
+    textShadow:
+      (inFolder && foldersSettings.shortcutLabelShadow) ||
+      (!inFolder && desktopSettings.shortcutLabelShadow)
         ? textShadow
         : undefined,
   }
-  const showLabel = inFolder
-    ? foldersSettings.shortcutLabel
-    : desktopSettings.shortcutLabel
+
+  const showLabel = inFolder ? foldersSettings.shortcutLabel : desktopSettings.shortcutLabel
 
   return (
     <a
@@ -51,9 +46,7 @@ const Webiste: FC<Props> = (props) => {
       className="shortcut"
       data-type="shortcut"
     >
-      <div className="shortcut-icon">
-        {iconURL && <img src={iconURL} alt={label} />}
-      </div>
+      <div className="shortcut-icon">{iconURL && <img src={iconURL} alt={label} />}</div>
       {showLabel && (
         <Typography className="shortcut-name" variant="subtitle1" style={style}>
           {label}
