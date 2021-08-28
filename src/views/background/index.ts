@@ -42,12 +42,11 @@ chrome.storage.local.get([wallpaper], (result) => {
 })
 
 onMessage("getIcons", (url: string, sender, sendResponse) => {
-  let hostname: string
+  let hostname = ""
   try {
     hostname = new URL(url).hostname
   } catch (error) {
-    sendResponse()
-    return
+    console.error(error)
   }
 
   import("./icons").then(({ default: icons }) => {
