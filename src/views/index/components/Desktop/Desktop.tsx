@@ -249,7 +249,7 @@ const Desktop: FC = () => {
           }
           return null
         })}
-        <Wrap className="widget-wrap" row={1} column={4} rowEnd={2} columnEnd={6}>
+        <Wrap className="widget-wrap" row={2} column={4} rowEnd={3} columnEnd={6}>
           <DateTime />
         </Wrap>
       </div>

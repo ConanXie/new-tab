@@ -4,9 +4,9 @@ import format from "date-fns/format"
 const DateTime: FC = () => {
   const timerRef = useRef<NodeJS.Timeout>()
   const [time, setTime] = useState("")
-  
+
   const updateTime = () => {
-    setTime(format(new Date(), "HH:mm"))
+    setTime(format(new Date(), "HH,mm"))
   }
 
   useEffect(() => {
@@ -21,8 +21,10 @@ const DateTime: FC = () => {
     return () => clearInterval(timerRef.current!)
   }, [])
 
+  const [hour, minute] = time.split(",")
+
   return (
-    <h1>{time}</h1>
+    <h1>{hour}<br/>{minute}</h1>
   )
 }
 

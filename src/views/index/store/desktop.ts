@@ -40,8 +40,8 @@ export class DesktopStore extends DesktopSettings {
   data: Desktop[] = [
     {
       type: 1,
-      row: 1,
-      column: 1,
+      row: 4,
+      column: 3,
       id: "wb001",
       shortcuts: [
         {
@@ -53,27 +53,15 @@ export class DesktopStore extends DesktopSettings {
     },
     {
       type: 1,
-      row: 1,
-      column: 2,
-      id: "wb002",
-      shortcuts: [
-        {
-          id: "s002",
-          label: "酷安",
-          url: "https://www.coolapk.com",
-        },
-      ],
-    },
-    {
-      type: 1,
-      row: 2,
+      row: 4,
       column: 4,
       id: "wb003",
+      label: "境外势力",
       shortcuts: [
         {
           id: "s003",
-          label: "Google",
-          url: "https://www.google.com",
+          label: "Steam",
+          url: "https://www.steampowered.com",
         },
         {
           id: "s004",
@@ -82,21 +70,39 @@ export class DesktopStore extends DesktopSettings {
         },
         {
           id: "s005",
-          label: "Facebook",
-          url: "https://www.facebook.com",
+          label: "Twitter",
+          url: "https://www.twitter.com",
+        },
+        {
+          id: "s008",
+          label: "Amazon",
+          url: "https://www.amazon.com",
         },
       ],
     },
     {
       type: 1,
-      row: 3,
+      row: 4,
       column: 5,
       id: "wb004",
       shortcuts: [
         {
           id: "s006",
-          label: "Twitter",
-          url: "https://www.twitter.com",
+          label: "豆瓣",
+          url: "https://www.douban.com",
+        },
+      ],
+    },
+    {
+      type: 1,
+      row: 4,
+      column: 6,
+      id: "wb005",
+      shortcuts: [
+        {
+          id: "s007",
+          label: "QQ",
+          url: "https://www.qq.com",
         },
       ],
     },
