@@ -1,4 +1,3 @@
-const webpack = require("webpack")
 const { merge } = require("webpack-merge")
 const baseConfig = require("./webpack.base.conf")
 
@@ -36,20 +35,22 @@ module.exports = merge(baseConfig, {
       },
     ],
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {
     port,
-    overlay: true,
-    compress: true,
     hot: true,
-    disableHostCheck: true,
-    clientLogLevel: "warning",
-    stats: {
-      assets: false,
-      timings: true,
-      modules: false,
-      version: false,
-      hash: false,
+    allowedHosts: "all",
+    client: {
+      overlay: true,
+      logging: "warn",
+    },
+    devMiddleware: {
+      stats: {
+        assets: false,
+        timings: true,
+        modules: false,
+        version: false,
+        hash: false,
+      },
     },
   },
   devtool: "cheap-module-source-map",

@@ -51,7 +51,7 @@ module.exports = {
         },
       },
       {
-        test: /\.(woff2?|eot|ttf|otf)$/,
+        test: /\.(eot|ttf|otf)$/,
         loader: "file-loader",
         options: {
           name: "fonts/[name].[ext]",
