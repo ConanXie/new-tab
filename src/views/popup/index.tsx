@@ -1,6 +1,6 @@
 import React from "react"
 import { render } from "react-dom"
-import "typeface-roboto"
+import "@fontsource/roboto"
 import "../../styles"
 import "./styles"
 import App from "./App"
