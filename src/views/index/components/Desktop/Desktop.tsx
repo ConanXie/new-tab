@@ -1,4 +1,4 @@
-import React, { FC, Suspense, useEffect, useMemo, useRef, useState } from "react"
+import React, { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import clsx from "clsx"
 
 import AddIcon from "@material-ui/icons/Add"
@@ -27,7 +27,8 @@ import Undo from "./Undo"
 import Folder from "./Folder"
 import Wrap from "./Wrap"
 import FolderEditor from "./FolderEditor"
-import { observer } from "mobx-react-lite"
+import { observer, useLocalObservable } from "mobx-react-lite"
+import { toJS } from "mobx"
 
 const WebsiteInfo = React.lazy(() => import("./WebsiteInfo"))
 const WebsiteEdit = React.lazy(() => import("./WebsiteEdit"))
@@ -44,6 +45,8 @@ const Desktop: FC = () => {
 
   const desktopElement = useRef<HTMLDivElement>(null)
   const pageElement = useRef<HTMLDivElement>(null)
+
+  const desktopState = useLocalObservable(() => desktopStore)
 
   const desktopMenus: MenuType[] = useMemo(
     () => [
@@ -90,7 +93,7 @@ const Desktop: FC = () => {
         icon: <EditIcon />,
         text: "Edit",
         onClick: () => {
-          const folder = desktopStore.findById(currentItem.current.id)
+          const folder = desktopState.findById(currentItem.current.id)
           if (folder) {
             setFolderEditorOpen(true)
             setFolderLabel(folder.label!)
@@ -108,7 +111,7 @@ const Desktop: FC = () => {
         icon: <ClearIcon />,
         text: "Remove",
         onClick: () => {
-          desktopStore.removeFolder(currentItem.current.id)
+          desktopState.removeFolder(currentItem.current.id)
           setUndoOpen(true)
         },
       },
@@ -168,49 +171,52 @@ const Desktop: FC = () => {
     websiteInfoStore.openDialog(currentItem.current.id, currentItem.current.index)
   }
   const removeWebsite = () => {
-    desktopStore.removeWebsite(currentItem.current.id, currentItem.current.index)
+    desktopState.removeWebsite(currentItem.current.id, currentItem.current.index)
     setUndoOpen(true)
   }
   const handleFolderEditDone = (label?: string) => {
     if (label !== undefined) {
-      desktopStore.updateFolder(currentItem.current.id, label)
+      desktopState.updateFolder(currentItem.current.id, label)
     }
     setFolderEditorOpen(false)
   }
   const closeUndo = () => {
     setUndoOpen(false)
   }
-  const handleContextMenu = (event: MouseEvent) => {
-    event.preventDefault()
-    const path = event.composedPath() as HTMLElement[]
-    for (const target of path) {
-      const { dataset } = target
-      if (dataset) {
-        const { type, id, index } = dataset
-        if (type === "shortcut") {
-          showMenu(event, shortcutMenus, id, Number(index))
-          return
-        } else if (type === "folder") {
-          showMenu(event, folderMenus, id, Number(index))
+  const handleContextMenu = useCallback(
+    (event: MouseEvent) => {
+      event.preventDefault()
+      const path = event.composedPath() as HTMLElement[]
+      for (const target of path) {
+        const { dataset } = target
+        if (dataset) {
+          const { type, id, index } = dataset
+          if (type === "shortcut") {
+            showMenu(event, shortcutMenus, id, Number(index))
+            return
+          } else if (type === "folder") {
+            showMenu(event, folderMenus, id, Number(index))
+            return
+          }
+        }
+        if (target === desktopElement.current) {
+          desktopMenus[0].disabled = desktopState.isFilled
+          const menus = desktopState.toolbar ? desktopMenus : [...desktopMenus, ...toolbarMenus]
+          showMenu(event, menus)
           return
         }
       }
-      if (target === desktopElement.current) {
-        desktopMenus[0].disabled = desktopStore.isFilled
-        const menus = desktopStore.toolbar ? desktopMenus : [...desktopMenus, ...toolbarMenus]
-        showMenu(event, menus)
-        return
-      }
-    }
-  }
+    },
+    [desktopMenus, folderMenus, shortcutMenus, toolbarMenus],
+  )
+
   useEffect(() => {
     document.addEventListener("contextmenu", handleContextMenu)
 
     return () => document.removeEventListener("contextmenu", handleContextMenu)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [handleContextMenu])
 
-  const { toolbar, columns, rows, data } = desktopStore
+  const { toolbar, columns, rows, data } = desktopState
   // const { open: folderOpen, closeFolder, openFolder, folderElement } = folderStore
   const styles: React.CSSProperties = {
     gridTemplateColumns: `repeat(${columns}, 1fr)`,
@@ -242,7 +248,7 @@ const Desktop: FC = () => {
               const { id } = item
               return (
                 <Wrap row={row} column={column} key={id}>
-                  <Folder {...item} />
+                  <Folder {...toJS(item)} />
                 </Wrap>
               )
             }

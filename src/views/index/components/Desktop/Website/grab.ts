@@ -42,6 +42,7 @@ const grab = (
   let cloneEventRef: MouseEvent
   let folderWindow: HTMLElement | undefined
   let folderWindowPadding: number
+  let labelHeight = 0
 
   /** Grab the shortcut */
   const handleMouseMove = (evt: MouseEvent) => {
@@ -56,6 +57,7 @@ const grab = (
       clone.classList.add("grabbing")
       if (initialEnv === Env.Folder) {
         clone.classList.add("from-folder")
+        labelHeight = wrap.querySelector(".shortcut-name")!.getBoundingClientRect().height
       }
 
       // Hide original shortcut
@@ -178,8 +180,7 @@ const grab = (
           } else {
             env = Env.Desktop
             // folderStore.saveTempShortcut(shortcut.id)
-            // folderStore.closeFolder()
-            folderWindow = undefined
+            folderStore.closeFolder()
           }
         } else if (env === Env.Desktop) {
           y -= desktopOffsetTop
@@ -264,7 +265,7 @@ const grab = (
             row = gridRows - 1
           }
           const adjustLeft = (unitWidth - width) / 2
-          const adjustTop = (unitHeight - height) / 2
+          const adjustTop = (unitHeight - height - labelHeight) / 2
           const transX = column * unitWidth + folderWindowPadding + wLeft
           const transY = row * unitHeight + folderWindowPadding + wTop
           clone.style.transform = `translate(${transX + adjustLeft}px, ${transY + adjustTop}px)`
@@ -274,7 +275,7 @@ const grab = (
           unitWidth = clientWidth / desktopStore.columns
           unitHeight = clientHeight / desktopStore.rows
           const adjustLeft = (unitWidth - width) / 2
-          const adjustTop = (unitHeight - height) / 2
+          const adjustTop = (unitHeight - height - labelHeight) / 2
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
             const transX = column * unitWidth
             const transY = row * unitHeight + desktopOffsetTop
@@ -298,6 +299,11 @@ const grab = (
         }
 
         clone.addEventListener("transitionend", () => {
+          if (folderWindow) {
+            Array.from(folderWindow.children).forEach((e) => e.removeAttribute("style"))
+            folderWindow.classList.add("releasing")
+            setTimeout(() => folderWindow!.classList.remove("releasing"))
+          }
           wrap.setAttribute("aria-grabbed", "false")
 
           if (env === Env.Folder) {

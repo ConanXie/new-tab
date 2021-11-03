@@ -2,7 +2,7 @@ transition-single(property)
   return property 285ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
 
 transition-all()
-  properties = left top right bottom width height padding-bottom border border-radius margin transform opacity font-size
+  properties = left top right bottom width height padding-bottom border border-radius margin transform opacity font-size box-shadow
   value = ''
 
   for property, index in properties
@@ -55,7 +55,7 @@ transition-all()
         opacity 1
 
   .folder-grid,
-  .folder-grid > div,
+  .folder-grid:not(.releasing) > div,
   .folder-grid > div > span,
   .shortcut-icon,
   .shortcut-name

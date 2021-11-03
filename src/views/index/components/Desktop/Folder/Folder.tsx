@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import clsx from "clsx"
-import { toJS } from "mobx"
 import { observer, useLocalObservable } from "mobx-react"
 
 import Typography from "@material-ui/core/Typography"
@@ -46,10 +45,27 @@ const Folder: FC<Props> = (props) => {
     [desktopSettingsState],
   )
 
+  const handleDesktopClick = useCallback(
+    (event: MouseEvent) => {
+      // click area out of folder to close folder
+      const path = event.composedPath()
+      if (path.indexOf(folderRef.current!) === -1) {
+        folderState.closeFolder()
+        setOnTransition(true)
+
+        // clear listener
+        !(document.querySelector("#desktop") as any).removeEventListener(
+          "click",
+          handleDesktopClick,
+        )
+      }
+    },
+    [folderState],
+  )
+
   // dynamic styles of folder container
   const folderStyles = useMemo<React.CSSProperties>(() => {
     const style: React.CSSProperties = {}
-
     if (open) {
       style.position = "absolute"
       style.margin = "0"
@@ -58,6 +74,7 @@ const Folder: FC<Props> = (props) => {
       style.borderRadius = "16px"
       style.borderColor = "transparent"
       style.boxShadow = `0 2px 8px 0 rgba(0, 0, 0, 0.35)`
+      !(document.querySelector("#desktop") as any).addEventListener("click", handleDesktopClick)
     }
 
     return style
@@ -89,40 +106,40 @@ const Folder: FC<Props> = (props) => {
     }
   }, [shortcuts])
 
-  const handleDocumentClick = useCallback(
-    (event: MouseEvent) => {
-      // click area out of folder to close folder
-      const path = event.composedPath()
-      if (path.indexOf(folderRef.current!) === -1) {
-        folderState.closeFolder()
-        setOnTransition(true)
-
-        // clear listener
-        document.removeEventListener("click", handleDocumentClick)
-      }
-    },
-    [folderState],
-  )
-
   useEffect(() => {
+    // set transition on grabbing out shortcut from folder
+    if (folderState.id == "" && open) {
+      setOnTransition(true)
+    }
+
     setOpen(folderState.id === props.id)
   }, [folderState.id, props.id])
 
-  function handleFolderClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    event.stopPropagation()
+  const handleFolderClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      event.stopPropagation()
 
-    // put opening in next event loop which after document click
-    // for opening anothor folder immediately
-    setTimeout(() => folderState.openFolder(props.id), 0)
+      // put opening in next event loop which after document click
+      // for opening anothor folder immediately
+      setTimeout(() => folderState.openFolder(props.id), 0)
 
-    setOnTransition(true)
+      setOnTransition(true)
 
-    document.addEventListener("click", handleDocumentClick)
-  }
+      // !(document.querySelector("#desktop") as any).addEventListener("click", handleDesktopClick)
+    },
+    [handleDesktopClick],
+  )
+
+  useEffect(() => {
+    return () => {
+      // clear listener
+      !(document.querySelector("#desktop") as any).removeEventListener("click", handleDesktopClick)
+    }
+  }, [])
 
   const handleGrab = (index: number) => (event: React.MouseEvent<HTMLElement>) => {
     if (event.button === 0) {
-      grab(event, toJS(shortcuts)[index], folderState.id, Env.Folder)
+      grab(event, shortcuts[index], folderState.id, Env.Folder)
     }
   }
 
@@ -249,7 +266,7 @@ const Folder: FC<Props> = (props) => {
                     id={id}
                     label={label}
                     url={url}
-                    key={id}
+                    key={index + id}
                     itemId={folderState.id}
                     index={index}
                     onMouseDown={handleGrab(index)}
