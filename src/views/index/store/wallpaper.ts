@@ -33,8 +33,6 @@ export class WallpaperStore {
   backgroundBrightness: number
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(data: any) {
-    makeAutoObservable(this, {}, { autoBind: true })
-
     const {
       wallpaper,
       color,
@@ -55,6 +53,8 @@ export class WallpaperStore {
     this.backgroundBrightness = Number(backgroundBrightness)
       ? Number(backgroundBrightness)
       : defaultWallpaperData.backgroundBrightness
+
+    makeAutoObservable(this, {}, { autoBind: true })
   }
   get wallpaperStyles(): React.CSSProperties {
     const styles: React.CSSProperties = {}
@@ -87,7 +87,7 @@ export class WallpaperStore {
   async updateWallpaper(file: File | Blob): Promise<void> {
     // Save base64 data to storage
     const base64 = await toBase64(file)
-    sendMessage("saveWallpaper", base64)
+    sendMessage("saveWallpaper", base64 as string)
   }
   wallpaperUpdated(url: string): void {
     this.wallpaperType = WallpaperType.Image
