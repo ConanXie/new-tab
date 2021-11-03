@@ -87,8 +87,7 @@ function ContextMenu() {
       document.removeEventListener("click", clearMenus)
       window.removeEventListener("blur", clearMenus)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [clearMenus])
 
   return (
     <Paper
