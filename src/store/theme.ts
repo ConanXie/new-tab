@@ -9,10 +9,10 @@ import isValid from "date-fns/isValid"
 import isBefore from "date-fns/isBefore"
 
 export enum NightModeStatus {
-  Off,
-  On,
-  Custom,
-  BasedOnSystem,
+  Off = "Off",
+  On = "On",
+  Custom = "Custom",
+  BasedOnSystem = "BasedOnSystem",
 }
 
 export interface NightMode {

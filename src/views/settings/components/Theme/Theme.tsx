@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react"
-import { observer, useLocalStore } from "mobx-react"
+import { observer, useLocalObservable } from "mobx-react"
 
 import {
   makeStyles,
@@ -52,7 +52,7 @@ const Theme: FC = () => {
     saveColor,
     setNightTime,
     changeNightMode,
-  } = useLocalStore(() => themeStore)
+  } = useLocalObservable(() => themeStore)
 
   function openColorPicker() {
     setColorPickerOpen(true)
@@ -145,7 +145,7 @@ const Theme: FC = () => {
             ))}
           </Menu>
           <Divider />
-          <ListItem button onClick={editNightTime} disabled={nightMode !== 2}>
+          <ListItem button onClick={editNightTime} disabled={nightMode !== NightModeStatus.Custom}>
             <ListItemText
               primary={chrome.i18n.getMessage(
                 "settings_night_mode_custom_primary",
