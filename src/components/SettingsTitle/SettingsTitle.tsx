@@ -1,12 +1,14 @@
 import React, { FC, ReactNode } from "react"
 
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
+import { Theme } from "@mui/material/styles"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import Typography from "@mui/material/Typography"
 
 const useStyles = makeStyles(({ spacing }: Theme) =>
   createStyles({
     root: {
-      padding: `${spacing(2)}px ${spacing(2)}px ${spacing(1)}px`,
+      padding: `${spacing(2)} ${spacing(2)} ${spacing(1)}`,
     },
     secondary: {
       paddingTop: spacing(1),
@@ -26,7 +28,11 @@ const SettingsTitle: FC<Props> = ({ primary, secondary, children }) => {
   return (
     <div className={classes.root}>
       <Typography variant="h5">{primary || children}</Typography>
-      {secondary && <Typography variant="body2" className={classes.secondary}>{secondary}</Typography>}
+      {secondary && (
+        <Typography variant="body2" className={classes.secondary}>
+          {secondary}
+        </Typography>
+      )}
     </div>
   )
 }

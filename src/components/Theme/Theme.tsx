@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from "react"
-import { ThemeProvider } from "@material-ui/core/styles"
-import { Observer, useLocalObservable } from "mobx-react"
+import { ThemeProvider } from "@mui/material/styles"
+import { observer, useLocalObservable } from "mobx-react"
 
 import themeStore from "store/theme"
 
@@ -12,8 +12,8 @@ const Theme: FC<Props> = ({ children }) => {
   const store = useLocalObservable(() => themeStore)
 
   return (
-    <Observer>{() => <ThemeProvider theme={store.theme}>{children}</ThemeProvider>}</Observer>
+    <ThemeProvider theme={store.theme}>{children}</ThemeProvider>
   )
 }
 
-export default Theme
+export default observer(Theme)

@@ -1,15 +1,16 @@
 import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 
-import { makeStyles, createStyles } from "@material-ui/core/styles"
-import { Theme } from "@material-ui/core/styles"
-import Button from "@material-ui/core/Button"
-import Dialog from "@material-ui/core/Dialog"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogContent from "@material-ui/core/DialogContent"
-import DialogActions from "@material-ui/core/DialogActions"
-import TextField from "@material-ui/core/TextField"
-import Avatar from "@material-ui/core/Avatar"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import { Theme } from "@mui/material/styles"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import DialogContent from "@mui/material/DialogContent"
+import DialogActions from "@mui/material/DialogActions"
+import TextField from "@mui/material/TextField"
+import Avatar from "@mui/material/Avatar"
 
 import IconEditor from "../IconEditor"
 import { websiteEditStore, shortcutIconsStore } from "../../../store"
@@ -110,7 +111,7 @@ const WebsiteEdit: FC = () => {
       setUrl(url)
       setNewIcon(!id ? "default" : "")
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [websiteEditStore.open, synced])
 
   const { open, info } = websiteEditStore

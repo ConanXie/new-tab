@@ -1,7 +1,7 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 
-import Typography from "@material-ui/core/Typography"
+import Typography from "@mui/material/Typography"
 
 import { shortcutIconsStore, foldersSettings, desktopSettings, themeStore } from "../../../store"
 

@@ -1,8 +1,8 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 
-import Snackbar from "@material-ui/core/Snackbar"
-import Button from "@material-ui/core/Button"
+import Snackbar from "@mui/material/Snackbar"
+import Button from "@mui/material/Button"
 // import Button from "./Button"
 
 import { desktopStore } from "../../../store"
@@ -13,7 +13,6 @@ interface Props {
 }
 
 const Undo = observer(({ open, onClose }: Props) => {
-
   function handleSnackbarClose() {
     onClose()
   }

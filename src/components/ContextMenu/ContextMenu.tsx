@@ -1,17 +1,19 @@
 import React, { useRef, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import classNames from "classnames"
+import clsx from "clsx"
 
-import { makeStyles, createStyles } from "@material-ui/core/styles"
-import Paper from "@material-ui/core/Paper"
-import MenuList from "@material-ui/core/MenuList"
-import MenuItem from "@material-ui/core/MenuItem"
-import ListItemIcon from "@material-ui/core/ListItemIcon"
-import ListItemText from "@material-ui/core/ListItemText"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import Paper from "@mui/material/Paper"
+import MenuList from "@mui/material/MenuList"
+import MuiMenuItem from "@mui/material/MenuItem"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import ListItemText from "@mui/material/ListItemText"
 
 import menuStore from "store/menu"
 import desktopSettings from "store/desktopSettings"
 import { useAcrylic } from "../../styles/acrylic"
+import { styled } from "@mui/material/styles"
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -27,9 +29,6 @@ const useStyles = makeStyles(() =>
         outline: "none",
       },
     },
-    menuItem: {
-      paddingRight: 72,
-    },
     text: {
       fontSize: "0.9rem",
     },
@@ -42,6 +41,12 @@ const useStyles = makeStyles(() =>
     },
   }),
 )
+
+const MenuItem = styled(MuiMenuItem)(() => ({
+  paddingRight: 72,
+  paddingTop: 8,
+  paddingBottom: 8,
+}))
 
 function ContextMenu() {
   const contextMenuRef = useRef<HTMLDivElement>(null)
@@ -92,23 +97,16 @@ function ContextMenu() {
   return (
     <Paper
       classes={{
-        root: classNames(desktopSettings.acrylicContextMenu ? acrylic.root : null, classes.root),
+        root: clsx(desktopSettings.acrylicContextMenu ? acrylic.root : null, classes.root),
       }}
       ref={contextMenuRef}
     >
       <MenuList>
         {menus.map(({ disabled, icon, text, onClick }, index) => (
-          <li key={index}>
-            <MenuItem
-              classes={{ root: classes.menuItem }}
-              disabled={disabled}
-              component="div"
-              onClick={onClick}
-            >
-              <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
-              <ListItemText primary={text} classes={{ primary: classes.text }} />
-            </MenuItem>
-          </li>
+          <MenuItem disabled={disabled} onClick={onClick} key={index}>
+            <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+            <ListItemText primary={text} classes={{ primary: classes.text }} />
+          </MenuItem>
         ))}
       </MenuList>
     </Paper>

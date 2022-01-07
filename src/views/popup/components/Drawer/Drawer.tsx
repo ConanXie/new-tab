@@ -1,8 +1,9 @@
 import React, { FC } from "react"
 
-import Typography from "@material-ui/core/Typography"
-import { makeStyles, createStyles } from "@material-ui/core/styles"
-import { Theme } from "@material-ui/core/styles"
+import Typography from "@mui/material/Typography"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import { Theme } from "@mui/material/styles"
 
 const useStyles = makeStyles(({ palette }: Theme) =>
   createStyles({

@@ -1,8 +1,8 @@
 import React, { FC } from "react"
 
-import BrightnessHigh from "@material-ui/icons/BrightnessHighOutlined"
-import BrightnessMedium from "@material-ui/icons/BrightnessMediumOutlined"
-import BrightnessLow from "@material-ui/icons/BrightnessLowOutlined"
+import BrightnessHigh from "@mui/icons-material/BrightnessHighOutlined"
+import BrightnessMedium from "@mui/icons-material/BrightnessMediumOutlined"
+import BrightnessLow from "@mui/icons-material/BrightnessLowOutlined"
 
 import SliderItem from "./SliderItem"
 import { ItemProps } from "./Item"

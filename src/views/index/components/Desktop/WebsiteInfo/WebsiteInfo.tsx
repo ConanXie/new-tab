@@ -1,16 +1,17 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 
-import { makeStyles, createStyles } from "@material-ui/core/styles"
-import { Theme } from "@material-ui/core/styles"
-import Avatar from "@material-ui/core/Avatar"
-import Button from "@material-ui/core/Button"
-import Dialog from "@material-ui/core/Dialog"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogContent from "@material-ui/core/DialogContent"
-import DialogContentText from "@material-ui/core/DialogContentText"
-import DialogActions from "@material-ui/core/DialogActions"
-import Typography from "@material-ui/core/Typography"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import { Theme } from "@mui/material/styles"
+import Avatar from "@mui/material/Avatar"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import DialogContent from "@mui/material/DialogContent"
+import DialogContentText from "@mui/material/DialogContentText"
+import DialogActions from "@mui/material/DialogActions"
+import Typography from "@mui/material/Typography"
 
 import { shortcutIconsStore, websiteInfoStore } from "../../../store"
 
@@ -43,9 +44,9 @@ const WebsiteInfo: FC = () => {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle className={classes.title} disableTypography>
+      <DialogTitle className={classes.title}>
         <Avatar className={classes.avatar} src={iconURL} />
-        <Typography variant="h6">{info.label}</Typography>
+        <Typography variant="h6" component="p">{info.label}</Typography>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>{info.url}</DialogContentText>

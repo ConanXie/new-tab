@@ -1,13 +1,15 @@
 import React, { useState, useEffect, FC } from "react"
 
-import { Theme, makeStyles, createStyles } from "@material-ui/core/styles"
-import Button from "@material-ui/core/Button"
-import Dialog from "@material-ui/core/Dialog"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogActions from "@material-ui/core/DialogActions"
-import DialogContent from "@material-ui/core/DialogContent"
-import Input from "@material-ui/core/Input"
-import Typography from "@material-ui/core/Typography"
+import { Theme } from "@mui/material/styles"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
+import Input from "@mui/material/Input"
+import Typography from "@mui/material/Typography"
 
 const defaultValue = "00"
 
@@ -102,15 +104,17 @@ const NightTime: FC<Props> = (props) => {
   const handleChange = (
     setState: (value: React.SetStateAction<TimeState>) => void,
     pattern: TimePattern,
-  ) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-    const max = pattern === TimePattern.Hour ? 23 : 59
-    const isNumber = /^[0-5]?[0-9]$/.test(value)
-    const error = !isNumber || Number(value) > max
-    setState({
-      error,
-      value,
-    })
+  ) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target
+      const max = pattern === TimePattern.Hour ? 23 : 59
+      const isNumber = /^[0-5]?[0-9]$/.test(value)
+      const error = !isNumber || Number(value) > max
+      setState({
+        error,
+        value,
+      })
+    }
   }
 
   function handleClose() {

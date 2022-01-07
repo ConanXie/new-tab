@@ -1,11 +1,11 @@
 import React, { FC, useState } from "react"
 
-import createStyles from "@material-ui/core/styles/createStyles"
-import makeStyles from "@material-ui/core/styles/makeStyles"
-import Menu from "@material-ui/core/Menu"
-import MenuItem from "@material-ui/core/MenuItem"
-import ImageIcon from "@material-ui/icons/ImageOutlined"
-import ColorIcon from "@material-ui/icons/ColorLensOutlined"
+import createStyles from "@mui/styles/createStyles"
+import makeStyles from "@mui/styles/makeStyles"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
+import ImageIcon from "@mui/icons-material/ImageOutlined"
+import ColorIcon from "@mui/icons-material/ColorLensOutlined"
 
 import Item, { ItemProps } from "./Item"
 import { WallpaperType } from "../../../../store/wallpaper"

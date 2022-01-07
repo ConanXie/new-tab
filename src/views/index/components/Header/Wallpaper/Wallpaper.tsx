@@ -1,9 +1,9 @@
 import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 
-import Divider from "@material-ui/core/Divider"
-import List from "@material-ui/core/List"
-import Snackbar from "@material-ui/core/Snackbar"
+import Divider from "@mui/material/Divider"
+import List from "@mui/material/List"
+import Snackbar from "@mui/material/Snackbar"
 
 import { wallpaperStore, desktopStore } from "../../../store"
 import WallpaperSwitch from "./components/WallpaperSwitch"
@@ -24,7 +24,7 @@ const Wallpaper: FC = () => {
     setSnackbarOpen(false)
   }
 
-  const handleSnackbarClose = (event: React.SyntheticEvent<any>, reason: string) => {
+  const handleSnackbarClose = (event: any, reason: any) => {
     if (reason === "clickaway") {
       return
     }
@@ -64,16 +64,8 @@ const Wallpaper: FC = () => {
           type={wallpaperType}
           onChange={changeWallpaperType}
         />
-        <SelectImage
-          disabled={disabledImage}
-          onChange={updateWallpaper}
-          onError={showMessage}
-        />
-        <FetchImage
-          disabled={disabledImage}
-          onChange={updateWallpaper}
-          onError={showMessage}
-        />
+        <SelectImage disabled={disabledImage} onChange={updateWallpaper} onError={showMessage} />
+        <FetchImage disabled={disabledImage} onChange={updateWallpaper} onError={showMessage} />
         <SaveImage disabled={disabledImage} url={wallpaper} />
         <BlurImage disabled={disabledImage} value={blurRadius} onChange={handleBlurChange} />
         <SelectColor disabled={disabledColor} color={color} onChange={handleColorChange} />

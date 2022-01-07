@@ -6,7 +6,7 @@ import {
 import { settingsStorage } from "utils/storage"
 import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
-import deepOrange from "@material-ui/core/colors/deepOrange"
+import deepOrange from "@mui/material/colors/deepOrange"
 
 export enum WallpaperType {
   Image = 1,

@@ -1,22 +1,23 @@
 import React, { FC, useCallback } from "react"
 import classNames from "classnames"
 
-import { makeStyles, createStyles } from "@material-ui/core/styles"
-import { Theme } from "@material-ui/core/styles"
-import Button from "@material-ui/core/Button"
-import Dialog from "@material-ui/core/Dialog"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogContent from "@material-ui/core/DialogContent"
-import DialogActions from "@material-ui/core/DialogActions"
-import Tooltip from "@material-ui/core/Tooltip"
-import Snackbar from "@material-ui/core/Snackbar"
-import ToggleButton from "@material-ui/lab/ToggleButton"
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup"
-import AutorenewIcon from "@material-ui/icons/AutorenewOutlined"
-import HelpIcon from "@material-ui/icons/HelpOutlineOutlined"
-import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternateOutlined"
-import DashboardIcon from "@material-ui/icons/DashboardOutlined"
-import CropIcon from "@material-ui/icons/CropOutlined"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import { Theme } from "@mui/material/styles"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import DialogContent from "@mui/material/DialogContent"
+import DialogActions from "@mui/material/DialogActions"
+import Tooltip from "@mui/material/Tooltip"
+import Snackbar from "@mui/material/Snackbar"
+import ToggleButton from "@mui/material/ToggleButton"
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
+import AutorenewIcon from "@mui/icons-material/AutorenewOutlined"
+import HelpIcon from "@mui/icons-material/HelpOutlineOutlined"
+import AddPhotoIcon from "@mui/icons-material/AddPhotoAlternateOutlined"
+import DashboardIcon from "@mui/icons-material/DashboardOutlined"
+import CropIcon from "@mui/icons-material/CropOutlined"
 
 import { imageRe, imageSize } from "config"
 import { sendMessage } from "utils/message"
@@ -25,89 +26,91 @@ import { isBase64 } from "utils/validate"
 const SIZE = 192
 const ACTUAL_SIZE = 174
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => createStyles({
-  dialog: {
-    width: 374,
-    minHeight: 450,
-  },
-  typeToggle: {
-    display: "flex",
-    marginBottom: spacing(2),
-  },
-  cropperContainer: {
-    position: "relative",
-    overflow: "hidden",
-    width: SIZE,
-    height: SIZE,
-    userSelect: "none",
-    contain: "strict",
-    // tslint:disable-next-line: max-line-length
-    background: `url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M1 2V0h1v1H0v1z" fill-opacity=".047"/></svg>')`,
-    backgroundSize: "20px 20px",
-    "&:after": {
-      content: "''",
+const useStyles = makeStyles(({ spacing, palette }: Theme) =>
+  createStyles({
+    dialog: {
+      width: 374,
+      minHeight: 450,
+    },
+    typeToggle: {
+      display: "flex",
+      marginBottom: spacing(2),
+    },
+    cropperContainer: {
+      position: "relative",
+      overflow: "hidden",
+      width: SIZE,
+      height: SIZE,
+      userSelect: "none",
+      contain: "strict",
+      // tslint:disable-next-line: max-line-length
+      background: `url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M1 2V0h1v1H0v1z" fill-opacity=".047"/></svg>')`,
+      backgroundSize: "20px 20px",
+      "&:after": {
+        content: "''",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        width: SIZE - 2,
+        height: SIZE - 2,
+        transform: "translate(-50%, -50%)",
+        border: "1px dashed rgba(255, 255, 255, 0.6)",
+        borderRadius: "50%",
+      },
+      "& > img": {
+        position: "absolute",
+      },
+    },
+    cropper: {
       position: "absolute",
       top: "50%",
       left: "50%",
-      width: SIZE - 2,
-      height: SIZE - 2,
+      width: ACTUAL_SIZE,
+      height: ACTUAL_SIZE,
       transform: "translate(-50%, -50%)",
-      border: "1px dashed rgba(255, 255, 255, 0.6)",
       borderRadius: "50%",
+      boxShadow: "0 0 0 9999em rgba(0, 0, 0, 0.5)",
     },
-    "& > img": {
+    cropperIcons: {
       position: "absolute",
+      cursor: "pointer",
+      color: "#fff",
+      opacity: 0.8,
+      "&:active": {
+        opacity: 1,
+      },
     },
-  },
-  cropper: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    width: ACTUAL_SIZE,
-    height: ACTUAL_SIZE,
-    transform: "translate(-50%, -50%)",
-    borderRadius: "50%",
-    boxShadow: "0 0 0 9999em rgba(0, 0, 0, 0.5)",
-  },
-  cropperIcons: {
-    position: "absolute",
-    cursor: "pointer",
-    color: "#fff",
-    opacity: 0.8,
-    "&:active": {
-      opacity: 1,
+    resetIcon: {
+      left: 2,
+      top: 2,
     },
-  },
-  resetIcon: {
-    left: 2,
-    top: 2,
-  },
-  helpIcon: {
-    right: 2,
-    top: 2,
-  },
-  addPhotoIcon: {
-    marginTop: spacing(1),
-    marginRight: spacing(1),
-  },
-  input: {
-    display: "none",
-  },
-  iconsWrap: {
-    margin: spacing(-1),
-  },
-  icon: {
-    width: SIZE / 2,
-    height: SIZE / 2,
-    margin: spacing(1),
-    borderRadius: 4,
-    border: "1px solid transparent",
-    cursor: "pointer",
-  },
-  iconSelected: {
-    borderColor: palette.primary.main,
-  },
-}))
+    helpIcon: {
+      right: 2,
+      top: 2,
+    },
+    addPhotoIcon: {
+      marginTop: spacing(1),
+      marginRight: spacing(1),
+    },
+    input: {
+      display: "none",
+    },
+    iconsWrap: {
+      margin: spacing(-1),
+    },
+    icon: {
+      width: SIZE / 2,
+      height: SIZE / 2,
+      margin: spacing(1),
+      borderRadius: 4,
+      border: "1px solid transparent",
+      cursor: "pointer",
+    },
+    iconSelected: {
+      borderColor: palette.primary.main,
+    },
+  }),
+)
 
 enum IconType {
   BuiltIn = "1",
@@ -349,13 +352,15 @@ const ShortcutIcon: FC<Props> = (props) => {
           </div>
           {type === IconType.BuiltIn && (
             <div className={classes.iconsWrap}>
-              {icons.map(item => {
+              {icons.map((item) => {
                 return (
                   <img
                     key={item}
                     src={chrome.runtime.getURL(`icons/${item}.png`)}
                     alt={item}
-                    className={classNames(classes.icon, { [classes.iconSelected]: selectedIcon === item })}
+                    className={classNames(classes.icon, {
+                      [classes.iconSelected]: selectedIcon === item,
+                    })}
                     // tslint:disable-next-line: jsx-no-lambda
                     onClick={() => setSelectedIcon(item)}
                   />
@@ -365,18 +370,14 @@ const ShortcutIcon: FC<Props> = (props) => {
           )}
           {type === IconType.Custom && (
             <>
-              <div
-                className={classes.cropperContainer}
-                onMouseDown={handleMouseDown}
-                ref={cropEl}
-              >
+              <div className={classes.cropperContainer} onMouseDown={handleMouseDown} ref={cropEl}>
                 {image && (
                   <img
                     style={{
                       top: crop.y + "px",
                       left: crop.x + "px",
-                      width: (image.width * crop.scale) + "px",
-                      height: (image.height * crop.scale) + "px",
+                      width: image.width * crop.scale + "px",
+                      height: image.height * crop.scale + "px",
                     }}
                     onMouseDown={preventImgDrag}
                     src={image.src}
@@ -404,7 +405,6 @@ const ShortcutIcon: FC<Props> = (props) => {
               <label htmlFor="select-image">
                 <Button
                   variant="outlined"
-                  color="default"
                   size="small"
                   component="span"
                   className={classes.addPhotoIcon}
@@ -417,8 +417,12 @@ const ShortcutIcon: FC<Props> = (props) => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={handleClose}>{chrome.i18n.getMessage("button_cancel")}</Button>
-          <Button color="primary" onClick={handleDone}>{chrome.i18n.getMessage("button_done")}</Button>
+          <Button color="primary" onClick={handleClose}>
+            {chrome.i18n.getMessage("button_cancel")}
+          </Button>
+          <Button color="primary" onClick={handleDone}>
+            {chrome.i18n.getMessage("button_done")}
+          </Button>
         </DialogActions>
       </Dialog>
       <Snackbar

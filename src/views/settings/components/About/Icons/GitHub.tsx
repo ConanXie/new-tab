@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import SvgIcon from "@material-ui/core/SvgIcon"
+import SvgIcon from "@mui/material/SvgIcon"
 
 const GitHub: FC = (props) => (
   <SvgIcon {...props}>

@@ -1,7 +1,9 @@
 import React, { FC } from "react"
 
-import { Theme, makeStyles, createStyles } from "@material-ui/core/styles"
-import Paper from "@material-ui/core/Paper"
+import { Theme } from "@mui/material/styles"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import Paper from "@mui/material/Paper"
 
 import { WRAPPER_MAX_WIDTH } from "./Layout"
 
@@ -10,7 +12,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) =>
     root: {
       maxWidth: WRAPPER_MAX_WIDTH,
       boxSizing: "border-box",
-      margin: `${spacing(3)}px 0`,
+      margin: `${spacing(3)} 0`,
       border: `1px solid ${palette.divider}`,
       overflow: "hidden",
       "&:first-of-type": {

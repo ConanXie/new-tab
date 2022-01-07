@@ -1,9 +1,9 @@
 import React, { FC } from "react"
 import classNames from "classnames"
 
-import createStyles from "@material-ui/core/styles/createStyles"
-import makeStyles from "@material-ui/core/styles/makeStyles"
-import LinearProgress from "@material-ui/core/LinearProgress"
+import createStyles from "@mui/styles/createStyles"
+import makeStyles from "@mui/styles/makeStyles"
+import LinearProgress from "@mui/material/LinearProgress"
 
 const useStyles = makeStyles(() =>
   createStyles({

@@ -1,9 +1,4 @@
-import {
-  computed,
-  autorun,
-  toJS,
-  makeAutoObservable,
-} from "mobx"
+import { computed, autorun, toJS, makeAutoObservable } from "mobx"
 import { sendMessage } from "utils/message"
 import { isBase64 } from "utils/validate"
 

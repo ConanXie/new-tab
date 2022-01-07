@@ -1,7 +1,10 @@
 import React from "react"
 import { observer, useLocalObservable } from "mobx-react-lite"
 
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
+import { Theme } from "@mui/material/styles"
+
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
 
 import { wallpaperStore } from "../../store"
 import { folder } from "../Desktop/IconLayout"

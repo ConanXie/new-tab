@@ -1,7 +1,8 @@
-import { makeStyles } from "@material-ui/core"
+import { Theme } from "@mui/material/styles"
+import makeStyles from "@mui/styles/makeStyles"
 import Color from "color"
 
-export const useAcrylic = makeStyles(({ palette }) => ({
+export const useAcrylic = makeStyles(({ palette }: Theme) => ({
   root: {
     // background: "none",
     // "&::before": {
@@ -15,8 +16,8 @@ export const useAcrylic = makeStyles(({ palette }) => ({
     //   backdropFilter: "saturate(180%) blur(20px)",
     // },
     backgroundColor: `${Color(palette.background.paper)
-      .alpha(palette.type === "light" ? 0.68 : 0.7)
+      .alpha(palette.mode === "light" ? 0.68 : 0.7)
       .toString()} !important`,
-    backdropFilter: `saturate(${palette.type === "light" ? 150 : 260}%) blur(24px) !important`,
+    backdropFilter: `saturate(${palette.mode === "light" ? 150 : 260}%) blur(24px) !important`,
   },
 }))

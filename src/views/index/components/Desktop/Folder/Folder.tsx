@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import clsx from "clsx"
 import { observer, useLocalObservable } from "mobx-react"
 
-import Typography from "@material-ui/core/Typography"
+import Typography from "@mui/material/Typography"
 
 import { desktopStore, desktopSettings, folderStore } from "../../../store"
 import { Desktop } from "../../../store/desktop"

@@ -1,20 +1,22 @@
 import React, { FC } from "react"
 
-import { Theme, makeStyles, createStyles } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
-import IconButton from "@material-ui/core/IconButton"
-import Tooltip from "@material-ui/core/Tooltip"
-import ShareIcon from "@material-ui/icons/Share"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
+import { Theme } from "@mui/material/styles"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import Typography from "@mui/material/Typography"
+import IconButton from "@mui/material/IconButton"
+import Tooltip from "@mui/material/Tooltip"
+import ShareIcon from "@mui/icons-material/Share"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
+import ListItemText from "@mui/material/ListItemText"
 import { useSnackbar } from "notistack"
 
 import Wrapper from "../../Layout/SettingsWrapper"
 import GitHubIcon from "./Icons/GitHub"
 import LogoIcon from "./Icons/Logo"
 
-const useStyles = makeStyles(({ spacing, overrides }: Theme) =>
+const useStyles = makeStyles(({ spacing, palette }: Theme) =>
   createStyles({
     sec: {
       padding: spacing(3),
@@ -29,7 +31,7 @@ const useStyles = makeStyles(({ spacing, overrides }: Theme) =>
       height: 40,
       marginRight: spacing(1),
       marginLeft: spacing(-0.25),
-      color: (overrides!.MuiButton!.textPrimary as React.CSSProperties)!.color,
+      color: palette.primary.main,
     },
     "@keyframes rotate": {
       from: {
@@ -65,7 +67,6 @@ const About: FC = () => {
     enqueueSnackbar(chrome.i18n.getMessage("settings_about_clipboard"))
   }
 
-
   return (
     <>
       <Wrapper>
@@ -79,12 +80,12 @@ const About: FC = () => {
           </Typography>
           <div className={classes.iconBtnWrap}>
             <Tooltip title={chrome.i18n.getMessage("settings_about_share")}>
-              <IconButton onClick={copyToClipboard}>
+              <IconButton onClick={copyToClipboard} size="large">
                 <ShareIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title={chrome.i18n.getMessage("settings_about_source_code")}>
-              <IconButton href="https://github.com/ConanXie/new-tab/">
+              <IconButton href="https://github.com/ConanXie/new-tab/" size="large">
                 <GitHubIcon />
               </IconButton>
             </Tooltip>

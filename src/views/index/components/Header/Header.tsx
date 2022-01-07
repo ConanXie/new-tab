@@ -4,16 +4,16 @@ import React, { Suspense } from "react"
 import { observer } from "mobx-react-lite"
 import classNames from "classnames"
 
-import { makeStyles } from "@material-ui/styles"
-import { Theme } from "@material-ui/core/styles"
-import AppBar from "@material-ui/core/AppBar"
-import Drawer from "@material-ui/core/Drawer"
-import Toolbar from "@material-ui/core/Toolbar"
-import Tooltip from "@material-ui/core/Tooltip"
-import IconButton from "@material-ui/core/IconButton"
-import WallpaperIcon from "@material-ui/icons/WallpaperOutlined"
-import WidgetsIcon from "@material-ui/icons/WidgetsOutlined"
-import SettingsIcon from "@material-ui/icons/SettingsOutlined"
+import { makeStyles } from "@mui/styles"
+import { Theme } from "@mui/material/styles"
+import AppBar from "@mui/material/AppBar"
+import Drawer from "@mui/material/Drawer"
+import Toolbar from "@mui/material/Toolbar"
+import Tooltip from "@mui/material/Tooltip"
+import IconButton from "@mui/material/IconButton"
+import WallpaperIcon from "@mui/icons-material/WallpaperOutlined"
+import WidgetsIcon from "@mui/icons-material/WidgetsOutlined"
+import SettingsIcon from "@mui/icons-material/SettingsOutlined"
 
 import { desktopStore, desktopSettings, toolbarStore, wallpaperStore } from "../../store"
 import { useAcrylic } from "../../../../styles/acrylic"
@@ -63,17 +63,17 @@ function Header() {
         <AppBar square className={classes.root}>
           <Toolbar className={classes.gutters}>
             <Tooltip enterDelay={300} title="Wallpaper">
-              <IconButton onClick={handleWallpaperIconClick}>
+              <IconButton onClick={handleWallpaperIconClick} size="large">
                 <WallpaperIcon className={iconClassName} />
               </IconButton>
             </Tooltip>
             <Tooltip enterDelay={300} title="Widgets">
-              <IconButton>
+              <IconButton size="large">
                 <WidgetsIcon className={iconClassName} />
               </IconButton>
             </Tooltip>
             <Tooltip enterDelay={300} title="Settings">
-              <IconButton href="./settings.html">
+              <IconButton href="./settings.html" size="large">
                 <SettingsIcon className={iconClassName} />
               </IconButton>
             </Tooltip>

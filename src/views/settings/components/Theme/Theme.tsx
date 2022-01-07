@@ -1,18 +1,16 @@
 import React, { FC, useState } from "react"
 import { observer, useLocalObservable } from "mobx-react"
 
-import {
-  makeStyles,
-  createStyles,
-  Theme as MuiTheme,
-} from "@material-ui/core/styles"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
-import Divider from "@material-ui/core/Divider"
-import Menu from "@material-ui/core/Menu"
-import MenuItem from "@material-ui/core/MenuItem"
+import { Theme as MuiTheme } from "@mui/material/styles"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
+import ListItemText from "@mui/material/ListItemText"
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction"
+import Divider from "@mui/material/Divider"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
 
 import ColorPicker from "components/ColorPicker"
 import Wrapper from "../../Layout/SettingsWrapper"
@@ -44,15 +42,8 @@ const Theme: FC = () => {
   const [nightTimeOpen, setNightTimeOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<EventTarget & HTMLElement>()
 
-  const {
-    color,
-    nightMode,
-    nightModeText,
-    nightTime,
-    saveColor,
-    setNightTime,
-    changeNightMode,
-  } = useLocalObservable(() => themeStore)
+  const { color, nightMode, nightModeText, nightTime, saveColor, setNightTime, changeNightMode } =
+    useLocalObservable(() => themeStore)
 
   function openColorPicker() {
     setColorPickerOpen(true)
@@ -79,8 +70,7 @@ const Theme: FC = () => {
     changeNightMode(value)
   }
 
-  const handleMenuItemClick = (value: NightModeStatus) => () =>
-    handleModeMenuClick(value)
+  const handleMenuItemClick = (value: NightModeStatus) => () => handleModeMenuClick(value)
 
   /**
    * open night time edit dialog
@@ -115,11 +105,7 @@ const Theme: FC = () => {
           </ListItem>
         </List>
       </Wrapper>
-      <ColorPicker
-        color={color}
-        open={colorPickerOpen}
-        onClose={closeColorPicker}
-      />
+      <ColorPicker color={color} open={colorPickerOpen} onClose={closeColorPicker} />
       <Wrapper>
         <List>
           <ListItem button onClick={handleClickListItem}>
@@ -147,20 +133,14 @@ const Theme: FC = () => {
           <Divider />
           <ListItem button onClick={editNightTime} disabled={nightMode !== NightModeStatus.Custom}>
             <ListItemText
-              primary={chrome.i18n.getMessage(
-                "settings_night_mode_custom_primary",
-              )}
+              primary={chrome.i18n.getMessage("settings_night_mode_custom_primary")}
               secondary={chrome.i18n.getMessage(
                 "settings_night_mode_custom_secondary",
                 `${nightTime[0]} – ${nightTime[1]}`,
               )}
             />
           </ListItem>
-          <NightTime
-            open={nightTimeOpen}
-            times={nightTime}
-            onClose={handleNightTimeChanged}
-          />
+          <NightTime open={nightTimeOpen} times={nightTime} onClose={handleNightTimeChanged} />
         </List>
       </Wrapper>
     </>

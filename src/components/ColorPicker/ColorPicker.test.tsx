@@ -1,7 +1,7 @@
 import React from "react"
 import { shallow, ShallowWrapper } from "enzyme"
-import Dialog from "@material-ui/core/Dialog"
-import Button from "@material-ui/core/Button"
+import Dialog from "@mui/material/Dialog"
+import Button from "@mui/material/Button"
 
 import ColorPicker from "./ColorPicker"
 

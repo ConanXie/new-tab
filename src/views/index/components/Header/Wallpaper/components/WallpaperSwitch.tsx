@@ -1,7 +1,7 @@
 import React, { FC } from "react"
 
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
-import Switch from "@material-ui/core/Switch"
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction"
+import Switch from "@mui/material/Switch"
 
 import Item from "./Item"
 

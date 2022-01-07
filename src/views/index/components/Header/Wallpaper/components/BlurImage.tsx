@@ -1,7 +1,7 @@
 import React, { FC } from "react"
 
-import BlurOnIcon from "@material-ui/icons/BlurOnOutlined"
-import BlurOffIcon from "@material-ui/icons/BlurOffOutlined"
+import BlurOnIcon from "@mui/icons-material/BlurOnOutlined"
+import BlurOffIcon from "@mui/icons-material/BlurOffOutlined"
 
 import SliderItem from "./SliderItem"
 import { ItemProps } from "./Item"

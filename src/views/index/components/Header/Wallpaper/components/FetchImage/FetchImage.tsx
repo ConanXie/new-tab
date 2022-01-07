@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from "react"
 
-import createStyles from "@material-ui/core/styles/createStyles"
-import makeStyles from "@material-ui/core/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import makeStyles from "@mui/styles/makeStyles"
 
 import FetchProgress from "./FetchProgress"
 

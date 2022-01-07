@@ -1,11 +1,11 @@
 import React, { FC } from "react"
 
-import createStyles from "@material-ui/core/styles/createStyles"
-import makeStyles from "@material-ui/core/styles/makeStyles"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemIcon from "@material-ui/core/ListItemIcon"
-import ListItemText from "@material-ui/core/ListItemText"
-import Slider from "@material-ui/core/Slider"
+import createStyles from "@mui/styles/createStyles"
+import makeStyles from "@mui/styles/makeStyles"
+import ListItem from "@mui/material/ListItem"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import ListItemText from "@mui/material/ListItemText"
+import Slider from "@mui/material/Slider"
 
 import { ItemProps } from "../Item"
 
@@ -34,7 +34,7 @@ const SliderItem: FC<Props> = (props: Props) => {
   const classes = useStyles()
   const { disabled, value, icon, ...range } = props
 
-  const handleChange = (event: React.ChangeEvent<any>, value: number | number[]) =>
+  const handleChange = (event: any, value: number | number[]) =>
     props.onChange(value)
 
   return (

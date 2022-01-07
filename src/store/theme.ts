@@ -1,8 +1,8 @@
 import { autorun, toJS, makeAutoObservable, runInAction } from "mobx"
 import { settingsStorage } from "utils/storage"
 import Color from "color"
-import { createTheme, ThemeOptions, Theme } from "@material-ui/core/styles"
-import deepOrange from "@material-ui/core/colors/deepOrange"
+import { createTheme, ThemeOptions, Theme } from "@mui/material/styles"
+import deepOrange from "@mui/material/colors/deepOrange"
 import isWithinInterval from "date-fns/isWithinInterval"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
@@ -147,24 +147,33 @@ export class ThemeStore {
         ].join(","),
       },
       palette: {
-        type:
+        mode:
           (nightMode === NightModeStatus.BasedOnSystem && isSystemDark) ||
           (nightMode !== NightModeStatus.BasedOnSystem && applyNightMode)
             ? "dark"
             : "light",
         primary: {
+          dark: color,
+          light: color,
           main: color,
         },
       },
-      overrides: {
+      components: {
         MuiButton: {
-          textPrimary: {
-            color: isLight ? `${colorTool.darken(lightDiff * 0.08)}` : color,
+          styleOverrides: {
+            textPrimary: {
+              color: isLight ? `${colorTool.darken(lightDiff * 0.08)}` : color,
+            },
           },
         },
         MuiPaper: {
-          rounded: {
-            borderRadius: 16,
+          styleOverrides: {
+            rounded: "border-radius: 16px",
+          },
+        },
+        MuiMenuItem: {
+          styleOverrides: {
+            root: "padding-top: 8px; padding-bottom: 8px;",
           },
         },
       },

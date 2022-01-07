@@ -4,25 +4,27 @@ import Loadable from "react-loadable"
 import Color from "color"
 import { observer } from "mobx-react"
 
-import { makeStyles, createStyles, Theme as MuiTheme } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import Drawer from "@material-ui/core/Drawer"
-import Divider from "@material-ui/core/Divider"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemIcon from "@material-ui/core/ListItemIcon"
-import ListItemText from "@material-ui/core/ListItemText"
-import ColorLensIcon from "@material-ui/icons/ColorLensOutlined"
-import ViewModuleIcon from "@material-ui/icons/ViewModuleOutlined"
-import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUncheckedOutlined"
-import InfoIcon from "@material-ui/icons/InfoOutlined"
+import { Theme as MuiTheme } from "@mui/material/styles"
+import makeStyles from "@mui/styles/makeStyles"
+import createStyles from "@mui/styles/createStyles"
+import Typography from "@mui/material/Typography"
+import AppBar from "@mui/material/AppBar"
+import Toolbar from "@mui/material/Toolbar"
+import Drawer from "@mui/material/Drawer"
+import Divider from "@mui/material/Divider"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import ListItemText from "@mui/material/ListItemText"
+import ColorLensIcon from "@mui/icons-material/ColorLensOutlined"
+import ViewModuleIcon from "@mui/icons-material/ViewModuleOutlined"
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUncheckedOutlined"
+import InfoIcon from "@mui/icons-material/InfoOutlined"
 
 export const WRAPPER_MAX_WIDTH = 840
 export const NAV_WIDTH = 280
 
-const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
+const useStyles = makeStyles(({ spacing, palette }: MuiTheme) =>
   createStyles({
     appbar: {
       boxShadow: "none",
@@ -39,15 +41,13 @@ const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
       borderBottomRightRadius: spacing(6),
     },
     navActiveColor: {
-      color: (overrides!.MuiButton!.textPrimary as React.CSSProperties)!.color,
+      color: palette.text.primary,
     },
     navActiveBg: {
-      background: Color(palette.primary.main)
-        .alpha(0.15)
-        .toString(),
+      background: Color(palette.primary.main).alpha(0.15).toString(),
     },
     navDivider: {
-      margin: `${spacing(1)}px 0`,
+      margin: `${spacing(1)} 0`,
     },
     main: {
       marginLeft: NAV_WIDTH,
@@ -55,10 +55,10 @@ const useStyles = makeStyles(({ spacing, palette, overrides }: MuiTheme) =>
     },
     content: {
       boxSizing: "border-box",
-      maxWidth: WRAPPER_MAX_WIDTH + NAV_WIDTH + spacing(6) * 2,
-      padding: `${spacing(1)}px ${spacing(6)}px`,
+      maxWidth: WRAPPER_MAX_WIDTH + NAV_WIDTH + parseInt(spacing(6)) * 2,
+      padding: `${spacing(1)} ${spacing(6)}`,
       margin: "0 auto",
-      height: `calc(100vh - ${spacing(8)}px)`,
+      height: `calc(100vh - ${spacing(8)})`,
       overflow: "auto",
     },
   }),
