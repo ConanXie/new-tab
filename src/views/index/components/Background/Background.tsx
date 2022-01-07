@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react"
 import { observer, useLocalObservable } from "mobx-react-lite"
 
-import { imageAccepts, imageSize } from "config"
+import { imageRe, imageSize } from "config"
 import { wallpaperStore } from "../../store"
 
 const Background: FC = () => {
@@ -18,7 +18,7 @@ const Background: FC = () => {
     const file = event.dataTransfer!.files[0]
     if (file && useWallpaper) {
       const { type, size } = file
-      const matched = imageAccepts.find((item) => item === type)
+      const matched = imageRe.test(type)
       if (!matched || size > imageSize) {
         return
       }

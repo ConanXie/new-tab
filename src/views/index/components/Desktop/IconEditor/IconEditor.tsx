@@ -18,7 +18,7 @@ import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternateOutlined"
 import DashboardIcon from "@material-ui/icons/DashboardOutlined"
 import CropIcon from "@material-ui/icons/CropOutlined"
 
-import { imageAccepts, imageSize } from "config"
+import { imageRe, imageSize } from "config"
 import { sendMessage } from "utils/message"
 import { isBase64 } from "utils/validate"
 
@@ -245,7 +245,7 @@ const ShortcutIcon: FC<Props> = (props) => {
       event.target.value = ""
       if (file) {
         const { type: fileType, size } = file
-        const matched = imageAccepts.find(item => item === fileType)
+        const matched = imageRe.test(fileType)
         if (!matched) {
           setSnackbar({
             open: true,

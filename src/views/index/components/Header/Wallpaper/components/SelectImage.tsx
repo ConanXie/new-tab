@@ -1,7 +1,7 @@
 import React, { FC, useRef } from "react"
 
 import Item, { ItemProps, ItemMethods } from "./Item"
-import { imageAccepts, imageSize } from "config"
+import { imageAccepts, imageRe, imageSize } from "config"
 
 const SelectImage: FC<ItemProps & ItemMethods> = (props) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -21,7 +21,7 @@ const SelectImage: FC<ItemProps & ItemMethods> = (props) => {
       event.target.value = ""
       if (file) {
         const { type, size } = file
-        const matched = imageAccepts.find((item) => item === type)
+        const matched = imageRe.test(type)
         if (!matched) {
           props.onError(chrome.i18n.getMessage("desktop_msg_not_supported"))
           return
