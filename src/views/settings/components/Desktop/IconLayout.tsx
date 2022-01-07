@@ -1,8 +1,7 @@
 import React, { useState } from "react"
-import { observer, useLocalStore } from "mobx-react-lite"
+import { observer, useLocalObservable } from "mobx-react-lite"
 
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
@@ -14,6 +13,10 @@ import ColorPicker from "components/ColorPicker"
 import SettingsTitle from "components/SettingsTitle"
 
 import { wallpaperStore, desktopSettings } from "../../store"
+import { Desktop, Shortcut } from "../../../index/store/desktop"
+import Wrap from "../../../index/components/Desktop/Wrap"
+import Website from "../../../index/components/Desktop/Website"
+import "../../../index/components/Desktop/style"
 
 const useStyles = makeStyles(({ spacing }: Theme) =>
   createStyles({
@@ -39,29 +42,6 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
       gridTemplateColumns: "repeat(4, 1fr)",
       height: "100%",
     },
-    shortcut: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    shortcutIcon: {
-      position: "relative",
-      width: "5.5vw",
-      height: "5.5vw",
-      maxWidth: 96,
-      maxHeight: 96,
-      minWidth: 48,
-      minHeight: 48,
-      "& > img": {
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-      },
-    },
-    shortcutLabel: {
-      marginTop: spacing(1),
-    },
     colorIndicator: {
       boxSizing: "border-box",
       width: spacing(4),
@@ -74,27 +54,39 @@ const useStyles = makeStyles(({ spacing }: Theme) =>
   }),
 )
 
-export const shortcuts = [
+export const shortcuts: Shortcut[] = [
   {
-    icon: "google",
-    label: "Google",
+    id: "i001",
+    label: "Steam",
+    url: "https://www.steampowered.com",
   },
   {
-    icon: "twitter",
-    label: "Twitter",
-  },
-  {
-    icon: "amazon",
-    label: "Amazon",
-  },
-  {
-    icon: "youtube",
+    id: "i002",
     label: "Youtube",
+    url: "https://www.youtube.com",
+  },
+  {
+    id: "i003",
+    label: "Twitter",
+    url: "https://www.twitter.com",
+  },
+  {
+    id: "i004",
+    label: "Google",
+    url: "https://www.google.com",
   },
 ]
 
+export const folder: Desktop = {
+  type: 1,
+  row: 1,
+  column: 1,
+  id: "folder-sample",
+  shortcuts,
+}
+
 const IconLayout = observer(() => {
-  const { wallpaperStyles } = useLocalStore(() => wallpaperStore)
+  const { wallpaperStyles } = useLocalObservable(() => wallpaperStore)
   const {
     shortcutLabel,
     shortcutLabelColor,
@@ -103,7 +95,7 @@ const IconLayout = observer(() => {
     toggleShortcutLabel,
     saveShortcutLabelColor,
     toggleShortcutLabelShadow,
-  } = useLocalStore(() => desktopSettings)
+  } = useLocalObservable(() => desktopSettings)
   const classes = useStyles()
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
 
@@ -119,24 +111,17 @@ const IconLayout = observer(() => {
       <div className={classes.desktop}>
         <div className={classes.desktopBg} style={wallpaperStyles} />
         <div className={classes.wrapper}>
-          {shortcuts.map(({ icon, label }, index) => (
-            <div className={classes.shortcut} key={index}>
-              <div className={classes.shortcutIcon}>
-                <img src={chrome.runtime.getURL(`icons/${icon}.png`)} alt="" />
-              </div>
-              {shortcutLabel && (
-                <Typography
-                  className={classes.shortcutLabel}
-                  variant="subtitle1"
-                  style={{
-                    color: shortcutLabelColor,
-                    textShadow: shortcutLabelShadow ? `0 1px 2px rgba(0, 0, 0, 0.36)` : "",
-                  }}
-                >
-                  {label}
-                </Typography>
-              )}
-            </div>
+          {shortcuts.map(({ id, label, url }, index) => (
+            <Wrap row={1} column={index + 1} key={id}>
+              <Website
+                id={id}
+                label={label}
+                url={url}
+                itemId={id}
+                index={0}
+                onClick={(e) => e.preventDefault()}
+              />
+            </Wrap>
           ))}
         </div>
       </div>
@@ -165,9 +150,15 @@ const IconLayout = observer(() => {
         </ListItem>
         <Divider />
         <ListItem button onClick={toggleShortcutLabelShadow}>
-          <ListItemText primary={chrome.i18n.getMessage("settings_desktop_shortcut_label_shadow")} />
+          <ListItemText
+            primary={chrome.i18n.getMessage("settings_desktop_shortcut_label_shadow")}
+          />
           <ListItemSecondaryAction>
-            <Switch color="primary" checked={shortcutLabelShadow} onChange={toggleShortcutLabelShadow} />
+            <Switch
+              color="primary"
+              checked={shortcutLabelShadow}
+              onChange={toggleShortcutLabelShadow}
+            />
           </ListItemSecondaryAction>
         </ListItem>
       </List>
