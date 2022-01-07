@@ -36,7 +36,7 @@
         "asyncArrow": "always"
       }
     ],
-    // "comma-dangle": ["error", "always-multiline"],
+    "comma-dangle": ["error", "always-multiline"],
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/member-delimiter-style": "off",
@@ -44,7 +44,6 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "react/prop-types": "off"
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
