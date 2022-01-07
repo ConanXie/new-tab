@@ -12,12 +12,29 @@ import { onMessage } from "utils/message"
 
 import * as store from "./store"
 
+const setCssVariables = () => {
+  document.body.style.setProperty("--width", `${innerWidth}`)
+  document.body.style.setProperty("--height", `${innerHeight}`)
+  document.body.style.setProperty(
+    "--desktop-cell-width",
+    `${innerWidth / store.desktopStore.columns}`,
+  )
+  document.body.style.setProperty(
+    "--desktop-cell-height",
+    `${innerHeight / store.desktopStore.rows}`,
+  )
+}
+
 const App = () => {
   useEffect(() => {
     onMessage("updateWallpaper", (url: string, sender, sendResponse) => {
       sendResponse()
       store.wallpaperStore.wallpaperUpdated(url)
     })
+
+    setCssVariables()
+
+    window.onresize = setCssVariables
   }, [])
 
   return (

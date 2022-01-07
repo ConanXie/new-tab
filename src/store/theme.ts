@@ -1,4 +1,4 @@
-import { autorun, toJS, makeAutoObservable } from "mobx"
+import { autorun, toJS, makeAutoObservable, runInAction } from "mobx"
 import { settingsStorage } from "utils/storage"
 import Color from "color"
 import { createTheme, ThemeOptions, Theme } from "@material-ui/core/styles"
@@ -97,7 +97,9 @@ export class ThemeStore {
       }
       case NightModeStatus.BasedOnSystem:
         darkSchemeMedia.addEventListener("change", detectColorScheme)
-        this.setSystemDark(darkSchemeMedia.matches)
+        runInAction(() => {
+          this.setSystemDark(darkSchemeMedia.matches)
+        })
         return darkSchemeMedia.matches
       case NightModeStatus.Off:
       default:

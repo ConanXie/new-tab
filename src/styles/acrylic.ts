@@ -14,7 +14,9 @@ export const useAcrylic = makeStyles(({ palette }) => ({
     //   backgroundColor: Color(theme.palette.background.paper).alpha(0.75).toString(),
     //   backdropFilter: "saturate(180%) blur(20px)",
     // },
-    backgroundColor: `${Color(palette.background.paper).alpha(0.68).toString()} !important`,
-    backdropFilter: "saturate(180%) blur(24px) !important",
+    backgroundColor: `${Color(palette.background.paper)
+      .alpha(palette.type === "light" ? 0.68 : 0.7)
+      .toString()} !important`,
+    backdropFilter: `saturate(${palette.type === "light" ? 150 : 260}%) blur(24px) !important`,
   },
 }))
