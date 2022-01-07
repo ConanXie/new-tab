@@ -13,16 +13,17 @@ import grab, { Env } from "../Website/grab"
 import { useEffect } from "react"
 
 interface Props extends Desktop {
-  // onClick: (id: string, element: HTMLDivElement) => void
+  open?: boolean
   className?: string
   style?: React.CSSProperties
+  fixed?: boolean
 }
 
 const Folder: FC<Props> = (props) => {
   const { className, style: propsStyle, shortcuts = [] } = props
 
   // state of folder opening
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(!!props.open)
 
   const [onTransition, setOnTransition] = useState(false)
 
@@ -54,10 +55,9 @@ const Folder: FC<Props> = (props) => {
         setOnTransition(true)
 
         // clear listener
-        !(document.querySelector("#desktop") as any).removeEventListener(
-          "click",
-          handleDesktopClick,
-        )
+        document
+          .querySelector<HTMLElement>("#desktop")
+          ?.removeEventListener("click", handleDesktopClick)
       }
     },
     [folderState],
@@ -69,12 +69,12 @@ const Folder: FC<Props> = (props) => {
     if (open) {
       style.position = "absolute"
       style.margin = "0"
-      style.width = `calc(min(max(5.5vw, 48px), 96px) * ${columns} / 0.85 + 4px)`
-      style.height = `calc((min(max(5.5vw, 48px), 96px) + 20px) * ${rows} / 0.85 + 4px)`
+      style.width = `calc(var(--shortcut-size) * ${columns} / 0.85 + 4px)`
+      style.height = `calc((var(--shortcut-size) + 20px) * ${rows} / 0.85 + 4px)`
       style.borderRadius = "16px"
       style.borderColor = "transparent"
       style.boxShadow = `0 2px 8px 0 rgba(0, 0, 0, 0.35)`
-      !(document.querySelector("#desktop") as any).addEventListener("click", handleDesktopClick)
+      document.querySelector<HTMLElement>("#desktop")?.addEventListener("click", handleDesktopClick)
     }
 
     return style
@@ -107,6 +107,13 @@ const Folder: FC<Props> = (props) => {
   }, [shortcuts])
 
   useEffect(() => {
+    if (props.open) {
+      folderState.id = props.id
+      handleFolderClick()
+    }
+  }, [])
+
+  useEffect(() => {
     // set transition on grabbing out shortcut from folder
     if (folderState.id == "" && open) {
       setOnTransition(true)
@@ -116,8 +123,8 @@ const Folder: FC<Props> = (props) => {
   }, [folderState.id, props.id])
 
   const handleFolderClick = useCallback(
-    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      event.stopPropagation()
+    (event?: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      event?.stopPropagation()
 
       // put opening in next event loop which after document click
       // for opening anothor folder immediately
@@ -125,7 +132,7 @@ const Folder: FC<Props> = (props) => {
 
       setOnTransition(true)
 
-      // !(document.querySelector("#desktop") as any).addEventListener("click", handleDesktopClick)
+      document.querySelector<HTMLElement>("#desktop")?.addEventListener("click", handleDesktopClick)
     },
     [handleDesktopClick],
   )
@@ -133,11 +140,17 @@ const Folder: FC<Props> = (props) => {
   useEffect(() => {
     return () => {
       // clear listener
-      !(document.querySelector("#desktop") as any).removeEventListener("click", handleDesktopClick)
+      document
+        .querySelector<HTMLElement>("#desktop")
+        ?.removeEventListener("click", handleDesktopClick)
     }
   }, [])
 
   const handleGrab = (index: number) => (event: React.MouseEvent<HTMLElement>) => {
+    // prevent grab for settings sample
+    if (props.open) {
+      return
+    }
     if (event.button === 0) {
       grab(event, shortcuts[index], folderState.id, Env.Folder)
     }
@@ -150,7 +163,7 @@ const Folder: FC<Props> = (props) => {
     event.persist()
     const el = event.currentTarget
     const wrap = el.parentNode as HTMLElement
-    const desktopEl = document.querySelector("#desktop") as HTMLElement
+    const desktopEl = document.querySelector<HTMLElement>("#desktop")!
     const { top, left, width, height } = wrap.getBoundingClientRect()
     const { clientWidth, clientHeight, offsetTop: desktopOffsetTop } = desktopEl
     const { screenX: downScreenX, screenY: downScreenY } = event
@@ -234,7 +247,9 @@ const Folder: FC<Props> = (props) => {
         document.body.appendChild(clone)
       }
     }
-    el.addEventListener("mousemove", handleMouseMove)
+    if (!props.fixed) {
+      el.addEventListener("mousemove", handleMouseMove)
+    }
     el.addEventListener("mouseup", handleMouseUp)
 
     const handleMouseUpOnDocument = () => {
@@ -270,6 +285,7 @@ const Folder: FC<Props> = (props) => {
                     itemId={folderState.id}
                     index={index}
                     onMouseDown={handleGrab(index)}
+                    onClick={props.fixed ? (e) => e.preventDefault() : undefined}
                   />
                 </Wrap>
               </span>

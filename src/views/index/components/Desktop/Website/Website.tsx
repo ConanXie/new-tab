@@ -13,7 +13,8 @@ interface Props {
   index?: number
   icon?: string
   inFolder?: boolean
-  onMouseDown(e: any): void
+  onMouseDown?(e: any): void
+  onClick?(e: any): void
 }
 
 const textShadow = "0 1px 2px rgba(0, 0, 0, 0.36)"
@@ -45,6 +46,7 @@ const Webiste: FC<Props> = (props) => {
       onMouseDown={props.onMouseDown}
       className="shortcut"
       data-type="shortcut"
+      onClick={props.onClick}
     >
       <div className="shortcut-icon">{iconURL && <img src={iconURL} alt={label} />}</div>
       {showLabel && (
