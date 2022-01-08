@@ -81,6 +81,9 @@ function Header() {
               overflowX: "hidden",
               boxShadow: "none",
             },
+            "& .MuiBackdrop-root": {
+              backgroundColor: "transparent",
+            },
           },
           {
             "& .MuiPaper-root": desktopSettings.acrylicWallpaperDrawer ? acrylicBg : null,
