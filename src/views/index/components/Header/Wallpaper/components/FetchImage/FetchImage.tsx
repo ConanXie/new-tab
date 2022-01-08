@@ -1,19 +1,9 @@
 import React, { FC, useMemo, useState } from "react"
 
-import createStyles from "@mui/styles/createStyles"
-import makeStyles from "@mui/styles/makeStyles"
-
 import FetchProgress from "./FetchProgress"
 
 import Item, { ItemProps, ItemMethods } from "../Item"
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    wrap: {
-      position: "relative",
-    },
-  }),
-)
+import Box from "@mui/material/Box"
 
 const max = 100
 const diff = 100
@@ -90,10 +80,12 @@ const FetchImage: FC<ItemProps & ItemMethods> = (props) => {
     setCompleted(0)
   }
 
-  const classes = useStyles()
-
   return (
-    <div className={classes.wrap}>
+    <Box
+      sx={{
+        position: "relative",
+      }}
+    >
       <Item
         disabled={props.disabled}
         primary={chrome.i18n.getMessage("wallpaper_random")}
@@ -101,7 +93,7 @@ const FetchImage: FC<ItemProps & ItemMethods> = (props) => {
         onClick={startFetch}
       />
       <FetchProgress fetching={fetching} progress={completed} />
-    </div>
+    </Box>
   )
 }
 

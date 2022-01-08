@@ -1,9 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
-import { Theme } from "@mui/material/styles"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
@@ -15,32 +12,7 @@ import Avatar from "@mui/material/Avatar"
 import IconEditor from "../IconEditor"
 import { websiteEditStore, shortcutIconsStore } from "../../../store"
 import { isBase64 } from "utils/validate"
-
-const useStyles = makeStyles(({ spacing }: Theme) =>
-  createStyles({
-    dialog: {
-      width: "30vw",
-      minWidth: 300,
-      maxWidth: 320,
-    },
-    iconLabelWrap: {
-      display: "flex",
-      alignItems: "center",
-    },
-    avatar: {
-      display: "inline-block",
-      marginRight: spacing(2),
-      marginLeft: spacing(-0.5),
-      background: "none",
-      width: spacing(6),
-      height: spacing(6),
-      cursor: "pointer",
-    },
-    urlInput: {
-      marginLeft: spacing(8),
-    },
-  }),
-)
+import Box from "@mui/material/Box"
 
 const WebsiteEdit: FC = () => {
   const [synced, setSynced] = useState(false)
@@ -48,8 +20,6 @@ const WebsiteEdit: FC = () => {
   const [url, setUrl] = useState("")
   const [newIcon, setNewIcon] = useState("")
   const [iconEditorOpen, setIconEditorOpen] = useState(false)
-
-  const classes = useStyles()
 
   const handleLabelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLabel(event.target.value)
@@ -116,7 +86,6 @@ const WebsiteEdit: FC = () => {
 
   const { open, info } = websiteEditStore
   const { id } = info
-  const { dialog, avatar, iconLabelWrap } = classes
   const { shortcutIcon, getURL } = shortcutIconsStore
   const icon = newIcon || shortcutIcon(id, url)
   const iconURL = newIcon
@@ -130,8 +99,12 @@ const WebsiteEdit: FC = () => {
       <Dialog
         open={open}
         onClose={handleClose}
-        classes={{
-          paper: dialog,
+        sx={{
+          "& .MuiDialog-root": {
+            width: "30vw",
+            minWidth: 300,
+            maxWidth: 320,
+          },
         }}
       >
         <form onSubmit={handleDone}>
@@ -139,8 +112,25 @@ const WebsiteEdit: FC = () => {
             {chrome.i18n.getMessage(id ? "website_update_title" : "website_new_title")}
           </DialogTitle>
           <DialogContent>
-            <div className={iconLabelWrap}>
-              <Avatar className={avatar} src={iconURL} onClick={openIconEditor} />
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Avatar
+                src={iconURL}
+                onClick={openIconEditor}
+                sx={({ spacing }) => ({
+                  display: "inline-block",
+                  marginRight: 2,
+                  marginLeft: -0.5,
+                  background: "none",
+                  width: spacing(8),
+                  height: spacing(8),
+                  cursor: "pointer",
+                })}
+              />
               <TextField
                 autoFocus
                 fullWidth
@@ -150,7 +140,7 @@ const WebsiteEdit: FC = () => {
                 label={chrome.i18n.getMessage("edit_label")}
                 onChange={handleLabelChange}
               />
-            </div>
+            </Box>
             <br />
             <TextField
               fullWidth

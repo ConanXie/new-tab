@@ -1,8 +1,5 @@
 import React, { FC } from "react"
 
-import { Theme } from "@mui/material/styles"
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
 import Typography from "@mui/material/Typography"
 import IconButton from "@mui/material/IconButton"
 import Tooltip from "@mui/material/Tooltip"
@@ -15,43 +12,11 @@ import { useSnackbar } from "notistack"
 import Wrapper from "../../Layout/SettingsWrapper"
 import GitHubIcon from "./Icons/GitHub"
 import LogoIcon from "./Icons/Logo"
-
-const useStyles = makeStyles(({ spacing, palette }: Theme) =>
-  createStyles({
-    sec: {
-      padding: spacing(3),
-    },
-    header: {
-      display: "flex",
-      alignItems: "center",
-      marginBottom: spacing(1),
-    },
-    logo: {
-      width: 40,
-      height: 40,
-      marginRight: spacing(1),
-      marginLeft: spacing(-0.25),
-      color: palette.primary.main,
-    },
-    "@keyframes rotate": {
-      from: {
-        transform: "rotate(0deg)",
-      },
-      to: {
-        transform: "rotate(360deg)",
-      },
-    },
-    iconBtnWrap: {
-      textAlign: "right",
-      margin: spacing(-2),
-    },
-  }),
-)
+import Box from "@mui/material/Box"
 
 const share = "https://chrome.google.com/webstore/detail/kgfodmcknjlgkbgkkafogbdaibkfgdgo/"
 
 const About: FC = () => {
-  const classes = useStyles()
   const { version_name: versionName, version } = chrome.runtime.getManifest()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -70,15 +35,28 @@ const About: FC = () => {
   return (
     <>
       <Wrapper>
-        <div className={classes.sec}>
-          <header className={classes.header}>
-            <LogoIcon className={classes.logo} />
+        <Box sx={{ padding: 3 }}>
+          <Box component="header" sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
+            <LogoIcon
+              sx={{
+                width: 40,
+                height: 40,
+                marginRight: 1,
+                marginLeft: -0.25,
+                color: "primary.main",
+              }}
+            />
             <Typography variant="h6">Material Design New Tab</Typography>
-          </header>
+          </Box>
           <Typography gutterBottom>
             If you like Material Design, you may also like this extension.
           </Typography>
-          <div className={classes.iconBtnWrap}>
+          <Box
+            sx={{
+              textAlign: "right",
+              margin: -2,
+            }}
+          >
             <Tooltip title={chrome.i18n.getMessage("settings_about_share")}>
               <IconButton onClick={copyToClipboard} size="large">
                 <ShareIcon />
@@ -89,8 +67,8 @@ const About: FC = () => {
                 <GitHubIcon />
               </IconButton>
             </Tooltip>
-          </div>
-        </div>
+          </Box>
+        </Box>
       </Wrapper>
       <Wrapper>
         <List>

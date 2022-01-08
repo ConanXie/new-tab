@@ -1,8 +1,6 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC, useMemo } from "react"
 
-import { Theme } from "@mui/material/styles"
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
+import { SxProps, Theme } from "@mui/material/styles"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
@@ -10,6 +8,7 @@ import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import Input from "@mui/material/Input"
 import Typography from "@mui/material/Typography"
+import Box from "@mui/material/Box"
 
 const defaultValue = "00"
 
@@ -17,35 +16,6 @@ enum TimePattern {
   Hour,
   Minute,
 }
-
-const useStyles = makeStyles(({ spacing }: Theme) =>
-  createStyles({
-    wrap: {
-      display: "flex",
-      "& > div:last-child": {
-        marginLeft: spacing(6),
-      },
-    },
-    timeSec: {
-      display: "flex",
-      alignItems: "center",
-    },
-    timeTitle: {
-      textAlign: "center",
-      marginBottom: spacing(2),
-    },
-    inputRoot: {
-      width: "2em",
-    },
-    input: {
-      textAlign: "center",
-    },
-    symbol: {
-      marginTop: -4,
-      margin: spacing(0, 1),
-    },
-  }),
-)
 
 interface Props {
   times: string[]
@@ -60,7 +30,6 @@ interface TimeState {
 
 const NightTime: FC<Props> = (props) => {
   const { times, open, onClose } = props
-  const classes = useStyles()
   const [startHourState, setStartHourState] = useState<TimeState>({
     error: false,
     value: defaultValue,
@@ -141,70 +110,95 @@ const NightTime: FC<Props> = (props) => {
     }
   }
 
+  const inputStyle: SxProps<Theme> = useMemo(
+    () => ({
+      width: "2em",
+      "& .MuiInput-input": {
+        textAlign: "center",
+      },
+    }),
+    [],
+  )
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>{chrome.i18n.getMessage("settings_night_time")}</DialogTitle>
       <form onSubmit={handleDone}>
         <DialogContent>
-          <div className={classes.wrap}>
-            <div>
-              <Typography className={classes.timeTitle}>
+          <Box
+            sx={{
+              display: "flex",
+              "& > div:last-child": {
+                marginLeft: 6,
+              },
+            }}
+          >
+            <Box>
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  marginBottom: 2,
+                }}
+              >
                 {chrome.i18n.getMessage("settings_night_time_start")}
               </Typography>
-              <div className={classes.timeSec}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <Input
                   autoFocus
                   error={startHourState.error}
                   defaultValue={startHourState.value}
                   onChange={handleChange(setStartHourState, TimePattern.Hour)}
                   margin="dense"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.input,
-                  }}
+                  sx={inputStyle}
                 />
-                <Typography className={classes.symbol}>:</Typography>
+                <Typography sx={{ mt: "-4px", mx: 1 }}>:</Typography>
                 <Input
                   error={startMinuteState.error}
                   margin="dense"
                   defaultValue={startMinuteState.value}
                   onChange={handleChange(setStartMinuteState, TimePattern.Minute)}
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.input,
-                  }}
+                  sx={inputStyle}
                 />
-              </div>
-            </div>
-            <div>
-              <Typography className={classes.timeTitle}>
+              </Box>
+            </Box>
+            <Box>
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  marginBottom: 2,
+                }}
+              >
                 {chrome.i18n.getMessage("settings_night_time_end")}
               </Typography>
-              <div className={classes.timeSec}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <Input
                   error={endHourState.error}
                   defaultValue={endHourState.value}
                   onChange={handleChange(setEndHourState, TimePattern.Hour)}
                   margin="dense"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.input,
-                  }}
+                  sx={inputStyle}
                 />
-                <Typography className={classes.symbol}>:</Typography>
+                <Typography sx={{ mt: "-4px", mx: 1 }}>:</Typography>
                 <Input
                   error={endMinuteState.error}
                   margin="dense"
                   defaultValue={endMinuteState.value}
                   onChange={handleChange(setEndMinuteState, TimePattern.Minute)}
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.input,
-                  }}
+                  sx={inputStyle}
                 />
-              </div>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button color="primary" onClick={handleClose}>

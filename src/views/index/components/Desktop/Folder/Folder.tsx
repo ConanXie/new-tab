@@ -2,12 +2,13 @@ import React, { FC, useCallback, useMemo, useRef, useState } from "react"
 import clsx from "clsx"
 import { observer, useLocalObservable } from "mobx-react"
 
+import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 
 import { desktopStore, desktopSettings, folderStore } from "../../../store"
 import { Desktop } from "../../../store/desktop"
 import Wrap from "../Wrap"
-import { useAcrylic } from "styles/acrylic"
+import { acrylicBg } from "styles/acrylic"
 import Website from "../Website"
 import grab, { Env } from "../Website/grab"
 import { useEffect } from "react"
@@ -32,8 +33,6 @@ const Folder: FC<Props> = (props) => {
   const columns = useMemo(() => Math.ceil(Math.sqrt(shortcuts.length)), [shortcuts])
 
   const rows = useMemo(() => Math.ceil(shortcuts.length / columns), [shortcuts, columns])
-
-  const acrylic = useAcrylic()
 
   const folderState = useLocalObservable(() => folderStore)
 
@@ -262,14 +261,15 @@ const Folder: FC<Props> = (props) => {
 
   return (
     <>
-      <div
+      <Box
         ref={folderRef}
         data-id={props.id}
         data-type="folder"
-        className={clsx("folder", { open, "on-transition": onTransition }, className, acrylic.root)}
+        className={clsx("folder", { open, "on-transition": onTransition }, className)}
         style={{ ...propsStyle, ...folderStyles }}
         onMouseDown={handleMouseDown}
         onTransitionEnd={() => setOnTransition(false)}
+        sx={[acrylicBg]}
       >
         <div className={clsx("folder-grid", gridClassName)} style={gridStyles}>
           {shortcuts.map(({ id, label, url }, index) => (
@@ -292,7 +292,7 @@ const Folder: FC<Props> = (props) => {
             </div>
           ))}
         </div>
-      </div>
+      </Box>
       <Typography
         className={clsx("shortcut-name", { shadow: desktopSettingsState.shortcutLabelShadow })}
         variant="subtitle1"

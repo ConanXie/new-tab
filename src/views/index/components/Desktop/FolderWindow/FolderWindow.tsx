@@ -1,10 +1,6 @@
 import React, { FC } from "react"
-import clsx from "clsx"
 import { observer } from "mobx-react-lite"
 
-import { Theme } from "@mui/material/styles"
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
 import Popover, { PopoverOrigin } from "@mui/material/Popover"
 
 import folderStore from "../../../store/folder"
@@ -12,30 +8,12 @@ import foldersSettings from "store/foldersSettings"
 import Website from "../Website"
 import Wrap from "../Wrap"
 import grab, { Env } from "../Website/grab"
-import { useAcrylic } from "../../../../../styles/acrylic"
+import Box from "@mui/material/Box"
 
 const origin: PopoverOrigin = {
   vertical: "center",
   horizontal: "center",
 }
-
-const useStyles = makeStyles(({ spacing, palette }: Theme) =>
-  createStyles({
-    window: {
-      display: "grid",
-      padding: spacing(1),
-      "& > .wrap": {
-        padding: spacing(2),
-        height: "auto",
-        transition: "transform 0.2s cubic-bezier(0.333, 0, 0, 1)",
-      },
-      "& .shortcut-name": {
-        color: `${palette.text.primary} !important`,
-        textShadow: "none",
-      },
-    },
-  }),
-)
 
 interface Props {
   open: boolean
@@ -45,10 +23,8 @@ interface Props {
 
 const FolderWindow: FC<Props> = (props) => {
   const { open, anchorEl, onClose } = props
-  const classes = useStyles()
   const { tempShortcutId, id, shortcuts } = folderStore
-  const { backgroundColor, acrylicEffect } = foldersSettings
-  const acrylic = useAcrylic()
+  const { backgroundColor } = foldersSettings
 
   const handleGrab = (index: number) => (event: React.MouseEvent<HTMLElement>) => {
     if (event.button === 0) {
@@ -63,15 +39,26 @@ const FolderWindow: FC<Props> = (props) => {
       onClose={onClose}
       anchorOrigin={origin}
       transformOrigin={origin}
-      classes={{
-        paper: clsx(acrylicEffect ? acrylic.root : null),
-      }}
       PaperProps={{
         style: { backgroundColor },
       }}
     >
-      <div
-        className={clsx(["folder-window", classes.window])}
+      <Box
+        // className={clsx(["folder-window", classes.window])}
+        className="folder-window"
+        sx={{
+          display: "grid",
+          padding: 1,
+          "& > .wrap": {
+            padding: 2,
+            height: "auto",
+            transition: "transform 0.2s cubic-bezier(0.333, 0, 0, 1)",
+          },
+          "& .shortcut-name": {
+            color: `text.primary !important`,
+            textShadow: "none",
+          },
+        }}
         style={{
           gridTemplateColumns: `repeat(${folderStore.gridColumns}, 1fr)`,
         }}
@@ -93,7 +80,7 @@ const FolderWindow: FC<Props> = (props) => {
             </Wrap>
           )
         })}
-      </div>
+      </Box>
     </Popover>
   )
 }

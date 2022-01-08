@@ -1,7 +1,5 @@
 import React, { useState, useEffect, FC } from "react"
 
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
@@ -9,14 +7,6 @@ import DialogContent from "@mui/material/DialogContent"
 import DialogActions from "@mui/material/DialogActions"
 import TextField from "@mui/material/TextField"
 import { observer } from "mobx-react-lite"
-
-const useStyles = makeStyles(() => createStyles({
-  dialog: {
-    width: "30vw",
-    minWidth: 300,
-    maxWidth: 320,
-  },
-}))
 
 interface Props {
   open: boolean
@@ -27,7 +17,6 @@ interface Props {
 const FolderEditor: FC<Props> = (props) => {
   const { open, onClose } = props
   const [label, setLabel] = useState("")
-  const classes = useStyles()
 
   useEffect(() => {
     if (open) {
@@ -52,12 +41,16 @@ const FolderEditor: FC<Props> = (props) => {
     <Dialog
       open={open}
       onClose={handleClose}
-      classes={{ paper: classes.dialog }}
+      sx={{
+        "& .MuiPaper-root": {
+          width: "30vw",
+          minWidth: 300,
+          maxWidth: 320,
+        },
+      }}
     >
       <form onSubmit={handleDone}>
-        <DialogTitle>
-          {chrome.i18n.getMessage("folder_edit_title")}
-        </DialogTitle>
+        <DialogTitle>{chrome.i18n.getMessage("folder_edit_title")}</DialogTitle>
         <DialogContent>
           <TextField
             fullWidth

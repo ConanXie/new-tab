@@ -1,8 +1,5 @@
 import React, { FC, useCallback } from "react"
-import classNames from "classnames"
 
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
 import { Theme } from "@mui/material/styles"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
@@ -22,95 +19,21 @@ import CropIcon from "@mui/icons-material/CropOutlined"
 import { imageRe, imageSize } from "config"
 import { sendMessage } from "utils/message"
 import { isBase64 } from "utils/validate"
+import Box from "@mui/material/Box"
+import { SystemStyleObject } from "@mui/system/styleFunctionSx"
 
 const SIZE = 192
 const ACTUAL_SIZE = 174
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) =>
-  createStyles({
-    dialog: {
-      width: 374,
-      minHeight: 450,
-    },
-    typeToggle: {
-      display: "flex",
-      marginBottom: spacing(2),
-    },
-    cropperContainer: {
-      position: "relative",
-      overflow: "hidden",
-      width: SIZE,
-      height: SIZE,
-      userSelect: "none",
-      contain: "strict",
-      // tslint:disable-next-line: max-line-length
-      background: `url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M1 2V0h1v1H0v1z" fill-opacity=".047"/></svg>')`,
-      backgroundSize: "20px 20px",
-      "&:after": {
-        content: "''",
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        width: SIZE - 2,
-        height: SIZE - 2,
-        transform: "translate(-50%, -50%)",
-        border: "1px dashed rgba(255, 255, 255, 0.6)",
-        borderRadius: "50%",
-      },
-      "& > img": {
-        position: "absolute",
-      },
-    },
-    cropper: {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      width: ACTUAL_SIZE,
-      height: ACTUAL_SIZE,
-      transform: "translate(-50%, -50%)",
-      borderRadius: "50%",
-      boxShadow: "0 0 0 9999em rgba(0, 0, 0, 0.5)",
-    },
-    cropperIcons: {
-      position: "absolute",
-      cursor: "pointer",
-      color: "#fff",
-      opacity: 0.8,
-      "&:active": {
-        opacity: 1,
-      },
-    },
-    resetIcon: {
-      left: 2,
-      top: 2,
-    },
-    helpIcon: {
-      right: 2,
-      top: 2,
-    },
-    addPhotoIcon: {
-      marginTop: spacing(1),
-      marginRight: spacing(1),
-    },
-    input: {
-      display: "none",
-    },
-    iconsWrap: {
-      margin: spacing(-1),
-    },
-    icon: {
-      width: SIZE / 2,
-      height: SIZE / 2,
-      margin: spacing(1),
-      borderRadius: 4,
-      border: "1px solid transparent",
-      cursor: "pointer",
-    },
-    iconSelected: {
-      borderColor: palette.primary.main,
-    },
-  }),
-)
+const cropperIcons: (theme: Theme) => SystemStyleObject<Theme> = () => ({
+  position: "absolute",
+  cursor: "pointer",
+  color: "#fff",
+  opacity: 0.8,
+  "&:active": {
+    opacity: 1,
+  },
+})
 
 enum IconType {
   BuiltIn = "1",
@@ -130,7 +53,6 @@ const ShortcutIcon: FC<Props> = (props) => {
   const [icons, setIcons] = React.useState([] as string[])
   const [selectedIcon, setSelectedIcon] = React.useState("")
   const [image, setImage] = React.useState(null as HTMLImageElement | null)
-  const classes = useStyles()
 
   const handleClose = () => {
     props.onClose()
@@ -329,14 +251,22 @@ const ShortcutIcon: FC<Props> = (props) => {
     <>
       <Dialog
         open={open}
-        classes={{
-          paper: classes.dialog,
-        }}
         onClose={handleClose}
+        sx={{
+          "& .MuiPaper-root": {
+            width: 374,
+            minHeight: 450,
+          },
+        }}
       >
         <DialogTitle>Icon Editor</DialogTitle>
         <DialogContent>
-          <div className={classes.typeToggle}>
+          <Box
+            sx={{
+              display: "flex",
+              marginBottom: 2,
+            }}
+          >
             <ToggleButtonGroup size="small" value={type} exclusive onChange={handleTypeChange}>
               <ToggleButton value={IconType.BuiltIn}>
                 <Tooltip enterDelay={500} title="Built-in">
@@ -349,28 +279,66 @@ const ShortcutIcon: FC<Props> = (props) => {
                 </Tooltip>
               </ToggleButton>
             </ToggleButtonGroup>
-          </div>
+          </Box>
           {type === IconType.BuiltIn && (
-            <div className={classes.iconsWrap}>
+            <Box
+              sx={{
+                margin: -1,
+              }}
+            >
               {icons.map((item) => {
                 return (
-                  <img
+                  <Box
+                    component="img"
                     key={item}
                     src={chrome.runtime.getURL(`icons/${item}.png`)}
                     alt={item}
-                    className={classNames(classes.icon, {
-                      [classes.iconSelected]: selectedIcon === item,
-                    })}
-                    // tslint:disable-next-line: jsx-no-lambda
                     onClick={() => setSelectedIcon(item)}
+                    sx={{
+                      width: SIZE / 2,
+                      height: SIZE / 2,
+                      margin: 1,
+                      borderRadius: 4,
+                      border: "1px solid transparent",
+                      cursor: "pointer",
+                      borderColor: selectedIcon === item ? "primary.main" : null,
+                    }}
                   />
                 )
               })}
-            </div>
+            </Box>
           )}
           {type === IconType.Custom && (
             <>
-              <div className={classes.cropperContainer} onMouseDown={handleMouseDown} ref={cropEl}>
+              <Box
+                onMouseDown={handleMouseDown}
+                ref={cropEl}
+                sx={{
+                  position: "relative",
+                  overflow: "hidden",
+                  width: SIZE,
+                  height: SIZE,
+                  userSelect: "none",
+                  contain: "strict",
+                  // tslint:disable-next-line: max-line-length
+                  background: `url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M1 2V0h1v1H0v1z" fill-opacity=".047"/></svg>')`,
+                  backgroundSize: "20px 20px",
+                  "&:after": {
+                    content: "''",
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: SIZE - 2,
+                    height: SIZE - 2,
+                    transform: "translate(-50%, -50%)",
+                    border: "1px dashed rgba(255, 255, 255, 0.6)",
+                    borderRadius: "50%",
+                  },
+                  "& > img": {
+                    position: "absolute",
+                  },
+                }}
+              >
                 {image && (
                   <img
                     style={{
@@ -384,22 +352,47 @@ const ShortcutIcon: FC<Props> = (props) => {
                     alt=""
                   />
                 )}
-                <div className={classes.cropper} />
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: ACTUAL_SIZE,
+                    height: ACTUAL_SIZE,
+                    transform: "translate(-50%, -50%)",
+                    borderRadius: "50%",
+                    boxShadow: "0 0 0 9999em rgba(0, 0, 0, 0.5)",
+                  }}
+                />
                 <Tooltip enterDelay={500} title={chrome.i18n.getMessage("website_edit_icon_reset")}>
                   <AutorenewIcon
-                    className={classNames(classes.cropperIcons, classes.resetIcon)}
                     onClick={resetImage}
+                    sx={[
+                      cropperIcons,
+                      {
+                        left: 2,
+                        top: 2,
+                      },
+                    ]}
                   />
                 </Tooltip>
                 <Tooltip enterDelay={500} title={chrome.i18n.getMessage("website_edit_icon_help")}>
-                  <HelpIcon className={classNames(classes.cropperIcons, classes.helpIcon)} />
+                  <HelpIcon
+                    sx={[
+                      cropperIcons,
+                      {
+                        right: 2,
+                        top: 2,
+                      },
+                    ]}
+                  />
                 </Tooltip>
-              </div>
+              </Box>
               <input
                 accept="image/*"
                 id="select-image"
                 type="file"
-                className={classes.input}
+                style={{ display: "none" }}
                 onChange={selectImage}
               />
               <label htmlFor="select-image">
@@ -407,7 +400,10 @@ const ShortcutIcon: FC<Props> = (props) => {
                   variant="outlined"
                   size="small"
                   component="span"
-                  className={classes.addPhotoIcon}
+                  sx={{
+                    marginTop: 1,
+                    marginRight: 1,
+                  }}
                 >
                   <AddPhotoIcon />
                   {chrome.i18n.getMessage("website_edit_icon_select_file")}

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { observer, useLocalStore } from "mobx-react-lite"
 
-import { Theme } from "@mui/material/styles"
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
@@ -27,32 +24,6 @@ interface State {
   rows: number
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: "flex",
-      flexWrap: "wrap",
-    },
-    formControl: {
-      minWidth: 120,
-      "&:first-child": {
-        marginRight: theme.spacing(2),
-      },
-    },
-  }),
-)
-
-const ITEM_HEIGHT = 48
-const ITEM_PADDING_TOP = 8
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-}
-
 const generateNumberList = (max = 30) =>
   "a"
     .repeat(max)
@@ -66,7 +37,6 @@ const generateNumberList = (max = 30) =>
 const Grid = observer<Props>(({ open, onClose }) => {
   const { columns, rows, updateGrid } = useLocalStore(() => desktopSettings)
   const [values, setValues] = useState<State>({ columns, rows })
-  const classes = useStyles()
 
   function handleDone(event: React.FormEvent) {
     event.preventDefault()
@@ -88,24 +58,42 @@ const Grid = observer<Props>(({ open, onClose }) => {
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={handleDone}>
         <DialogTitle>Desktop grid</DialogTitle>
-        <DialogContent className={classes.container}>
-          <FormControl className={classes.formControl}>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            pt: "20px !important",
+          }}
+        >
+          <FormControl
+            sx={{
+              minWidth: "120px",
+              "&:first-child": {
+                marginRight: 2,
+              },
+            }}
+          >
             <InputLabel htmlFor="desktop-grid-columns">Columns</InputLabel>
             <Select
               value={values.columns}
               input={<Input id="desktop-grid-columns" />}
-              MenuProps={MenuProps}
               onChange={handleChange("columns")}
             >
               {generateNumberList(30)}
             </Select>
           </FormControl>
-          <FormControl className={classes.formControl}>
+          <FormControl
+            sx={{
+              minWidth: "120px",
+              "&:first-child": {
+                marginRight: 2,
+              },
+            }}
+          >
             <InputLabel htmlFor="desktop-grid-rows">Rows</InputLabel>
             <Select
               value={values.rows}
               input={<Input id="desktop-grid-rows" />}
-              MenuProps={MenuProps}
               onChange={handleChange("rows")}
             >
               {generateNumberList(30)}

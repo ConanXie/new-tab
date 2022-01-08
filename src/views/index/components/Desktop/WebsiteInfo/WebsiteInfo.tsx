@@ -1,9 +1,6 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
-import { Theme } from "@mui/material/styles"
 import Avatar from "@mui/material/Avatar"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
@@ -15,23 +12,7 @@ import Typography from "@mui/material/Typography"
 
 import { shortcutIconsStore, websiteInfoStore } from "../../../store"
 
-const useStyles = makeStyles(({ spacing }: Theme) =>
-  createStyles({
-    title: {
-      display: "flex",
-      alignItems: "center",
-    },
-    avatar: {
-      display: "inline-block",
-      marginRight: spacing(2),
-      marginLeft: spacing(-0.5),
-      background: "none",
-    },
-  }),
-)
-
 const WebsiteInfo: FC = () => {
-  const classes = useStyles()
 
   const handleClose = () => {
     websiteInfoStore.closeDialog()
@@ -44,9 +25,23 @@ const WebsiteInfo: FC = () => {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle className={classes.title}>
-        <Avatar className={classes.avatar} src={iconURL} />
-        <Typography variant="h6" component="p">{info.label}</Typography>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Avatar
+          src={iconURL}
+          sx={{
+            display: "inline-block",
+            marginRight: 2,
+            marginLeft: -0.5,
+          }}
+        />
+        <Typography variant="h6" component="p">
+          {info.label}
+        </Typography>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>{info.url}</DialogContentText>

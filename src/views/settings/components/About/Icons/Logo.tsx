@@ -1,8 +1,10 @@
 import React, { FC } from "react"
 import SvgIcon from "@mui/material/SvgIcon"
+import { SxProps, Theme } from "@mui/material/styles"
 
 interface Props {
   className?: string
+  sx?: SxProps<Theme>
 }
 
 const Logo: FC<Props> = (props) => (

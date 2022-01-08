@@ -1,15 +1,13 @@
 import React, { useState } from "react"
 import { observer, useLocalObservable } from "mobx-react-lite"
 
-import { Theme } from "@mui/material/styles"
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction"
 import Switch from "@mui/material/Switch"
 import Divider from "@mui/material/Divider"
+import Box from "@mui/material/Box"
 
 import ColorPicker from "components/ColorPicker"
 import SettingsTitle from "components/SettingsTitle"
@@ -19,42 +17,7 @@ import { Desktop, Shortcut } from "../../../index/store/desktop"
 import Wrap from "../../../index/components/Desktop/Wrap"
 import Website from "../../../index/components/Desktop/Website"
 import "../../../index/components/Desktop/style"
-
-const useStyles = makeStyles(({ spacing }: Theme) =>
-  createStyles({
-    desktop: {
-      position: "relative",
-      height: spacing(30),
-      overflow: "hidden",
-    },
-    desktopBg: {
-      position: "absolute",
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-      zIndex: 0,
-      backgroundPosition: "center",
-      backgroundSize: "cover",
-    },
-    wrapper: {
-      position: "relative",
-      zIndex: 1,
-      display: "grid",
-      gridTemplateColumns: "repeat(4, 1fr)",
-      height: "100%",
-    },
-    colorIndicator: {
-      boxSizing: "border-box",
-      width: spacing(4),
-      height: spacing(4),
-      marginRight: 12,
-      border: "2px solid #bfbfbf",
-      borderRadius: "50%",
-      outline: "none",
-    },
-  }),
-)
+import ColorIndicator from "../Folders/ColorIndicator"
 
 export const shortcuts: Shortcut[] = [
   {
@@ -98,7 +61,6 @@ const IconLayout = observer(() => {
     saveShortcutLabelColor,
     toggleShortcutLabelShadow,
   } = useLocalObservable(() => desktopSettings)
-  const classes = useStyles()
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
 
   function handleColorPickerClose(color?: string) {
@@ -110,9 +72,35 @@ const IconLayout = observer(() => {
 
   return (
     <>
-      <div className={classes.desktop}>
-        <div className={classes.desktopBg} style={wallpaperStyles} />
-        <div className={classes.wrapper}>
+      <Box
+        sx={({ spacing }) => ({
+          position: "relative",
+          height: spacing(30),
+          overflow: "hidden",
+        })}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            zIndex: 0,
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            ...wallpaperStyles,
+          }}
+        />
+        <Box
+          sx={{
+            position: "relative",
+            zIndex: 1,
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            height: "100%",
+          }}
+        >
           {shortcuts.map(({ id, label, url }, index) => (
             <Wrap row={1} column={index + 1} key={id}>
               <Website
@@ -125,8 +113,8 @@ const IconLayout = observer(() => {
               />
             </Wrap>
           ))}
-        </div>
-      </div>
+        </Box>
+      </Box>
       <SettingsTitle>{chrome.i18n.getMessage("settings_desktop_shortcut_title")}</SettingsTitle>
       <List>
         <ListItem button onClick={toggleShortcutLabel}>
@@ -142,11 +130,10 @@ const IconLayout = observer(() => {
             secondary={shortcutLabelColor}
           />
           <ListItemSecondaryAction>
-            <button
-              className={classes.colorIndicator}
-              style={{ backgroundColor: shortcutLabelColor }}
-              disabled={disabledLabelOptions}
+            <ColorIndicator
+              backgroundColor={shortcutLabelColor}
               onClick={() => setColorPickerOpen(true)}
+              disabled={disabledLabelOptions}
             />
           </ListItemSecondaryAction>
         </ListItem>

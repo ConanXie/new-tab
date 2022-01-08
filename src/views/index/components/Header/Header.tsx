@@ -1,11 +1,11 @@
 import "./style"
 
-import React, { Suspense } from "react"
-import { observer } from "mobx-react-lite"
+import React, { Suspense, useMemo } from "react"
+import { observer, useLocalObservable } from "mobx-react-lite"
 import classNames from "classnames"
 
-import { makeStyles } from "@mui/styles"
-import { Theme } from "@mui/material/styles"
+import { SxProps, Theme } from "@mui/material/styles"
+import grey from "@mui/material/colors/grey"
 import AppBar from "@mui/material/AppBar"
 import Drawer from "@mui/material/Drawer"
 import Toolbar from "@mui/material/Toolbar"
@@ -15,66 +15,54 @@ import WallpaperIcon from "@mui/icons-material/WallpaperOutlined"
 import WidgetsIcon from "@mui/icons-material/WidgetsOutlined"
 import SettingsIcon from "@mui/icons-material/SettingsOutlined"
 
-import { desktopStore, desktopSettings, toolbarStore, wallpaperStore } from "../../store"
-import { useAcrylic } from "../../../../styles/acrylic"
+import { desktopSettings, toolbarStore, wallpaperStore } from "../../store"
+import { acrylicBg } from "styles/acrylic"
 
 const Wallpaper = React.lazy(() => import("./Wallpaper"))
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
-  root: {
-    backgroundColor: "transparent",
-    boxShadow: "none",
-  },
-  gutters: {
-    justifyContent: "flex-end",
-  },
-  iconLight: {
-    color: palette.grey["50"],
-  },
-  iconDark: {
-    color: palette.grey["800"],
-  },
-  drawerPaper: {
-    width: 360,
-    overflowX: "hidden",
-    boxShadow: "none",
-  },
-  drawerMask: {
-    "& > div:first-child": {
-      backgroundColor: "transparent",
-    },
-  },
-}))
-
 function Header() {
-  const classes = useStyles()
-  const acrylic = useAcrylic()
+  const wallpaperState = useLocalObservable(() => wallpaperStore)
 
   function handleWallpaperIconClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.currentTarget.blur()
     toolbarStore.loadAndOpenWallpaperDrawer()
   }
 
-  const iconClassName = classNames(wallpaperStore.darkIcons ? classes.iconDark : classes.iconLight)
+  const iconStyles: SxProps<Theme> = useMemo(
+    () => ({
+      color: wallpaperState.darkIcons ? grey["800"] : grey["50"],
+    }),
+    [wallpaperState.darkIcons],
+  )
 
   return (
     <>
-      {desktopStore.toolbar && (
-        <AppBar square className={classes.root}>
-          <Toolbar className={classes.gutters}>
+      {desktopSettings.toolbar && (
+        <AppBar
+          square
+          sx={{
+            backgroundColor: "transparent",
+            boxShadow: 0,
+          }}
+        >
+          <Toolbar
+            sx={{
+              justifyContent: "flex-end",
+            }}
+          >
             <Tooltip enterDelay={300} title="Wallpaper">
               <IconButton onClick={handleWallpaperIconClick} size="large">
-                <WallpaperIcon className={iconClassName} />
+                <WallpaperIcon sx={iconStyles} />
               </IconButton>
             </Tooltip>
             <Tooltip enterDelay={300} title="Widgets">
               <IconButton size="large">
-                <WidgetsIcon className={iconClassName} />
+                <WidgetsIcon sx={iconStyles} />
               </IconButton>
             </Tooltip>
             <Tooltip enterDelay={300} title="Settings">
               <IconButton href="./settings.html" size="large">
-                <SettingsIcon className={iconClassName} />
+                <SettingsIcon sx={iconStyles} />
               </IconButton>
             </Tooltip>
           </Toolbar>
@@ -84,13 +72,19 @@ function Header() {
         anchor="right"
         open={toolbarStore.wallpaperDrawerOpen}
         onClose={toolbarStore.closeWallpaperDrawer}
-        classes={{
-          modal: classes.drawerMask,
-          paper: classNames(
-            desktopSettings.acrylicWallpaperDrawer ? acrylic.root : null,
-            classes.drawerPaper,
-          ),
-        }}
+        sx={[
+          {
+            "& .MuiPaper-root": {
+              backgroundColor: "transparent",
+              width: 360,
+              overflowX: "hidden",
+              boxShadow: "none",
+            },
+          },
+          {
+            "& .MuiPaper-root": desktopSettings.acrylicWallpaperDrawer ? acrylicBg : null,
+          },
+        ]}
       >
         {toolbarStore.wallpaperDrawerLoaded && (
           <Suspense fallback>

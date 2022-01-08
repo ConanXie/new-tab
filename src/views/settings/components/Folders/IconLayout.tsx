@@ -12,7 +12,7 @@ import ColorPicker from "components/ColorPicker"
 import SettingsTitle from "components/SettingsTitle"
 
 import { foldersSettings } from "../../store"
-import { useStyles } from "./FoldersWindow"
+import ColorIndicator from "./ColorIndicator"
 
 const IconLayout = observer(() => {
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
@@ -24,7 +24,6 @@ const IconLayout = observer(() => {
     toggleShortcutLabel,
     toggleShortcutLabelShadow,
   } = useLocalStore(() => foldersSettings)
-  const classes = useStyles()
 
   function handleColorPickerClose(color?: string) {
     setColorPickerOpen(false)
@@ -50,9 +49,8 @@ const IconLayout = observer(() => {
             secondary={shortcutLabelColor}
           />
           <ListItemSecondaryAction>
-            <button
-              className={classes.colorIndicator}
-              style={{ backgroundColor: shortcutLabelColor }}
+            <ColorIndicator
+              backgroundColor={shortcutLabelColor}
               onClick={() => setColorPickerOpen(true)}
             />
           </ListItemSecondaryAction>

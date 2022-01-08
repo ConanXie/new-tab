@@ -1,9 +1,6 @@
 import React, { FC, useState } from "react"
 import { observer, useLocalObservable } from "mobx-react"
 
-import { Theme as MuiTheme } from "@mui/material/styles"
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
@@ -17,27 +14,9 @@ import Wrapper from "../../Layout/SettingsWrapper"
 import NightTime from "./NightTime"
 
 import themeStore, { nightModeMenu, NightModeStatus } from "store/theme"
-
-const useStyles = makeStyles(({ spacing, palette }: MuiTheme) =>
-  createStyles({
-    color: {
-      boxSizing: "border-box",
-      width: spacing(4),
-      height: spacing(4),
-      marginRight: 12,
-      border: "2px solid #bfbfbf",
-      borderRadius: "50%",
-      backgroundColor: palette.primary.main,
-      cursor: "pointer",
-    },
-    paper: {
-      width: 200,
-    },
-  }),
-)
+import ColorIndicator from "../Folders/ColorIndicator"
 
 const Theme: FC = () => {
-  const classes = useStyles()
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
   const [nightTimeOpen, setNightTimeOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<EventTarget & HTMLElement>()
@@ -100,7 +79,7 @@ const Theme: FC = () => {
               secondary={color}
             />
             <ListItemSecondaryAction>
-              <div onClick={openColorPicker} className={classes.color} />
+              <ColorIndicator onClick={openColorPicker} />
             </ListItemSecondaryAction>
           </ListItem>
         </List>
@@ -118,7 +97,11 @@ const Theme: FC = () => {
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleModeMenuClose}
-            classes={{ paper: classes.paper }}
+            sx={{
+              "& .MuiList-root": {
+                width: 200,
+              },
+            }}
           >
             {nightModeMenu.map(({ status, text }) => (
               <MenuItem

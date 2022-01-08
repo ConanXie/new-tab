@@ -1,7 +1,5 @@
 import React, { FC, useState } from "react"
 
-import createStyles from "@mui/styles/createStyles"
-import makeStyles from "@mui/styles/makeStyles"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import ImageIcon from "@mui/icons-material/ImageOutlined"
@@ -20,14 +18,6 @@ const source = [
     text: chrome.i18n.getMessage("wallpaper_type_color"),
   },
 ]
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    paper: {
-      width: 200,
-    },
-  }),
-)
 
 interface TypeMenuItemProps {
   selected: boolean
@@ -70,7 +60,6 @@ const TypeMenu: FC<TypeMenuProps> = (props) => {
   }
 
   const { type } = props
-  const classes = useStyles()
   const currentType = source.find((item) => item.type === type)!.text
   const icon = type === WallpaperType.Image ? <ImageIcon /> : <ColorIcon />
 
@@ -88,7 +77,11 @@ const TypeMenu: FC<TypeMenuProps> = (props) => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
-        classes={{ paper: classes.paper }}
+        sx={{
+          "& .MuiList-root": {
+            width: 200,
+          },
+        }}
       >
         {source.map((item) => (
           <TypeMenuItem

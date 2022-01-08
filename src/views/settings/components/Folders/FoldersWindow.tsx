@@ -1,9 +1,6 @@
 import React, { useState } from "react"
 import { observer, useLocalStore } from "mobx-react-lite"
 
-import { Theme } from "@mui/material/styles"
-import makeStyles from "@mui/styles/makeStyles"
-import createStyles from "@mui/styles/createStyles"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
@@ -14,25 +11,11 @@ import ColorPicker from "components/ColorPicker"
 import SettingsTitle from "components/SettingsTitle"
 
 import { foldersSettings } from "../../store"
-
-export const useStyles = makeStyles(({ spacing }: Theme) =>
-  createStyles({
-    colorIndicator: {
-      boxSizing: "border-box",
-      width: spacing(4),
-      height: spacing(4),
-      marginRight: 12,
-      border: "2px solid #bfbfbf",
-      borderRadius: "50%",
-      outline: "none",
-    },
-  }),
-)
+import ColorIndicator from "./ColorIndicator"
 
 const FoldersWindow = observer(() => {
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
   const { backgroundColor, saveBackgroundColor } = useLocalStore(() => foldersSettings)
-  const classes = useStyles()
 
   function handleColorPickerClose(color?: string) {
     setColorPickerOpen(false)
@@ -51,9 +34,8 @@ const FoldersWindow = observer(() => {
             secondary={backgroundColor}
           />
           <ListItemSecondaryAction>
-            <button
-              className={classes.colorIndicator}
-              style={{ backgroundColor: backgroundColor }}
+            <ColorIndicator
+              backgroundColor={backgroundColor}
               onClick={() => setColorPickerOpen(true)}
             />
           </ListItemSecondaryAction>
