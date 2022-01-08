@@ -19,6 +19,7 @@ import {
   menuStore,
   websiteEditStore,
   websiteInfoStore,
+  desktopSettings,
 } from "../../store"
 import { MenuType } from "store/menu"
 // import WidgetWrap from "../Widgets/Wrap"
@@ -147,13 +148,12 @@ const Desktop: FC = () => {
     [],
   )
 
-  const handleShortcutGrab = (shortcut: Shortcut, componentId: string) => (
-    event: React.MouseEvent<HTMLElement>,
-  ) => {
-    if (event.button === 0) {
-      grab(event, shortcut, componentId, Env.Desktop)
+  const handleShortcutGrab =
+    (shortcut: Shortcut, componentId: string) => (event: React.MouseEvent<HTMLElement>) => {
+      if (event.button === 0) {
+        grab(event, shortcut, componentId, Env.Desktop)
+      }
     }
-  }
 
   const showMenu = (event: MouseEvent, menus: MenuType[], id?: string, index = 0) => {
     if (id) {
@@ -202,7 +202,7 @@ const Desktop: FC = () => {
         }
         if (target === desktopElement.current) {
           desktopMenus[0].disabled = desktopState.isFilled
-          const menus = desktopState.toolbar ? desktopMenus : [...desktopMenus, ...toolbarMenus]
+          const menus = desktopSettings.toolbar ? desktopMenus : [...desktopMenus, ...toolbarMenus]
           showMenu(event, menus)
           return
         }

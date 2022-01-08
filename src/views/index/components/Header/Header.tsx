@@ -42,6 +42,7 @@ function Header() {
           square
           sx={{
             backgroundColor: "transparent",
+            backgroundImage: "none",
             boxShadow: 0,
           }}
         >
