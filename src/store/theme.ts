@@ -1,12 +1,13 @@
 import { autorun, toJS, makeAutoObservable, runInAction } from "mobx"
 import { settingsStorage } from "utils/storage"
-import Color from "color"
 import { createTheme, ThemeOptions, Theme } from "@mui/material/styles"
 import deepOrange from "@mui/material/colors/deepOrange"
 import isWithinInterval from "date-fns/isWithinInterval"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 import isBefore from "date-fns/isBefore"
+import { createColorScheme, DEFAULT_VIEWING_CONDITIONS } from "@monet-color/theme"
+import { getPalette } from "@monet-color/palette"
 
 export enum NightModeStatus {
   Off = "Off",
@@ -18,6 +19,11 @@ export enum NightModeStatus {
 export interface NightMode {
   status: NightModeStatus
   text: string
+}
+
+export enum ThemeSource {
+  Wallpaper = "Wallpaper",
+  Custom = "Custom",
 }
 
 export const nightModeMenu: NightMode[] = [
@@ -44,6 +50,7 @@ const defaultData = {
   whiteToolbar: false,
   nightMode: NightModeStatus.BasedOnSystem,
   nightTime: ["18:30", "5:00"],
+  themeSource: ThemeSource.Custom,
 }
 
 const darkSchemeMedia = window.matchMedia("(prefers-color-scheme: dark)")
@@ -57,16 +64,30 @@ export class ThemeStore {
   nightMode: NightModeStatus
   nightTime: string[]
   isSystemDark: boolean
+  themeSource: ThemeSource
+  wallpaperPalette: string[]
+  customColor: string
 
   constructor() {
     const persistence = settingsStorage.get("theme", {})
-    const { color, nightMode, nightTime } = persistence
+    const { color, nightMode, nightTime, themeSource, wallpaperPalette, customColor } = persistence
     this.color = color || defaultData.color
     this.nightMode = nightMode || defaultData.nightMode
     this.nightTime = nightTime || defaultData.nightTime
+    this.themeSource = themeSource || defaultData.themeSource
+    this.wallpaperPalette = wallpaperPalette || []
+    this.customColor = customColor || defaultData.color
     this.isSystemDark = darkSchemeMedia.matches
 
     makeAutoObservable(this, {}, { autoBind: true })
+  }
+
+  get scheme() {
+    console.log(this.color)
+    const scheme = createColorScheme(this.color.toLowerCase())
+    console.log(scheme)
+
+    return scheme
   }
 
   get theme(): Theme {
@@ -111,7 +132,7 @@ export class ThemeStore {
     return nightModeMenu.find((item) => item.status === this.nightMode)!.text
   }
 
-  saveColor(color: string): void {
+  applyThemeColor(color: string): void {
     this.color = color
   }
 
@@ -127,11 +148,42 @@ export class ThemeStore {
     this.isSystemDark = isSystemDark
   }
 
+  changeThemeSource(source: ThemeSource | null): void {
+    if (source) {
+      this.themeSource = source
+      if (source == ThemeSource.Custom) {
+        this.applyThemeColor(this.customColor)
+      } else if (source == ThemeSource.Wallpaper) {
+        this.applyThemeColor(this.wallpaperPalette[0])
+      }
+    }
+  }
+
+  saveCustomColor(color: string): void {
+    if (color != this.customColor) {
+      this.customColor = color
+      this.applyThemeColor(color)
+    }
+  }
+
+  setWallpaperPalette(colors: string[]) {
+    this.wallpaperPalette = colors
+    if (this.themeSource == ThemeSource.Wallpaper) {
+      this.applyThemeColor(this.wallpaperPalette[0])
+    }
+  }
+
+  getPaletteFromWallpaper(url: string): void {
+    const img = new Image()
+    img.src = url
+    img.onload = () => {
+      const colors = getPalette(img, DEFAULT_VIEWING_CONDITIONS)
+      this.setWallpaperPalette(colors)
+    }
+  }
+
   private static createTheme(settings: ThemeStore) {
-    const { color, applyNightMode, nightMode, isSystemDark } = settings
-    const colorTool = Color(color).hsl().round()
-    const lightDiff = (colorTool as any)["color"][2] - 90
-    const isLight = lightDiff > 0 && !applyNightMode
+    const { scheme, applyNightMode, nightMode, isSystemDark } = settings
 
     const themeOptions: ThemeOptions = {
       typography: {
@@ -153,19 +205,10 @@ export class ThemeStore {
             ? "dark"
             : "light",
         primary: {
-          dark: color,
-          light: color,
-          main: color,
+          main: scheme.accent1.get(400)!,
         },
       },
       components: {
-        MuiButton: {
-          styleOverrides: {
-            textPrimary: {
-              color: isLight ? `${colorTool.darken(lightDiff * 0.08)}` : color,
-            },
-          },
-        },
         MuiPaper: {
           styleOverrides: {
             rounded: "border-radius: 16px",

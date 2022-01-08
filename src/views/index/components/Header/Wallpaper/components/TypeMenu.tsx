@@ -39,8 +39,8 @@ export const TypeMenuItem: FC<TypeMenuItemProps> = ({ selected, label, value, on
 }
 
 interface TypeMenuProps extends ItemProps {
-  type: number
-  onChange(value: number): void
+  type: WallpaperType
+  onChange(value: WallpaperType): void
 }
 
 const TypeMenu: FC<TypeMenuProps> = (props) => {

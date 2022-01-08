@@ -8,21 +8,43 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction"
 import Divider from "@mui/material/Divider"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
+import Box from "@mui/material/Box"
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
+import ToggleButton from "@mui/material/ToggleButton"
+import Tooltip from "@mui/material/Tooltip"
+import WallpaperOutlinedIcon from "@mui/icons-material/WallpaperOutlined"
+import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined"
 
 import ColorPicker from "components/ColorPicker"
 import Wrapper from "../../Layout/SettingsWrapper"
 import NightTime from "./NightTime"
 
-import themeStore, { nightModeMenu, NightModeStatus } from "store/theme"
+import themeStore, { nightModeMenu, NightModeStatus, ThemeSource } from "store/theme"
 import ColorIndicator from "../Folders/ColorIndicator"
+import { wallpaperStore } from "../../store"
+import SettingsTitle from "components/SettingsTitle"
 
 const Theme: FC = () => {
   const [colorPickerOpen, setColorPickerOpen] = useState(false)
   const [nightTimeOpen, setNightTimeOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<EventTarget & HTMLElement>()
 
-  const { color, nightMode, nightModeText, nightTime, saveColor, setNightTime, changeNightMode } =
-    useLocalObservable(() => themeStore)
+  const {
+    color: themeColor,
+    nightMode,
+    nightModeText,
+    nightTime,
+    themeSource,
+    wallpaperPalette,
+    customColor,
+    setNightTime,
+    changeNightMode,
+    changeThemeSource,
+    saveCustomColor,
+    applyThemeColor,
+  } = useLocalObservable(() => themeStore)
+
+  const { wallpaperStyles } = useLocalObservable(() => wallpaperStore)
 
   function openColorPicker() {
     setColorPickerOpen(true)
@@ -32,7 +54,7 @@ const Theme: FC = () => {
     setColorPickerOpen(false)
 
     if (color) {
-      saveColor(color.toUpperCase())
+      saveCustomColor(color.toUpperCase())
     }
   }
 
@@ -72,19 +94,104 @@ const Theme: FC = () => {
   return (
     <>
       <Wrapper>
-        <List>
-          <ListItem button onClick={openColorPicker}>
-            <ListItemText
-              primary={chrome.i18n.getMessage("settings_theme_switch_label")}
-              secondary={color}
-            />
-            <ListItemSecondaryAction>
-              <ColorIndicator onClick={openColorPicker} />
-            </ListItemSecondaryAction>
-          </ListItem>
-        </List>
+        <Box
+          sx={({ spacing }) => ({
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: spacing(40),
+            overflow: "hidden",
+          })}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              zIndex: 0,
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+              ...wallpaperStyles,
+            }}
+          />
+        </Box>
+        <SettingsTitle>Theme source</SettingsTitle>
+        <ToggleButtonGroup
+          exclusive
+          value={themeSource}
+          onChange={(_, value) => changeThemeSource(value)}
+          sx={{
+            ml: 2,
+            mt: 1,
+          }}
+        >
+          <ToggleButton value={ThemeSource.Wallpaper}>
+            <Tooltip enterDelay={300} title="Wallpaper">
+              <WallpaperOutlinedIcon />
+            </Tooltip>
+          </ToggleButton>
+          <ToggleButton value={ThemeSource.Custom}>
+            <Tooltip enterDelay={300} title="Custom">
+              <PaletteOutlinedIcon />
+            </Tooltip>
+          </ToggleButton>
+        </ToggleButtonGroup>
+        {themeSource == ThemeSource.Wallpaper && (
+          <Box
+            sx={{
+              mx: 2,
+              my: 1.5,
+              fontSize: 0,
+            }}
+          >
+            {wallpaperPalette.map((color) => (
+              <Box
+                key={color}
+                sx={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: 48,
+                  height: 48,
+                  mr: 2,
+                  my: 1,
+                  borderRadius: "50%",
+                  backgroundColor: color,
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                  "&::after": {
+                    content: "''",
+                    position: "absolute",
+                    bottom: -10,
+                    left: "50%",
+                    transform: `translateX(-50%) scale(${themeColor == color ? 1 : 0})`,
+                    width: 8,
+                    height: 4,
+                    borderRadius: 2,
+                    backgroundColor: "primary.main",
+                    transition: "all 260ms ease-out",
+                  },
+                }}
+                onClick={() => applyThemeColor(color)}
+              ></Box>
+            ))}
+          </Box>
+        )}
+        {themeSource == ThemeSource.Custom && (
+          <List>
+            <ListItem button onClick={openColorPicker}>
+              <ListItemText primary="Custom theme main color" secondary={customColor} />
+              <ListItemSecondaryAction>
+                <ColorIndicator backgroundColor={customColor} onClick={openColorPicker} />
+              </ListItemSecondaryAction>
+            </ListItem>
+          </List>
+        )}
       </Wrapper>
-      <ColorPicker color={color} open={colorPickerOpen} onClose={closeColorPicker} />
+      <ColorPicker color={customColor} open={colorPickerOpen} onClose={closeColorPicker} />
       <Wrapper>
         <List>
           <ListItem button onClick={handleClickListItem}>

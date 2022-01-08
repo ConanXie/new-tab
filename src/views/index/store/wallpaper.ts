@@ -1,12 +1,9 @@
-import {
-  autorun,
-  toJS,
-  makeAutoObservable,
-} from "mobx"
+import { autorun, toJS, makeAutoObservable } from "mobx"
 import { settingsStorage } from "utils/storage"
 import { sendMessage } from "utils/message"
 import { toBase64 } from "utils/fileConversions"
 import deepOrange from "@mui/material/colors/deepOrange"
+import themeStore from "store/theme"
 
 export enum WallpaperType {
   Image = 1,
@@ -92,12 +89,19 @@ export class WallpaperStore {
   wallpaperUpdated(url: string): void {
     this.wallpaperType = WallpaperType.Image
     this.wallpaper = url
+    themeStore.getPaletteFromWallpaper(this.wallpaper)
   }
-  changeWallpaperType(value: number): void {
+  changeWallpaperType(value: WallpaperType): void {
     this.wallpaperType = value
+    if (value == WallpaperType.Color) {
+      themeStore.setWallpaperPalette([this.color])
+    } else {
+      themeStore.getPaletteFromWallpaper(this.wallpaper)
+    }
   }
   handleColorChange(color: string): void {
     this.color = color
+    themeStore.setWallpaperPalette([this.color])
   }
   toggleDarkIcons(): void {
     this.darkIcons = !this.darkIcons
