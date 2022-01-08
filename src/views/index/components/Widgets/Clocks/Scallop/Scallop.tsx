@@ -1,12 +1,17 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { differenceInMilliseconds, format, startOfDay, startOfHour, startOfMinute } from "date-fns"
 
+import Box from "@mui/material/Box"
+import themeStore from "store/theme"
+
 import "./scallop.styl"
+import { useLocalObservable } from "mobx-react"
+import { SxProps, Theme } from "@mui/material/styles"
+
+const dailRadius = 50
+const secondRadius = 34.5
 
 const ClockScallop: FC = () => {
-  const dailRadius = 50
-  const secondRadius = 34.5
-
   const [date, setDate] = useState("")
   const [hourDeg, setHourDeg] = useState(0)
   const [minuteDeg, setMinuteDeg] = useState(0)
@@ -15,6 +20,8 @@ const ClockScallop: FC = () => {
 
   const clockEl = useRef<HTMLDivElement>(null)
   const dateTextEl = useRef<SVGTextElement>(null)
+
+  const { scheme } = useLocalObservable(() => themeStore)
 
   // draw a circle path
   const dateTextPath = useMemo(() => {
@@ -64,10 +71,26 @@ const ClockScallop: FC = () => {
   }, [])
 
   return (
-    <div
+    <Box
       className="scallop-clock"
       ref={clockEl}
-      style={{ visibility: dateTextDeg === null ? "hidden" : "visible" }}
+      sx={
+        {
+          visibility: dateTextDeg === null ? "hidden" : "visible",
+          "--color-scallop-dail": scheme.accent1.get(20),
+          "--color-scallop-date": scheme.neutral1.get(900),
+          "--color-scallop-hour": scheme.accent2.get(700),
+          "--color-scallop-minute": scheme.accent1.get(500),
+          "--color-scallop-second": scheme.accent3.get(600),
+          "@media (prefers-color-scheme: dark)": {
+            "--color-scallop-dail": scheme.accent2.get(800),
+            "--color-scallop-date": scheme.neutral1.get(100),
+            "--color-scallop-hour": scheme.accent1.get(400),
+            "--color-scallop-minute": scheme.accent1.get(100),
+            "--color-scallop-second": scheme.accent3.get(50),
+          },
+        } as SxProps<Theme>
+      }
     >
       <div className="dail"></div>
       <svg
@@ -80,7 +103,7 @@ const ClockScallop: FC = () => {
       >
         <path id="circle" d={dateTextPath} />
         <text
-          fill="#453c3c"
+          fill="var(--color-scallop-date)"
           fontSize="9px"
           fontWeight="500"
           style={{
@@ -113,7 +136,7 @@ const ClockScallop: FC = () => {
           transform: `translate(var(--second-hand-translate), -50%) rotate(${secondDeg}deg)`,
         }}
       ></div>
-    </div>
+    </Box>
   )
 }
 
