@@ -4,8 +4,6 @@ import Color from "color"
 import { observer } from "mobx-react"
 
 import Typography from "@mui/material/Typography"
-import AppBar from "@mui/material/AppBar"
-import Toolbar from "@mui/material/Toolbar"
 import Drawer from "@mui/material/Drawer"
 import Divider from "@mui/material/Divider"
 import List from "@mui/material/List"
@@ -78,30 +76,29 @@ const Layout: FC = () => {
 
   return (
     <>
-      <AppBar
-        position="static"
-        sx={{
-          boxShadow: "none",
-          backgroundColor: "background.paper",
-        }}
-      >
-        <Toolbar disableGutters={!open}>
-          <Typography variant="h6" color="textPrimary" noWrap>
-            {chrome.i18n.getMessage("settings_toolbar_title")}
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Drawer
         variant="permanent"
         sx={{
           "& .MuiPaper-root": {
             zIndex: 0,
-            top: 64,
             minWidth: NAV_WIDTH,
             borderRight: "none",
           },
         }}
       >
+        <Typography
+          variant="h6"
+          color="textPrimary"
+          noWrap
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            height: 64,
+            pl: 2,
+          }}
+        >
+          {chrome.i18n.getMessage("settings_toolbar_title")}
+        </Typography>
         <List>
           {settingsNav.map((item, index) => {
             if (!item) {
@@ -155,9 +152,10 @@ const Layout: FC = () => {
           sx={({ spacing }) => ({
             boxSizing: "border-box",
             maxWidth: `${WRAPPER_MAX_WIDTH + NAV_WIDTH + parseInt(spacing(6)) * 2}px`,
-            padding: `${spacing(1)} ${spacing(6)}`,
+            px: 6,
+            py: 8,
             margin: "0 auto",
-            height: `calc(100vh - ${spacing(8)})`,
+            height: "100vh",
             overflow: "auto",
           })}
         >
