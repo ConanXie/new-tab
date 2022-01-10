@@ -2,6 +2,7 @@ import { autorun, toJS, makeAutoObservable, runInAction } from "mobx"
 import { settingsStorage } from "utils/storage"
 import { createTheme, ThemeOptions, Theme } from "@mui/material/styles"
 import deepOrange from "@mui/material/colors/deepOrange"
+import { PaletteMode } from "@mui/material"
 import isWithinInterval from "date-fns/isWithinInterval"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
@@ -185,6 +186,13 @@ export class ThemeStore {
   private static createTheme(settings: ThemeStore) {
     const { scheme, applyNightMode, nightMode, isSystemDark } = settings
 
+    const mode: PaletteMode =
+      (nightMode === NightModeStatus.BasedOnSystem && isSystemDark) ||
+      (nightMode !== NightModeStatus.BasedOnSystem && applyNightMode)
+        ? "dark"
+        : "light"
+    const isDarkMode = mode == "dark"
+
     const themeOptions: ThemeOptions = {
       typography: {
         fontFamily: [
@@ -199,13 +207,12 @@ export class ThemeStore {
         ].join(","),
       },
       palette: {
-        mode:
-          (nightMode === NightModeStatus.BasedOnSystem && isSystemDark) ||
-          (nightMode !== NightModeStatus.BasedOnSystem && applyNightMode)
-            ? "dark"
-            : "light",
+        mode,
         primary: {
-          main: scheme.accent1.get(400)!,
+          main: isDarkMode ? scheme.accent1.get(200)! : scheme.accent1.get(500)!,
+        },
+        background: {
+          paper: isDarkMode ? scheme.neutral1.get(900)! : scheme.neutral1.get(10)!,
         },
       },
       components: {
