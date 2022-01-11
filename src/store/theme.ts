@@ -211,6 +211,9 @@ export class ThemeStore {
         primary: {
           main: isDarkMode ? scheme.accent1.get(200)! : scheme.accent1.get(500)!,
         },
+        secondary: {
+          main: isDarkMode ? scheme.accent3.get(500)! : scheme.accent3.get(200)!,
+        },
         background: {
           paper: isDarkMode ? scheme.neutral1.get(900)! : scheme.neutral1.get(10)!,
         },
