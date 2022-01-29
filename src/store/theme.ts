@@ -7,7 +7,11 @@ import isWithinInterval from "date-fns/isWithinInterval"
 import format from "date-fns/format"
 import isValid from "date-fns/isValid"
 import isBefore from "date-fns/isBefore"
-import { createColorScheme, DEFAULT_VIEWING_CONDITIONS } from "@monet-color/theme"
+import {
+  createColorScheme,
+  DEFAULT_VIEWING_CONDITIONS,
+  DynamicColorScheme,
+} from "@monet-color/theme"
 import { getPalette } from "@monet-color/palette"
 
 export enum NightModeStatus {
@@ -87,6 +91,8 @@ export class ThemeStore {
     console.log(this.color)
     const scheme = createColorScheme(this.color.toLowerCase())
     console.log(scheme)
+
+    ThemeStore.setColorSchemeProperties(scheme)
 
     return scheme
   }
@@ -175,12 +181,32 @@ export class ThemeStore {
   }
 
   getPaletteFromWallpaper(url: string): void {
-    const img = new Image()
-    img.src = url
-    img.onload = () => {
-      const colors = getPalette(img, DEFAULT_VIEWING_CONDITIONS)
-      this.setWallpaperPalette(colors)
-    }
+    setTimeout(() => {
+      const img = new Image()
+      img.src = url
+      img.onload = () => {
+        const colors = getPalette(img, DEFAULT_VIEWING_CONDITIONS)
+        this.setWallpaperPalette(colors)
+      }
+    })
+  }
+
+  private static setColorSchemeProperties(scheme: DynamicColorScheme) {
+    scheme.accent1.forEach((color, weight) => {
+      document.documentElement.style.setProperty(`--accent1-${weight}`, color ?? "")
+    })
+    scheme.accent2.forEach((color, weight) => {
+      document.documentElement.style.setProperty(`--accent2-${weight}`, color ?? "")
+    })
+    scheme.accent3.forEach((color, weight) => {
+      document.documentElement.style.setProperty(`--accent3-${weight}`, color ?? "")
+    })
+    scheme.neutral1.forEach((color, weight) => {
+      document.documentElement.style.setProperty(`--neutral1-${weight}`, color ?? "")
+    })
+    scheme.neutral2.forEach((color, weight) => {
+      document.documentElement.style.setProperty(`--neutral2-${weight}`, color ?? "")
+    })
   }
 
   private static createTheme(settings: ThemeStore) {
