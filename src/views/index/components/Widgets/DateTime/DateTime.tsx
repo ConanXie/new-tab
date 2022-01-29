@@ -1,8 +1,14 @@
 import React, { FC, useEffect, useRef, useState } from "react"
 import format from "date-fns/format"
+import Typography from "@mui/material/Typography"
 
-const DateTime: FC = () => {
-  const timerRef = useRef<NodeJS.Timeout>()
+interface Props {
+  col: number
+  row: number
+}
+
+const DateTime: FC<Props> = ({ col, row }) => {
+  const timerRef = useRef<number>()
   const [time, setTime] = useState("")
 
   const updateTime = () => {
@@ -13,18 +19,32 @@ const DateTime: FC = () => {
     const milliseconds = new Date().getMilliseconds()
     updateTime()
 
-    setTimeout(() => {
+    window.setTimeout(() => {
       updateTime()
-      timerRef.current = setInterval(updateTime, 1000)
+      timerRef.current = window.setInterval(updateTime, 1000)
     }, 1000 - milliseconds)
 
-    return () => clearInterval(timerRef.current!)
+    return () => clearInterval(timerRef.current)
   }, [])
 
   const [hour, minute] = time.split(",")
 
+  const minAxis = Math.min(row, col)
+
   return (
-    <h1>{hour}<br/>{minute}</h1>
+    <Typography
+      sx={{
+        fontWeight: "normal",
+        fontSize: `clamp(${32 * minAxis}px, ${10 * minAxis}vw, ${120 * minAxis}px)`,
+        color: "var(--accent1-100)",
+        textAlign: "center",
+        lineHeight: "1",
+      }}
+    >
+      {hour}
+      <br />
+      {minute}
+    </Typography>
   )
 }
 

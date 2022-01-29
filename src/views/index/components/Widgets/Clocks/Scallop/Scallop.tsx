@@ -11,7 +11,14 @@ import { SxProps, Theme } from "@mui/material/styles"
 const dailRadius = 50
 const secondRadius = 34.5
 
-const ClockScallop: FC = () => {
+interface Props {
+  col: number
+  row: number
+}
+
+import { desktopStore } from "../../../../store"
+
+const ClockScallop: FC<Props> = (props) => {
   const [date, setDate] = useState("")
   const [hourDeg, setHourDeg] = useState(0)
   const [minuteDeg, setMinuteDeg] = useState(0)
@@ -76,6 +83,9 @@ const ClockScallop: FC = () => {
       ref={clockEl}
       sx={
         {
+          transform: `scale(${
+            Math.min(desktopStore.cellWidth * props.col, desktopStore.cellHeight * props.row) / 100
+          })`,
           visibility: dateTextDeg === null ? "hidden" : "visible",
           "--color-scallop-dail": scheme.accent1.get(20),
           "--color-scallop-date": scheme.neutral1.get(900),

@@ -1,8 +1,11 @@
+.wrap[aria-grabbed=true] .scallop-clock
+  visibility hidden
+
 .scallop-clock
   display inline-flex
   position relative
   user-select none
-  transform 'scale(calc(min(var(--desktop-cell-width), var(--desktop-cell-height)) / 100))' % null
+  // transform 'scale(calc(min(var(--desktop-cell-width), var(--desktop-cell-height)) / 100))' % null
   visibility var(--visibility)
   --hand-height 8px
   --second-hand-translate 33.5px
