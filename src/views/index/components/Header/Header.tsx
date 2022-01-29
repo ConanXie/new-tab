@@ -76,7 +76,6 @@ function Header() {
         sx={[
           {
             "& .MuiPaper-root": {
-              backgroundColor: "transparent",
               width: 360,
               overflowX: "hidden",
               boxShadow: "none",
