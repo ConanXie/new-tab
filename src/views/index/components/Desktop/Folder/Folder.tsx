@@ -178,6 +178,8 @@ const Folder: FC<Props> = (props) => {
         event.preventDefault()
         evt.preventDefault()
 
+        desktopStore.grabbedId = props.id
+
         el.removeEventListener("mousemove", handleMouseMove)
         el.removeEventListener("mouseup", handleMouseUp)
 
@@ -209,8 +211,8 @@ const Folder: FC<Props> = (props) => {
           let restricted = true
           const x = e.clientX
           const y = e.clientY - desktopOffsetTop
-          const columnSize = clientWidth / desktopStore.columns
-          const rowSize = clientHeight / desktopStore.rows
+          const columnSize = clientWidth / desktopSettings.columns
+          const rowSize = clientHeight / desktopSettings.rows
           const column = Math.ceil(x / columnSize) - 1
           const row = Math.ceil(y / rowSize) - 1
 

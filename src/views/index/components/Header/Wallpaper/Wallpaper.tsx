@@ -5,7 +5,7 @@ import Divider from "@mui/material/Divider"
 import List from "@mui/material/List"
 import Snackbar from "@mui/material/Snackbar"
 
-import { wallpaperStore, desktopStore } from "../../../store"
+import { wallpaperStore, desktopSettings } from "../../../store"
 import WallpaperSwitch from "./components/WallpaperSwitch"
 import TypeMenu from "./components/TypeMenu"
 import SelectImage from "./components/SelectImage"
@@ -72,7 +72,7 @@ const Wallpaper: FC = () => {
         <Divider />
         <Brightness value={backgroundBrightness} onChange={handleBackgroundBrightnessChange} />
         <DarkIcons
-          disabled={!desktopStore.toolbar}
+          disabled={!desktopSettings.toolbar}
           onChange={toggleDarkIcons}
           checked={darkIcons}
         />

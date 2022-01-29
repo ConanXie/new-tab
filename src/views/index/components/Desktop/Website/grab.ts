@@ -2,6 +2,7 @@
  * Make shortcut grabable.
  */
 
+import desktopSettings from "store/desktopSettings"
 import desktopStore, { Shortcut } from "../../../store/desktop"
 import folderStore from "../../../store/folder"
 
@@ -50,6 +51,9 @@ const grab = (
     if (downScreenX !== moveScreenX || downScreenY !== moveScreenY) {
       event.preventDefault()
       evt.preventDefault()
+
+      desktopStore.grabbedId = componentId
+
       el.removeEventListener("mousemove", handleMouseMove)
 
       // Create a clone to follow mouse moving
@@ -185,8 +189,8 @@ const grab = (
         } else if (env === Env.Desktop) {
           y -= desktopOffsetTop
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
-            unitWidth = clientWidth / desktopStore.columns
-            unitHeight = clientHeight / desktopStore.rows
+            unitWidth = clientWidth / desktopSettings.columns
+            unitHeight = clientHeight / desktopSettings.rows
             row = Math.ceil(y / unitHeight)
             column = Math.ceil(x / unitWidth)
             if (tempRow !== row || tempColumn !== column) {
@@ -272,8 +276,8 @@ const grab = (
         } else if (env === Env.Desktop) {
           const x = e.clientX
           const y = e.clientY - desktopOffsetTop
-          unitWidth = clientWidth / desktopStore.columns
-          unitHeight = clientHeight / desktopStore.rows
+          unitWidth = clientWidth / desktopSettings.columns
+          unitHeight = clientHeight / desktopSettings.rows
           const adjustLeft = (unitWidth - width) / 2
           const adjustTop = (unitHeight - height - labelHeight) / 2
           if (x > 0 && x < clientWidth && y > 0 && y < clientHeight) {
