@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 
 import { desktopSettings } from "../../store"
+import { SxProps, Theme } from "@mui/material/styles"
 
 interface Props {
   open: boolean
@@ -28,11 +29,15 @@ const generateNumberList = (max = 30) =>
   "a"
     .repeat(max)
     .split("")
-    .map((value, index) => (
+    .map((_, index) => (
       <MenuItem value={index + 1} key={index}>
         {index + 1}
       </MenuItem>
     ))
+
+const labelStyles: SxProps<Theme> = {
+  transform: "translate(0, -9px) scale(0.75)",
+}
 
 const Grid = observer<Props>(({ open, onClose }) => {
   const { columns, rows, updateGrid } = useLocalStore(() => desktopSettings)
@@ -68,12 +73,14 @@ const Grid = observer<Props>(({ open, onClose }) => {
           <FormControl
             sx={{
               minWidth: "120px",
-              "&:first-child": {
+              "&:first-of-type": {
                 marginRight: 2,
               },
             }}
           >
-            <InputLabel htmlFor="desktop-grid-columns">Columns</InputLabel>
+            <InputLabel htmlFor="desktop-grid-columns" sx={labelStyles}>
+              Columns
+            </InputLabel>
             <Select
               value={values.columns}
               input={<Input id="desktop-grid-columns" />}
@@ -85,12 +92,14 @@ const Grid = observer<Props>(({ open, onClose }) => {
           <FormControl
             sx={{
               minWidth: "120px",
-              "&:first-child": {
+              "&:first-of-type": {
                 marginRight: 2,
               },
             }}
           >
-            <InputLabel htmlFor="desktop-grid-rows">Rows</InputLabel>
+            <InputLabel htmlFor="desktop-grid-rows" sx={labelStyles}>
+              Rows
+            </InputLabel>
             <Select
               value={values.rows}
               input={<Input id="desktop-grid-rows" />}
