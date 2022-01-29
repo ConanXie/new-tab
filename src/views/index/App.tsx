@@ -12,17 +12,17 @@ import { onMessage } from "utils/message"
 
 import * as store from "./store"
 
-const setCssVariables = () => {
+const calcDesktopGrid = () => {
+  const cellWidth = innerWidth / store.desktopSettings.columns
+  const cellHeight = innerHeight / store.desktopSettings.rows
+
+  store.desktopStore.updateCell(cellWidth, cellHeight)
+  store.widgetStore.resetResizableMode()
+
   document.body.style.setProperty("--width", `${innerWidth}`)
   document.body.style.setProperty("--height", `${innerHeight}`)
-  document.body.style.setProperty(
-    "--desktop-cell-width",
-    `${innerWidth / store.desktopStore.columns}`,
-  )
-  document.body.style.setProperty(
-    "--desktop-cell-height",
-    `${innerHeight / store.desktopStore.rows}`,
-  )
+  document.body.style.setProperty("--desktop-cell-width", `${cellWidth}`)
+  document.body.style.setProperty("--desktop-cell-height", `${cellHeight}`)
 }
 
 const App = () => {
@@ -32,9 +32,9 @@ const App = () => {
       store.wallpaperStore.wallpaperUpdated(url)
     })
 
-    setCssVariables()
+    calcDesktopGrid()
 
-    window.onresize = setCssVariables
+    window.onresize = calcDesktopGrid
   }, [])
 
   return (
