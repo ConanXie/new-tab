@@ -1,10 +1,6 @@
 import { toJS, observable, computed, makeObservable, action } from "mobx"
 import shortid from "shortid"
-import {
-  DesktopSettings,
-  DESKTOP_SETTINGS,
-  defaultData as desktopSettingsDefault,
-} from "store/desktopSettings"
+import desktopSettings from "store/desktopSettings"
 // import folderStore from "./folder"
 import menuStore from "store/menu"
 
@@ -34,10 +30,29 @@ export interface Desktop extends Based {
   columnEnd?: number
   label?: string
   shortcuts?: Shortcut[]
+  widgetName?: string
 }
 
-export class DesktopStore extends DesktopSettings {
+export class DesktopStore {
   data: Desktop[] = [
+    {
+      type: 2,
+      row: 2,
+      rowEnd: 3,
+      column: 4,
+      columnEnd: 6,
+      id: "widget001",
+      widgetName: "DateTime",
+    },
+    {
+      type: 2,
+      row: 2,
+      rowEnd: 3,
+      column: 6,
+      columnEnd: 7,
+      id: "widget002",
+      widgetName: "Scallop",
+    },
     {
       type: 1,
       row: 4,
@@ -107,22 +122,24 @@ export class DesktopStore extends DesktopSettings {
       ],
     },
   ]
-  constructor() {
-    super(false)
 
+  /**
+   * id of grabbed shortcut, folder or widget
+   */
+  grabbedId = ""
+
+  cellWidth = 0
+
+  cellHeight = 0
+
+  constructor() {
     makeObservable(
       this,
       {
         data: observable,
-        toolbar: observable,
-        columns: observable,
-        rows: observable,
-        shortcutLabel: observable,
-        shortcutLabelColor: observable,
-        shortcutLabelShadow: observable,
-        acrylicContextMenu: observable,
-        acrylicWallpaperDrawer: observable,
         removed: observable,
+        cellWidth: observable,
+        cellHeight: observable,
         chessBoard: computed,
         isFilled: computed,
         undoMessage: computed,
@@ -138,27 +155,31 @@ export class DesktopStore extends DesktopSettings {
         transferShortcut: action,
         createShortcutComponent: action,
         retrieveCallback: action,
+        updateCell: action,
+        updateWidgetSize: action,
       },
       { autoBind: true },
     )
 
-    chrome.storage.local.get([DESKTOP, DESKTOP_SETTINGS], this.retrieveCallback)
+    chrome.storage.local.get([DESKTOP], this.retrieveCallback)
   }
   get chessBoard(): number[][] {
     const arr: number[][] = []
-    for (let i = 0; i < this.rows; i++) {
+    for (let i = 0; i < desktopSettings.rows; i++) {
       arr[i] = []
-      for (let j = 0; j < this.columns; j++) {
+      for (let j = 0; j < desktopSettings.columns; j++) {
         arr[i][j] = 0
       }
     }
-    this.data.forEach(({ row, column, rowEnd, columnEnd, type }) => {
-      rowEnd = rowEnd || row
-      columnEnd = columnEnd || column
-      if (rowEnd <= this.rows && columnEnd <= this.columns) {
-        for (let i = row - 1; i < rowEnd; i++) {
-          for (let j = column - 1; j < columnEnd; j++) {
-            arr[i][j] = type
+    this.data.forEach(({ id, row, column, rowEnd, columnEnd, type }) => {
+      if (this.grabbedId !== id) {
+        rowEnd = rowEnd || row + 1
+        columnEnd = columnEnd || column + 1
+        if (rowEnd <= desktopSettings.rows && columnEnd <= desktopSettings.columns) {
+          for (let i = row - 1; i < rowEnd - 1; i++) {
+            for (let j = column - 1; j < columnEnd - 1; j++) {
+              arr[i][j] = type
+            }
           }
         }
       }
@@ -195,15 +216,22 @@ export class DesktopStore extends DesktopSettings {
     return this.cachedUndoMessage
   }
 
-  retrieveCallback(result: { [key: string]: any }): void {
-    if (result[DESKTOP_SETTINGS]) {
-      const { toolbar, columns, rows } = result[DESKTOP_SETTINGS]
-      this.toolbar = toolbar !== undefined ? toolbar : desktopSettingsDefault.toolbar
-      this.columns = columns !== undefined ? columns : desktopSettingsDefault.columns
-      this.rows = rows !== undefined ? rows : desktopSettingsDefault.rows
+  isAreaAvailable(row: number, column: number, rowEnd?: number, columnEnd?: number): boolean {
+    if (rowEnd === undefined && columnEnd === undefined) {
+      return !this.chessBoard[row][column]
     } else {
-      this.toolbar = desktopSettingsDefault.toolbar
+      for (let i = row; i < rowEnd!; i++) {
+        for (let j = column; j < columnEnd!; j++) {
+          if (this.chessBoard[i][j]) {
+            return false
+          }
+        }
+      }
+      return true
     }
+  }
+
+  retrieveCallback(result: { [key: string]: any }): void {
     if (result[DESKTOP]) {
       this.data = result[DESKTOP]
     }
@@ -234,13 +262,13 @@ export class DesktopStore extends DesktopSettings {
   findUsableArea(left: number, top: number): number[] | undefined {
     const desktopEl = document.querySelector("#desktop") as HTMLElement
     const { clientWidth, clientHeight, offsetTop: desktopOffsetTop } = desktopEl
-    const unitWidth = clientWidth / this.columns
-    const unitHeight = clientHeight / this.rows
+    const unitWidth = clientWidth / desktopSettings.columns
+    const unitHeight = clientHeight / desktopSettings.rows
     const row = Math.floor((top - desktopOffsetTop) / unitHeight)
     const column = Math.floor(left / unitWidth)
     if (this.chessBoard[row][column]) {
-      for (let i = 0; i < this.rows; i++) {
-        for (let j = 0; j < this.columns; j++) {
+      for (let i = 0; i < desktopSettings.rows; i++) {
+        for (let j = 0; j < desktopSettings.columns; j++) {
           if (!this.chessBoard[i][j]) {
             return [i + 1, j + 1]
           }
@@ -254,6 +282,10 @@ export class DesktopStore extends DesktopSettings {
   updateArea(id: string, row: number, column: number): void {
     const component = this.data.find((item) => item.id === id)
     if (component) {
+      if (component.type == 2) {
+        component.rowEnd = row + component.rowEnd! - component.row
+        component.columnEnd = column + component.columnEnd! - component.column
+      }
       component.row = row
       component.column = column
     }
@@ -314,7 +346,6 @@ export class DesktopStore extends DesktopSettings {
    * @param target The id of the target shortcut
    */
   createFolder(current: string, target: string): void {
-    // console.log(current, target)
     const currentIndex = this.findIndexById(current)
     const targetIndex = this.findIndexById(target)
     if (currentIndex > -1 && targetIndex > -1) {
@@ -393,6 +424,27 @@ export class DesktopStore extends DesktopSettings {
 
   findById(id: string, origin: Desktop[] = this.data): Desktop | undefined {
     return origin.find((item) => item.id === id)
+  }
+
+  updateCell(width: number, height: number): void {
+    this.cellWidth = width
+    this.cellHeight = height
+  }
+
+  updateWidgetSize(
+    id: string,
+    rowStart: number,
+    rowEnd: number,
+    columnStart: number,
+    columnEnd: number,
+  ) {
+    const widget = this.findById(id)
+    if (widget) {
+      widget.row = rowStart
+      widget.rowEnd = rowEnd
+      widget.column = columnStart
+      widget.columnEnd = columnEnd
+    }
   }
 }
 
