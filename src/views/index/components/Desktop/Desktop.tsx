@@ -3,13 +3,14 @@ import clsx from "clsx"
 import { observer, useLocalObservable } from "mobx-react-lite"
 import { toJS } from "mobx"
 
-import AddIcon from "@mui/icons-material/Add"
-import EditIcon from "@mui/icons-material/Edit"
+import AddIcon from "@mui/icons-material/AddOutlined"
+import EditIcon from "@mui/icons-material/EditOutlined"
 import InfoIcon from "@mui/icons-material/InfoOutlined"
-import ClearIcon from "@mui/icons-material/Clear"
-import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd"
+import DeleteIcon from "@mui/icons-material/DeleteOutlined"
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAddOutlined"
 import WallpaperIcon from "@mui/icons-material/WallpaperOutlined"
 import WidgetsIcon from "@mui/icons-material/WidgetsOutlined"
+import FitScreenOutlinedIcon from "@mui/icons-material/FitScreenOutlined"
 
 import grab, { Env } from "./Website/grab"
 import { Shortcut } from "../../store/desktop"
@@ -20,6 +21,7 @@ import {
   websiteEditStore,
   websiteInfoStore,
   desktopSettings,
+  widgetStore,
 } from "../../store"
 import { MenuType } from "store/menu"
 // import WidgetWrap from "../Widgets/Wrap"
@@ -31,6 +33,10 @@ import Folder from "./Folder"
 import Wrap from "./Wrap"
 import FolderEditor from "./FolderEditor"
 import { Settings as SettingsIcon } from "components/icons"
+import { Widget } from "../Widgets/Widget"
+import { WidgetResize } from "../Widgets/Widget/WidgetResize"
+import DateTime from "../Widgets/DateTime"
+import Box from "@mui/material/Box"
 
 const WebsiteInfo = React.lazy(() => import("./WebsiteInfo"))
 const WebsiteEdit = React.lazy(() => import("./WebsiteEdit"))
@@ -49,6 +55,7 @@ const Desktop: FC = () => {
   const pageElement = useRef<HTMLDivElement>(null)
 
   const desktopState = useLocalObservable(() => desktopStore)
+  const widgetState = useLocalObservable(() => widgetStore)
 
   const desktopMenus: MenuType[] = useMemo(
     () => [
@@ -110,7 +117,7 @@ const Desktop: FC = () => {
         },
       },
       {
-        icon: <ClearIcon />,
+        icon: <DeleteIcon />,
         text: "Remove",
         onClick: () => {
           desktopState.removeFolder(currentItem.current.id)
@@ -138,7 +145,40 @@ const Desktop: FC = () => {
         },
       },
       {
-        icon: <ClearIcon />,
+        icon: <DeleteIcon />,
+        text: "Remove",
+        onClick: () => {
+          removeWebsite()
+        },
+      },
+    ],
+    [],
+  )
+
+  const widgetMenus: MenuType[] = useMemo(
+    () => [
+      {
+        icon: <FitScreenOutlinedIcon />,
+        text: "Resize",
+        onClick: () => {
+          widgetStore.activeResizableMode(currentItem.current.id)
+        },
+      },
+      {
+        icon: <SettingsIcon />,
+        text: "Widget settings",
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onClick: () => {},
+      },
+      {
+        icon: <InfoIcon />,
+        text: "Widget info",
+        onClick: () => {
+          showInfo()
+        },
+      },
+      {
+        icon: <DeleteIcon />,
         text: "Remove",
         onClick: () => {
           removeWebsite()
@@ -198,6 +238,9 @@ const Desktop: FC = () => {
           } else if (type === "folder") {
             showMenu(event, folderMenus, id, Number(index))
             return
+          } else if (type === "widget") {
+            showMenu(event, widgetMenus, id, Number(index))
+            return
           }
         }
         if (target === desktopElement.current) {
@@ -217,21 +260,24 @@ const Desktop: FC = () => {
     return () => document.removeEventListener("contextmenu", handleContextMenu)
   }, [handleContextMenu])
 
-  const { toolbar, columns, rows, data } = desktopState
-  // const { open: folderOpen, closeFolder, openFolder, folderElement } = folderStore
-  const styles: React.CSSProperties = {
-    gridTemplateColumns: `repeat(${columns}, 1fr)`,
-    gridAutoRows: `calc((100vh - ${toolbar ? 64 : 0}px) / ${rows})`,
-  }
+  const { toolbar, columns, rows } = desktopSettings
+  const { data } = desktopState
 
   return (
     <div className={clsx("desktop", { toolbar })} ref={desktopElement}>
-      <div className="page" id="desktop" ref={pageElement} style={styles}>
+      <Box
+        className="page"
+        id="desktop"
+        ref={pageElement}
+        sx={{
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          gridAutoRows: `calc((100vh - ${toolbar ? 64 : 0}px) / ${rows})`,
+        }}
+      >
         {data.map((item) => {
-          const { row, column } = item
+          const { id, row, rowEnd, column, columnEnd, shortcuts, widgetName } = item
           if (item.type === 1) {
-            if (item.shortcuts!.length <= 1) {
-              const { id, shortcuts } = item
+            if (shortcuts!.length <= 1) {
               const { label, url, id: shortcutId } = shortcuts![0]
               return (
                 <Wrap row={row} column={column} key={id}>
@@ -253,13 +299,36 @@ const Desktop: FC = () => {
                 </Wrap>
               )
             }
+          } else if (item.type === 2) {
+            const rowSize = rowEnd! - row
+            const colSize = columnEnd! - column
+            return (
+              <Wrap
+                row={row}
+                column={column}
+                rowEnd={rowEnd}
+                columnEnd={columnEnd}
+                key={id}
+                className="widget-wrapper"
+              >
+                <Widget
+                  id={id}
+                  row={rowSize}
+                  col={colSize}
+                  rowStart={row}
+                  colStart={column}
+                  rowEnd={rowEnd!}
+                  colEnd={columnEnd!}
+                >
+                  {widgetName == "DateTime" && <DateTime row={rowSize} col={colSize} />}
+                  {widgetName == "Scallop" && <Scallop row={rowSize} col={colSize} />}
+                </Widget>
+              </Wrap>
+            )
           }
           return null
         })}
-        <Wrap className="widget-wrap" row={2} column={4} rowEnd={3} columnEnd={6}>
-          <Scallop />
-        </Wrap>
-      </div>
+      </Box>
       <Suspense fallback={null}>
         <>
           <WebsiteInfo />
@@ -268,6 +337,7 @@ const Desktop: FC = () => {
       </Suspense>
       <Undo open={undoOpen} onClose={closeUndo} />
       <FolderEditor open={folderEditorOpen} label={folderLabel} onClose={handleFolderEditDone} />
+      {widgetState.widget && <WidgetResize />}
     </div>
   )
 }
