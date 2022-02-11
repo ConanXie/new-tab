@@ -2,7 +2,6 @@ import "./style"
 
 import React, { Suspense, useMemo } from "react"
 import { observer, useLocalObservable } from "mobx-react-lite"
-import classNames from "classnames"
 
 import { SxProps, Theme } from "@mui/material/styles"
 import grey from "@mui/material/colors/grey"
@@ -19,13 +18,19 @@ import { desktopSettings, toolbarStore, wallpaperStore } from "../../store"
 import { acrylicBg } from "styles/acrylic"
 
 const Wallpaper = React.lazy(() => import("./Wallpaper"))
+const WidgetList = React.lazy(() => import("./WidgetList"))
 
 function Header() {
   const wallpaperState = useLocalObservable(() => wallpaperStore)
 
   function handleWallpaperIconClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.currentTarget.blur()
-    toolbarStore.loadAndOpenWallpaperDrawer()
+    toolbarStore.openWallpaperDrawer()
+  }
+
+  function handleWidgetIconClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.currentTarget.blur()
+    toolbarStore.openWidgetDrawer()
   }
 
   const iconStyles: SxProps<Theme> = useMemo(
@@ -52,12 +57,12 @@ function Header() {
             }}
           >
             <Tooltip enterDelay={300} title="Wallpaper">
-              <IconButton onClick={handleWallpaperIconClick} size="large">
+              <IconButton size="large" onClick={handleWallpaperIconClick}>
                 <WallpaperIcon sx={iconStyles} />
               </IconButton>
             </Tooltip>
             <Tooltip enterDelay={300} title="Widgets">
-              <IconButton size="large">
+              <IconButton size="large" onClick={handleWidgetIconClick}>
                 <WidgetsIcon sx={iconStyles} />
               </IconButton>
             </Tooltip>
@@ -71,8 +76,8 @@ function Header() {
       )}
       <Drawer
         anchor="right"
-        open={toolbarStore.wallpaperDrawerOpen}
-        onClose={toolbarStore.closeWallpaperDrawer}
+        open={toolbarStore.drawerOpen}
+        onClose={toolbarStore.closeDrawer}
         sx={[
           {
             "& .MuiPaper-root": {
@@ -89,11 +94,10 @@ function Header() {
           },
         ]}
       >
-        {toolbarStore.wallpaperDrawerLoaded && (
-          <Suspense fallback>
-            <Wallpaper />
-          </Suspense>
-        )}
+        <Suspense fallback>
+          {toolbarStore.isWallpaperDrawer && <Wallpaper />}
+          {toolbarStore.isWidgetDrawer && <WidgetList />}
+        </Suspense>
       </Drawer>
     </>
   )

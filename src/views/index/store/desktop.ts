@@ -3,6 +3,7 @@ import shortid from "shortid"
 import desktopSettings from "store/desktopSettings"
 // import folderStore from "./folder"
 import menuStore from "store/menu"
+import { Widget } from "../components/Header/WidgetList/WidgetList"
 
 const DESKTOP = "DESKTOP"
 
@@ -42,7 +43,7 @@ export class DesktopStore {
       column: 4,
       columnEnd: 6,
       id: "widget001",
-      widgetName: "DateTime",
+      widgetName: "Text Clock",
     },
     {
       type: 2,
@@ -51,7 +52,7 @@ export class DesktopStore {
       column: 6,
       columnEnd: 7,
       id: "widget002",
-      widgetName: "Scallop",
+      widgetName: "Scallop Clock",
     },
     {
       type: 1,
@@ -156,6 +157,7 @@ export class DesktopStore {
         createShortcutComponent: action,
         retrieveCallback: action,
         updateCell: action,
+        createWidget: action,
         updateWidgetSize: action,
       },
       { autoBind: true },
@@ -195,22 +197,26 @@ export class DesktopStore {
 
   get undoMessage(): string {
     if (this.removed.length) {
-      const shortcuts = this.removed[0].shortcuts!
+      const { type, shortcuts, widgetName } = this.removed[0]
       const { getMessage } = chrome.i18n
-      if (shortcuts!.length > 1) {
-        if (this.removed[0].label) {
-          this.cachedUndoMessage = getMessage("removed_shortcut_or_folder", this.removed[0].label)
+      if (type == 1) {
+        if (shortcuts!.length > 1) {
+          if (this.removed[0].label) {
+            this.cachedUndoMessage = getMessage("removed_shortcut_or_folder", this.removed[0].label)
+          } else {
+            this.cachedUndoMessage = getMessage("removed_unnamed_folder", [
+              shortcuts![0].label || getMessage("unnamed_shortcut"),
+              shortcuts!.length - 1,
+            ])
+          }
         } else {
-          this.cachedUndoMessage = getMessage("removed_unnamed_folder", [
+          this.cachedUndoMessage = getMessage(
+            "removed_shortcut_or_folder",
             shortcuts![0].label || getMessage("unnamed_shortcut"),
-            shortcuts!.length - 1,
-          ])
+          )
         }
       } else {
-        this.cachedUndoMessage = getMessage(
-          "removed_shortcut_or_folder",
-          shortcuts![0].label || getMessage("unnamed_shortcut"),
-        )
+        this.cachedUndoMessage = getMessage("removed_shortcut_or_folder", widgetName)
       }
     }
     return this.cachedUndoMessage
@@ -429,6 +435,18 @@ export class DesktopStore {
   updateCell(width: number, height: number): void {
     this.cellWidth = width
     this.cellHeight = height
+  }
+
+  createWidget(widget: Widget, row: number, column: number): void {
+    this.data.push({
+      id: widget.id + Date.now().toString(),
+      type: 2,
+      row,
+      column,
+      rowEnd: row + widget.rows,
+      columnEnd: column + widget.columns,
+      widgetName: widget.name,
+    })
   }
 
   updateWidgetSize(

@@ -1,15 +1,38 @@
 import { makeAutoObservable } from "mobx"
 
-export class ToolbarStore {
-  wallpaperDrawerOpen = false
-  wallpaperDrawerLoaded = false
+enum DrawerType {
+  Wallpaper = "Wallpaper",
+  Widget = "Widget",
+}
 
-  loadAndOpenWallpaperDrawer(): void {
-    this.wallpaperDrawerLoaded = true
-    this.wallpaperDrawerOpen = true
+export class ToolbarStore {
+  drawerOpen = false
+
+  drawerType: DrawerType = DrawerType.Widget
+
+  get isWallpaperDrawer(): boolean {
+    return this.drawerType === DrawerType.Wallpaper
   }
-  closeWallpaperDrawer(): void {
-    this.wallpaperDrawerOpen = false
+
+  get isWidgetDrawer(): boolean {
+    return this.drawerType === DrawerType.Widget
+  }
+
+  openDrawer(type: DrawerType): void {
+    this.drawerType = type
+    this.drawerOpen = true
+  }
+
+  closeDrawer(): void {
+    this.drawerOpen = false
+  }
+
+  openWallpaperDrawer() {
+    this.openDrawer(DrawerType.Wallpaper)
+  }
+
+  openWidgetDrawer() {
+    this.openDrawer(DrawerType.Widget)
   }
 
   constructor() {

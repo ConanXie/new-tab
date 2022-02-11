@@ -76,14 +76,15 @@ const Desktop: FC = () => {
         icon: <WallpaperIcon />,
         text: "Wallpaper",
         onClick: () => {
-          toolbarStore.loadAndOpenWallpaperDrawer()
+          toolbarStore.openWallpaperDrawer()
         },
       },
       {
         icon: <WidgetsIcon />,
         text: "Widgets",
-        // eslint-disable-next-line
-        onClick: () => {},
+        onClick: () => {
+          toolbarStore.openWidgetDrawer()
+        },
       },
       {
         icon: <SettingsIcon />,
@@ -174,14 +175,15 @@ const Desktop: FC = () => {
         icon: <InfoIcon />,
         text: "Widget info",
         onClick: () => {
-          showInfo()
+          //
         },
       },
       {
         icon: <DeleteIcon />,
         text: "Remove",
         onClick: () => {
-          removeWebsite()
+          desktopState.removeFolder(currentItem.current.id)
+          setUndoOpen(true)
         },
       },
     ],
@@ -320,8 +322,8 @@ const Desktop: FC = () => {
                   rowEnd={rowEnd!}
                   colEnd={columnEnd!}
                 >
-                  {widgetName == "DateTime" && <DateTime row={rowSize} col={colSize} />}
-                  {widgetName == "Scallop" && <Scallop row={rowSize} col={colSize} />}
+                  {widgetName == "Text Clock" && <DateTime row={rowSize} col={colSize} />}
+                  {widgetName == "Scallop Clock" && <Scallop row={rowSize} col={colSize} />}
                 </Widget>
               </Wrap>
             )
